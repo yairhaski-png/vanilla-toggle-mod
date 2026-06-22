@@ -1,23 +1,33 @@
 package com.haski.vanillatoggle.client;
 
-import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientTickEvents;
+import com.mojang.blaze3d.platform.InputConstants;
 import net.fabricmc.api.Environment;
 import net.fabricmc.api.EnvType;
+import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientTickEvents;
+import net.fabricmc.fabric.api.client.keymapping.v1.KeyMappingHelper;
 import net.minecraft.client.KeyMapping;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.renderer.GameRenderer;
+import net.minecraft.network.chat.Component;
+import net.minecraft.resources.Identifier;
 import org.lwjgl.glfw.GLFW;
+
+import com.haski.vanillatoggle.VanillaToggleMod;
 
 @Environment(EnvType.CLIENT)
 public class KeyInputHandler {
+	private static final KeyMapping.Category CATEGORY = KeyMapping.Category.register(
+		Identifier.fromNamespaceAndPath(VanillaToggleMod.MOD_ID, "general")
+	);
+
 	private static KeyMapping toggleKey;
 
 	public static void register() {
-		toggleKey = new KeyMapping(
+		toggleKey = KeyMappingHelper.registerKeyMapping(new KeyMapping(
 			"key.vanilla-toggle.toggle",
+			InputConstants.Type.KEYSYM,
 			GLFW.GLFW_KEY_F12,
-			"key.categories.misc"
-		);
+			CATEGORY
+		));
 
 		ClientTickEvents.END_CLIENT_TICK.register(client -> {
 			while (toggleKey.consumeClick()) {
@@ -30,39 +40,16 @@ public class KeyInputHandler {
 		VanillaToggleClient.isVanillaMode = !VanillaToggleClient.isVanillaMode;
 
 		if (VanillaToggleClient.isVanillaMode) {
-			activateVanillaMode(client);
-			if (client.gui != null) {
-				client.gui.getChat().addMessage(
-					net.minecraft.network.chat.Component.literal("§a✓ Vanilla Mode ON")
-				);
+			if (client.gameRenderer != null && client.gameRenderer.currentPostEffect() != null) {
+				client.gameRenderer.clearPostEffect();
+			}
+			if (client.player != null) {
+				client.player.sendSystemMessage(Component.literal("§a✓ Vanilla Mode ON"));
 			}
 		} else {
-			deactivateVanillaMode(client);
-			if (client.gui != null) {
-				client.gui.getChat().addMessage(
-					net.minecraft.network.chat.Component.literal("§c✗ Vanilla Mode OFF")
-				);
+			if (client.player != null) {
+				client.player.sendSystemMessage(Component.literal("§c✗ Vanilla Mode OFF"));
 			}
-		}
-	}
-
-	private static void activateVanillaMode(Minecraft client) {
-		if (client.gameRenderer != null && client.gameRenderer.currentEffect() != null) {
-			client.gameRenderer.shutdownEffect();
-		}
-
-		if (client.getResourceManager() != null) {
-			client.getResourceManager().unload();
-		}
-	}
-
-	private static void deactivateVanillaMode(Minecraft client) {
-		if (client.getResourceManager() != null) {
-			client.getResourceManager().unload();
-		}
-
-		if (client.gameRenderer != null) {
-			client.gameRenderer.checkShaderCompile();
 		}
 	}
 }
