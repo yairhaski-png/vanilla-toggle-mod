@@ -1,0 +1,32 @@
+{
+  "schemaVersion": 1,
+  "id": "vanilla-toggle-mod",
+  "version": "${version}",
+  "name": "Vanilla Toggle Mod",
+  "description": "Press F12 to toggle vanilla visuals - hide all resource packs and mods instantly",
+  "authors": [
+    "Haski"
+  ],
+  "contact": {
+    "homepage": "https://github.com",
+    "sources": "https://github.com"
+  },
+  "license": "MIT",
+  "environment": "*",
+  "entrypoints": {
+    "main": [
+      "com.haski.vanillatoggle.VanillaToggleMod"
+    ],
+    "client": [
+      "com.haski.vanillatoggle.client.VanillaToggleClient"
+    ]
+  },
+  "mixins": [
+    "vanillatoggle.mixins.json"
+  ],
+  "depends": {
+    "fabricloader": ">=${loader_version}",
+    "fabric-api": "*",
+    "minecraft": "26.1.2"
+  }
+}

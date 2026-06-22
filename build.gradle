@@ -1,0 +1,38 @@
+plugins {
+	id 'net.fabricmc.fabric-loom' version '1.15.+'
+	id 'maven-publish'
+}
+
+archivesBaseName = project.archives_base_name
+version = project.mod_version
+group = project.maven_group
+
+repositories {
+	mavenCentral()
+}
+
+dependencies {
+	minecraft "com.mojang:minecraft:${project.minecraft_version}"
+	// 26.1+ is fully unobfuscated - no mappings/Yarn needed, no "mod" prefix on configs
+	implementation "net.fabricmc:fabric-loader:${project.loader_version}"
+	implementation "net.fabricmc.fabric-api:fabric-api:${project.fabric_version}"
+}
+
+processResources {
+	inputs.property "version", project.version
+	filesMatching("fabric.mod.json") {
+		expand "version": project.version,
+				"loader_version": project.loader_version,
+				"minecraft_version": project.minecraft_version
+	}
+}
+
+java {
+	sourceCompatibility = JavaVersion.VERSION_25
+	targetCompatibility = JavaVersion.VERSION_25
+	withSourcesJar()
+}
+
+tasks.withType(JavaCompile).configureEach {
+	it.options.release = 25
+}
