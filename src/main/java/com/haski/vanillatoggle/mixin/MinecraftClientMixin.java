@@ -14,8 +14,8 @@ public class MinecraftClientMixin {
 	private void onTick(CallbackInfo ci) {
 		Minecraft client = (Minecraft) (Object) this;
 		if (VanillaToggleClient.isVanillaMode) {
-			if (client.gameRenderer != null && client.gameRenderer.currentEffect() != null) {
-				client.gameRenderer.shutdownEffect();
+			if (client.gameRenderer != null && client.gameRenderer.currentPostEffect() != null) {
+				client.gameRenderer.clearPostEffect();
 			}
 		}
 	}
