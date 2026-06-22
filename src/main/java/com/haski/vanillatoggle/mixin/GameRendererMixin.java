@@ -14,8 +14,8 @@ public class GameRendererMixin {
 	private void onRender(float partialTick, long nanoTime, boolean renderLevel, CallbackInfo ci) {
 		if (VanillaToggleClient.isVanillaMode) {
 			GameRenderer self = (GameRenderer) (Object) this;
-			if (self.currentEffect() != null) {
-				self.shutdownEffect();
+			if (self.currentPostEffect() != null) {
+				self.clearPostEffect();
 			}
 		}
 	}
