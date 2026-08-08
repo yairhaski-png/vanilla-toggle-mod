@@ -1,0 +1,1651 @@
+<title>Vet-to-Go — אב־טיפוס</title>
+
+<style>
+/* ============================================================
+   Vet-to-Go — RTL Hebrew veterinary field app prototype
+   Tokens → components. All spacing uses logical properties.
+   ============================================================ */
+
+:root{
+  color-scheme: light dark;
+
+  --font-he: "Assistant","Heebo","Rubik", system-ui, -apple-system, "SF Hebrew", "Arial Hebrew", sans-serif;
+
+  /* neutrals — cool slate, biased toward the navy brand */
+  --paper:      #E9EDF4;
+  --surface:    #FFFFFF;
+  --surface-2:  #F5F8FC;
+  --line:       #E0E6F0;
+  --line-soft:  #EDF1F7;
+  --ink:        #0E1729;
+  --ink-2:      #4A576D;
+  --ink-3:      #7C8AA0;
+
+  /* brand */
+  --brand:      #16294F;
+  --brand-2:    #24406F;
+  --on-brand:   #FFFFFF;
+
+  /* semantic — state, never used as decoration */
+  --crit:#C21F35;  --crit-bg:#FDEBEE;  --crit-line:#F4C6CD;  --crit-solid:#D22B41;
+  --warn:#A85B08;  --warn-bg:#FDF0E1;  --warn-line:#F3D6B4;  --warn-solid:#E07A1F;
+  --caut:#8A6A00;  --caut-bg:#FBF4DC;  --caut-line:#EFDFA8;  --caut-solid:#D9A800;
+  --ok:  #0B6E4F;  --ok-bg:  #E4F4EC;  --ok-line:  #BEE4D2;  --ok-solid:  #12A06E;
+  --info:#1B4FB0;  --info-bg:#E8EFFD;  --info-line:#C6D8F7;  --info-solid:#2F6BE0;
+  --lab: #5D34AC;  --lab-bg: #F0EAFC;  --lab-line: #DCCDF6;  --lab-solid: #7A4FD6;
+
+  --shadow-1: 0 1px 2px rgba(14,23,41,.05), 0 1px 3px rgba(14,23,41,.04);
+  --shadow-2: 0 2px 6px rgba(14,23,41,.06), 0 8px 24px rgba(14,23,41,.07);
+  --shadow-3: 0 -1px 0 var(--line), 0 -8px 28px rgba(14,23,41,.06);
+
+  --r-xs: 8px; --r-sm: 11px; --r-md: 15px; --r-lg: 20px; --r-xl: 26px; --r-pill: 999px;
+
+  --fs-xs: 11px; --fs-sm: 12.5px; --fs-md: 13.5px; --fs-base: 15px;
+  --fs-lg: 17px; --fs-xl: 20px; --fs-2xl: 27px; --fs-display: 46px;
+
+  --dur: .22s;
+  --ease: cubic-bezier(.32,.72,.32,1);
+}
+
+@media (prefers-color-scheme: dark){
+  :root{
+    --paper:#070B14; --surface:#111A2B; --surface-2:#0D1524;
+    --line:#22314C; --line-soft:#1A2438;
+    --ink:#E9EFF9; --ink-2:#A3B1C7; --ink-3:#75849C;
+    --brand:#5C8CE8; --brand-2:#7BA4F0; --on-brand:#08101F;
+    --crit:#FF8593; --crit-bg:#2B1219; --crit-line:#4C1F2A; --crit-solid:#F04A60;
+    --warn:#F0A85E; --warn-bg:#2A1B0E; --warn-line:#48301A; --warn-solid:#E58A33;
+    --caut:#E9CA63; --caut-bg:#251F0F; --caut-line:#3F361B; --caut-solid:#D9AF2E;
+    --ok:#5BD6A6;   --ok-bg:#0C241C;   --ok-line:#17402F;   --ok-solid:#1FB980;
+    --info:#8FB3F8; --info-bg:#101E38;  --info-line:#1E3563; --info-solid:#4C86EA;
+    --lab:#BC9BF3;  --lab-bg:#1B1430;   --lab-line:#2E2352;  --lab-solid:#8F65E0;
+    --shadow-1: 0 1px 2px rgba(0,0,0,.4);
+    --shadow-2: 0 2px 8px rgba(0,0,0,.45), 0 12px 32px rgba(0,0,0,.35);
+    --shadow-3: 0 -1px 0 var(--line), 0 -8px 28px rgba(0,0,0,.4);
+  }
+}
+:root[data-theme="dark"]{
+  --paper:#070B14; --surface:#111A2B; --surface-2:#0D1524;
+  --line:#22314C; --line-soft:#1A2438;
+  --ink:#E9EFF9; --ink-2:#A3B1C7; --ink-3:#75849C;
+  --brand:#5C8CE8; --brand-2:#7BA4F0; --on-brand:#08101F;
+  --crit:#FF8593; --crit-bg:#2B1219; --crit-line:#4C1F2A; --crit-solid:#F04A60;
+  --warn:#F0A85E; --warn-bg:#2A1B0E; --warn-line:#48301A; --warn-solid:#E58A33;
+  --caut:#E9CA63; --caut-bg:#251F0F; --caut-line:#3F361B; --caut-solid:#D9AF2E;
+  --ok:#5BD6A6;   --ok-bg:#0C241C;   --ok-line:#17402F;   --ok-solid:#1FB980;
+  --info:#8FB3F8; --info-bg:#101E38;  --info-line:#1E3563; --info-solid:#4C86EA;
+  --lab:#BC9BF3;  --lab-bg:#1B1430;   --lab-line:#2E2352;  --lab-solid:#8F65E0;
+  --shadow-1: 0 1px 2px rgba(0,0,0,.4);
+  --shadow-2: 0 2px 8px rgba(0,0,0,.45), 0 12px 32px rgba(0,0,0,.35);
+  --shadow-3: 0 -1px 0 var(--line), 0 -8px 28px rgba(0,0,0,.4);
+}
+:root[data-theme="light"]{
+  --paper:#E9EDF4; --surface:#FFFFFF; --surface-2:#F5F8FC;
+  --line:#E0E6F0; --line-soft:#EDF1F7;
+  --ink:#0E1729; --ink-2:#4A576D; --ink-3:#7C8AA0;
+  --brand:#16294F; --brand-2:#24406F; --on-brand:#FFFFFF;
+  --crit:#C21F35;  --crit-bg:#FDEBEE;  --crit-line:#F4C6CD;  --crit-solid:#D22B41;
+  --warn:#A85B08;  --warn-bg:#FDF0E1;  --warn-line:#F3D6B4;  --warn-solid:#E07A1F;
+  --caut:#8A6A00;  --caut-bg:#FBF4DC;  --caut-line:#EFDFA8;  --caut-solid:#D9A800;
+  --ok:  #0B6E4F;  --ok-bg:  #E4F4EC;  --ok-line:  #BEE4D2;  --ok-solid:  #12A06E;
+  --info:#1B4FB0;  --info-bg:#E8EFFD;  --info-line:#C6D8F7;  --info-solid:#2F6BE0;
+  --lab: #5D34AC;  --lab-bg: #F0EAFC;  --lab-line: #DCCDF6;  --lab-solid: #7A4FD6;
+  --shadow-1: 0 1px 2px rgba(14,23,41,.05), 0 1px 3px rgba(14,23,41,.04);
+  --shadow-2: 0 2px 6px rgba(14,23,41,.06), 0 8px 24px rgba(14,23,41,.07);
+  --shadow-3: 0 -1px 0 var(--line), 0 -8px 28px rgba(14,23,41,.06);
+}
+
+*, *::before, *::after{ box-sizing: border-box; }
+
+body{
+  margin:0;
+  font-family: var(--font-he);
+  background:
+    radial-gradient(120% 90% at 50% 0%, color-mix(in oklab, var(--brand) 9%, var(--paper)) 0%, var(--paper) 60%);
+  color: var(--ink);
+  -webkit-font-smoothing: antialiased;
+  min-height:100dvh;
+}
+
+button, input{ font: inherit; color: inherit; }
+button{ background:none; border:0; cursor:pointer; }
+
+:focus-visible{
+  outline: 2px solid var(--info-solid);
+  outline-offset: 2px;
+  border-radius: 6px;
+}
+
+.num{ font-variant-numeric: tabular-nums; font-feature-settings:"tnum" 1; unicode-bidi: isolate; }
+
+/* ---------- stage (desktop chrome around the device) ---------- */
+.stage{
+  min-height:100dvh;
+  display:flex; flex-direction:column; align-items:center;
+  gap:22px; padding: 34px 20px 44px;
+}
+.stage-head{
+  direction: rtl;
+  display:flex; flex-wrap:wrap; align-items:center; justify-content:center;
+  gap:10px 16px; text-align:center;
+}
+.stage-title{
+  margin:0; font-size:var(--fs-md); font-weight:700; letter-spacing:.2px; color:var(--ink-2);
+}
+.stage-title b{ color:var(--ink); }
+.jump{ display:flex; gap:6px; background:var(--surface); padding:4px; border-radius:var(--r-pill);
+  box-shadow: var(--shadow-1); border:1px solid var(--line); direction:rtl; }
+.jump button{
+  font-size:var(--fs-sm); font-weight:600; color:var(--ink-2);
+  padding:7px 13px; border-radius:var(--r-pill); transition: background var(--dur), color var(--dur);
+  min-height:32px;
+}
+.jump button:hover{ background: var(--surface-2); color:var(--ink); }
+.jump button[aria-current="true"]{ background: var(--brand); color: var(--on-brand); }
+
+/* ---------- device ---------- */
+.device{
+  --bezel: 11px;
+  width: 392px; height: 848px;
+  padding: var(--bezel);
+  border-radius: 54px;
+  background: linear-gradient(160deg,#33394a,#0d0f16 42%,#2a2f3d);
+  box-shadow: 0 40px 90px rgba(6,12,26,.34), 0 4px 12px rgba(6,12,26,.2), inset 0 0 0 1px rgba(255,255,255,.09);
+  flex: none;
+}
+
+.phone{
+  position:relative;
+  width:100%; height:100%;
+  border-radius: 43px;
+  overflow:hidden;
+  background: var(--paper);
+  display:flex; flex-direction:column;
+  isolation:isolate;
+}
+
+@media (max-width: 700px){
+  .stage{ padding:0; gap:0; }
+  .stage-head{ display:none; }
+  .device{ width:100%; height:100dvh; padding:0; border-radius:0; box-shadow:none; background:var(--paper); }
+  .phone{ border-radius:0; }
+}
+
+/* ---------- status bar ---------- */
+.statusbar{
+  flex:none; height:46px; padding-inline: 26px 20px;
+  display:flex; align-items:center; justify-content:space-between;
+  font-size:var(--fs-md); font-weight:700; color:var(--ink);
+  background: var(--surface);
+}
+.statusbar .sb-icons{ display:flex; align-items:center; gap:5px; color:var(--ink); }
+
+/* ---------- screens ---------- */
+.screens{ position:relative; flex:1; min-height:0; }
+.screen{
+  position:absolute; inset:0;
+  display:none; flex-direction:column;
+  background: var(--paper);
+}
+.screen.is-active{ display:flex; animation: screen-in .26s var(--ease); }
+@keyframes screen-in{ from{ opacity:0; transform: translateY(6px) } to{ opacity:1; transform:none } }
+
+.scroll{
+  flex:1; min-height:0; overflow-y:auto; overflow-x:hidden;
+  padding: 0 0 22px;
+  scrollbar-width: none;
+  overscroll-behavior: contain;
+}
+.scroll::-webkit-scrollbar{ width:0; height:0; }
+.pad{ padding-inline: 16px; }
+
+/* ---------- app bars ---------- */
+.appbar{
+  flex:none;
+  display:flex; align-items:center; gap:8px;
+  padding: 6px 12px 14px;
+  background: var(--surface);
+  border-bottom: 1px solid var(--line-soft);
+}
+.appbar h1{
+  margin:0; flex:1; text-align:center;
+  font-size:var(--fs-xl); font-weight:800; letter-spacing:-.3px;
+}
+.iconbtn{
+  flex:none; width:40px; height:40px; border-radius:var(--r-pill);
+  display:grid; place-items:center; color:var(--ink);
+  transition: background var(--dur), transform var(--dur);
+}
+.iconbtn:hover{ background: var(--surface-2); }
+.iconbtn:active{ transform: scale(.9); }
+.iconbtn svg{ width:22px; height:22px; }
+
+/* home bar has the brand instead of a title */
+.homebar{
+  flex:none; display:flex; align-items:center; gap:10px;
+  padding: 4px 12px 12px; background: var(--surface);
+}
+.brand{
+  flex:1; text-align:center;
+  font-size:var(--fs-xl); font-weight:800; letter-spacing:-.5px;
+  color: var(--brand); direction:ltr;
+}
+:root[data-theme="dark"] .brand, :root:not([data-theme="light"]) .brand{ color: var(--brand); }
+.sync{
+  display:inline-flex; align-items:center; gap:6px;
+  font-size:var(--fs-sm); font-weight:700; color:var(--ok);
+  background: var(--ok-bg); border:1px solid var(--ok-line);
+  padding: 6px 10px; border-radius: var(--r-pill); white-space:nowrap;
+}
+.sync svg{ width:14px; height:14px; }
+
+/* ---------- date block ---------- */
+.datecard{
+  background: var(--surface);
+  padding: 2px 16px 20px;
+  text-align:center;
+  border-bottom: 1px solid var(--line-soft);
+}
+.datecard .dow{ font-size:var(--fs-md); font-weight:700; color:var(--ink-3); letter-spacing:.4px; }
+.datecard .dnum{
+  display:block; font-size:var(--fs-display); font-weight:800; line-height:1;
+  letter-spacing:-2px; margin-block: 2px 4px; color:var(--ink);
+}
+.datecard .dmon{ font-size:var(--fs-md); font-weight:600; color:var(--ink-2); }
+
+/* ---------- critical banner ---------- */
+.banner{
+  margin: 14px 16px 0;
+  background: linear-gradient(200deg, var(--crit-solid), color-mix(in oklab, var(--crit-solid) 78%, #6d0d1c));
+  color:#fff; border-radius: var(--r-lg); padding: 14px;
+  box-shadow: 0 8px 22px color-mix(in oklab, var(--crit-solid) 32%, transparent);
+  transition: opacity .3s var(--ease), transform .3s var(--ease), margin .3s var(--ease), max-height .3s var(--ease), padding .3s var(--ease);
+  max-height: 220px; overflow:hidden;
+}
+.banner.is-gone{ opacity:0; transform: scale(.96); max-height:0; padding-block:0; margin-block-start:0; }
+.banner-top{ display:flex; align-items:center; justify-content:center; gap:7px; font-weight:800; font-size:var(--fs-base); }
+.banner-top svg{ width:18px; height:18px; animation: ring 3.2s var(--ease) infinite; transform-origin: 50% 15%; }
+@keyframes ring{ 0%,88%,100%{transform:rotate(0)} 90%{transform:rotate(11deg)} 93%{transform:rotate(-9deg)} 96%{transform:rotate(5deg)} }
+.banner p{ margin: 7px 0 12px; text-align:center; font-size:var(--fs-md); line-height:1.55; color: #fff; opacity:.95; }
+.banner button{
+  display:block; width:100%; min-height:44px; border-radius: var(--r-md);
+  background:#fff; color: var(--crit-solid); font-weight:800; font-size:var(--fs-base);
+  transition: transform var(--dur), box-shadow var(--dur);
+}
+.banner button:hover{ box-shadow: 0 4px 14px rgba(0,0,0,.18); }
+.banner button:active{ transform: scale(.97); }
+
+/* ---------- section head ---------- */
+.sechead{
+  display:flex; align-items:baseline; justify-content:space-between;
+  gap:10px; margin-block: 22px 10px;
+}
+.sechead h2{ margin:0; font-size:var(--fs-lg); font-weight:800; letter-spacing:-.3px; }
+.sechead .link{ font-size:var(--fs-md); font-weight:700; color:var(--brand); padding:4px; }
+:root:not([data-theme="light"]) .sechead .link{ color: var(--brand); }
+.sechead .link:hover{ text-decoration: underline; }
+
+/* ---------- alert feed ---------- */
+.feed{ background: var(--surface); border-radius: var(--r-lg); box-shadow: var(--shadow-1); overflow:hidden; }
+.feed li{ list-style:none; }
+.feed ul{ margin:0; padding:0; }
+.alert{
+  display:flex; align-items:center; gap:11px; width:100%;
+  padding: 12px 14px; text-align:start; min-height:56px;
+  border-bottom: 1px solid var(--line-soft);
+  transition: background var(--dur);
+}
+.feed li:last-child .alert{ border-bottom:0; }
+.alert:hover{ background: var(--surface-2); }
+.alert:active{ background: color-mix(in oklab, var(--brand) 6%, var(--surface)); }
+.dot-ico{
+  flex:none; width:30px; height:30px; border-radius:var(--r-sm);
+  display:grid; place-items:center;
+}
+.dot-ico svg{ width:17px; height:17px; }
+.alert .txt{ flex:1; font-size:var(--fs-md); font-weight:600; line-height:1.5; }
+.alert time{ flex:none; font-size:var(--fs-sm); font-weight:700; color:var(--ink-3); }
+
+/* tone helpers */
+.t-crit{ background:var(--crit-bg); color:var(--crit); }
+.t-warn{ background:var(--warn-bg); color:var(--warn); }
+.t-caut{ background:var(--caut-bg); color:var(--caut); }
+.t-ok  { background:var(--ok-bg);   color:var(--ok);   }
+.t-info{ background:var(--info-bg); color:var(--info); }
+.t-lab { background:var(--lab-bg);  color:var(--lab);  }
+
+/* ---------- stat cards ---------- */
+.stats{ display:grid; grid-template-columns: 1fr 1fr; gap:10px; margin-block-start:12px; }
+.stat{
+  background: var(--surface); border-radius: var(--r-lg); padding: 13px 14px;
+  box-shadow: var(--shadow-1); display:flex; flex-direction:column; gap:5px;
+}
+.stat h3{ margin:0; font-size:var(--fs-sm); font-weight:700; color:var(--ink-2); }
+.stat.urgent h3{ color: var(--crit); }
+.stat .big{ font-size:var(--fs-2xl); font-weight:800; line-height:1.05; letter-spacing:-1px; }
+.stat .sub{ font-size:var(--fs-xs); color:var(--ink-3); font-weight:600; }
+.track{ height:6px; border-radius:var(--r-pill); background: var(--line); overflow:hidden; display:flex; }
+.track > i{
+  display:block; height:100%; border-radius:var(--r-pill);
+  background: var(--ok-solid);
+  animation: grow .8s var(--ease) both;
+}
+.stat.urgent .track > i{ background: var(--crit-solid); }
+@keyframes grow{ from{ width:0 !important } }
+.track-row{ display:flex; align-items:center; gap:8px; }
+.track-row .pct{ font-size:var(--fs-xs); font-weight:700; color:var(--ink-3); flex:none; }
+
+/* ---------- due-now card ---------- */
+.due{
+  display:flex; align-items:center; gap:12px; width:100%; text-align:start;
+  background: var(--crit-bg); border:1px solid var(--crit-line);
+  border-radius: var(--r-lg); padding: 11px 12px;
+  transition: transform var(--dur), box-shadow var(--dur);
+}
+.due:hover{ box-shadow: var(--shadow-2); }
+.due:active{ transform: scale(.99); }
+.due .body{ flex:1; min-width:0; }
+.due .who{ font-size:var(--fs-sm); font-weight:700; color:var(--crit); }
+.due .what{ font-size:var(--fs-base); font-weight:700; margin-block-start:2px; }
+.due .when{
+  flex:none; align-self:flex-start;
+  font-size:var(--fs-xs); font-weight:800; color:var(--crit);
+  background: var(--surface); border:1px solid var(--crit-line);
+  padding: 5px 9px; border-radius: var(--r-pill); white-space:nowrap;
+}
+
+/* ---------- avatars ---------- */
+.ava{
+  flex:none; border-radius: var(--r-md); overflow:hidden;
+  display:grid; place-items:center; position:relative;
+  width:52px; height:52px;
+  box-shadow: inset 0 0 0 1px rgba(255,255,255,.25);
+}
+.ava svg{ width:62%; height:62%; color: rgba(255,255,255,.94); filter: drop-shadow(0 1px 2px rgba(0,0,0,.22)); }
+.ava.g1{ background: linear-gradient(150deg,#C98B5E,#7C4A2B); }
+.ava.g2{ background: linear-gradient(150deg,#D6A867,#8A5A2B); }
+.ava.g3{ background: linear-gradient(150deg,#9EB6C9,#4F657C); }
+.ava.g4{ background: linear-gradient(150deg,#D4A08C,#8B5343); }
+.ava.g5{ background: linear-gradient(150deg,#8FA98F,#41603F); }
+.ava.g6{ background: linear-gradient(150deg,#C4A07A,#6E4A2F); }
+.ava.sm{ width:44px; height:44px; border-radius: var(--r-sm); }
+
+/* ---------- primary button ---------- */
+.btn-primary{
+  display:flex; align-items:center; justify-content:center; gap:8px;
+  width:100%; min-height:52px; border-radius: var(--r-lg);
+  background: var(--brand); color: var(--on-brand);
+  font-size:var(--fs-lg); font-weight:800;
+  box-shadow: 0 6px 18px color-mix(in oklab, var(--brand) 26%, transparent);
+  transition: transform var(--dur), filter var(--dur), box-shadow var(--dur);
+}
+.btn-primary svg{ width:19px; height:19px; }
+.btn-primary:hover{ filter: brightness(1.12); box-shadow: 0 8px 24px color-mix(in oklab, var(--brand) 34%, transparent); }
+.btn-primary:active{ transform: scale(.98); }
+
+/* ---------- search + filters (pets) ---------- */
+.searchrow{ display:flex; gap:9px; align-items:center; margin-block-start:12px; }
+.search{
+  flex:1; display:flex; align-items:center; gap:9px;
+  background: var(--surface); border:1px solid var(--line);
+  border-radius: var(--r-pill); padding-inline: 16px; min-height:46px;
+  transition: border-color var(--dur), box-shadow var(--dur);
+}
+.search:focus-within{ border-color: var(--brand); box-shadow: 0 0 0 3px color-mix(in oklab, var(--brand) 16%, transparent); }
+.search input{
+  flex:1; min-width:0; border:0; background:none; outline:none;
+  font-size:var(--fs-base); text-align:start;
+}
+.search input::placeholder{ color: var(--ink-3); }
+.search svg{ width:19px; height:19px; color: var(--ink-3); flex:none; }
+.filterbtn{
+  flex:none; width:46px; height:46px; border-radius:var(--r-pill);
+  background: var(--surface); border:1px solid var(--line);
+  display:grid; place-items:center; color:var(--ink);
+  transition: background var(--dur), transform var(--dur);
+}
+.filterbtn:hover{ background: var(--surface-2); }
+.filterbtn:active{ transform: scale(.92); }
+.filterbtn svg{ width:19px; height:19px; }
+
+.chips{ display:flex; gap:8px; margin-block-start:12px; overflow-x:auto; padding-block-end:2px; scrollbar-width:none; }
+.chips::-webkit-scrollbar{ height:0; }
+.chip{
+  flex:none; display:inline-flex; align-items:center; gap:6px;
+  min-height:38px; padding-inline: 15px; border-radius: var(--r-pill);
+  background: var(--surface); border:1px solid var(--line);
+  font-size:var(--fs-md); font-weight:700; color:var(--ink-2);
+  transition: background var(--dur), color var(--dur), border-color var(--dur), transform var(--dur);
+}
+.chip svg{ width:16px; height:16px; }
+.chip:hover{ border-color: var(--brand-2); color: var(--ink); }
+.chip:active{ transform: scale(.95); }
+.chip[aria-pressed="true"], .chip[aria-selected="true"]{
+  background: var(--brand); border-color: var(--brand); color: var(--on-brand);
+}
+
+/* ---------- pet list ---------- */
+.petlist{ list-style:none; margin:12px 0 0; padding:0; display:flex; flex-direction:column; gap:9px; }
+.petrow{
+  display:flex; align-items:center; gap:12px; width:100%; text-align:start;
+  background: var(--surface); border-radius: var(--r-lg); padding: 11px 12px;
+  box-shadow: var(--shadow-1);
+  transition: transform var(--dur), box-shadow var(--dur), background var(--dur);
+}
+.petrow:hover{ box-shadow: var(--shadow-2); }
+.petrow:active{ transform: scale(.985); background: var(--surface-2); }
+.petrow .body{ flex:1; min-width:0; display:flex; flex-direction:column; gap:3px; align-items:flex-start; }
+.petrow .name{ font-size:var(--fs-lg); font-weight:800; letter-spacing:-.2px; }
+.petrow .kind{ font-size:var(--fs-sm); color:var(--ink-3); font-weight:600; }
+.petrow .tail{ flex:none; display:flex; align-items:center; gap:4px; color:var(--ink-3); }
+.petrow .id{ font-size:var(--fs-xl); font-weight:800; color:var(--ink-3); letter-spacing:-.5px; }
+/* the chevron glyph is drawn pointing to the inline-end of an LTR flow;
+   mirror it so "drill in" points the RTL way */
+.petrow .tail svg{ width:18px; height:18px; transform: scaleX(-1); }
+
+.badge{
+  display:inline-flex; align-items:center; gap:5px;
+  font-size:var(--fs-xs); font-weight:800;
+  padding: 4px 9px; border-radius: var(--r-pill);
+  border:1px solid transparent;
+}
+.badge.t-crit{ border-color: var(--crit-line); }
+.badge.t-warn{ border-color: var(--warn-line); }
+.badge.t-caut{ border-color: var(--caut-line); }
+.badge.t-ok  { border-color: var(--ok-line); }
+.badge.t-info{ border-color: var(--info-line); }
+.badge.t-lab { border-color: var(--lab-line); }
+
+/* ---------- pet detail ---------- */
+.hero{
+  display:flex; gap:14px; align-items:flex-start;
+  background: var(--surface); border-radius: var(--r-xl); padding: 14px;
+  box-shadow: var(--shadow-1); margin-block-start:14px;
+}
+.hero .ava{ width:118px; height:132px; border-radius: var(--r-lg); }
+.hero .meta{ flex:1; min-width:0; display:flex; flex-direction:column; align-items:flex-start; gap:3px; text-align:start; }
+.hero .meta > *{ margin:0; }
+.hero .id{ font-size:var(--fs-2xl); font-weight:800; line-height:1; letter-spacing:-1px; color:var(--ink); }
+.hero .name{ font-size:var(--fs-xl); font-weight:800; letter-spacing:-.4px; }
+.hero .line{ font-size:var(--fs-md); color:var(--ink-2); font-weight:600; line-height:1.6; }
+.hero .badge{ margin-block-start:6px; font-size:var(--fs-sm); padding:6px 11px; }
+
+.tiles{ display:grid; grid-template-columns: repeat(4,1fr); gap:8px; margin-block-start:14px; }
+.tile{
+  display:flex; flex-direction:column; align-items:center; gap:7px;
+  padding: 12px 4px; border-radius: var(--r-md);
+  background: var(--surface); box-shadow: var(--shadow-1);
+  font-size: var(--fs-xs); font-weight:700; color:var(--ink-2); line-height:1.35; text-align:center;
+  transition: transform var(--dur), box-shadow var(--dur), color var(--dur);
+}
+.tile svg{ width:24px; height:24px; color: var(--ink); }
+.tile:hover{ box-shadow: var(--shadow-2); color: var(--ink); }
+.tile:active{ transform: scale(.95); }
+.tile.is-alert svg{ color: var(--crit-solid); }
+.tile.is-alert{ color: var(--crit); }
+
+.panel{
+  background: var(--surface); border-radius: var(--r-xl); padding: 14px;
+  box-shadow: var(--shadow-1); margin-block-start:14px;
+}
+.panel > h3{
+  margin:0 0 10px; font-size:var(--fs-base); font-weight:800; text-align:start;
+}
+.panel.critical{ background: var(--crit-bg); border:1px solid var(--crit-line); box-shadow:none; }
+.panel.critical > h3{
+  display:flex; align-items:center; gap:7px; color: var(--crit);
+}
+.panel.critical svg{ width:18px; height:18px; }
+.kv{ display:flex; flex-direction:column; gap:2px; }
+.kv > div{
+  display:flex; align-items:baseline; justify-content:space-between; gap:14px;
+  padding-block: 8px; border-block-end: 1px solid var(--line-soft);
+  font-size: var(--fs-md);
+}
+.panel.critical .kv > div{ border-block-end-color: var(--crit-line); }
+.kv > div:last-child{ border-block-end:0; }
+.kv dt, .kv .k{ color: var(--ink-2); font-weight:600; }
+.kv dd, .kv .v{ margin:0; font-weight:700; color:var(--ink); text-align:start; }
+.panel.critical .kv .k{ color: color-mix(in oklab, var(--crit) 72%, var(--ink-2)); }
+.panel.critical .kv .v{ color: var(--crit); }
+.note{ margin-block-start:10px; font-size:var(--fs-md); line-height:1.6; color: var(--crit); font-weight:700; }
+.note span{ display:block; font-weight:600; color: color-mix(in oklab, var(--crit) 72%, var(--ink-2)); font-size:var(--fs-sm); margin-block-end:2px; }
+
+/* ---------- timeline ---------- */
+.tabs{ display:flex; gap:8px; padding-block: 12px 4px; overflow-x:auto; scrollbar-width:none; }
+.tabs::-webkit-scrollbar{ height:0; }
+
+.timeline{
+  list-style:none; margin:14px 0 0; padding:0 32px 0 0;
+  position:relative;
+}
+.timeline::before{
+  content:""; position:absolute; inset-block: 10px 10px; inset-inline-end: 11px;
+  width:2px; background: linear-gradient(var(--line), var(--line) 88%, transparent);
+  border-radius:2px;
+}
+.tl-date{
+  display:inline-block; margin-block: 4px 9px;
+  font-size:var(--fs-sm); font-weight:800; color:var(--ink-2);
+  background: var(--surface); border:1px solid var(--line);
+  padding: 5px 11px; border-radius: var(--r-pill);
+}
+.tl-item{ position:relative; margin-block-end:10px; }
+.tl-item .tl-dot{
+  position:absolute; inset-inline-end:-25px; inset-block-start:17px;
+  width:12px; height:12px; border-radius:50%;
+  box-shadow: 0 0 0 3px var(--paper);
+}
+.ev{
+  display:flex; gap:10px; align-items:flex-start; width:100%; text-align:start;
+  border-radius: var(--r-md); padding: 12px; border:1px solid transparent;
+  transition: transform var(--dur), box-shadow var(--dur);
+}
+.ev:hover{ box-shadow: var(--shadow-2); }
+.ev:active{ transform: scale(.99); }
+.ev.t-crit{ border-color: var(--crit-line); }
+.ev.t-caut{ border-color: var(--caut-line); }
+.ev.t-info{ border-color: var(--info-line); }
+.ev.t-lab { border-color: var(--lab-line); }
+.ev.t-ok  { border-color: var(--ok-line); }
+.ev .body{ flex:1; min-width:0; }
+.ev .head{ display:flex; align-items:baseline; justify-content:space-between; gap:10px; }
+.ev .title{ font-size:var(--fs-base); font-weight:800; color: var(--ink); }
+.ev time{ font-size:var(--fs-sm); font-weight:700; color: var(--ink-3); }
+.ev .det{ margin-block-start:5px; display:flex; flex-direction:column; gap:2px; }
+.ev .det span{ font-size:var(--fs-md); color: var(--ink-2); line-height:1.5; }
+.ev .marks{ flex:none; display:flex; flex-direction:column; align-items:center; gap:9px; padding-block-start:2px; }
+.ev .marks svg{ width:17px; height:17px; }
+.ev .marks .done{ color: var(--ok-solid); width:19px; height:19px; }
+.ev .marks .edit{ color: var(--ink-3); }
+
+.empty{
+  margin-block-start:34px; text-align:center; color: var(--ink-3);
+  display:flex; flex-direction:column; align-items:center; gap:10px;
+}
+.empty svg{ width:34px; height:34px; opacity:.55; }
+.empty p{ margin:0; font-size:var(--fs-md); font-weight:600; line-height:1.6; max-width:26ch; }
+
+/* floating action */
+.fab-wrap{
+  position:absolute; inset-inline:0; inset-block-end:0;
+  display:flex; justify-content:center; padding: 10px 16px 12px;
+  background: linear-gradient(to top, var(--paper) 55%, transparent);
+  pointer-events:none;
+}
+.fab{
+  pointer-events:auto;
+  display:inline-flex; align-items:center; gap:8px;
+  min-height:48px; padding-inline: 22px; border-radius: var(--r-pill);
+  background: var(--brand); color: var(--on-brand); font-weight:800; font-size:var(--fs-base);
+  box-shadow: 0 8px 22px color-mix(in oklab, var(--brand) 34%, transparent);
+  transition: transform var(--dur), filter var(--dur);
+}
+.fab svg{ width:18px; height:18px; }
+.fab:hover{ filter: brightness(1.12); }
+.fab:active{ transform: scale(.96); }
+
+/* ---------- tab bar ---------- */
+.tabbar{
+  flex:none; display:flex; align-items:stretch;
+  background: var(--surface); box-shadow: var(--shadow-3);
+  padding: 8px 4px 6px;
+}
+.tabbar button{
+  flex:1; display:flex; flex-direction:column; align-items:center; gap:4px;
+  padding-block: 4px; color: var(--ink-3); font-size:10.5px; font-weight:700;
+  transition: color var(--dur), transform var(--dur); min-height:48px;
+}
+.tabbar button svg{ width:23px; height:23px; }
+.tabbar button:hover{ color: var(--ink-2); }
+.tabbar button:active{ transform: scale(.92); }
+.tabbar button[aria-current="page"]{ color: var(--brand); }
+:root:not([data-theme="light"]) .tabbar button[aria-current="page"]{ color: var(--brand); }
+
+.homebar-ind{ flex:none; height:20px; display:grid; place-items:center; background: var(--surface); }
+.homebar-ind i{ display:block; width:130px; height:5px; border-radius:99px; background: var(--ink); opacity:.85; }
+@media (max-width:700px){ .homebar-ind{ height:18px } }
+
+/* toast */
+.toast{
+  position:absolute; inset-inline:0; inset-block-start:56px;
+  display:flex; justify-content:center; pointer-events:none; z-index:40;
+}
+.toast span{
+  background: var(--ink); color: var(--paper);
+  font-size:var(--fs-md); font-weight:700; padding: 10px 16px; border-radius: var(--r-pill);
+  box-shadow: var(--shadow-2);
+  opacity:0; transform: translateY(-10px); transition: opacity .24s var(--ease), transform .24s var(--ease);
+}
+.toast.show span{ opacity:1; transform:none; }
+
+/* ---------- login ---------- */
+.phone.no-chrome .tabbar,
+.phone.no-chrome .homebar-ind{ display:none; }
+
+.login-wrap{ padding: 54px 22px 24px; display:flex; flex-direction:column; min-height:100%; }
+.login-brand{ text-align:center; margin-block-end:34px; }
+.login-logo{
+  display:inline-grid; place-items:center; width:64px; height:64px; border-radius: var(--r-lg);
+  background: linear-gradient(150deg, var(--brand-2), var(--brand));
+  color:#fff; margin-block-end:14px; box-shadow: 0 10px 26px color-mix(in oklab, var(--brand) 34%, transparent);
+}
+.login-logo svg{ width:32px; height:32px; }
+.login-brand h1{ margin:0 0 6px; font-size:var(--fs-2xl); font-weight:800; letter-spacing:-.5px; color:var(--brand); direction:ltr; }
+.login-brand p{ margin:0; font-size:var(--fs-md); color:var(--ink-2); font-weight:600; }
+
+.login-form{ display:flex; flex-direction:column; gap:14px; }
+.field{ display:flex; flex-direction:column; gap:6px; text-align:start; }
+.field > span{ font-size:var(--fs-sm); font-weight:700; color:var(--ink-2); }
+.field input{
+  min-height:48px; border-radius: var(--r-md); border:1px solid var(--line);
+  background: var(--surface); padding-inline:14px; font-size:var(--fs-base);
+  outline:none; transition: border-color var(--dur), box-shadow var(--dur);
+}
+.field input::placeholder{ color: var(--ink-3); }
+.field input:focus{ border-color: var(--brand); box-shadow: 0 0 0 3px color-mix(in oklab, var(--brand) 16%, transparent); }
+.field.has-error input{ border-color: var(--crit); }
+
+.login-row{ display:flex; align-items:center; justify-content:space-between; font-size:var(--fs-sm); }
+.check{ display:inline-flex; align-items:center; gap:7px; font-weight:600; color:var(--ink-2); }
+.check input{ width:17px; height:17px; accent-color: var(--brand); }
+.login-row .link{ color: var(--brand); font-weight:700; }
+
+.login-form .btn-primary{ margin-block-start:6px; }
+.login-foot{ margin: 22px 0 0; text-align:center; font-size:var(--fs-md); color:var(--ink-2); }
+.login-foot .link{ color: var(--brand); font-weight:700; }
+.field-error{ font-size:var(--fs-xs); font-weight:700; color:var(--crit); min-height:2px; margin-block-start:2px; }
+
+/* ---------- editable avatar photo ---------- */
+.ava img{ width:100%; height:100%; object-fit:cover; }
+
+.hero .name-row, .profile-body .name-row{ display:flex; align-items:center; gap:6px; }
+.pencil-inline{
+  flex:none; width:30px; height:30px; border-radius:var(--r-pill); display:grid; place-items:center;
+  color: var(--ink-3); transition: background var(--dur), color var(--dur);
+}
+.pencil-inline:hover{ background: var(--surface-2); color: var(--ink); }
+.pencil-inline svg{ width:15px; height:15px; }
+
+/* ---------- bottom sheet (edit name / photo) ---------- */
+.sheet-backdrop{
+  position:absolute; inset:0; background: rgba(6,10,20,.5);
+  opacity:0; transition: opacity .22s var(--ease); z-index:60;
+}
+.sheet-backdrop.show{ opacity:1; }
+.sheet{
+  position:absolute; inset-inline:0; inset-block-end:0; z-index:61;
+  background: var(--surface); border-radius: 22px 22px 0 0;
+  padding: 10px 18px 18px;
+  box-shadow: 0 -12px 30px rgba(0,0,0,.18);
+  transform: translateY(100%); transition: transform .26s var(--ease);
+  display:flex; flex-direction:column; gap:14px;
+}
+.sheet.show{ transform: translateY(0); }
+.sheet-handle{ width:40px; height:5px; border-radius:99px; background: var(--line); margin: 4px auto 2px; }
+.sheet h2{ margin:0; font-size:var(--fs-lg); font-weight:800; text-align:center; }
+.sheet-avatar-row{ display:flex; flex-direction:column; align-items:center; gap:10px; }
+.ava-preview{
+  width:84px; height:84px; border-radius: var(--r-lg); overflow:hidden;
+  display:grid; place-items:center; box-shadow: inset 0 0 0 1px rgba(255,255,255,.25);
+}
+.ava-preview svg{ width:56%; height:56%; color:rgba(255,255,255,.94); }
+.ava-preview img{ width:100%; height:100%; object-fit:cover; }
+.sheet-avatar-actions{ display:flex; gap:8px; }
+.chip.ghost{ background:none; }
+.sheet-actions{ display:flex; gap:10px; margin-block-start:4px; }
+.btn-ghost{
+  flex:1; min-height:48px; border-radius: var(--r-lg); font-weight:800; font-size:var(--fs-base);
+  background: var(--surface-2); color: var(--ink-2); transition: background var(--dur);
+}
+.btn-ghost:hover{ background: var(--line-soft); }
+.sheet-actions .btn-primary{ flex:1.4; }
+
+/* ---------- tasks ---------- */
+.tasksec + .tasksec{ margin-block-start:22px; }
+.tasklist{ list-style:none; margin:12px 0 0; padding:0; display:flex; flex-direction:column; gap:8px; }
+.taskrow{
+  display:flex; align-items:center; gap:11px; width:100%; text-align:start;
+  background: var(--surface); border-radius: var(--r-lg); padding: 12px 14px;
+  box-shadow: var(--shadow-1); transition: background var(--dur), transform var(--dur), opacity var(--dur);
+}
+.taskrow:active{ transform: scale(.99); }
+.taskrow.done{ opacity:.58; }
+.checkbox{
+  flex:none; width:24px; height:24px; border-radius:8px; border:2px solid var(--line);
+  display:grid; place-items:center; color:transparent; transition: background var(--dur), border-color var(--dur), color var(--dur);
+}
+.checkbox svg{ width:14px; height:14px; }
+.taskrow.urgent .checkbox{ border-color: var(--crit-line); }
+.taskrow.done .checkbox{ background: var(--ok-solid); border-color: var(--ok-solid); color:#fff; }
+.taskrow .ttxt{ flex:1; font-size:var(--fs-md); font-weight:700; }
+.taskrow.done .ttxt{ text-decoration: line-through; color: var(--ink-3); }
+.taskrow .twho{
+  flex:none; font-size:var(--fs-xs); font-weight:700; color:var(--ink-3);
+  background:var(--surface-2); padding:4px 9px; border-radius:var(--r-pill);
+}
+
+/* ---------- treatments ---------- */
+.treatlist{ list-style:none; margin:12px 0 0; padding:0; display:flex; flex-direction:column; gap:9px; }
+
+/* ---------- more / profile ---------- */
+.profile-card{
+  display:flex; align-items:center; gap:14px; background: var(--surface); border-radius: var(--r-xl);
+  padding:16px; box-shadow: var(--shadow-1); margin-block-start:14px;
+}
+.profile-ava-wrap{ position:relative; flex:none; }
+.profile-ava-wrap .ava{ width:64px; height:64px; }
+.ava-edit-btn{
+  position:absolute; inset-inline-end:-4px; inset-block-end:-4px;
+  width:26px; height:26px; border-radius:50%; background: var(--brand); color:#fff;
+  display:grid; place-items:center; box-shadow: var(--shadow-2); border:2px solid var(--surface);
+  transition: transform var(--dur);
+}
+.ava-edit-btn:hover{ transform: scale(1.08); }
+.ava-edit-btn svg{ width:13px; height:13px; }
+.profile-body{ flex:1; min-width:0; }
+.profile-body h2{ margin:0; font-size:var(--fs-lg); font-weight:800; }
+.profile-body .role{ font-size:var(--fs-sm); color:var(--ink-2); font-weight:600; margin-block-start:2px; }
+
+.menu-list{ margin-block-start:16px; background: var(--surface); border-radius: var(--r-lg); box-shadow: var(--shadow-1); overflow:hidden; }
+.menu-item{
+  display:flex; align-items:center; gap:12px; width:100%; text-align:start; min-height:54px;
+  padding: 12px 14px; border-bottom:1px solid var(--line-soft); transition: background var(--dur);
+}
+.menu-list .menu-item:last-child{ border-bottom:0; }
+.menu-item:hover{ background: var(--surface-2); }
+.menu-item svg{ width:20px; height:20px; color: var(--ink-2); flex:none; }
+.menu-item span{ flex:1; font-size:var(--fs-md); font-weight:700; }
+.menu-item .chev{ width:16px; height:16px; color:var(--ink-3); transform: scaleX(-1); flex:none; }
+
+.btn-danger{
+  width:100%; min-height:50px; border-radius: var(--r-lg); margin-block-start:18px;
+  background: var(--crit-bg); color: var(--crit); border:1px solid var(--crit-line);
+  font-weight:800; font-size:var(--fs-base); display:flex; align-items:center; justify-content:center; gap:8px;
+  transition: background var(--dur), transform var(--dur);
+}
+.btn-danger:hover{ background: color-mix(in oklab, var(--crit-bg) 60%, var(--crit-line)); }
+.btn-danger:active{ transform: scale(.98); }
+.btn-danger svg{ width:18px; height:18px; }
+
+.appver{ text-align:center; margin-block-start:18px; font-size:var(--fs-xs); color:var(--ink-3); font-weight:600; }
+
+@media (prefers-reduced-motion: reduce){
+  *, *::before, *::after{ animation-duration:.001ms !important; animation-iteration-count:1 !important; transition-duration:.001ms !important; }
+}
+</style>
+
+<svg width="0" height="0" aria-hidden="true" style="position:absolute" focusable="false"><defs>
+  <g id="i-home" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 10.6 12 3.4l9 7.2"/><path d="M5.6 9.4V20a1 1 0 0 0 1 1h10.8a1 1 0 0 0 1-1V9.4"/><path d="M9.8 21v-5.4h4.4V21"/></g>
+  <g id="i-paw" fill="currentColor"><ellipse cx="6.9" cy="8.6" rx="2.05" ry="2.65"/><ellipse cx="11.9" cy="6.8" rx="2.1" ry="2.9"/><ellipse cx="17" cy="8.6" rx="2.05" ry="2.65"/><path d="M12 11.2c3 0 5.6 2.5 5.6 4.9 0 2-1.7 3.1-3.4 2.7a10.4 10.4 0 0 0-4.5 0c-1.7.4-3.4-.7-3.4-2.7 0-2.4 2.6-4.9 5.7-4.9Z"/></g>
+  <g id="i-syringe" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="m17.4 3.2 3.4 3.4"/><path d="m15.1 6.1 2.8 2.8"/><path d="M12.9 4.9 19.1 11l-8 8-3.4.6-3-3 .6-3.4 7.6-8.3Z" /><path d="m11.6 9.4 1.9 1.9M9.2 11.8l1.9 1.9"/></g>
+  <g id="i-tasks" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="4.4" width="16" height="16" rx="3.4"/><path d="m8.4 12.2 2.6 2.6 4.8-5"/></g>
+  <g id="i-more" fill="currentColor"><circle cx="5.5" cy="12" r="1.8"/><circle cx="12" cy="12" r="1.8"/><circle cx="18.5" cy="12" r="1.8"/></g>
+  <g id="i-menu" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round"><path d="M3.6 6.5h16.8M3.6 12h16.8M3.6 17.5h11.4"/></g>
+  <g id="i-bell" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M18 9.5a6 6 0 1 0-12 0c0 5-2 6.5-2 6.5h16s-2-1.5-2-6.5Z"/><path d="M13.7 19.6a2 2 0 0 1-3.4 0"/></g>
+  <g id="i-alert" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M10.3 3.9a2 2 0 0 1 3.4 0l7.4 12.7a2 2 0 0 1-1.7 3H4.6a2 2 0 0 1-1.7-3Z"/><path d="M12 9.3v4.2M12 17.1h.01"/></g>
+  <g id="i-box" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M20.5 7.8v8.4a1.6 1.6 0 0 1-.85 1.4l-6.9 3.6a1.6 1.6 0 0 1-1.5 0l-6.9-3.6a1.6 1.6 0 0 1-.85-1.4V7.8"/><path d="m3.5 7.8 8.5 4.3 8.5-4.3-7.75-3.9a1.6 1.6 0 0 0-1.5 0Z"/><path d="M12 12.1v9.3"/></g>
+  <g id="i-userplus" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="10" cy="8" r="3.6"/><path d="M3.8 20.2c.5-3.4 3.1-5.6 6.2-5.6 1.3 0 2.5.4 3.5 1"/><path d="M17.6 14.4v5.6M14.8 17.2h5.6"/></g>
+  <g id="i-calendar" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><rect x="3.4" y="5.2" width="17.2" height="15.4" rx="3"/><path d="M3.4 10h17.2M8 3.4v3.4M16 3.4v3.4"/></g>
+  <g id="i-info" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="8.8"/><path d="M12 11.2v5M12 7.9h.01"/></g>
+  <g id="i-plus" fill="none" stroke="currentColor" stroke-width="2.1" stroke-linecap="round"><path d="M12 5.2v13.6M5.2 12h13.6"/></g>
+  <g id="i-search" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round"><circle cx="11" cy="11" r="6.6"/><path d="m20 20-4.3-4.3"/></g>
+  <g id="i-filter" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M4 7.5h9M17 7.5h3M4 16.5h3M11 16.5h9"/><circle cx="15" cy="7.5" r="2.1"/><circle cx="9" cy="16.5" r="2.1"/></g>
+  <g id="i-chev" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m9.5 5.5 6.5 6.5-6.5 6.5"/></g>
+  <g id="i-pencil" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M16.4 3.9a2.1 2.1 0 0 1 3 3L8.6 17.7l-4 1 1-4Z"/><path d="m14.4 5.9 3 3"/></g>
+  <g id="i-check-circle" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="8.8"/><path d="m8.2 12.2 2.6 2.6 5-5.4"/></g>
+  <g id="i-check" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="m4.8 12.6 4.4 4.4 9.8-10.4"/></g>
+  <g id="i-flask" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M9.6 3.4h4.8M10.4 3.4v6.1L5.2 17.9A2 2 0 0 0 6.9 21h10.2a2 2 0 0 0 1.7-3.1l-5.2-8.4V3.4"/><path d="M7.6 15.2h8.8"/></g>
+  <g id="i-shield" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3.2 4.8 6v5.6c0 4.3 3 8.2 7.2 9.4 4.2-1.2 7.2-5.1 7.2-9.4V6Z"/><path d="m9.2 12 2 2 3.6-4"/></g>
+  <g id="i-dog" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M7.7 5.5C5.6 5.5 3.9 7.5 3.9 10c0 2.2 1 3.8 2.5 4.4"/><path d="M16.3 5.5c2.1 0 3.8 2 3.8 4.5 0 2.2-1 3.8-2.5 4.4"/><path d="M6.4 11a5.6 5.6 0 0 1 11.2 0v2.2a5.6 5.6 0 0 1-11.2 0Z"/><path d="M9.8 12.1h.01M14.2 12.1h.01"/><path d="M12 14.4v1.3"/><path d="M10.1 16.6c1.2 1 2.6 1 3.8 0"/></g>
+  <g id="i-cat" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M4.4 4.2 5.5 9M19.6 4.2 18.5 9"/><path d="M4.4 4.2 8.6 7.6h6.8l4.2-3.4"/><path d="M5.3 9.4v3.5a6.7 6.7 0 0 0 6.7 6.7h0a6.7 6.7 0 0 0 6.7-6.7V9.4"/><path d="M9.6 12.2h.01M14.4 12.2h.01"/><path d="M12 14.6v1.2M9.4 15.4c.7.8 1.6 1.2 2.6 1.2s1.9-.4 2.6-1.2"/></g>
+  <g id="i-doc" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M13.4 3.4H7a2 2 0 0 0-2 2v13.2a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V9Z"/><path d="M13.4 3.4V9H19"/><path d="M8.6 13.4h6.8M8.6 17h4.4"/></g>
+  <g id="i-clock" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="8.8"/><path d="M12 6.8V12l3.4 2"/></g>
+  <g id="i-signal" fill="currentColor"><rect x="0" y="7" width="3" height="4" rx="1"/><rect x="4.5" y="5" width="3" height="6" rx="1"/><rect x="9" y="3" width="3" height="8" rx="1"/><rect x="13.5" y="1" width="3" height="10" rx="1"/></g>
+  <g id="i-wifi" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"><path d="M1.4 4.6a11 11 0 0 1 13.2 0M4 7.6a7 7 0 0 1 8 0M6.7 10.5a3 3 0 0 1 2.6 0"/></g>
+  <g id="i-battery" fill="none" stroke="currentColor" stroke-width="1.3"><rect x=".7" y="1.2" width="20" height="10.6" rx="3.2"/><rect x="2.4" y="2.9" width="15.6" height="7.2" rx="2" fill="currentColor" stroke="none"/><path d="M22.4 5.2v3.6" stroke-width="2.4" stroke-linecap="round" opacity=".45"/></g>
+  <g id="i-camera" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M4 8.4a1.6 1.6 0 0 1 1.6-1.6h1.7l1-1.6h7.4l1 1.6h1.7A1.6 1.6 0 0 1 20 8.4v9A1.6 1.6 0 0 1 18.4 19H5.6A1.6 1.6 0 0 1 4 17.4Z"/><circle cx="12" cy="12.6" r="3.4"/></g>
+  <g id="i-lock" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="10.4" width="14" height="9.6" rx="2.4"/><path d="M7.6 10.4V7.6a4.4 4.4 0 0 1 8.8 0v2.8"/></g>
+  <g id="i-mail" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><rect x="3.4" y="5.6" width="17.2" height="12.8" rx="2.4"/><path d="m4.2 6.6 7.8 6 7.8-6"/></g>
+  <g id="i-user" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8.2" r="3.6"/><path d="M4.6 20c.6-3.8 3.6-6.2 7.4-6.2s6.8 2.4 7.4 6.2"/></g>
+  <g id="i-team" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><circle cx="8.6" cy="8.4" r="3"/><path d="M3 19c.4-3 2.8-5 5.6-5s5.2 2 5.6 5"/><circle cx="16.6" cy="9" r="2.4"/><path d="M15.6 14.2c2.4.2 4.3 2 4.7 4.6"/></g>
+  <g id="i-cog" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3.1"/><path d="M12 3.6v2.1M12 18.3v2.1M20.4 12h-2.1M5.7 12H3.6M17.7 6.3l-1.5 1.5M7.8 16.2l-1.5 1.5M17.7 17.7l-1.5-1.5M7.8 7.8 6.3 6.3"/></g>
+  <g id="i-headset" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M4 13v-1a8 8 0 0 1 16 0v1"/><rect x="3.2" y="13" width="4" height="6" rx="1.6"/><rect x="16.8" y="13" width="4" height="6" rx="1.6"/><path d="M20.8 19v.6a3 3 0 0 1-3 3h-3.4"/></g>
+  <g id="i-logout" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M9 4.5H6a2 2 0 0 0-2 2v11a2 2 0 0 0 2 2h3"/><path d="M14.5 8l4 4-4 4"/><path d="M18.2 12H9.5"/></g>
+</defs></svg>
+
+<div class="stage">
+  <div class="stage-head">
+    <p class="stage-title"><b>Vet-to-Go</b> — אב־טיפוס אינטראקטיבי · <span class="num">8</span> מסכים · RTL</p>
+    <div class="jump" role="group" aria-label="מעבר מהיר בין מסכים">
+      <button type="button" data-jump="login">התחברות</button>
+      <button type="button" data-jump="home">בית</button>
+      <button type="button" data-jump="pets">בעלי חיים</button>
+      <button type="button" data-jump="pet">פרטי בעל חיים</button>
+      <button type="button" data-jump="treat">טיפולים</button>
+      <button type="button" data-jump="tasks">משימות</button>
+      <button type="button" data-jump="history">היסטוריה רפואית</button>
+      <button type="button" data-jump="more">עוד</button>
+    </div>
+  </div>
+
+  <div class="device">
+    <div class="phone no-chrome" dir="rtl" lang="he">
+
+      <div class="statusbar">
+        <span class="num">9:41</span>
+        <span class="sb-icons">
+          <svg viewBox="0 0 17 12" width="17" height="12" aria-hidden="true"><use href="#i-signal"/></svg>
+          <svg viewBox="0 0 16 12" width="16" height="12" aria-hidden="true"><use href="#i-wifi"/></svg>
+          <svg viewBox="0 0 24 13" width="24" height="13" aria-hidden="true"><use href="#i-battery"/></svg>
+        </span>
+      </div>
+
+      <div class="toast" id="toast" aria-live="polite"><span></span></div>
+
+      <main class="screens">
+
+        <!-- ============ 0 · התחברות ============ -->
+        <section class="screen is-active" id="scr-login" aria-label="התחברות">
+          <div class="scroll">
+            <div class="login-wrap">
+              <div class="login-brand">
+                <span class="login-logo"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="#i-paw"/></svg></span>
+                <h1>Vet-to-Go</h1>
+                <p>מערכת שטח לניהול בעלי חיים וטיפולים</p>
+              </div>
+
+              <form class="login-form" id="loginForm" novalidate>
+                <label class="field" id="loginUserField">
+                  <span>אימייל או טלפון</span>
+                  <input type="text" id="loginUser" autocomplete="username" placeholder="לורי כהן">
+                  <span class="field-error" id="loginUserError"></span>
+                </label>
+                <label class="field" id="loginPassField">
+                  <span>סיסמה</span>
+                  <input type="password" id="loginPass" autocomplete="current-password" placeholder="••••••••">
+                  <span class="field-error" id="loginPassError"></span>
+                </label>
+                <div class="login-row">
+                  <label class="check"><input type="checkbox" id="loginRemember" checked>זכור אותי</label>
+                  <button class="link" type="button" data-toast="נשלח קישור לאיפוס סיסמה">שכחתי סיסמה</button>
+                </div>
+                <button class="btn-primary" type="submit" id="loginSubmit">
+                  <svg viewBox="0 0 24 24" aria-hidden="true"><use href="#i-lock"/></svg>כניסה
+                </button>
+              </form>
+
+              <p class="login-foot">אין לך חשבון? <button class="link" type="button" data-toast="פנייה למנהל המערכת לקבלת גישה">בקשת גישה</button></p>
+            </div>
+          </div>
+        </section>
+
+        <!-- ============ 1 · בית ============ -->
+        <section class="screen" id="scr-home" aria-label="בית">
+          <div class="homebar">
+            <button class="iconbtn" type="button" aria-label="פתיחת תפריט"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="#i-menu"/></svg></button>
+            <span class="brand">Vet-to-Go</span>
+            <span class="sync"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="#i-check"/></svg>מסונכרן</span>
+          </div>
+
+          <div class="scroll">
+            <div class="datecard">
+              <span class="dow">יום שבת</span>
+              <strong class="dnum num">8</strong>
+              <span class="dmon">אוגוסט <span class="num">2026</span></span>
+            </div>
+
+            <section class="banner" id="banner" role="alert">
+              <div class="banner-top"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="#i-bell"/></svg>התראה קריטית</div>
+              <p>עצרו שימוש באצווה <bdi>X</bdi> של אנטיביוטיקה עד להודעה חדשה.</p>
+              <button type="button" id="ackBtn">קראתי והבנתי</button>
+            </section>
+
+            <div class="pad">
+              <div class="sechead">
+                <h2>מרכז ההתראות</h2>
+                <button class="link" type="button" data-toast="פותח את כל ההתראות">הצג הכל</button>
+              </div>
+
+              <div class="feed">
+                <ul>
+                  <li><button class="alert" type="button" data-toast="פתיחת דוח התפרצות">
+                    <span class="dot-ico t-crit"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="#i-alert"/></svg></span>
+                    <span class="txt">התפרצות שעלת כלבייה ב׳</span>
+                    <time class="num" datetime="08:30">08:30</time>
+                  </button></li>
+                  <li><button class="alert" type="button" data-toast="פתיחת ניהול מלאי">
+                    <span class="dot-ico t-warn"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="#i-box"/></svg></span>
+                    <span class="txt">חוסר במלאי: מטרונידזול</span>
+                    <time class="num" datetime="08:00">08:00</time>
+                  </button></li>
+                  <li><button class="alert" type="button" data-toast="פתיחת רשימת המשימות">
+                    <span class="dot-ico t-info"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="#i-userplus"/></svg></span>
+                    <span class="txt">ד״ר כהן הוסיף משימות חדשות</span>
+                    <time class="num" datetime="07:45">07:45</time>
+                  </button></li>
+                  <li><button class="alert" type="button" data-toast="פתיחת יומן התורים">
+                    <span class="dot-ico t-caut"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="#i-calendar"/></svg></span>
+                    <span class="txt">ביקור תורים מתוכנן ב־<bdi class="num">14:00</bdi></span>
+                    <time>אתמול</time>
+                  </button></li>
+                  <li><button class="alert" type="button" data-toast="פתיחת סבב החיסונים">
+                    <span class="dot-ico t-info"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="#i-info"/></svg></span>
+                    <span class="txt">סבב חיסונים מתחיל בעוד <bdi class="num">20</bdi> דקות</span>
+                    <time class="num" datetime="07:10">07:10</time>
+                  </button></li>
+                </ul>
+              </div>
+
+              <div class="stats">
+                <article class="stat">
+                  <h3>משימות כלליות</h3>
+                  <span class="big num">12</span>
+                  <span class="sub">בוצעו <bdi class="num">5</bdi> מתוך <bdi class="num">12</bdi></span>
+                  <div class="track-row">
+                    <div class="track"><i style="width:42%"></i></div>
+                    <span class="pct num">42%</span>
+                  </div>
+                </article>
+                <article class="stat urgent">
+                  <h3>משימות דחופות</h3>
+                  <span class="big num">3</span>
+                  <span class="sub">בוצעה <bdi class="num">1</bdi> מתוך <bdi class="num">3</bdi></span>
+                  <div class="track-row">
+                    <div class="track"><i style="width:33%"></i></div>
+                    <span class="pct num">33%</span>
+                  </div>
+                </article>
+              </div>
+
+              <div class="sechead"><h2>דחוף לביצוע</h2></div>
+
+              <div id="homeDue"></div>
+
+              <div style="margin-block-start:16px">
+                <button class="btn-primary" type="button" data-toast="פתיחת טופס משימה חדשה">
+                  <svg viewBox="0 0 24 24" aria-hidden="true"><use href="#i-plus"/></svg>משימה חדשה
+                </button>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- ============ 2 · בעלי חיים ============ -->
+        <section class="screen" id="scr-pets" aria-label="בעלי חיים">
+          <div class="appbar">
+            <span style="width:40px" aria-hidden="true"></span>
+            <h1>בעלי חיים</h1>
+            <button class="iconbtn" type="button" aria-label="הוספת בעל חיים" data-toast="פתיחת טופס קליטה"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="#i-plus"/></svg></button>
+          </div>
+
+          <div class="scroll pad">
+            <div class="searchrow">
+              <div class="search">
+                <svg viewBox="0 0 24 24" aria-hidden="true"><use href="#i-search"/></svg>
+                <input id="petSearch" type="search" inputmode="search" placeholder="חיפוש לפי שם או מספר" aria-label="חיפוש בעלי חיים">
+              </div>
+              <button class="filterbtn" type="button" aria-label="סינון מתקדם" data-toast="סינון מתקדם"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="#i-filter"/></svg></button>
+            </div>
+
+            <div class="chips" id="speciesChips" role="group" aria-label="סינון לפי סוג">
+              <button class="chip" type="button" data-species="all" aria-pressed="true">הכל</button>
+              <button class="chip" type="button" data-species="cat" aria-pressed="false"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="#i-cat"/></svg>חתולים</button>
+              <button class="chip" type="button" data-species="dog" aria-pressed="false"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="#i-dog"/></svg>כלבים</button>
+              <button class="chip" type="button" data-species="other" aria-pressed="false">אחרים</button>
+            </div>
+
+            <ul class="petlist" id="petList"></ul>
+            <div class="empty" id="petsEmpty" hidden>
+              <svg viewBox="0 0 24 24" aria-hidden="true"><use href="#i-search"/></svg>
+              <p>לא נמצאו בעלי חיים שמתאימים לחיפוש. נסו שם או מספר אחר.</p>
+            </div>
+          </div>
+        </section>
+
+        <!-- ============ 3 · פרטי בעל חיים ============ -->
+        <section class="screen" id="scr-pet" aria-label="פרטי בעל חיים">
+          <div class="appbar">
+            <button class="iconbtn" type="button" aria-label="חזרה" data-back><svg viewBox="0 0 24 24" aria-hidden="true"><use href="#i-chev"/></svg></button>
+            <h1>פרטי בעל חיים</h1>
+            <button class="iconbtn" type="button" aria-label="פעולות נוספות" data-toast="עריכה · העברה · שחרור"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="#i-more"/></svg></button>
+          </div>
+
+          <div class="scroll pad" id="petDetail"></div>
+        </section>
+
+        <!-- ============ 4 · היסטוריה רפואית ============ -->
+        <section class="screen" id="scr-history" aria-label="היסטוריה רפואית">
+          <div class="appbar">
+            <button class="iconbtn" type="button" aria-label="חזרה" data-back><svg viewBox="0 0 24 24" aria-hidden="true"><use href="#i-chev"/></svg></button>
+            <h1>היסטוריה רפואית</h1>
+            <span style="width:40px" aria-hidden="true"></span>
+          </div>
+
+          <div class="scroll pad" style="padding-block-end:78px">
+            <div class="chips tabs" id="historyTabs" role="tablist" aria-label="תצוגות היסטוריה">
+              <button class="chip" type="button" role="tab" data-kind="all"   aria-selected="true">ציר זמן</button>
+              <button class="chip" type="button" role="tab" data-kind="treat" aria-selected="false">טיפולים</button>
+              <button class="chip" type="button" role="tab" data-kind="exam"  aria-selected="false">בדיקות</button>
+              <button class="chip" type="button" role="tab" data-kind="doc"   aria-selected="false">מסמכים</button>
+            </div>
+
+            <ol class="timeline" id="timeline"></ol>
+            <div class="empty" id="historyEmpty" hidden>
+              <svg viewBox="0 0 24 24" aria-hidden="true"><use href="#i-doc"/></svg>
+              <p id="historyEmptyText">אין רישומים בתצוגה הזו.</p>
+            </div>
+          </div>
+
+          <div class="fab-wrap">
+            <button class="fab" type="button" data-toast="פתיחת טופס טיפול/אירוע">
+              <svg viewBox="0 0 24 24" aria-hidden="true"><use href="#i-plus"/></svg>הוסף טיפול/אירוע
+            </button>
+          </div>
+        </section>
+
+        <!-- ============ 5 · טיפולים ============ -->
+        <section class="screen" id="scr-treat" aria-label="טיפולים">
+          <div class="appbar">
+            <span style="width:40px" aria-hidden="true"></span>
+            <h1>טיפולים</h1>
+            <span style="width:40px" aria-hidden="true"></span>
+          </div>
+          <div class="scroll pad">
+            <div class="sechead" style="margin-block-start:16px"><h2>טיפולים פעילים</h2></div>
+            <ul class="treatlist" id="treatList"></ul>
+          </div>
+        </section>
+
+        <!-- ============ 6 · משימות ============ -->
+        <section class="screen" id="scr-tasks" aria-label="משימות">
+          <div class="appbar">
+            <span style="width:40px" aria-hidden="true"></span>
+            <h1>משימות</h1>
+            <span style="width:40px" aria-hidden="true"></span>
+          </div>
+          <div class="scroll pad" id="taskScreen"></div>
+        </section>
+
+        <!-- ============ 7 · עוד ============ -->
+        <section class="screen" id="scr-more" aria-label="עוד">
+          <div class="appbar">
+            <span style="width:40px" aria-hidden="true"></span>
+            <h1>עוד</h1>
+            <span style="width:40px" aria-hidden="true"></span>
+          </div>
+          <div class="scroll pad" id="moreScreen"></div>
+        </section>
+
+      </main>
+
+      <nav class="tabbar" id="tabbar" aria-label="ניווט ראשי">
+        <button type="button" data-tab="home" aria-current="page"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="#i-home"/></svg>בית</button>
+        <button type="button" data-tab="pets"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="#i-paw"/></svg>בעלי חיים</button>
+        <button type="button" data-tab="treat"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="#i-syringe"/></svg>טיפולים</button>
+        <button type="button" data-tab="tasks"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="#i-tasks"/></svg>משימות</button>
+        <button type="button" data-tab="more"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="#i-more"/></svg>עוד</button>
+      </nav>
+
+      <div class="homebar-ind"><i></i></div>
+
+      <div class="sheet-backdrop" id="sheetBackdrop" hidden></div>
+      <div class="sheet" id="editSheet" hidden role="dialog" aria-modal="true" aria-labelledby="sheetTitle">
+        <div class="sheet-handle"></div>
+        <h2 id="sheetTitle">עריכת פרטים</h2>
+        <div class="sheet-avatar-row">
+          <span class="ava-preview" id="sheetAvaPreview"></span>
+          <div class="sheet-avatar-actions">
+            <button type="button" class="chip" id="sheetPickPhoto"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="#i-camera"/></svg>בחירת תמונה</button>
+            <button type="button" class="chip ghost" id="sheetResetPhoto">איפוס לברירת מחדל</button>
+          </div>
+          <input type="file" id="sheetFileInput" accept="image/*" hidden>
+        </div>
+        <label class="field">
+          <span id="sheetNameLabel">שם</span>
+          <input type="text" id="sheetNameInput" maxlength="24">
+        </label>
+        <div class="sheet-actions">
+          <button type="button" class="btn-ghost" id="sheetCancel">ביטול</button>
+          <button type="button" class="btn-primary" id="sheetSave">שמירה</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+(() => {
+  "use strict";
+
+  /* ---------------- data ---------------- */
+  const STATUS = {
+    active:   { label: "טיפול פעיל",  tone: "t-crit" },
+    watch:    { label: "מעקב רפואי",  tone: "t-warn" },
+    recover:  { label: "החלמה",       tone: "t-caut" },
+    healthy:  { label: "בריא",        tone: "t-ok"   }
+  };
+
+  const PETS = [
+    { id:24, name:"רולי",   species:"dog", kind:"כלב", breed:"כלב מעורב", sex:"זכר", age:"3 שנים",  weight:"18.5", status:"active",  ava:"g1", photo:null,
+      born:"12/05/2023", chip:"900215000123456", intake:"01/02/2026", source:"כלבייה א׳", fix:"מסורס",
+      allergy:"פניצילין", sens:"מזון בקר", chronic:"אין", note:"יש להימנע ממתן NSAIDs" },
+    { id:25, name:"בוני",   species:"dog", kind:"כלב", breed:"כלב רועים", sex:"נקבה", age:"5 שנים", weight:"24.2", status:"watch",   ava:"g2", photo:null,
+      born:"03/09/2021", chip:"900215000123457", intake:"14/03/2026", source:"כלבייה ב׳", fix:"מעוקרת",
+      allergy:"אין ידועה", sens:"אין", chronic:"דלקת מפרקים", note:"לשקול משכך כאבים ארוך טווח" },
+    { id:26, name:"מילו",   species:"cat", kind:"חתול", breed:"חתול בית", sex:"זכר", age:"2 שנים",  weight:"4.6",  status:"recover", ava:"g3", photo:null,
+      born:"20/01/2024", chip:"900215000123458", intake:"22/06/2026", source:"קליטה מהשטח", fix:"מסורס",
+      allergy:"אין ידועה", sens:"אין", chronic:"אין", note:"מעקב משקל שבועי" },
+    { id:27, name:"קיטי",   species:"cat", kind:"חתול", breed:"חתול בית", sex:"נקבה", age:"4 שנים", weight:"3.9",  status:"healthy", ava:"g4", photo:null,
+      born:"08/11/2021", chip:"900215000123459", intake:"05/05/2026", source:"מסירה", fix:"מעוקרת",
+      allergy:"אין ידועה", sens:"אין", chronic:"אין", note:"אין הערות מיוחדות" },
+    { id:28, name:"לונה",   species:"dog", kind:"כלב", breed:"לברדור", sex:"נקבה", age:"1 שנה",     weight:"21.0", status:"healthy", ava:"g5", photo:null,
+      born:"17/07/2025", chip:"900215000123460", intake:"29/07/2026", source:"כלבייה א׳", fix:"מעוקרת",
+      allergy:"אין ידועה", sens:"אין", chronic:"אין", note:"אין הערות מיוחדות" },
+    { id:29, name:"צ׳ארלי", species:"dog", kind:"כלב", breed:"בול טרייר", sex:"זכר", age:"6 שנים",  weight:"27.4", status:"watch",   ava:"g6", photo:null,
+      born:"02/04/2020", chip:"900215000123461", intake:"11/01/2026", source:"כלבייה ב׳", fix:"מסורס",
+      allergy:"אין ידועה", sens:"מזון עוף", chronic:"רגישות עורית", note:"להימנע ממזון על בסיס עוף" }
+  ];
+
+  let USER = { name:"לורי כהן", role:"טכנאי/ת וטרינרי/ת · משמרת בוקר", photo:null };
+
+  const DUE_TASK = { petId:24, what:"מתן אנטיביוטיקה", when:"15" };
+
+  let TASKS = [
+    { id:1,  text:"מתן אנטיביוטיקה לרולי (24)",       who:"לורי",    urgent:true,  done:false },
+    { id:2,  text:"בדיקת מעקב לצ׳ארלי (29)",           who:"ד״ר כהן", urgent:true,  done:false },
+    { id:3,  text:"עדכון תיק רפואי לבוני (25)",         who:"לורי",    urgent:true,  done:true  },
+    { id:4,  text:"ניקוי כלוב 12",                     who:"לורי",    urgent:false, done:true  },
+    { id:5,  text:"הזמנת מלאי מטרונידזול",             who:"ד״ר כהן", urgent:false, done:false },
+    { id:6,  text:"שקילה שבועית למילו (26)",           who:"לורי",    urgent:false, done:true  },
+    { id:7,  text:"חיסון משושה ללונה (28)",            who:"ד״ר כהן", urgent:false, done:false },
+    { id:8,  text:"בדיקת דם לרולי (24)",                who:"לורי",    urgent:false, done:true  },
+    { id:9,  text:"עדכון יומן תורים",                  who:"ד״ר כהן", urgent:false, done:false },
+    { id:10, text:"ספירת מלאי תרופות",                 who:"לורי",    urgent:false, done:true  },
+    { id:11, text:"ניקוי תא בידוד",                    who:"לורי",    urgent:false, done:false },
+    { id:12, text:"דוח יומי למנהל",                    who:"ד״ר כהן", urgent:false, done:false }
+  ];
+
+  const HISTORY = {
+    24: [
+      { date:"8 באוגוסט 2026", time:"09:10", title:"מתן אנטיביוטיקה", kind:"treat", tone:"t-crit", icon:"i-syringe", done:true,
+        det:["אמוקסיצילין <bdi class='num'>250</bdi> מ״ג", "מינון: <bdi class='num'>1.5</bdi> מ״ל", "בוצע על ידי: לורי"] },
+      { date:"8 באוגוסט 2026", time:"07:45", title:"בדיקה כללית", kind:"exam", tone:"t-caut", icon:"i-check-circle", done:true,
+        det:["מצב כללי טוב, תיאבון תקין", "מבצע: ד״ר כהן"] },
+      { date:"6 באוגוסט 2026", time:"16:30", title:"מעקב רפואי", kind:"treat", tone:"t-info", icon:"i-check-circle", done:true,
+        det:["מצב יציב, ללא שינוי", "מבצע: לורי"] },
+      { date:"3 באוגוסט 2026", time:"11:20", title:"בדיקת דם", kind:"exam", tone:"t-lab", icon:"i-flask", done:true,
+        det:["תוצאות בטווח תקין", "מבצע: ד״ר כהן"] },
+      { date:"1 באוגוסט 2026", time:"15:00", title:"חיסון משושה", kind:"treat", tone:"t-ok", icon:"i-shield", done:true,
+        det:["בוצע חיסון משושה", "מבצע: לורי"] }
+    ],
+    25: [
+      { date:"7 באוגוסט 2026", time:"10:05", title:"בדיקת מפרקים", kind:"exam", tone:"t-lab", icon:"i-flask", done:true,
+        det:["ירידה קלה בטווח התנועה", "מבצע: ד״ר כהן"] },
+      { date:"2 באוגוסט 2026", time:"08:20", title:"מתן משכך כאבים", kind:"treat", tone:"t-info", icon:"i-syringe", done:true,
+        det:["גבפנטין <bdi class='num'>100</bdi> מ״ג", "מבצע: לורי"] }
+    ],
+    26: [
+      { date:"5 באוגוסט 2026", time:"13:40", title:"שקילה שבועית", kind:"exam", tone:"t-ok", icon:"i-check-circle", done:true,
+        det:["<bdi class='num'>4.6</bdi> ק״ג · עלייה של <bdi class='num'>0.3</bdi> ק״ג", "מבצע: לורי"] }
+    ]
+  };
+
+  const TONE_SOLID = { "t-crit":"--crit-solid", "t-warn":"--warn-solid", "t-caut":"--caut-solid",
+                       "t-ok":"--ok-solid", "t-info":"--info-solid", "t-lab":"--lab-solid" };
+
+  /* ---------------- helpers ---------------- */
+  const $  = (s, r = document) => r.querySelector(s);
+  const $$ = (s, r = document) => Array.from(r.querySelectorAll(s));
+  const ico = (id, cls = "") => `<svg class="${cls}" viewBox="0 0 24 24" aria-hidden="true"><use href="#${id}"/></svg>`;
+  const speciesIcon = p => p.species === "cat" ? "i-cat" : "i-dog";
+  const avaContent = p => p.photo ? `<img src="${p.photo}" alt="">` : ico(speciesIcon(p));
+
+  /* ---------------- navigation ---------------- */
+  const SCREENS = { login:"scr-login", home:"scr-home", pets:"scr-pets", pet:"scr-pet", treat:"scr-treat", tasks:"scr-tasks", history:"scr-history", more:"scr-more" };
+  const TAB_OF  = { home:"home", pets:"pets", pet:"pets", treat:"treat", tasks:"tasks", history:"pets", more:"more" };
+  let current = "login";
+  let stack = [];
+
+  function show(name, { push = false } = {}) {
+    if (!SCREENS[name]) return;
+    if (push && name !== current) stack.push(current);
+    current = name;
+    $$(".screen").forEach(s => s.classList.toggle("is-active", s.id === SCREENS[name]));
+    $$("#tabbar button").forEach(b => {
+      const on = b.dataset.tab === TAB_OF[name];
+      on ? b.setAttribute("aria-current", "page") : b.removeAttribute("aria-current");
+    });
+    $$(".jump button").forEach(b => b.setAttribute("aria-current", String(b.dataset.jump === name)));
+    $(".phone").classList.toggle("no-chrome", name === "login");
+    const sc = $("#" + SCREENS[name] + " .scroll");
+    if (sc) sc.scrollTop = 0;
+  }
+  function back() { show(stack.pop() || "pets"); }
+
+  /* ---------------- toast ---------------- */
+  let toastTimer;
+  function toast(msg) {
+    const t = $("#toast");
+    t.firstElementChild.textContent = msg;
+    t.classList.add("show");
+    clearTimeout(toastTimer);
+    toastTimer = setTimeout(() => t.classList.remove("show"), 1900);
+  }
+
+  /* ---------------- pets list ---------------- */
+  let species = "all", query = "";
+
+  function renderPets() {
+    const q = query.trim();
+    const rows = PETS.filter(p => {
+      const bySpecies = species === "all"
+        ? true
+        : species === "other" ? !["dog", "cat"].includes(p.species) : p.species === species;
+      const byQuery = !q || p.name.includes(q) || String(p.id).includes(q);
+      return bySpecies && byQuery;
+    });
+
+    $("#petsEmpty").hidden = rows.length > 0;
+    $("#petList").innerHTML = rows.map(p => {
+      const st = STATUS[p.status];
+      return `<li>
+        <button class="petrow" type="button" data-open-pet="${p.id}">
+          <span class="ava ${p.ava}">${avaContent(p)}</span>
+          <span class="body">
+            <span class="name">${p.name}</span>
+            <span class="kind">${p.kind}</span>
+            <span class="badge ${st.tone}">${st.label}</span>
+          </span>
+          <span class="tail">
+            <span class="id num">${p.id}</span>
+            ${ico("i-chev")}
+          </span>
+        </button>
+      </li>`;
+    }).join("");
+  }
+
+  /* ---------------- pet detail ---------------- */
+  let activePet = PETS[0];
+
+  function renderPet(pet) {
+    activePet = pet;
+    const st = STATUS[pet.status];
+    $("#petDetail").innerHTML = `
+      <section class="hero">
+        <div class="meta">
+          <span class="id num">${pet.id}</span>
+          <div class="name-row">
+            <h2 class="name">${pet.name}</h2>
+            <button class="pencil-inline" type="button" data-edit-pet="${pet.id}" aria-label="עריכת שם ותמונה">${ico("i-pencil")}</button>
+          </div>
+          <span class="line">${pet.breed} | ${pet.sex}</span>
+          <span class="line">גיל: ${pet.age}</span>
+          <span class="line">משקל: <bdi class="num">${pet.weight}</bdi> ק״ג</span>
+          <span class="badge ${st.tone}">${st.label}</span>
+        </div>
+        <span class="ava ${pet.ava}">${avaContent(pet)}</span>
+      </section>
+
+      <div class="tiles">
+        <button class="tile is-alert" type="button" data-go-history>${ico("i-alert")}היסטוריה רפואית</button>
+        <button class="tile" type="button" data-toast="פתיחת הטיפול הפעיל">${ico("i-dog")}טיפול פעיל</button>
+        <button class="tile" type="button" data-toast="פתיחת פרטי בעל החיים">${ico("i-paw")}פרטים</button>
+        <button class="tile" type="button" data-go-history>${ico("i-syringe")}היסטוריה</button>
+      </div>
+
+      <section class="panel critical" aria-labelledby="crit-h">
+        <h3 id="crit-h">${ico("i-alert")}מידע קריטי</h3>
+        <div class="kv">
+          <div><span class="k">אלרגיה</span><span class="v">${pet.allergy}</span></div>
+          <div><span class="k">רגישויות</span><span class="v">${pet.sens}</span></div>
+          <div><span class="k">מחלות רקע</span><span class="v">${pet.chronic}</span></div>
+        </div>
+        <p class="note"><span>הערות חשובות</span>${pet.note.replace("NSAIDs", "<bdi>NSAIDs</bdi>")}</p>
+      </section>
+
+      <section class="panel" aria-labelledby="gen-h">
+        <h3 id="gen-h">פרטים כלליים</h3>
+        <dl class="kv">
+          <div><dt>תאריך לידה</dt><dd class="num">${pet.born}</dd></div>
+          <div><dt>מס׳ שבב</dt><dd class="num">${pet.chip}</dd></div>
+          <div><dt>תאריך כניסה</dt><dd class="num">${pet.intake}</dd></div>
+          <div><dt>מקור כניסה</dt><dd>${pet.source}</dd></div>
+          <div><dt>סטטוס</dt><dd>${pet.fix}</dd></div>
+        </dl>
+      </section>`;
+  }
+
+  /* ---------------- timeline ---------------- */
+  let historyKind = "all";
+
+  function renderHistory() {
+    const events = (HISTORY[activePet.id] || []).filter(e => historyKind === "all" || e.kind === historyKind);
+    const empty = $("#historyEmpty");
+    empty.hidden = events.length > 0;
+    $("#historyEmptyText").textContent = historyKind === "doc"
+      ? "אין מסמכים סרוקים עבור " + activePet.name + ". אפשר להוסיף מסמך מכפתור ההוספה."
+      : "אין רישומים בתצוגה הזו עבור " + activePet.name + ".";
+
+    let lastDate = null;
+    $("#timeline").innerHTML = events.map(e => {
+      const head = e.date === lastDate ? "" : `<li><span class="tl-date">${e.date}</span></li>`;
+      lastDate = e.date;
+      return head + `<li class="tl-item">
+        <span class="tl-dot" style="background: var(${TONE_SOLID[e.tone]})"></span>
+        <button class="ev ${e.tone}" type="button" data-toast="פתיחת הרישום: ${e.title}">
+          <span class="body">
+            <span class="head">
+              <span class="title">${e.title}</span>
+              <time class="num" datetime="${e.time}">${e.time}</time>
+            </span>
+            <span class="det">${e.det.map(d => `<span>${d}</span>`).join("")}</span>
+          </span>
+          <span class="marks">
+            ${ico("i-pencil", "edit")}
+            ${e.done ? ico("i-check-circle", "done") : ico(e.icon, "edit")}
+          </span>
+        </button>
+      </li>`;
+    }).join("");
+  }
+
+  /* ---------------- home stats + due card ---------------- */
+  function renderHomeStats() {
+    const gTotal = TASKS.length, gDone = TASKS.filter(t => t.done).length;
+    const uTasks = TASKS.filter(t => t.urgent);
+    const uTotal = uTasks.length, uDone = uTasks.filter(t => t.done).length;
+    const gPct = Math.round((gDone / gTotal) * 100), uPct = Math.round((uDone / uTotal) * 100);
+
+    const stats = $$(".stats .stat");
+    stats[0].querySelector(".big").textContent = gTotal;
+    stats[0].querySelector(".sub").innerHTML = `בוצעו <bdi class="num">${gDone}</bdi> מתוך <bdi class="num">${gTotal}</bdi>`;
+    stats[0].querySelector(".track > i").style.width = gPct + "%";
+    stats[0].querySelector(".pct").textContent = gPct + "%";
+
+    stats[1].querySelector(".big").textContent = uTotal;
+    stats[1].querySelector(".sub").innerHTML = `בוצעה <bdi class="num">${uDone}</bdi> מתוך <bdi class="num">${uTotal}</bdi>`;
+    stats[1].querySelector(".track > i").style.width = uPct + "%";
+    stats[1].querySelector(".pct").textContent = uPct + "%";
+  }
+
+  function renderHomeDue() {
+    const pet = PETS.find(p => p.id === DUE_TASK.petId);
+    if (!pet) { $("#homeDue").innerHTML = ""; return; }
+    $("#homeDue").innerHTML = `
+      <button class="due" type="button" data-open-pet="${pet.id}">
+        <span class="ava sm ${pet.ava}">${avaContent(pet)}</span>
+        <span class="body">
+          <span class="who">${pet.source} · ${pet.kind} <bdi class="num">${pet.id}</bdi> · ${pet.name}</span>
+          <span class="what">${DUE_TASK.what}</span>
+        </span>
+        <span class="when">עוד <bdi class="num">${DUE_TASK.when}</bdi> דק׳</span>
+      </button>`;
+  }
+
+  /* ---------------- treatments ---------------- */
+  function renderTreat() {
+    const rows = PETS.filter(p => p.status !== "healthy");
+    $("#treatList").innerHTML = rows.map(p => {
+      const st = STATUS[p.status];
+      return `<li>
+        <button class="due" type="button" style="background:var(--surface);border-color:var(--line)" data-open-pet="${p.id}">
+          <span class="ava sm ${p.ava}">${avaContent(p)}</span>
+          <span class="body">
+            <span class="who" style="color:var(--ink-2)">${p.kind} <bdi class="num">${p.id}</bdi> · ${p.name}</span>
+            <span class="what">${p.note}</span>
+          </span>
+          <span class="badge ${st.tone}">${st.label}</span>
+        </button>
+      </li>`;
+    }).join("");
+  }
+
+  /* ---------------- tasks ---------------- */
+  function taskRow(t) {
+    return `<li>
+      <button class="taskrow ${t.urgent ? "urgent" : ""} ${t.done ? "done" : ""}" type="button" data-toggle-task="${t.id}">
+        <span class="checkbox">${ico("i-check")}</span>
+        <span class="ttxt">${t.text}</span>
+        <span class="twho">${t.who}</span>
+      </button>
+    </li>`;
+  }
+  function renderTasks() {
+    const urgent = TASKS.filter(t => t.urgent);
+    const general = TASKS.filter(t => !t.urgent);
+    $("#taskScreen").innerHTML = `
+      <section class="tasksec" style="margin-block-start:16px">
+        <div class="sechead" style="margin-block:0 4px"><h2>משימות דחופות</h2></div>
+        <ul class="tasklist">${urgent.map(taskRow).join("")}</ul>
+      </section>
+      <section class="tasksec">
+        <div class="sechead" style="margin-block:0 4px"><h2>משימות כלליות</h2></div>
+        <ul class="tasklist">${general.map(taskRow).join("")}</ul>
+      </section>`;
+    renderHomeStats();
+  }
+
+  /* ---------------- more / profile ---------------- */
+  function renderMore() {
+    $("#moreScreen").innerHTML = `
+      <div class="profile-card">
+        <div class="profile-ava-wrap">
+          <span class="ava g2">${USER.photo ? `<img src="${USER.photo}" alt="">` : ico("i-user")}</span>
+          <button class="ava-edit-btn" type="button" data-edit-user aria-label="החלפת תמונת פרופיל">${ico("i-camera")}</button>
+        </div>
+        <div class="profile-body">
+          <div class="name-row">
+            <h2>${USER.name}</h2>
+            <button class="pencil-inline" type="button" data-edit-user aria-label="עריכת שם">${ico("i-pencil")}</button>
+          </div>
+          <p class="role">${USER.role}</p>
+        </div>
+      </div>
+
+      <nav class="menu-list">
+        <button class="menu-item" type="button" data-toast="פתיחת הגדרות">${ico("i-cog")}<span>הגדרות</span>${ico("i-chev", "chev")}</button>
+        <button class="menu-item" type="button" data-toast="פתיחת ניהול התראות">${ico("i-bell")}<span>התראות</span>${ico("i-chev", "chev")}</button>
+        <button class="menu-item" type="button" data-toast="פתיחת ניהול צוות">${ico("i-team")}<span>ניהול צוות</span>${ico("i-chev", "chev")}</button>
+        <button class="menu-item" type="button" data-toast="פתיחת עזרה ותמיכה">${ico("i-headset")}<span>עזרה ותמיכה</span>${ico("i-chev", "chev")}</button>
+      </nav>
+
+      <button class="btn-danger" type="button" id="logoutBtn">${ico("i-logout")}התנתקות</button>
+      <p class="appver">Vet-to-Go · גרסת אב־טיפוס <bdi class="num">1.0</bdi></p>`;
+  }
+
+  /* ---------------- edit sheet (name + photo) ---------------- */
+  let sheetKind = null, sheetId = null, sheetPhotoDraft = null;
+
+  function renderSheetAvatar() {
+    const el = $("#sheetAvaPreview");
+    if (sheetPhotoDraft) {
+      el.className = "ava-preview";
+      el.innerHTML = `<img src="${sheetPhotoDraft}" alt="">`;
+    } else if (sheetKind === "pet") {
+      const p = PETS.find(x => x.id === sheetId);
+      el.className = "ava-preview " + p.ava;
+      el.innerHTML = ico(speciesIcon(p));
+    } else {
+      el.className = "ava-preview g2";
+      el.innerHTML = ico("i-user");
+    }
+  }
+
+  function openSheet(kind, id) {
+    sheetKind = kind; sheetId = id;
+    if (kind === "pet") {
+      const p = PETS.find(x => x.id === id);
+      $("#sheetTitle").textContent = "עריכת בעל חיים";
+      $("#sheetNameLabel").textContent = "שם בעל החיים";
+      $("#sheetNameInput").value = p.name;
+      sheetPhotoDraft = p.photo;
+    } else {
+      $("#sheetTitle").textContent = "עריכת פרופיל";
+      $("#sheetNameLabel").textContent = "שם מלא";
+      $("#sheetNameInput").value = USER.name;
+      sheetPhotoDraft = USER.photo;
+    }
+    renderSheetAvatar();
+    $("#sheetBackdrop").hidden = false;
+    $("#editSheet").hidden = false;
+    requestAnimationFrame(() => {
+      $("#sheetBackdrop").classList.add("show");
+      $("#editSheet").classList.add("show");
+    });
+    setTimeout(() => $("#sheetNameInput").focus(), 260);
+  }
+
+  function closeSheet() {
+    $("#sheetBackdrop").classList.remove("show");
+    $("#editSheet").classList.remove("show");
+    setTimeout(() => { $("#sheetBackdrop").hidden = true; $("#editSheet").hidden = true; }, 240);
+  }
+
+  function saveSheet() {
+    const newName = $("#sheetNameInput").value.trim();
+    if (!newName) { toast("יש להזין שם"); return; }
+    if (sheetKind === "pet") {
+      const p = PETS.find(x => x.id === sheetId);
+      p.name = newName; p.photo = sheetPhotoDraft;
+      renderPets(); renderTreat(); renderHomeDue();
+      if (activePet.id === p.id) renderPet(p);
+    } else {
+      USER.name = newName; USER.photo = sheetPhotoDraft;
+      renderMore();
+    }
+    closeSheet();
+    toast("הפרטים נשמרו");
+  }
+
+  $("#sheetFileInput").addEventListener("change", e => {
+    const file = e.target.files[0];
+    if (!file) return;
+    const reader = new FileReader();
+    reader.onload = () => { sheetPhotoDraft = reader.result; renderSheetAvatar(); };
+    reader.readAsDataURL(file);
+  });
+
+  /* ---------------- login / logout ---------------- */
+  function clearLoginErrors() {
+    $("#loginUserField").classList.remove("has-error");
+    $("#loginPassField").classList.remove("has-error");
+    $("#loginUserError").textContent = "";
+    $("#loginPassError").textContent = "";
+  }
+
+  $("#loginForm").addEventListener("submit", ev => {
+    ev.preventDefault();
+    clearLoginErrors();
+    const user = $("#loginUser").value.trim();
+    const pass = $("#loginPass").value;
+    let ok = true;
+    if (!user) { $("#loginUserField").classList.add("has-error"); $("#loginUserError").textContent = "שדה חובה"; ok = false; }
+    if (!pass) { $("#loginPassField").classList.add("has-error"); $("#loginPassError").textContent = "שדה חובה"; ok = false; }
+    if (!ok) return;
+
+    USER.name = user;
+    $("#loginSubmit").disabled = true;
+    $("#loginSubmit").style.opacity = ".7";
+    toast("מתחבר...");
+    setTimeout(() => {
+      $("#loginSubmit").disabled = false;
+      $("#loginSubmit").style.opacity = "";
+      $("#loginPass").value = "";
+      renderMore();
+      stack = [];
+      show("home");
+      toast(`ברוך הבא, ${USER.name}`);
+    }, 550);
+  });
+
+  function logout() {
+    stack = [];
+    show("login");
+    toast("התנתקת בהצלחה");
+  }
+
+  /* ---------------- events ---------------- */
+  document.addEventListener("click", ev => {
+    const t = ev.target.closest("[data-open-pet],[data-back],[data-go-history],[data-toast],[data-tab],[data-jump],[data-species],[data-kind],[data-edit-pet],[data-edit-user],[data-toggle-task],#logoutBtn,#sheetCancel,#sheetSave,#sheetPickPhoto,#sheetResetPhoto,#sheetBackdrop");
+    if (!t) return;
+
+    if (t.dataset.openPet) {
+      const pet = PETS.find(p => p.id === Number(t.dataset.openPet));
+      if (pet) { renderPet(pet); show("pet", { push: true }); }
+      return;
+    }
+    if (t.hasAttribute("data-back")) { back(); return; }
+    if (t.hasAttribute("data-go-history")) {
+      historyKind = "all";
+      $$("#historyTabs .chip").forEach(c => c.setAttribute("aria-selected", String(c.dataset.kind === "all")));
+      renderHistory(); show("history", { push: true }); return;
+    }
+    if (t.dataset.species) {
+      species = t.dataset.species;
+      $$("#speciesChips .chip").forEach(c => c.setAttribute("aria-pressed", String(c === t)));
+      renderPets(); return;
+    }
+    if (t.dataset.kind) {
+      historyKind = t.dataset.kind;
+      $$("#historyTabs .chip").forEach(c => c.setAttribute("aria-selected", String(c === t)));
+      renderHistory(); return;
+    }
+    if (t.dataset.editPet) { openSheet("pet", Number(t.dataset.editPet)); return; }
+    if (t.hasAttribute("data-edit-user")) { openSheet("user", null); return; }
+    if (t.dataset.toggleTask) {
+      const task = TASKS.find(x => x.id === Number(t.dataset.toggleTask));
+      if (task) { task.done = !task.done; renderTasks(); }
+      return;
+    }
+    if (t.id === "logoutBtn") { logout(); return; }
+    if (t.id === "sheetCancel" || t.id === "sheetBackdrop") { closeSheet(); return; }
+    if (t.id === "sheetSave") { saveSheet(); return; }
+    if (t.id === "sheetPickPhoto") { $("#sheetFileInput").click(); return; }
+    if (t.id === "sheetResetPhoto") { sheetPhotoDraft = null; renderSheetAvatar(); return; }
+    if (t.dataset.jump) {
+      const name = t.dataset.jump;
+      if (name === "pet")   { renderPet(activePet); }
+      if (name === "history") { renderHistory(); }
+      if (name === "treat") { renderTreat(); }
+      if (name === "tasks") { renderTasks(); }
+      if (name === "more")  { renderMore(); }
+      if (name === "home")  { renderHomeDue(); renderHomeStats(); }
+      stack = (name === "home" || name === "pets" || name === "login") ? [] : ["pets"];
+      show(name); return;
+    }
+    if (t.dataset.tab) {
+      const map = { home:"home", pets:"pets", treat:"treat", tasks:"tasks", more:"more" };
+      if (map[t.dataset.tab]) {
+        if (t.dataset.tab === "treat") renderTreat();
+        if (t.dataset.tab === "tasks") renderTasks();
+        if (t.dataset.tab === "more")  renderMore();
+        if (t.dataset.tab === "home")  renderHomeDue();
+        stack = [];
+        show(map[t.dataset.tab]);
+      }
+      return;
+    }
+    if (t.dataset.toast) { toast(t.dataset.toast); }
+  });
+
+  $("#ackBtn").addEventListener("click", () => {
+    $("#banner").classList.add("is-gone");
+    toast("ההתראה סומנה כנקראה");
+  });
+
+  $("#petSearch").addEventListener("input", e => { query = e.target.value; renderPets(); });
+
+  /* ---------------- init ---------------- */
+  renderPets();
+  renderPet(PETS[0]);
+  renderHistory();
+  renderHomeDue();
+  renderHomeStats();
+  renderTreat();
+  renderTasks();
+  renderMore();
+  show("login");
+})();
+</script>
