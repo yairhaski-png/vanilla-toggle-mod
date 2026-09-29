@@ -1,0 +1,918 @@
+<!doctype html><html lang="he" dir="rtl"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>VEXO – ספר קולקציה</title><style>
+@font-face{font-family:'Rubik';font-weight:500;font-display:swap;src:url(assets/fonts/rubik-hebrew-500-normal.woff2) format('woff2');unicode-range:U+0590-05FF,U+200C-2010,U+20AA,U+25CC,U+FB1D-FB4F;}@font-face{font-family:'Rubik';font-weight:500;font-display:swap;src:url(assets/fonts/rubik-latin-500-normal.woff2) format('woff2');unicode-range:U+0000-00FF,U+0131,U+0152-0153,U+02BB-02BC,U+02C6,U+02DA,U+02DC,U+2000-206F,U+2074,U+20AC,U+2122,U+2191,U+2193,U+2212,U+2215,U+FEFF,U+FFFD;}@font-face{font-family:'Rubik';font-weight:700;font-display:swap;src:url(assets/fonts/rubik-hebrew-700-normal.woff2) format('woff2');unicode-range:U+0590-05FF,U+200C-2010,U+20AA,U+25CC,U+FB1D-FB4F;}@font-face{font-family:'Rubik';font-weight:700;font-display:swap;src:url(assets/fonts/rubik-latin-700-normal.woff2) format('woff2');unicode-range:U+0000-00FF,U+0131,U+0152-0153,U+02BB-02BC,U+02C6,U+02DA,U+02DC,U+2000-206F,U+2074,U+20AC,U+2122,U+2191,U+2193,U+2212,U+2215,U+FEFF,U+FFFD;}@font-face{font-family:'Rubik';font-weight:800;font-display:swap;src:url(assets/fonts/rubik-hebrew-800-normal.woff2) format('woff2');unicode-range:U+0590-05FF,U+200C-2010,U+20AA,U+25CC,U+FB1D-FB4F;}@font-face{font-family:'Rubik';font-weight:800;font-display:swap;src:url(assets/fonts/rubik-latin-800-normal.woff2) format('woff2');unicode-range:U+0000-00FF,U+0131,U+0152-0153,U+02BB-02BC,U+02C6,U+02DA,U+02DC,U+2000-206F,U+2074,U+20AC,U+2122,U+2191,U+2193,U+2212,U+2215,U+FEFF,U+FFFD;}
+@font-face{font-family:'Bungee';font-weight:400;font-display:swap;src:url(assets/fonts/bungee-latin-400-normal.woff2) format('woff2');}
+:root{--bg:#0E0A1A;--s1:#171029;--s2:#211838;--tx:#F3EEFF;--mu:#ABA0C9;--ac:#8B5CF6;--ac2:#C4B0FF;--pk:#F062C8;--bd:rgba(255,255,255,.09)}
+*{box-sizing:border-box}html{scroll-behavior:smooth;scroll-snap-type:y proximity}
+body{margin:0;background:var(--bg);color:var(--tx);font-family:Rubik,system-ui,sans-serif;font-weight:500;line-height:1.55}
+a{color:inherit;text-decoration:none}
+.slide{min-height:100vh;padding:56px 5vw 64px;display:flex;align-items:center;scroll-snap-align:start;position:relative;border-bottom:1px solid var(--bd)}
+.slide>.in{width:100%;max-width:1320px;margin:0 auto}
+.disp{font-family:Bungee,Rubik,sans-serif;font-weight:400;letter-spacing:.02em}
+h1,h2,h3{margin:0;font-weight:800;line-height:1.1}
+.muted{color:var(--mu)}.chip{display:inline-block;background:rgba(139,92,246,.18);color:var(--ac2);border:1px solid rgba(139,92,246,.35);border-radius:999px;padding:3px 12px;font-size:13px;font-weight:700}
+.idx{color:var(--mu);font-size:14px;letter-spacing:.06em}
+.btn{display:inline-flex;align-items:center;gap:8px;padding:9px 15px;border-radius:12px;border:1px solid var(--bd);background:var(--s2);font-size:14px;font-weight:700;transition:.15s;cursor:pointer}
+.btn:hover{background:#2c2050;border-color:rgba(196,176,255,.5);transform:translateY(-1px)}
+.btn.pri{background:var(--ac);border-color:var(--ac);color:#fff}.btn.pri:hover{background:#9d74fb}
+.btn.sm{padding:6px 10px;font-size:12.5px;border-radius:9px}
+/* shirt slide */
+.shirt-grid{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.2fr);gap:44px;align-items:center;direction:ltr}
+.info{direction:rtl;text-align:right}
+.info h2{font-size:clamp(34px,4.2vw,60px);margin:8px 0 12px}
+.price{display:flex;align-items:baseline;gap:10px;margin:8px 0 20px}.price b{font-size:44px;font-weight:800;color:#fff}.price span{color:var(--mu);font-size:14px}
+.blk{margin:0 0 18px}.blk h3{font-size:13px;letter-spacing:.08em;color:var(--ac2);margin-bottom:6px;font-weight:700}
+.blk ul{margin:0;padding:0 18px 0 0}.blk li{margin:3px 0}
+.meta{display:grid;grid-template-columns:auto 1fr;gap:4px 14px;font-size:14.5px}.meta dt{color:var(--mu)}.meta dd{margin:0}
+.sw{display:inline-block;width:13px;height:13px;border-radius:50%;border:1px solid rgba(255,255,255,.35);vertical-align:-1px;margin-left:6px}
+.dl{display:flex;flex-wrap:wrap;gap:8px;margin-top:16px}
+.mock{display:grid;grid-template-columns:1fr 1fr;gap:16px;direction:ltr}
+.mock figure{margin:0;background:var(--s1);border:1px solid var(--bd);border-radius:22px;overflow:hidden;position:relative}
+.mock img{display:block;width:100%;height:auto}
+.mock figcaption{position:absolute;top:10px;left:12px;background:rgba(14,10,26,.72);backdrop-filter:blur(4px);border-radius:8px;padding:2px 10px;font-size:12px;font-weight:700;color:#fff}
+/* cover */
+.cover{background:radial-gradient(1200px 600px at 75% 40%,rgba(139,92,246,.35),transparent 60%),var(--bg)}
+.cover h1{font-size:clamp(70px,13vw,190px);letter-spacing:.02em;line-height:.95}
+.cover .sub{font-size:clamp(18px,2vw,26px);color:var(--mu);max-width:560px}
+.cover-grid{display:grid;grid-template-columns:1.1fr .9fr;gap:40px;align-items:center;direction:ltr}.cover-grid .l{direction:rtl;text-align:right}
+.cover-logos{display:grid;grid-template-columns:repeat(3,1fr);gap:14px}.cover-logos img{width:100%;background:#F4F0E8;border-radius:22px;padding:12px}
+.stats{display:flex;gap:26px;margin-top:28px;flex-wrap:wrap}.stats div{font-size:13px;color:var(--mu)}.stats b{display:block;font-size:34px;color:#fff;font-weight:800}
+/* generic */
+.sec-title{font-size:clamp(30px,3.6vw,50px);margin-bottom:8px}.lead{color:var(--mu);font-size:18px;max-width:760px;margin:0 0 26px}
+.cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));gap:16px}
+.card{background:var(--s1);border:1px solid var(--bd);border-radius:20px;padding:20px}.card h3{font-size:18px;margin-bottom:8px}.card p,.card li{color:#d6ccf0;font-size:15px;margin:4px 0}
+.pal{display:flex;gap:10px;flex-wrap:wrap;margin-top:6px}.pal i{width:52px;height:52px;border-radius:14px;border:1px solid var(--bd);display:block;position:relative}.pal i em{position:absolute;bottom:-20px;left:0;font-style:normal;font-size:10.5px;color:var(--mu);white-space:nowrap;direction:ltr}
+.logo-grid{direction:ltr;display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:12px}
+.logo-grid a{background:#F4F0E8;border-radius:18px;padding:12px 12px 8px;text-align:center;color:#3A2277;font-size:12.5px;font-weight:700;direction:ltr;transition:.15s}
+.logo-grid a:hover{transform:translateY(-3px);box-shadow:0 10px 30px rgba(139,92,246,.35)}.logo-grid img{width:100%;display:block}
+.logo-grid a.dk{background:#17161B;color:var(--ac2)}
+.ov{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:12px}
+.ov a{background:var(--s1);border:1px solid var(--bd);border-radius:16px;overflow:hidden;transition:.15s;display:block}.ov a:hover{transform:translateY(-3px);border-color:rgba(196,176,255,.5)}
+.ov img{width:100%;display:block}.ov div{padding:8px 10px;font-size:12.5px;display:flex;justify-content:space-between;gap:6px;direction:ltr}.ov b{color:var(--ac2)}
+/* favourites */
+.fav-top{display:grid;grid-template-columns:auto 1fr;gap:26px;align-items:center;margin-bottom:22px;direction:ltr}
+.fav-top img{width:170px;background:#F4F0E8;border-radius:28px;padding:14px}.fav-top .t{direction:rtl;text-align:right}
+.prod-grid{display:grid;grid-template-columns:repeat(5,1fr);gap:14px;direction:ltr}
+.prod{background:var(--s1);border:1px solid var(--bd);border-radius:18px;overflow:hidden;display:flex;flex-direction:column;direction:rtl;text-align:right}
+.prod img{width:100%;display:block}.prod .b{padding:12px 14px 14px;display:flex;flex-direction:column;gap:6px;flex:1}.prod .b h4{margin:0;font-size:15px}.prod .b p{margin:0;color:var(--mu);font-size:12.5px;flex:1}.prod .pr{font-size:22px;font-weight:800}
+.prod .dl{margin-top:4px}
+/* table */
+.tbl{display:grid;grid-template-columns:1fr 1fr;gap:0 40px}
+.tbl table{width:100%;border-collapse:collapse;font-size:14px}.tbl td,.tbl th{padding:7px 8px;border-bottom:1px solid var(--bd);text-align:right}.tbl th{color:var(--ac2);font-size:12px;letter-spacing:.06em}.tbl td.p{font-weight:800;color:#fff;white-space:nowrap}
+#hud{position:fixed;bottom:16px;left:16px;z-index:9;display:flex;gap:8px;align-items:center;background:rgba(23,16,41,.85);backdrop-filter:blur(8px);border:1px solid var(--bd);border-radius:14px;padding:6px 8px;font-size:13px}
+#hud button{background:var(--s2);border:1px solid var(--bd);color:#fff;border-radius:9px;width:32px;height:30px;font-size:15px;cursor:pointer}#hud span{min-width:64px;text-align:center;direction:ltr;color:var(--mu)}
+@media(max-width:980px){.shirt-grid,.cover-grid{grid-template-columns:1fr}.info{order:2}.tbl{grid-template-columns:1fr}.prod-grid{grid-template-columns:repeat(2,1fr)}.fav-top{grid-template-columns:1fr}.slide{padding:32px 18px 60px}}
+@media print{@page{size:1400px 900px;margin:0}html{scroll-snap-type:none}#hud{display:none}.slide{min-height:auto;height:900px;page-break-after:always;break-after:page;overflow:hidden}.btn{display:none}}
+</style></head><body>
+
+<section class="slide cover" id="cover"><div class="in"><div class="cover-grid">
+  <div class="l"><div class="idx">ספר קולקציה · סתיו 2026</div><h1 class="disp">VEXO</h1>
+    <p class="sub">27 חולצות, 27 וריאציות לוגו ו־25 מוצרים נוספים – הכל מוכן להעלאה לשופיפיי.</p>
+    <div class="stats"><div><b>27</b>חולצות</div><div><b>27</b>לוגואים</div><div><b>25</b>מוצרי מרצ׳</div><div><b>₪105</b>מחיר ממוצע</div></div>
+    <div class="dl" style="margin-top:26px"><a class="btn pri" href="#overview">לקולקציה המלאה ↓</a><a class="btn" href="vexo-all-designs.zip" download>⬇ כל הקבצים (ZIP)</a></div>
+  </div>
+  <div class="cover-logos"><img src="logos/vexo-logo-classic-purple.png" alt=""><img src="logos/vexo-logo-m_wink-purple.png" alt=""><img src="logos/vexo-logo-grumpy-purple.png" alt=""><img src="logos/vexo-logo-m_whoa-purple.png" alt=""><img src="logos/vexo-logo-m_crush-purple.png" alt=""><img src="logos/vexo-logo-angel-purple.png" alt=""></div>
+</div></div></section>
+
+<section class="slide" id="guide"><div class="in">
+  <h2 class="sec-title disp">איך משתמשים בקובץ</h2><p class="lead">כל חולצה מקבלת שקף משלה: שם, מחיר, הסבר, קהל יעד, תצוגת חזית וגב, וכפתורי הורדה.</p>
+  <div class="cards">
+    <div class="card"><h3>1 · תמונות לאתר</h3><p>״תמונת חזית/גב לאתר״ – JPG בגודל 1400×1600. מעלים ישר כתמונות מוצר בשופיפיי.</p></div>
+    <div class="card"><h3>2 · קבצי הדפסה</h3><p>״קובץ הדפסה״ – PNG שקוף ב־300dpi (הגודל בשקף). מעלים לכלי עיצוב החולצות / למפעל.</p><p class="muted">תצוגה: הקבצים שקופים, לכן על רקע לבן ייתכן שלא ייראו טקסטים בהירים – זה תקין.</p></div>
+    <div class="card"><h3>3 · חבילת ZIP</h3><p>לכל חולצה: הכל בקובץ אחד. למעלה בשער יש ZIP של כל הקולקציה + חבילת לוגואים.</p></div>
+    <div class="card"><h3>מחירים</h3><p>כל המחירים בש״ח והם <b>הצעה</b>. אני לא יודע את עלות הייצור/משלוח – שלח לי ואעדכן לפי מרווח רצוי (בדרך כלל ×2.2–3 מהעלות).</p></div>
+  </div>
+  <h3 style="margin:34px 0 10px">שפה עיצובית</h3>
+  <div class="cards">
+    <div class="card"><h3>הדמות</h3><p>גוף כיפה סגול עם 4 גלים בתחתית, אנטנה עם כדור, עיניים גדולות. ההבעות (מבט, קריצה, כעס, הפתעה, אהבה, שינה) מחליפות רק את העיניים.</p></div>
+    <div class="card"><h3>צבעים</h3><div class="pal" style="margin-bottom:22px"><i style="background:#5B37A8"><em>#5B37A8</em></i><i style="background:#7B52E0"><em>#7B52E0</em></i><i style="background:#CDBDF2"><em>#CDBDF2</em></i><i style="background:#F6F1E7"><em>#F6F1E7</em></i><i style="background:#141018"><em>#141018</em></i><i style="background:#F062C8"><em>#F062C8</em></i></div></div>
+    <div class="card"><h3>טיפוגרפיה</h3><p>כותרות על החולצות: Bungee (עבה, ארקייד). לוגוטייפ: Fredoka ״vexo״.</p></div>
+  </div>
+</div></section>
+
+<section class="slide" id="logos"><div class="in">
+  <h2 class="sec-title disp">מערכת הלוגואים</h2><p class="lead">27 וריאציות – 20 לוגואים בסגנון גריד הלוגואים שהעלית + 6 הבעות + הרקמה עם ההילה. לחיצה על לוגו מורידה אותו (PNG שקוף, 2000px).</p>
+  <div class="logo-grid"><a href="logos/vexo-logo-classic-purple.png" download title="הורדה"><img src="logos/vexo-logo-classic-purple.png" alt="Classic" loading="lazy">Classic</a><a href="logos/vexo-logo-outline-purple.png" download title="הורדה"><img src="logos/vexo-logo-outline-purple.png" alt="Ghost Line" loading="lazy">Ghost Line</a><a href="logos/vexo-logo-badge-purple.png" download title="הורדה"><img src="logos/vexo-logo-badge-purple.png" alt="Badge" loading="lazy">Badge</a><a href="logos/vexo-logo-arcade-purple.png" download title="הורדה"><img src="logos/vexo-logo-arcade-purple.png" alt="Arcade Ghost" loading="lazy">Arcade Ghost</a><a href="logos/vexo-logo-grumpy-purple.png" download title="הורדה"><img src="logos/vexo-logo-grumpy-purple.png" alt="Grumpy" loading="lazy">Grumpy</a><a href="logos/vexo-logo-seal-purple.png" download title="הורדה"><img src="logos/vexo-logo-seal-purple.png" alt="Seal" loading="lazy">Seal</a><a href="logos/vexo-logo-bean-purple.png" download title="הורדה"><img src="logos/vexo-logo-bean-purple.png" alt="Bean" loading="lazy">Bean</a><a href="logos/vexo-logo-speed-purple.png" download title="הורדה"><img src="logos/vexo-logo-speed-purple.png" alt="Zoom" loading="lazy">Zoom</a><a href="logos/vexo-logo-heart-purple.png" download title="הורדה"><img src="logos/vexo-logo-heart-purple.png" alt="Love Alien" loading="lazy">Love Alien</a><a href="logos/vexo-logo-wink-purple.png" download title="הורדה"><img src="logos/vexo-logo-wink-purple.png" alt="Wink Line" loading="lazy">Wink Line</a><a href="logos/vexo-logo-app-purple.png" download title="הורדה"><img src="logos/vexo-logo-app-purple.png" alt="App Icon" loading="lazy">App Icon</a><a href="logos/vexo-logo-iris-purple.png" download title="הורדה"><img src="logos/vexo-logo-iris-purple.png" alt="Big Iris" loading="lazy">Big Iris</a><a href="logos/vexo-logo-chomp-purple.png" download title="הורדה"><img src="logos/vexo-logo-chomp-purple.png" alt="Chomp" loading="lazy">Chomp</a><a href="logos/vexo-logo-ring-purple.png" download title="הורדה"><img src="logos/vexo-logo-ring-purple.png" alt="Thin Ring" loading="lazy">Thin Ring</a><a href="logos/vexo-logo-pixel-purple.png" download title="הורדה"><img src="logos/vexo-logo-pixel-purple.png" alt="Pixel" loading="lazy">Pixel</a><a href="logos/vexo-logo-peek-purple.png" download title="הורדה"><img src="logos/vexo-logo-peek-purple.png" alt="Peek" loading="lazy">Peek</a><a href="logos/vexo-logo-shield-purple.png" download title="הורדה"><img src="logos/vexo-logo-shield-purple.png" alt="Shield" loading="lazy">Shield</a><a href="logos/vexo-logo-watcher-purple.png" download title="הורדה"><img src="logos/vexo-logo-watcher-purple.png" alt="Watcher" loading="lazy">Watcher</a><a href="logos/vexo-logo-cyclops-purple.png" download title="הורדה"><img src="logos/vexo-logo-cyclops-purple.png" alt="One Eye" loading="lazy">One Eye</a><a href="logos/vexo-logo-planet-purple.png" download title="הורדה"><img src="logos/vexo-logo-planet-purple.png" alt="Orbit" loading="lazy">Orbit</a><a href="logos/vexo-logo-m_hey-purple.png" download title="הורדה"><img src="logos/vexo-logo-m_hey-purple.png" alt="Mood · Hey" loading="lazy">Mood · Hey</a><a href="logos/vexo-logo-m_wink-purple.png" download title="הורדה"><img src="logos/vexo-logo-m_wink-purple.png" alt="Mood · Wink" loading="lazy">Mood · Wink</a><a href="logos/vexo-logo-m_grr-purple.png" download title="הורדה"><img src="logos/vexo-logo-m_grr-purple.png" alt="Mood · Grr" loading="lazy">Mood · Grr</a><a href="logos/vexo-logo-m_whoa-purple.png" download title="הורדה"><img src="logos/vexo-logo-m_whoa-purple.png" alt="Mood · Whoa" loading="lazy">Mood · Whoa</a><a href="logos/vexo-logo-m_crush-purple.png" download title="הורדה"><img src="logos/vexo-logo-m_crush-purple.png" alt="Mood · Crush" loading="lazy">Mood · Crush</a><a href="logos/vexo-logo-m_zzz-purple.png" download title="הורדה"><img src="logos/vexo-logo-m_zzz-purple.png" alt="Mood · Zzz" loading="lazy">Mood · Zzz</a><a href="logos/vexo-logo-angel-purple.png" download title="הורדה"><img src="logos/vexo-logo-angel-purple.png" alt="Angel" loading="lazy">Angel</a></div>
+  <div class="dl" style="margin-top:20px"><a class="btn pri" href="vexo-logos.zip" download>⬇ חבילת לוגואים (סגול + לרקע כהה)</a></div>
+</div></section>
+<section class="slide" id="overview"><div class="in"><h2 class="sec-title disp">כל הקולקציה</h2><p class="lead">לחיצה על חולצה פותחת את השקף שלה.</p><div class="ov"><a href="#s-vexo-original"><img src="downloads/vexo-original/vexo-original-mockup-front.jpg" alt="Vexo Original" loading="lazy"><div><span>Vexo Original</span><b>₪99</b></div></a><a href="#s-ghost-line"><img src="downloads/ghost-line/ghost-line-mockup-front.jpg" alt="Ghost Line" loading="lazy"><div><span>Ghost Line</span><b>₪99</b></div></a><a href="#s-vexo-badge"><img src="downloads/vexo-badge/vexo-badge-mockup-front.jpg" alt="Vexo Badge" loading="lazy"><div><span>Vexo Badge</span><b>₪109</b></div></a><a href="#s-arcade-ghost"><img src="downloads/arcade-ghost/arcade-ghost-mockup-front.jpg" alt="Arcade Ghost" loading="lazy"><div><span>Arcade Ghost</span><b>₪109</b></div></a><a href="#s-grumpy-vexo"><img src="downloads/grumpy-vexo/grumpy-vexo-mockup-front.jpg" alt="Grumpy Vexo" loading="lazy"><div><span>Grumpy Vexo</span><b>₪99</b></div></a><a href="#s-seal-of-vexo"><img src="downloads/seal-of-vexo/seal-of-vexo-mockup-front.jpg" alt="Seal of Vexo" loading="lazy"><div><span>Seal of Vexo</span><b>₪109</b></div></a><a href="#s-bean-buddy"><img src="downloads/bean-buddy/bean-buddy-mockup-front.jpg" alt="Bean Buddy" loading="lazy"><div><span>Bean Buddy</span><b>₪99</b></div></a><a href="#s-vexo-zoom"><img src="downloads/vexo-zoom/vexo-zoom-mockup-front.jpg" alt="Vexo Zoom" loading="lazy"><div><span>Vexo Zoom</span><b>₪109</b></div></a><a href="#s-love-alien"><img src="downloads/love-alien/love-alien-mockup-front.jpg" alt="Love Alien" loading="lazy"><div><span>Love Alien</span><b>₪109</b></div></a><a href="#s-wink-wink"><img src="downloads/wink-wink/wink-wink-mockup-front.jpg" alt="Wink Wink" loading="lazy"><div><span>Wink Wink</span><b>₪99</b></div></a><a href="#s-vexo-app"><img src="downloads/vexo-app/vexo-app-mockup-front.jpg" alt="Vexo App" loading="lazy"><div><span>Vexo App</span><b>₪109</b></div></a><a href="#s-big-iris"><img src="downloads/big-iris/big-iris-mockup-front.jpg" alt="Big Iris" loading="lazy"><div><span>Big Iris</span><b>₪119</b></div></a><a href="#s-chomp"><img src="downloads/chomp/chomp-mockup-front.jpg" alt="Chomp" loading="lazy"><div><span>Chomp</span><b>₪109</b></div></a><a href="#s-thin-ring"><img src="downloads/thin-ring/thin-ring-mockup-front.jpg" alt="Thin Ring" loading="lazy"><div><span>Thin Ring</span><b>₪99</b></div></a><a href="#s-pixel-vexo"><img src="downloads/pixel-vexo/pixel-vexo-mockup-front.jpg" alt="Pixel Vexo" loading="lazy"><div><span>Pixel Vexo</span><b>₪109</b></div></a><a href="#s-peek"><img src="downloads/peek/peek-mockup-front.jpg" alt="Peek" loading="lazy"><div><span>Peek</span><b>₪109</b></div></a><a href="#s-vexo-shield"><img src="downloads/vexo-shield/vexo-shield-mockup-front.jpg" alt="Vexo Shield" loading="lazy"><div><span>Vexo Shield</span><b>₪109</b></div></a><a href="#s-watcher"><img src="downloads/watcher/watcher-mockup-front.jpg" alt="Watcher" loading="lazy"><div><span>Watcher</span><b>₪99</b></div></a><a href="#s-one-eye"><img src="downloads/one-eye/one-eye-mockup-front.jpg" alt="One Eye" loading="lazy"><div><span>One Eye</span><b>₪109</b></div></a><a href="#s-vexo-orbit"><img src="downloads/vexo-orbit/vexo-orbit-mockup-front.jpg" alt="Vexo Orbit" loading="lazy"><div><span>Vexo Orbit</span><b>₪119</b></div></a><a href="#s-mood-hey"><img src="downloads/mood-hey/mood-hey-mockup-front.jpg" alt="Mood · Hey" loading="lazy"><div><span>Mood · Hey</span><b>₪99</b></div></a><a href="#s-mood-wink"><img src="downloads/mood-wink/mood-wink-mockup-front.jpg" alt="Mood · Wink" loading="lazy"><div><span>Mood · Wink</span><b>₪99</b></div></a><a href="#s-mood-grr"><img src="downloads/mood-grr/mood-grr-mockup-front.jpg" alt="Mood · Grr" loading="lazy"><div><span>Mood · Grr</span><b>₪99</b></div></a><a href="#s-mood-whoa"><img src="downloads/mood-whoa/mood-whoa-mockup-front.jpg" alt="Mood · Whoa" loading="lazy"><div><span>Mood · Whoa</span><b>₪99</b></div></a><a href="#s-mood-crush"><img src="downloads/mood-crush/mood-crush-mockup-front.jpg" alt="Mood · Crush" loading="lazy"><div><span>Mood · Crush</span><b>₪99</b></div></a><a href="#s-mood-zzz"><img src="downloads/mood-zzz/mood-zzz-mockup-front.jpg" alt="Mood · Zzz" loading="lazy"><div><span>Mood · Zzz</span><b>₪99</b></div></a><a href="#s-angel-vexo"><img src="downloads/angel-vexo/angel-vexo-mockup-front.jpg" alt="Angel Vexo" loading="lazy"><div><span>Angel Vexo</span><b>₪119</b></div></a></div></div></section>
+
+<section class="slide" id="s-vexo-original"><div class="in"><div class="shirt-grid">
+  <div class="info">
+    <div class="idx">חולצה 01 / 27 · קולקציית לוגואים</div>
+    <h2 class="disp">Vexo Original</h2>
+    <span class="chip">חולצת דגל</span>
+    <div class="price"><b>₪99</b><span>מחיר מומלץ ללקוח (כולל מע״מ)</span></div>
+    <div class="blk"><h3>למה אני ממליץ עליה</h3><ul><li>הלוגו הראשי של המותג בגודל מלא – מה שהלקוח זוכר.</li><li>שחור + סגול = ניגודיות חזקה בתמונות באתר ובאינסטגרם.</li><li>חולצת הכניסה לחנות: מחיר נגיש, הכי קל להחליט עליה.</li></ul></div>
+    <div class="blk"><h3>קהל יעד</h3>כולם · בעיקר 16–35</div>
+    <div class="blk"><h3>פרטי מוצר</h3><dl class="meta">
+      <dt>צבע חולצה</dt><dd><span class="sw" style="background:#17161B"></span>שחור</dd>
+      <dt>הדפס קדימה</dt><dd>מרכז החזה · <span dir="ltr">11" × 12.7"</span> · <span dir="ltr">"HELLO, EARTHLING"</span></dd>
+      <dt>הדפס אחורה</dt><dd>קטן בגב העליון, מתחת לצווארון · <span dir="ltr">4.2" × 4.7"</span></dd>
+    </dl></div>
+    <div class="dl">
+      <a class="btn pri" href="downloads/vexo-original/vexo-original.zip" download>⬇ הורד הכל (ZIP)</a>
+      <a class="btn sm" href="downloads/vexo-original/vexo-original-mockup-front.jpg" download>תמונת חזית לאתר</a>
+      <a class="btn sm" href="downloads/vexo-original/vexo-original-mockup-back.jpg" download>תמונת גב לאתר</a>
+      <a class="btn sm" href="downloads/vexo-original/vexo-original-print-front.png" download>קובץ הדפסה – חזית</a>
+      <a class="btn sm" href="downloads/vexo-original/vexo-original-print-back.png" download>קובץ הדפסה – גב</a>
+    </div>
+  </div>
+  <div class="mock">
+    <figure><img src="downloads/vexo-original/vexo-original-mockup-front.jpg" alt="Vexo Original – חזית" loading="lazy"><figcaption>חזית</figcaption></figure>
+    <figure><img src="downloads/vexo-original/vexo-original-mockup-back.jpg" alt="Vexo Original – גב" loading="lazy"><figcaption>גב</figcaption></figure>
+  </div>
+</div></div></section>
+
+<section class="slide" id="s-ghost-line"><div class="in"><div class="shirt-grid">
+  <div class="info">
+    <div class="idx">חולצה 02 / 27 · קולקציית לוגואים</div>
+    <h2 class="disp">Ghost Line</h2>
+    <span class="chip">מינימליסטי</span>
+    <div class="price"><b>₪99</b><span>מחיר מומלץ ללקוח (כולל מע״מ)</span></div>
+    <div class="blk"><h3>למה אני ממליץ עליה</h3><ul><li>גרסת קו נקייה – מרגישה &quot;מותג פרימיום&quot; בלי להשקיע בהדפס מורכב.</li><li>לבן שבור נותן קונטרסט לשחור/כהה שהחנות תהיה מלאה בו.</li><li>הדפס בצבע אחד – זול לייצור ולכן שולי רווח טובים.</li></ul></div>
+    <div class="blk"><h3>קהל יעד</h3>מינימליסטים · 20–35 · בנות ובנים</div>
+    <div class="blk"><h3>פרטי מוצר</h3><dl class="meta">
+      <dt>צבע חולצה</dt><dd><span class="sw" style="background:#F3EFE6"></span>לבן שבור</dd>
+      <dt>הדפס קדימה</dt><dd>מרכז החזה · <span dir="ltr">11" × 12.7"</span> · <span dir="ltr">"LINE ART"</span></dd>
+      <dt>הדפס אחורה</dt><dd>קטן בגב העליון, מתחת לצווארון · <span dir="ltr">4.2" × 4.7"</span></dd>
+    </dl></div>
+    <div class="dl">
+      <a class="btn pri" href="downloads/ghost-line/ghost-line.zip" download>⬇ הורד הכל (ZIP)</a>
+      <a class="btn sm" href="downloads/ghost-line/ghost-line-mockup-front.jpg" download>תמונת חזית לאתר</a>
+      <a class="btn sm" href="downloads/ghost-line/ghost-line-mockup-back.jpg" download>תמונת גב לאתר</a>
+      <a class="btn sm" href="downloads/ghost-line/ghost-line-print-front.png" download>קובץ הדפסה – חזית</a>
+      <a class="btn sm" href="downloads/ghost-line/ghost-line-print-back.png" download>קובץ הדפסה – גב</a>
+    </div>
+  </div>
+  <div class="mock">
+    <figure><img src="downloads/ghost-line/ghost-line-mockup-front.jpg" alt="Ghost Line – חזית" loading="lazy"><figcaption>חזית</figcaption></figure>
+    <figure><img src="downloads/ghost-line/ghost-line-mockup-back.jpg" alt="Ghost Line – גב" loading="lazy"><figcaption>גב</figcaption></figure>
+  </div>
+</div></div></section>
+
+<section class="slide" id="s-vexo-badge"><div class="in"><div class="shirt-grid">
+  <div class="info">
+    <div class="idx">חולצה 03 / 27 · קולקציית לוגואים</div>
+    <h2 class="disp">Vexo Badge</h2>
+    <span class="chip">לוגו חזה</span>
+    <div class="price"><b>₪109</b><span>מחיר מומלץ ללקוח (כולל מע״מ)</span></div>
+    <div class="blk"><h3>למה אני ממליץ עליה</h3><ul><li>לוגו קטן על החזה + הדפס גדול מאחור – הסטייל של סטריט־וור.</li><li>הלבנדר מבדיל את החנות מהים של שחור/לבן אצל מתחרים.</li><li>העיגול נראה טוב גם כתמונת פרופיל ומדבקה (ראו מוצרים נלווים).</li></ul></div>
+    <div class="blk"><h3>קהל יעד</h3>סטודנטים · 18–28</div>
+    <div class="blk"><h3>פרטי מוצר</h3><dl class="meta">
+      <dt>צבע חולצה</dt><dd><span class="sw" style="background:#CDBDF2"></span>לבנדר</dd>
+      <dt>הדפס קדימה</dt><dd>חזה שמאל (מבט הלובש) · <span dir="ltr">3.4" × 3.4"</span></dd>
+      <dt>הדפס אחורה</dt><dd>הדפס גדול על הגב · <span dir="ltr">11" × 11.5"</span> · <span dir="ltr">"SEND SNACKS"</span></dd>
+    </dl></div>
+    <div class="dl">
+      <a class="btn pri" href="downloads/vexo-badge/vexo-badge.zip" download>⬇ הורד הכל (ZIP)</a>
+      <a class="btn sm" href="downloads/vexo-badge/vexo-badge-mockup-front.jpg" download>תמונת חזית לאתר</a>
+      <a class="btn sm" href="downloads/vexo-badge/vexo-badge-mockup-back.jpg" download>תמונת גב לאתר</a>
+      <a class="btn sm" href="downloads/vexo-badge/vexo-badge-print-front.png" download>קובץ הדפסה – חזית</a>
+      <a class="btn sm" href="downloads/vexo-badge/vexo-badge-print-back.png" download>קובץ הדפסה – גב</a>
+    </div>
+  </div>
+  <div class="mock">
+    <figure><img src="downloads/vexo-badge/vexo-badge-mockup-front.jpg" alt="Vexo Badge – חזית" loading="lazy"><figcaption>חזית</figcaption></figure>
+    <figure><img src="downloads/vexo-badge/vexo-badge-mockup-back.jpg" alt="Vexo Badge – גב" loading="lazy"><figcaption>גב</figcaption></figure>
+  </div>
+</div></div></section>
+
+<section class="slide" id="s-arcade-ghost"><div class="in"><div class="shirt-grid">
+  <div class="info">
+    <div class="idx">חולצה 04 / 27 · קולקציית לוגואים</div>
+    <h2 class="disp">Arcade Ghost</h2>
+    <span class="chip">גיימרים</span>
+    <div class="price"><b>₪109</b><span>מחיר מומלץ ללקוח (כולל מע״מ)</span></div>
+    <div class="blk"><h3>למה אני ממליץ עליה</h3><ul><li>סטייל ארקייד רטרו – קהל שמזהה ומתחבר מיד.</li><li>הדפס קדימה ואחורה מצדיק מחיר מעט גבוה.</li><li>קל לשווק בקהילות גיימינג, דיסקורד וטיקטוק.</li></ul></div>
+    <div class="blk"><h3>קהל יעד</h3>גיימרים · 14–30 · בעיקר בנים</div>
+    <div class="blk"><h3>פרטי מוצר</h3><dl class="meta">
+      <dt>צבע חולצה</dt><dd><span class="sw" style="background:#17161B"></span>שחור</dd>
+      <dt>הדפס קדימה</dt><dd>מרכז החזה · <span dir="ltr">11" × 12.7"</span> · <span dir="ltr">"PLAYER ONE"</span></dd>
+      <dt>הדפס אחורה</dt><dd>כיתוב גדול על הגב · <span dir="ltr">12" × 13.2"</span> · <span dir="ltr">"GAME ON"</span></dd>
+    </dl></div>
+    <div class="dl">
+      <a class="btn pri" href="downloads/arcade-ghost/arcade-ghost.zip" download>⬇ הורד הכל (ZIP)</a>
+      <a class="btn sm" href="downloads/arcade-ghost/arcade-ghost-mockup-front.jpg" download>תמונת חזית לאתר</a>
+      <a class="btn sm" href="downloads/arcade-ghost/arcade-ghost-mockup-back.jpg" download>תמונת גב לאתר</a>
+      <a class="btn sm" href="downloads/arcade-ghost/arcade-ghost-print-front.png" download>קובץ הדפסה – חזית</a>
+      <a class="btn sm" href="downloads/arcade-ghost/arcade-ghost-print-back.png" download>קובץ הדפסה – גב</a>
+    </div>
+  </div>
+  <div class="mock">
+    <figure><img src="downloads/arcade-ghost/arcade-ghost-mockup-front.jpg" alt="Arcade Ghost – חזית" loading="lazy"><figcaption>חזית</figcaption></figure>
+    <figure><img src="downloads/arcade-ghost/arcade-ghost-mockup-back.jpg" alt="Arcade Ghost – גב" loading="lazy"><figcaption>גב</figcaption></figure>
+  </div>
+</div></div></section>
+
+<section class="slide" id="s-grumpy-vexo"><div class="in"><div class="shirt-grid">
+  <div class="info">
+    <div class="idx">חולצה 05 / 27 · קולקציית לוגואים</div>
+    <h2 class="disp">Grumpy Vexo</h2>
+    <span class="chip">הומור</span>
+    <div class="price"><b>₪99</b><span>מחיר מומלץ ללקוח (כולל מע״מ)</span></div>
+    <div class="blk"><h3>למה אני ממליץ עליה</h3><ul><li>הבעה כועסת + משפט קצר = חולצה שמצלמים ומשתפים.</li><li>טקסט על הגב יוצר &quot;בדיחה שנייה&quot; כשהולכים ממך.</li><li>מחיר נמוך כדי לעודד קנייה אימפולסיבית.</li></ul></div>
+    <div class="blk"><h3>קהל יעד</h3>הומור סרקסטי · 18–35</div>
+    <div class="blk"><h3>פרטי מוצר</h3><dl class="meta">
+      <dt>צבע חולצה</dt><dd><span class="sw" style="background:#F3EFE6"></span>לבן שבור</dd>
+      <dt>הדפס קדימה</dt><dd>מרכז החזה · <span dir="ltr">11" × 12.7"</span> · <span dir="ltr">"NOT TODAY"</span></dd>
+      <dt>הדפס אחורה</dt><dd>כיתוב גדול על הגב · <span dir="ltr">12" × 12.8"</span> · <span dir="ltr">"STILL NO"</span></dd>
+    </dl></div>
+    <div class="dl">
+      <a class="btn pri" href="downloads/grumpy-vexo/grumpy-vexo.zip" download>⬇ הורד הכל (ZIP)</a>
+      <a class="btn sm" href="downloads/grumpy-vexo/grumpy-vexo-mockup-front.jpg" download>תמונת חזית לאתר</a>
+      <a class="btn sm" href="downloads/grumpy-vexo/grumpy-vexo-mockup-back.jpg" download>תמונת גב לאתר</a>
+      <a class="btn sm" href="downloads/grumpy-vexo/grumpy-vexo-print-front.png" download>קובץ הדפסה – חזית</a>
+      <a class="btn sm" href="downloads/grumpy-vexo/grumpy-vexo-print-back.png" download>קובץ הדפסה – גב</a>
+    </div>
+  </div>
+  <div class="mock">
+    <figure><img src="downloads/grumpy-vexo/grumpy-vexo-mockup-front.jpg" alt="Grumpy Vexo – חזית" loading="lazy"><figcaption>חזית</figcaption></figure>
+    <figure><img src="downloads/grumpy-vexo/grumpy-vexo-mockup-back.jpg" alt="Grumpy Vexo – גב" loading="lazy"><figcaption>גב</figcaption></figure>
+  </div>
+</div></div></section>
+
+<section class="slide" id="s-seal-of-vexo"><div class="in"><div class="shirt-grid">
+  <div class="info">
+    <div class="idx">חולצה 06 / 27 · קולקציית לוגואים</div>
+    <h2 class="disp">Seal of Vexo</h2>
+    <span class="chip">קלאסי</span>
+    <div class="price"><b>₪109</b><span>מחיר מומלץ ללקוח (כולל מע״מ)</span></div>
+    <div class="blk"><h3>למה אני ממליץ עליה</h3><ul><li>חותם עגול מרגיש כמו מותג &quot;ותיק&quot; ואמין.</li><li>עובד מצוין למתנות – מראה נקי ובוגר.</li><li>מתאים גם כבסיס להודי/קפוצ׳ון בעתיד.</li></ul></div>
+    <div class="blk"><h3>קהל יעד</h3>אוהבי סטריט קלאסי · 20–40</div>
+    <div class="blk"><h3>פרטי מוצר</h3><dl class="meta">
+      <dt>צבע חולצה</dt><dd><span class="sw" style="background:#17161B"></span>שחור</dd>
+      <dt>הדפס קדימה</dt><dd>חזה שמאל (מבט הלובש) · <span dir="ltr">3.4" × 3.4"</span></dd>
+      <dt>הדפס אחורה</dt><dd>הדפס גדול על הגב · <span dir="ltr">11" × 11.5"</span> · <span dir="ltr">"OFFICIALLY WEIRD"</span></dd>
+    </dl></div>
+    <div class="dl">
+      <a class="btn pri" href="downloads/seal-of-vexo/seal-of-vexo.zip" download>⬇ הורד הכל (ZIP)</a>
+      <a class="btn sm" href="downloads/seal-of-vexo/seal-of-vexo-mockup-front.jpg" download>תמונת חזית לאתר</a>
+      <a class="btn sm" href="downloads/seal-of-vexo/seal-of-vexo-mockup-back.jpg" download>תמונת גב לאתר</a>
+      <a class="btn sm" href="downloads/seal-of-vexo/seal-of-vexo-print-front.png" download>קובץ הדפסה – חזית</a>
+      <a class="btn sm" href="downloads/seal-of-vexo/seal-of-vexo-print-back.png" download>קובץ הדפסה – גב</a>
+    </div>
+  </div>
+  <div class="mock">
+    <figure><img src="downloads/seal-of-vexo/seal-of-vexo-mockup-front.jpg" alt="Seal of Vexo – חזית" loading="lazy"><figcaption>חזית</figcaption></figure>
+    <figure><img src="downloads/seal-of-vexo/seal-of-vexo-mockup-back.jpg" alt="Seal of Vexo – גב" loading="lazy"><figcaption>גב</figcaption></figure>
+  </div>
+</div></div></section>
+
+<section class="slide" id="s-bean-buddy"><div class="in"><div class="shirt-grid">
+  <div class="info">
+    <div class="idx">חולצה 07 / 27 · קולקציית לוגואים</div>
+    <h2 class="disp">Bean Buddy</h2>
+    <span class="chip">חמוד</span>
+    <div class="price"><b>₪99</b><span>מחיר מומלץ ללקוח (כולל מע״מ)</span></div>
+    <div class="blk"><h3>למה אני ממליץ עליה</h3><ul><li>צורה עגולה וחמודה – הכי &quot;ידידותי&quot; בקולקציה.</li><li>משפט חיובי שנוח לקנות למתנה.</li><li>לבנדר + סגול נראה טוב בצילומי לייף־סטייל.</li></ul></div>
+    <div class="blk"><h3>קהל יעד</h3>נוער ונשים צעירות · 14–28</div>
+    <div class="blk"><h3>פרטי מוצר</h3><dl class="meta">
+      <dt>צבע חולצה</dt><dd><span class="sw" style="background:#CDBDF2"></span>לבנדר</dd>
+      <dt>הדפס קדימה</dt><dd>מרכז החזה · <span dir="ltr">11" × 12.7"</span> · <span dir="ltr">"STAY SOFT"</span></dd>
+      <dt>הדפס אחורה</dt><dd>קטן בגב העליון, מתחת לצווארון · <span dir="ltr">4.2" × 4.7"</span></dd>
+    </dl></div>
+    <div class="dl">
+      <a class="btn pri" href="downloads/bean-buddy/bean-buddy.zip" download>⬇ הורד הכל (ZIP)</a>
+      <a class="btn sm" href="downloads/bean-buddy/bean-buddy-mockup-front.jpg" download>תמונת חזית לאתר</a>
+      <a class="btn sm" href="downloads/bean-buddy/bean-buddy-mockup-back.jpg" download>תמונת גב לאתר</a>
+      <a class="btn sm" href="downloads/bean-buddy/bean-buddy-print-front.png" download>קובץ הדפסה – חזית</a>
+      <a class="btn sm" href="downloads/bean-buddy/bean-buddy-print-back.png" download>קובץ הדפסה – גב</a>
+    </div>
+  </div>
+  <div class="mock">
+    <figure><img src="downloads/bean-buddy/bean-buddy-mockup-front.jpg" alt="Bean Buddy – חזית" loading="lazy"><figcaption>חזית</figcaption></figure>
+    <figure><img src="downloads/bean-buddy/bean-buddy-mockup-back.jpg" alt="Bean Buddy – גב" loading="lazy"><figcaption>גב</figcaption></figure>
+  </div>
+</div></div></section>
+
+<section class="slide" id="s-vexo-zoom"><div class="in"><div class="shirt-grid">
+  <div class="info">
+    <div class="idx">חולצה 08 / 27 · קולקציית לוגואים</div>
+    <h2 class="disp">Vexo Zoom</h2>
+    <span class="chip">אנרגיה</span>
+    <div class="price"><b>₪109</b><span>מחיר מומלץ ללקוח (כולל מע״מ)</span></div>
+    <div class="blk"><h3>למה אני ממליץ עליה</h3><ul><li>קווי מהירות נותנים תחושת תנועה – מושך את העין בפיד.</li><li>משפט מוכר מהתרבות הפופולרית = קל להבין.</li><li>מתאים למכירות &quot;דרופ&quot; קצרות ומוגבלות.</li></ul></div>
+    <div class="blk"><h3>קהל יעד</h3>ספורטיביים ואנרגטיים · 16–30</div>
+    <div class="blk"><h3>פרטי מוצר</h3><dl class="meta">
+      <dt>צבע חולצה</dt><dd><span class="sw" style="background:#17161B"></span>שחור</dd>
+      <dt>הדפס קדימה</dt><dd>מרכז החזה · <span dir="ltr">11" × 12.7"</span> · <span dir="ltr">"GOTTA GO FAST"</span></dd>
+      <dt>הדפס אחורה</dt><dd>קטן בגב העליון, מתחת לצווארון · <span dir="ltr">4.2" × 4.7"</span></dd>
+    </dl></div>
+    <div class="dl">
+      <a class="btn pri" href="downloads/vexo-zoom/vexo-zoom.zip" download>⬇ הורד הכל (ZIP)</a>
+      <a class="btn sm" href="downloads/vexo-zoom/vexo-zoom-mockup-front.jpg" download>תמונת חזית לאתר</a>
+      <a class="btn sm" href="downloads/vexo-zoom/vexo-zoom-mockup-back.jpg" download>תמונת גב לאתר</a>
+      <a class="btn sm" href="downloads/vexo-zoom/vexo-zoom-print-front.png" download>קובץ הדפסה – חזית</a>
+      <a class="btn sm" href="downloads/vexo-zoom/vexo-zoom-print-back.png" download>קובץ הדפסה – גב</a>
+    </div>
+  </div>
+  <div class="mock">
+    <figure><img src="downloads/vexo-zoom/vexo-zoom-mockup-front.jpg" alt="Vexo Zoom – חזית" loading="lazy"><figcaption>חזית</figcaption></figure>
+    <figure><img src="downloads/vexo-zoom/vexo-zoom-mockup-back.jpg" alt="Vexo Zoom – גב" loading="lazy"><figcaption>גב</figcaption></figure>
+  </div>
+</div></div></section>
+
+<section class="slide" id="s-love-alien"><div class="in"><div class="shirt-grid">
+  <div class="info">
+    <div class="idx">חולצה 09 / 27 · קולקציית לוגואים</div>
+    <h2 class="disp">Love Alien</h2>
+    <span class="chip">מתנה</span>
+    <div class="price"><b>₪109</b><span>מחיר מומלץ ללקוח (כולל מע״מ)</span></div>
+    <div class="blk"><h3>למה אני ממליץ עליה</h3><ul><li>לב + חייזר: מתנה אידיאלית לוולנטיינ׳ס, יום הולדת ואירועים.</li><li>עובד על נשים וגברים – קהל רחב.</li><li>אפשר למכור כזוג (2 חולצות) במחיר מבצע.</li></ul></div>
+    <div class="blk"><h3>קהל יעד</h3>זוגות ומתנות · נשים 18–35</div>
+    <div class="blk"><h3>פרטי מוצר</h3><dl class="meta">
+      <dt>צבע חולצה</dt><dd><span class="sw" style="background:#F3EFE6"></span>לבן שבור</dd>
+      <dt>הדפס קדימה</dt><dd>מרכז החזה · <span dir="ltr">11" × 12.7"</span> · <span dir="ltr">"MADE WITH LOVE"</span></dd>
+      <dt>הדפס אחורה</dt><dd>כיתוב גדול על הגב · <span dir="ltr">12" × 8.1"</span> · <span dir="ltr">"FROM ANOTHER PLANET"</span></dd>
+    </dl></div>
+    <div class="dl">
+      <a class="btn pri" href="downloads/love-alien/love-alien.zip" download>⬇ הורד הכל (ZIP)</a>
+      <a class="btn sm" href="downloads/love-alien/love-alien-mockup-front.jpg" download>תמונת חזית לאתר</a>
+      <a class="btn sm" href="downloads/love-alien/love-alien-mockup-back.jpg" download>תמונת גב לאתר</a>
+      <a class="btn sm" href="downloads/love-alien/love-alien-print-front.png" download>קובץ הדפסה – חזית</a>
+      <a class="btn sm" href="downloads/love-alien/love-alien-print-back.png" download>קובץ הדפסה – גב</a>
+    </div>
+  </div>
+  <div class="mock">
+    <figure><img src="downloads/love-alien/love-alien-mockup-front.jpg" alt="Love Alien – חזית" loading="lazy"><figcaption>חזית</figcaption></figure>
+    <figure><img src="downloads/love-alien/love-alien-mockup-back.jpg" alt="Love Alien – גב" loading="lazy"><figcaption>גב</figcaption></figure>
+  </div>
+</div></div></section>
+
+<section class="slide" id="s-wink-wink"><div class="in"><div class="shirt-grid">
+  <div class="info">
+    <div class="idx">חולצה 10 / 27 · קולקציית לוגואים</div>
+    <h2 class="disp">Wink Wink</h2>
+    <span class="chip">צבע מותג</span>
+    <div class="price"><b>₪99</b><span>מחיר מומלץ ללקוח (כולל מע״מ)</span></div>
+    <div class="blk"><h3>למה אני ממליץ עליה</h3><ul><li>חולצה בסגול המותג – הכי &quot;Vexo&quot; שיש, מזהה אותנו ברחוב.</li><li>קו אחד בשמנת על סגול: הדפס פשוט וחד.</li><li>קריצה = פלרטטני וקליל, מתאים לקהל צעיר.</li></ul></div>
+    <div class="blk"><h3>קהל יעד</h3>צעירים חברתיים · 16–30</div>
+    <div class="blk"><h3>פרטי מוצר</h3><dl class="meta">
+      <dt>צבע חולצה</dt><dd><span class="sw" style="background:#5B37A8"></span>סגול Vexo</dd>
+      <dt>הדפס קדימה</dt><dd>מרכז החזה · <span dir="ltr">11" × 12.7"</span> · <span dir="ltr">"WINK"</span></dd>
+      <dt>הדפס אחורה</dt><dd>קטן בגב העליון, מתחת לצווארון · <span dir="ltr">4.2" × 4.7"</span></dd>
+    </dl></div>
+    <div class="dl">
+      <a class="btn pri" href="downloads/wink-wink/wink-wink.zip" download>⬇ הורד הכל (ZIP)</a>
+      <a class="btn sm" href="downloads/wink-wink/wink-wink-mockup-front.jpg" download>תמונת חזית לאתר</a>
+      <a class="btn sm" href="downloads/wink-wink/wink-wink-mockup-back.jpg" download>תמונת גב לאתר</a>
+      <a class="btn sm" href="downloads/wink-wink/wink-wink-print-front.png" download>קובץ הדפסה – חזית</a>
+      <a class="btn sm" href="downloads/wink-wink/wink-wink-print-back.png" download>קובץ הדפסה – גב</a>
+    </div>
+  </div>
+  <div class="mock">
+    <figure><img src="downloads/wink-wink/wink-wink-mockup-front.jpg" alt="Wink Wink – חזית" loading="lazy"><figcaption>חזית</figcaption></figure>
+    <figure><img src="downloads/wink-wink/wink-wink-mockup-back.jpg" alt="Wink Wink – גב" loading="lazy"><figcaption>גב</figcaption></figure>
+  </div>
+</div></div></section>
+
+<section class="slide" id="s-vexo-app"><div class="in"><div class="shirt-grid">
+  <div class="info">
+    <div class="idx">חולצה 11 / 27 · קולקציית לוגואים</div>
+    <h2 class="disp">Vexo App</h2>
+    <span class="chip">טכנולוגי</span>
+    <div class="price"><b>₪109</b><span>מחיר מומלץ ללקוח (כולל מע״מ)</span></div>
+    <div class="blk"><h3>למה אני ממליץ עליה</h3><ul><li>אייקון אפליקציה – בדיחה פנימית שקהל הייטק אוהב.</li><li>נראה כמו מרצ׳ של חברה – מתאים גם להזמנות קבוצתיות.</li><li>לוגו קטן = הדפס זול, רווח גבוה.</li></ul></div>
+    <div class="blk"><h3>קהל יעד</h3>טכנולוגיים וסטארטאפיסטים · 22–40</div>
+    <div class="blk"><h3>פרטי מוצר</h3><dl class="meta">
+      <dt>צבע חולצה</dt><dd><span class="sw" style="background:#17161B"></span>שחור</dd>
+      <dt>הדפס קדימה</dt><dd>חזה שמאל (מבט הלובש) · <span dir="ltr">3.4" × 3.4"</span></dd>
+      <dt>הדפס אחורה</dt><dd>הדפס גדול על הגב · <span dir="ltr">11" × 11.5"</span> · <span dir="ltr">"OPEN ME"</span></dd>
+    </dl></div>
+    <div class="dl">
+      <a class="btn pri" href="downloads/vexo-app/vexo-app.zip" download>⬇ הורד הכל (ZIP)</a>
+      <a class="btn sm" href="downloads/vexo-app/vexo-app-mockup-front.jpg" download>תמונת חזית לאתר</a>
+      <a class="btn sm" href="downloads/vexo-app/vexo-app-mockup-back.jpg" download>תמונת גב לאתר</a>
+      <a class="btn sm" href="downloads/vexo-app/vexo-app-print-front.png" download>קובץ הדפסה – חזית</a>
+      <a class="btn sm" href="downloads/vexo-app/vexo-app-print-back.png" download>קובץ הדפסה – גב</a>
+    </div>
+  </div>
+  <div class="mock">
+    <figure><img src="downloads/vexo-app/vexo-app-mockup-front.jpg" alt="Vexo App – חזית" loading="lazy"><figcaption>חזית</figcaption></figure>
+    <figure><img src="downloads/vexo-app/vexo-app-mockup-back.jpg" alt="Vexo App – גב" loading="lazy"><figcaption>גב</figcaption></figure>
+  </div>
+</div></div></section>
+
+<section class="slide" id="s-big-iris"><div class="in"><div class="shirt-grid">
+  <div class="info">
+    <div class="idx">חולצה 12 / 27 · קולקציית לוגואים</div>
+    <h2 class="disp">Big Iris</h2>
+    <span class="chip">הדפס גדול</span>
+    <div class="price"><b>₪119</b><span>מחיר מומלץ ללקוח (כולל מע״מ)</span></div>
+    <div class="blk"><h3>למה אני ממליץ עליה</h3><ul><li>הדפס ענק – חולצה &quot;וואו&quot; שנראית מרחוק.</li><li>עיניים גדולות מושכות אינטראקציה ותשומת לב.</li><li>מחיר גבוה יותר בגלל שטח הדפס מלא.</li></ul></div>
+    <div class="blk"><h3>קהל יעד</h3>אוהבי הדפסים גדולים · 18–35</div>
+    <div class="blk"><h3>פרטי מוצר</h3><dl class="meta">
+      <dt>צבע חולצה</dt><dd><span class="sw" style="background:#F3EFE6"></span>לבן שבור</dd>
+      <dt>הדפס קדימה</dt><dd>הדפס גדול על כל החזה · <span dir="ltr">13" × 12"</span></dd>
+      <dt>הדפס אחורה</dt><dd>קטן בגב העליון, מתחת לצווארון · <span dir="ltr">4.2" × 4.7"</span></dd>
+    </dl></div>
+    <div class="dl">
+      <a class="btn pri" href="downloads/big-iris/big-iris.zip" download>⬇ הורד הכל (ZIP)</a>
+      <a class="btn sm" href="downloads/big-iris/big-iris-mockup-front.jpg" download>תמונת חזית לאתר</a>
+      <a class="btn sm" href="downloads/big-iris/big-iris-mockup-back.jpg" download>תמונת גב לאתר</a>
+      <a class="btn sm" href="downloads/big-iris/big-iris-print-front.png" download>קובץ הדפסה – חזית</a>
+      <a class="btn sm" href="downloads/big-iris/big-iris-print-back.png" download>קובץ הדפסה – גב</a>
+    </div>
+  </div>
+  <div class="mock">
+    <figure><img src="downloads/big-iris/big-iris-mockup-front.jpg" alt="Big Iris – חזית" loading="lazy"><figcaption>חזית</figcaption></figure>
+    <figure><img src="downloads/big-iris/big-iris-mockup-back.jpg" alt="Big Iris – גב" loading="lazy"><figcaption>גב</figcaption></figure>
+  </div>
+</div></div></section>
+
+<section class="slide" id="s-chomp"><div class="in"><div class="shirt-grid">
+  <div class="info">
+    <div class="idx">חולצה 13 / 27 · קולקציית לוגואים</div>
+    <h2 class="disp">Chomp</h2>
+    <span class="chip">רטרו</span>
+    <div class="price"><b>₪109</b><span>מחיר מומלץ ללקוח (כולל מע״מ)</span></div>
+    <div class="blk"><h3>למה אני ממליץ עליה</h3><ul><li>מחווה למשחקי הארקייד הקלאסיים – נוסטלגיה מוכרת.</li><li>משפט על הגב מוסיף הומור.</li><li>משתלב עם Arcade Ghost ו־Pixel כסדרת גיימינג (מבצע 3 ב־299).</li></ul></div>
+    <div class="blk"><h3>קהל יעד</h3>גיימרים רטרו · 16–35</div>
+    <div class="blk"><h3>פרטי מוצר</h3><dl class="meta">
+      <dt>צבע חולצה</dt><dd><span class="sw" style="background:#17161B"></span>שחור</dd>
+      <dt>הדפס קדימה</dt><dd>מרכז החזה · <span dir="ltr">11" × 12.7"</span> · <span dir="ltr">"CHOMP"</span></dd>
+      <dt>הדפס אחורה</dt><dd>כיתוב גדול על הגב · <span dir="ltr">12" × 13.2"</span> · <span dir="ltr">"FEED ME"</span></dd>
+    </dl></div>
+    <div class="dl">
+      <a class="btn pri" href="downloads/chomp/chomp.zip" download>⬇ הורד הכל (ZIP)</a>
+      <a class="btn sm" href="downloads/chomp/chomp-mockup-front.jpg" download>תמונת חזית לאתר</a>
+      <a class="btn sm" href="downloads/chomp/chomp-mockup-back.jpg" download>תמונת גב לאתר</a>
+      <a class="btn sm" href="downloads/chomp/chomp-print-front.png" download>קובץ הדפסה – חזית</a>
+      <a class="btn sm" href="downloads/chomp/chomp-print-back.png" download>קובץ הדפסה – גב</a>
+    </div>
+  </div>
+  <div class="mock">
+    <figure><img src="downloads/chomp/chomp-mockup-front.jpg" alt="Chomp – חזית" loading="lazy"><figcaption>חזית</figcaption></figure>
+    <figure><img src="downloads/chomp/chomp-mockup-back.jpg" alt="Chomp – גב" loading="lazy"><figcaption>גב</figcaption></figure>
+  </div>
+</div></div></section>
+
+<section class="slide" id="s-thin-ring"><div class="in"><div class="shirt-grid">
+  <div class="info">
+    <div class="idx">חולצה 14 / 27 · קולקציית לוגואים</div>
+    <h2 class="disp">Thin Ring</h2>
+    <span class="chip">נקי</span>
+    <div class="price"><b>₪99</b><span>מחיר מומלץ ללקוח (כולל מע״מ)</span></div>
+    <div class="blk"><h3>למה אני ממליץ עליה</h3><ul><li>קו דק ולוגו קטן – החולצה הכי &quot;שקטה&quot; בקולקציה.</li><li>מתאימה ללובשים יומיומיים ולמשרד קז׳ואל.</li><li>קל לשלב עם כל דבר – מחזירה קונים.</li></ul></div>
+    <div class="blk"><h3>קהל יעד</h3>מינימליסטים · 20–40</div>
+    <div class="blk"><h3>פרטי מוצר</h3><dl class="meta">
+      <dt>צבע חולצה</dt><dd><span class="sw" style="background:#F3EFE6"></span>לבן שבור</dd>
+      <dt>הדפס קדימה</dt><dd>חזה שמאל (מבט הלובש) · <span dir="ltr">3.4" × 3.4"</span></dd>
+      <dt>הדפס אחורה</dt><dd>קטן בגב העליון, מתחת לצווארון · <span dir="ltr">4.2" × 4.7"</span></dd>
+    </dl></div>
+    <div class="dl">
+      <a class="btn pri" href="downloads/thin-ring/thin-ring.zip" download>⬇ הורד הכל (ZIP)</a>
+      <a class="btn sm" href="downloads/thin-ring/thin-ring-mockup-front.jpg" download>תמונת חזית לאתר</a>
+      <a class="btn sm" href="downloads/thin-ring/thin-ring-mockup-back.jpg" download>תמונת גב לאתר</a>
+      <a class="btn sm" href="downloads/thin-ring/thin-ring-print-front.png" download>קובץ הדפסה – חזית</a>
+      <a class="btn sm" href="downloads/thin-ring/thin-ring-print-back.png" download>קובץ הדפסה – גב</a>
+    </div>
+  </div>
+  <div class="mock">
+    <figure><img src="downloads/thin-ring/thin-ring-mockup-front.jpg" alt="Thin Ring – חזית" loading="lazy"><figcaption>חזית</figcaption></figure>
+    <figure><img src="downloads/thin-ring/thin-ring-mockup-back.jpg" alt="Thin Ring – גב" loading="lazy"><figcaption>גב</figcaption></figure>
+  </div>
+</div></div></section>
+
+<section class="slide" id="s-pixel-vexo"><div class="in"><div class="shirt-grid">
+  <div class="info">
+    <div class="idx">חולצה 15 / 27 · קולקציית לוגואים</div>
+    <h2 class="disp">Pixel Vexo</h2>
+    <span class="chip">גיימרים</span>
+    <div class="price"><b>₪109</b><span>מחיר מומלץ ללקוח (כולל מע״מ)</span></div>
+    <div class="blk"><h3>למה אני ממליץ עליה</h3><ul><li>פיקסל־ארט – סגנון שנמכר היטב ולא יוצא מהאופנה.</li><li>הדפס פשוט (כמה מלבנים) – נקי ומדויק גם בהדפסה זולה.</li><li>משלים את סדרת הגיימינג.</li></ul></div>
+    <div class="blk"><h3>קהל יעד</h3>גיימרים וגיקים · 14–35</div>
+    <div class="blk"><h3>פרטי מוצר</h3><dl class="meta">
+      <dt>צבע חולצה</dt><dd><span class="sw" style="background:#17161B"></span>שחור</dd>
+      <dt>הדפס קדימה</dt><dd>מרכז החזה · <span dir="ltr">11" × 12.7"</span> · <span dir="ltr">"8-BIT"</span></dd>
+      <dt>הדפס אחורה</dt><dd>כיתוב גדול על הגב · <span dir="ltr">12" × 12.8"</span> · <span dir="ltr">"LEVEL UP"</span></dd>
+    </dl></div>
+    <div class="dl">
+      <a class="btn pri" href="downloads/pixel-vexo/pixel-vexo.zip" download>⬇ הורד הכל (ZIP)</a>
+      <a class="btn sm" href="downloads/pixel-vexo/pixel-vexo-mockup-front.jpg" download>תמונת חזית לאתר</a>
+      <a class="btn sm" href="downloads/pixel-vexo/pixel-vexo-mockup-back.jpg" download>תמונת גב לאתר</a>
+      <a class="btn sm" href="downloads/pixel-vexo/pixel-vexo-print-front.png" download>קובץ הדפסה – חזית</a>
+      <a class="btn sm" href="downloads/pixel-vexo/pixel-vexo-print-back.png" download>קובץ הדפסה – גב</a>
+    </div>
+  </div>
+  <div class="mock">
+    <figure><img src="downloads/pixel-vexo/pixel-vexo-mockup-front.jpg" alt="Pixel Vexo – חזית" loading="lazy"><figcaption>חזית</figcaption></figure>
+    <figure><img src="downloads/pixel-vexo/pixel-vexo-mockup-back.jpg" alt="Pixel Vexo – גב" loading="lazy"><figcaption>גב</figcaption></figure>
+  </div>
+</div></div></section>
+
+<section class="slide" id="s-peek"><div class="in"><div class="shirt-grid">
+  <div class="info">
+    <div class="idx">חולצה 16 / 27 · קולקציית לוגואים</div>
+    <h2 class="disp">Peek</h2>
+    <span class="chip">עיצוב חד</span>
+    <div class="price"><b>₪109</b><span>מחיר מומלץ ללקוח (כולל מע״מ)</span></div>
+    <div class="blk"><h3>למה אני ממליץ עליה</h3><ul><li>קו אלכסוני חותך את הדמות – נראה מודרני ובלתי צפוי.</li><li>לבנדר + סגול – פלטה רכה ונקייה.</li><li>מתאים לצילומי סטודיו על רקע ניטרלי.</li></ul></div>
+    <div class="blk"><h3>קהל יעד</h3>אוהבי עיצוב · 18–32</div>
+    <div class="blk"><h3>פרטי מוצר</h3><dl class="meta">
+      <dt>צבע חולצה</dt><dd><span class="sw" style="background:#CDBDF2"></span>לבנדר</dd>
+      <dt>הדפס קדימה</dt><dd>הדפס גדול על כל החזה · <span dir="ltr">13" × 12"</span></dd>
+      <dt>הדפס אחורה</dt><dd>קטן בגב העליון, מתחת לצווארון · <span dir="ltr">4.2" × 4.7"</span></dd>
+    </dl></div>
+    <div class="dl">
+      <a class="btn pri" href="downloads/peek/peek.zip" download>⬇ הורד הכל (ZIP)</a>
+      <a class="btn sm" href="downloads/peek/peek-mockup-front.jpg" download>תמונת חזית לאתר</a>
+      <a class="btn sm" href="downloads/peek/peek-mockup-back.jpg" download>תמונת גב לאתר</a>
+      <a class="btn sm" href="downloads/peek/peek-print-front.png" download>קובץ הדפסה – חזית</a>
+      <a class="btn sm" href="downloads/peek/peek-print-back.png" download>קובץ הדפסה – גב</a>
+    </div>
+  </div>
+  <div class="mock">
+    <figure><img src="downloads/peek/peek-mockup-front.jpg" alt="Peek – חזית" loading="lazy"><figcaption>חזית</figcaption></figure>
+    <figure><img src="downloads/peek/peek-mockup-back.jpg" alt="Peek – גב" loading="lazy"><figcaption>גב</figcaption></figure>
+  </div>
+</div></div></section>
+
+<section class="slide" id="s-vexo-shield"><div class="in"><div class="shirt-grid">
+  <div class="info">
+    <div class="idx">חולצה 17 / 27 · קולקציית לוגואים</div>
+    <h2 class="disp">Vexo Shield</h2>
+    <span class="chip">מסר</span>
+    <div class="price"><b>₪109</b><span>מחיר מומלץ ללקוח (כולל מע״מ)</span></div>
+    <div class="blk"><h3>למה אני ממליץ עליה</h3><ul><li>מגן = תחושת חוזק ושייכות (&quot;הקהילה שלנו&quot;).</li><li>משפט חזק מאחור שנוח לשתף.</li><li>אפור פחם – צבע נוסף לגיוון מעבר לשחור.</li></ul></div>
+    <div class="blk"><h3>קהל יעד</h3>נערים וגברים · 16–35</div>
+    <div class="blk"><h3>פרטי מוצר</h3><dl class="meta">
+      <dt>צבע חולצה</dt><dd><span class="sw" style="background:#3B3A45"></span>אפור פחם</dd>
+      <dt>הדפס קדימה</dt><dd>חזה שמאל (מבט הלובש) · <span dir="ltr">3.4" × 3.4"</span></dd>
+      <dt>הדפס אחורה</dt><dd>הדפס גדול על הגב · <span dir="ltr">11" × 11.5"</span> · <span dir="ltr">"PROTECT THE WEIRD"</span></dd>
+    </dl></div>
+    <div class="dl">
+      <a class="btn pri" href="downloads/vexo-shield/vexo-shield.zip" download>⬇ הורד הכל (ZIP)</a>
+      <a class="btn sm" href="downloads/vexo-shield/vexo-shield-mockup-front.jpg" download>תמונת חזית לאתר</a>
+      <a class="btn sm" href="downloads/vexo-shield/vexo-shield-mockup-back.jpg" download>תמונת גב לאתר</a>
+      <a class="btn sm" href="downloads/vexo-shield/vexo-shield-print-front.png" download>קובץ הדפסה – חזית</a>
+      <a class="btn sm" href="downloads/vexo-shield/vexo-shield-print-back.png" download>קובץ הדפסה – גב</a>
+    </div>
+  </div>
+  <div class="mock">
+    <figure><img src="downloads/vexo-shield/vexo-shield-mockup-front.jpg" alt="Vexo Shield – חזית" loading="lazy"><figcaption>חזית</figcaption></figure>
+    <figure><img src="downloads/vexo-shield/vexo-shield-mockup-back.jpg" alt="Vexo Shield – גב" loading="lazy"><figcaption>גב</figcaption></figure>
+  </div>
+</div></div></section>
+
+<section class="slide" id="s-watcher"><div class="in"><div class="shirt-grid">
+  <div class="info">
+    <div class="idx">חולצה 18 / 27 · קולקציית לוגואים</div>
+    <h2 class="disp">Watcher</h2>
+    <span class="chip">הומור אפל</span>
+    <div class="price"><b>₪99</b><span>מחיר מומלץ ללקוח (כולל מע״מ)</span></div>
+    <div class="blk"><h3>למה אני ממליץ עליה</h3><ul><li>רק עיניים ואנטנה – מינימלי אבל מיד מזוהה.</li><li>טקסט קדימה ואחורה יוצר רגע קומי.</li><li>מחיר נמוך לרכישת ניסיון.</li></ul></div>
+    <div class="blk"><h3>קהל יעד</h3>הומור אפל קליל · 18–35</div>
+    <div class="blk"><h3>פרטי מוצר</h3><dl class="meta">
+      <dt>צבע חולצה</dt><dd><span class="sw" style="background:#17161B"></span>שחור</dd>
+      <dt>הדפס קדימה</dt><dd>מרכז החזה · <span dir="ltr">11" × 12.7"</span> · <span dir="ltr">"I SEE YOU"</span></dd>
+      <dt>הדפס אחורה</dt><dd>כיתוב גדול על הגב · <span dir="ltr">12" × 13.2"</span> · <span dir="ltr">"YES, YOU"</span></dd>
+    </dl></div>
+    <div class="dl">
+      <a class="btn pri" href="downloads/watcher/watcher.zip" download>⬇ הורד הכל (ZIP)</a>
+      <a class="btn sm" href="downloads/watcher/watcher-mockup-front.jpg" download>תמונת חזית לאתר</a>
+      <a class="btn sm" href="downloads/watcher/watcher-mockup-back.jpg" download>תמונת גב לאתר</a>
+      <a class="btn sm" href="downloads/watcher/watcher-print-front.png" download>קובץ הדפסה – חזית</a>
+      <a class="btn sm" href="downloads/watcher/watcher-print-back.png" download>קובץ הדפסה – גב</a>
+    </div>
+  </div>
+  <div class="mock">
+    <figure><img src="downloads/watcher/watcher-mockup-front.jpg" alt="Watcher – חזית" loading="lazy"><figcaption>חזית</figcaption></figure>
+    <figure><img src="downloads/watcher/watcher-mockup-back.jpg" alt="Watcher – גב" loading="lazy"><figcaption>גב</figcaption></figure>
+  </div>
+</div></div></section>
+
+<section class="slide" id="s-one-eye"><div class="in"><div class="shirt-grid">
+  <div class="info">
+    <div class="idx">חולצה 19 / 27 · קולקציית לוגואים</div>
+    <h2 class="disp">One Eye</h2>
+    <span class="chip">ייחודי</span>
+    <div class="price"><b>₪109</b><span>מחיר מומלץ ללקוח (כולל מע״מ)</span></div>
+    <div class="blk"><h3>למה אני ממליץ עליה</h3><ul><li>עין אחת ענקית – דמות שנראית שונה מכל השאר.</li><li>המסר &quot;ייחודי&quot; מתאים למי שאוהב להיות שונה.</li><li>סגול על סגול־מותג: גרסה עם נוכחות חזקה בפיד.</li></ul></div>
+    <div class="blk"><h3>קהל יעד</h3>אינדיבידואליסטים · 16–35</div>
+    <div class="blk"><h3>פרטי מוצר</h3><dl class="meta">
+      <dt>צבע חולצה</dt><dd><span class="sw" style="background:#5B37A8"></span>סגול Vexo</dd>
+      <dt>הדפס קדימה</dt><dd>מרכז החזה · <span dir="ltr">11" × 12.7"</span> · <span dir="ltr">"ONE OF A KIND"</span></dd>
+      <dt>הדפס אחורה</dt><dd>קטן בגב העליון, מתחת לצווארון · <span dir="ltr">4.2" × 4.7"</span></dd>
+    </dl></div>
+    <div class="dl">
+      <a class="btn pri" href="downloads/one-eye/one-eye.zip" download>⬇ הורד הכל (ZIP)</a>
+      <a class="btn sm" href="downloads/one-eye/one-eye-mockup-front.jpg" download>תמונת חזית לאתר</a>
+      <a class="btn sm" href="downloads/one-eye/one-eye-mockup-back.jpg" download>תמונת גב לאתר</a>
+      <a class="btn sm" href="downloads/one-eye/one-eye-print-front.png" download>קובץ הדפסה – חזית</a>
+      <a class="btn sm" href="downloads/one-eye/one-eye-print-back.png" download>קובץ הדפסה – גב</a>
+    </div>
+  </div>
+  <div class="mock">
+    <figure><img src="downloads/one-eye/one-eye-mockup-front.jpg" alt="One Eye – חזית" loading="lazy"><figcaption>חזית</figcaption></figure>
+    <figure><img src="downloads/one-eye/one-eye-mockup-back.jpg" alt="One Eye – גב" loading="lazy"><figcaption>גב</figcaption></figure>
+  </div>
+</div></div></section>
+
+<section class="slide" id="s-vexo-orbit"><div class="in"><div class="shirt-grid">
+  <div class="info">
+    <div class="idx">חולצה 20 / 27 · קולקציית לוגואים</div>
+    <h2 class="disp">Vexo Orbit</h2>
+    <span class="chip">פרימיום</span>
+    <div class="price"><b>₪119</b><span>מחיר מומלץ ללקוח (כולל מע״מ)</span></div>
+    <div class="blk"><h3>למה אני ממליץ עליה</h3><ul><li>כוכב + טבעת = הגרסה &quot;הכי חייזרית&quot; של הלוגו.</li><li>עיצוב מורכב יותר – מצדיק מחיר פרימיום.</li><li>נראה מעולה בצילום קרוב.</li></ul></div>
+    <div class="blk"><h3>קהל יעד</h3>חובבי חלל ופנטזיה · 16–40</div>
+    <div class="blk"><h3>פרטי מוצר</h3><dl class="meta">
+      <dt>צבע חולצה</dt><dd><span class="sw" style="background:#3B3A45"></span>אפור פחם</dd>
+      <dt>הדפס קדימה</dt><dd>מרכז החזה · <span dir="ltr">11" × 12.7"</span> · <span dir="ltr">"LOST IN SPACE"</span></dd>
+      <dt>הדפס אחורה</dt><dd>הדפס גדול על הגב · <span dir="ltr">11" × 11.5"</span> · <span dir="ltr">"SEND HELP"</span></dd>
+    </dl></div>
+    <div class="dl">
+      <a class="btn pri" href="downloads/vexo-orbit/vexo-orbit.zip" download>⬇ הורד הכל (ZIP)</a>
+      <a class="btn sm" href="downloads/vexo-orbit/vexo-orbit-mockup-front.jpg" download>תמונת חזית לאתר</a>
+      <a class="btn sm" href="downloads/vexo-orbit/vexo-orbit-mockup-back.jpg" download>תמונת גב לאתר</a>
+      <a class="btn sm" href="downloads/vexo-orbit/vexo-orbit-print-front.png" download>קובץ הדפסה – חזית</a>
+      <a class="btn sm" href="downloads/vexo-orbit/vexo-orbit-print-back.png" download>קובץ הדפסה – גב</a>
+    </div>
+  </div>
+  <div class="mock">
+    <figure><img src="downloads/vexo-orbit/vexo-orbit-mockup-front.jpg" alt="Vexo Orbit – חזית" loading="lazy"><figcaption>חזית</figcaption></figure>
+    <figure><img src="downloads/vexo-orbit/vexo-orbit-mockup-back.jpg" alt="Vexo Orbit – גב" loading="lazy"><figcaption>גב</figcaption></figure>
+  </div>
+</div></div></section>
+
+<section class="slide" id="s-mood-hey"><div class="in"><div class="shirt-grid">
+  <div class="info">
+    <div class="idx">חולצה 21 / 27 · סדרת Moods</div>
+    <h2 class="disp">Mood · Hey</h2>
+    <span class="chip">סדרת Moods</span>
+    <div class="price"><b>₪99</b><span>מחיר מומלץ ללקוח (כולל מע״מ)</span></div>
+    <div class="blk"><h3>למה אני ממליץ עליה</h3><ul><li>הבעה ידידותית – החולצה הכי &quot;קלה לעכל&quot; בסדרה.</li><li>קו מתאר שחור מזכיר מדבקה/קומיקס.</li><li>חלק מסדרת ה־6 – מעודד אספנות (מבצע 3 ב־269).</li></ul></div>
+    <div class="blk"><h3>קהל יעד</h3>כולם · 14–35</div>
+    <div class="blk"><h3>פרטי מוצר</h3><dl class="meta">
+      <dt>צבע חולצה</dt><dd><span class="sw" style="background:#F3EFE6"></span>לבן שבור</dd>
+      <dt>הדפס קדימה</dt><dd>מרכז החזה · <span dir="ltr">11" × 12.7"</span> · <span dir="ltr">"HEY."</span></dd>
+      <dt>הדפס אחורה</dt><dd>קטן בגב העליון, מתחת לצווארון · <span dir="ltr">4.2" × 4.7"</span></dd>
+    </dl></div>
+    <div class="dl">
+      <a class="btn pri" href="downloads/mood-hey/mood-hey.zip" download>⬇ הורד הכל (ZIP)</a>
+      <a class="btn sm" href="downloads/mood-hey/mood-hey-mockup-front.jpg" download>תמונת חזית לאתר</a>
+      <a class="btn sm" href="downloads/mood-hey/mood-hey-mockup-back.jpg" download>תמונת גב לאתר</a>
+      <a class="btn sm" href="downloads/mood-hey/mood-hey-print-front.png" download>קובץ הדפסה – חזית</a>
+      <a class="btn sm" href="downloads/mood-hey/mood-hey-print-back.png" download>קובץ הדפסה – גב</a>
+    </div>
+  </div>
+  <div class="mock">
+    <figure><img src="downloads/mood-hey/mood-hey-mockup-front.jpg" alt="Mood · Hey – חזית" loading="lazy"><figcaption>חזית</figcaption></figure>
+    <figure><img src="downloads/mood-hey/mood-hey-mockup-back.jpg" alt="Mood · Hey – גב" loading="lazy"><figcaption>גב</figcaption></figure>
+  </div>
+</div></div></section>
+
+<section class="slide" id="s-mood-wink"><div class="in"><div class="shirt-grid">
+  <div class="info">
+    <div class="idx">חולצה 22 / 27 · סדרת Moods</div>
+    <h2 class="disp">Mood · Wink</h2>
+    <span class="chip">סדרת Moods</span>
+    <div class="price"><b>₪99</b><span>מחיר מומלץ ללקוח (כולל מע״מ)</span></div>
+    <div class="blk"><h3>למה אני ממליץ עליה</h3><ul><li>הקריצה נותנת אופי שובב.</li><li>נראית מעולה בתמונות עם חברים.</li><li>מחיר סדרה אחיד – קל להסביר ללקוח.</li></ul></div>
+    <div class="blk"><h3>קהל יעד</h3>צעירים · 14–30</div>
+    <div class="blk"><h3>פרטי מוצר</h3><dl class="meta">
+      <dt>צבע חולצה</dt><dd><span class="sw" style="background:#CDBDF2"></span>לבנדר</dd>
+      <dt>הדפס קדימה</dt><dd>מרכז החזה · <span dir="ltr">11" × 12.7"</span> · <span dir="ltr">"OKAY, WINK"</span></dd>
+      <dt>הדפס אחורה</dt><dd>קטן בגב העליון, מתחת לצווארון · <span dir="ltr">4.2" × 4.7"</span></dd>
+    </dl></div>
+    <div class="dl">
+      <a class="btn pri" href="downloads/mood-wink/mood-wink.zip" download>⬇ הורד הכל (ZIP)</a>
+      <a class="btn sm" href="downloads/mood-wink/mood-wink-mockup-front.jpg" download>תמונת חזית לאתר</a>
+      <a class="btn sm" href="downloads/mood-wink/mood-wink-mockup-back.jpg" download>תמונת גב לאתר</a>
+      <a class="btn sm" href="downloads/mood-wink/mood-wink-print-front.png" download>קובץ הדפסה – חזית</a>
+      <a class="btn sm" href="downloads/mood-wink/mood-wink-print-back.png" download>קובץ הדפסה – גב</a>
+    </div>
+  </div>
+  <div class="mock">
+    <figure><img src="downloads/mood-wink/mood-wink-mockup-front.jpg" alt="Mood · Wink – חזית" loading="lazy"><figcaption>חזית</figcaption></figure>
+    <figure><img src="downloads/mood-wink/mood-wink-mockup-back.jpg" alt="Mood · Wink – גב" loading="lazy"><figcaption>גב</figcaption></figure>
+  </div>
+</div></div></section>
+
+<section class="slide" id="s-mood-grr"><div class="in"><div class="shirt-grid">
+  <div class="info">
+    <div class="idx">חולצה 23 / 27 · סדרת Moods</div>
+    <h2 class="disp">Mood · Grr</h2>
+    <span class="chip">סדרת Moods</span>
+    <div class="price"><b>₪99</b><span>מחיר מומלץ ללקוח (כולל מע״מ)</span></div>
+    <div class="blk"><h3>למה אני ממליץ עליה</h3><ul><li>כעס חמוד – רגש שכולם מכירים.</li><li>טקסט של מילה אחת = קריא מרחוק.</li><li>מתאים גם להדפסה על קפוצ׳ון בהמשך.</li></ul></div>
+    <div class="blk"><h3>קהל יעד</h3>בנים · 14–28</div>
+    <div class="blk"><h3>פרטי מוצר</h3><dl class="meta">
+      <dt>צבע חולצה</dt><dd><span class="sw" style="background:#F3EFE6"></span>לבן שבור</dd>
+      <dt>הדפס קדימה</dt><dd>מרכז החזה · <span dir="ltr">11" × 12.7"</span> · <span dir="ltr">"GRRR"</span></dd>
+      <dt>הדפס אחורה</dt><dd>קטן בגב העליון, מתחת לצווארון · <span dir="ltr">4.2" × 4.7"</span></dd>
+    </dl></div>
+    <div class="dl">
+      <a class="btn pri" href="downloads/mood-grr/mood-grr.zip" download>⬇ הורד הכל (ZIP)</a>
+      <a class="btn sm" href="downloads/mood-grr/mood-grr-mockup-front.jpg" download>תמונת חזית לאתר</a>
+      <a class="btn sm" href="downloads/mood-grr/mood-grr-mockup-back.jpg" download>תמונת גב לאתר</a>
+      <a class="btn sm" href="downloads/mood-grr/mood-grr-print-front.png" download>קובץ הדפסה – חזית</a>
+      <a class="btn sm" href="downloads/mood-grr/mood-grr-print-back.png" download>קובץ הדפסה – גב</a>
+    </div>
+  </div>
+  <div class="mock">
+    <figure><img src="downloads/mood-grr/mood-grr-mockup-front.jpg" alt="Mood · Grr – חזית" loading="lazy"><figcaption>חזית</figcaption></figure>
+    <figure><img src="downloads/mood-grr/mood-grr-mockup-back.jpg" alt="Mood · Grr – גב" loading="lazy"><figcaption>גב</figcaption></figure>
+  </div>
+</div></div></section>
+
+<section class="slide" id="s-mood-whoa"><div class="in"><div class="shirt-grid">
+  <div class="info">
+    <div class="idx">חולצה 24 / 27 · סדרת Moods</div>
+    <h2 class="disp">Mood · Whoa</h2>
+    <span class="chip">סדרת Moods</span>
+    <div class="price"><b>₪99</b><span>מחיר מומלץ ללקוח (כולל מע״מ)</span></div>
+    <div class="blk"><h3>למה אני ממליץ עליה</h3><ul><li>הפתעה – הבעה שמושכת עיניים.</li><li>קווי הניצוץ נראים מעולה על שחור.</li><li>אחת מהחולצות הכי &quot;מצחיקות&quot; לצילום.</li></ul></div>
+    <div class="blk"><h3>קהל יעד</h3>כולם · 14–30</div>
+    <div class="blk"><h3>פרטי מוצר</h3><dl class="meta">
+      <dt>צבע חולצה</dt><dd><span class="sw" style="background:#17161B"></span>שחור</dd>
+      <dt>הדפס קדימה</dt><dd>מרכז החזה · <span dir="ltr">11" × 12.7"</span> · <span dir="ltr">"WHOA"</span></dd>
+      <dt>הדפס אחורה</dt><dd>קטן בגב העליון, מתחת לצווארון · <span dir="ltr">4.2" × 4.7"</span></dd>
+    </dl></div>
+    <div class="dl">
+      <a class="btn pri" href="downloads/mood-whoa/mood-whoa.zip" download>⬇ הורד הכל (ZIP)</a>
+      <a class="btn sm" href="downloads/mood-whoa/mood-whoa-mockup-front.jpg" download>תמונת חזית לאתר</a>
+      <a class="btn sm" href="downloads/mood-whoa/mood-whoa-mockup-back.jpg" download>תמונת גב לאתר</a>
+      <a class="btn sm" href="downloads/mood-whoa/mood-whoa-print-front.png" download>קובץ הדפסה – חזית</a>
+      <a class="btn sm" href="downloads/mood-whoa/mood-whoa-print-back.png" download>קובץ הדפסה – גב</a>
+    </div>
+  </div>
+  <div class="mock">
+    <figure><img src="downloads/mood-whoa/mood-whoa-mockup-front.jpg" alt="Mood · Whoa – חזית" loading="lazy"><figcaption>חזית</figcaption></figure>
+    <figure><img src="downloads/mood-whoa/mood-whoa-mockup-back.jpg" alt="Mood · Whoa – גב" loading="lazy"><figcaption>גב</figcaption></figure>
+  </div>
+</div></div></section>
+
+<section class="slide" id="s-mood-crush"><div class="in"><div class="shirt-grid">
+  <div class="info">
+    <div class="idx">חולצה 25 / 27 · סדרת Moods</div>
+    <h2 class="disp">Mood · Crush</h2>
+    <span class="chip">סדרת Moods</span>
+    <div class="price"><b>₪99</b><span>מחיר מומלץ ללקוח (כולל מע״מ)</span></div>
+    <div class="blk"><h3>למה אני ממליץ עליה</h3><ul><li>עיני לב – מושלם לוולנטיינ׳ס ופרחי יום־הולדת.</li><li>ורוד־מגנטה קטן מוסיף צבע נקי.</li><li>נמכר טוב כמתנה.</li></ul></div>
+    <div class="blk"><h3>קהל יעד</h3>נשים צעירות וזוגות · 14–30</div>
+    <div class="blk"><h3>פרטי מוצר</h3><dl class="meta">
+      <dt>צבע חולצה</dt><dd><span class="sw" style="background:#F3EFE6"></span>לבן שבור</dd>
+      <dt>הדפס קדימה</dt><dd>מרכז החזה · <span dir="ltr">11" × 12.7"</span> · <span dir="ltr">"CRUSH ALERT"</span></dd>
+      <dt>הדפס אחורה</dt><dd>קטן בגב העליון, מתחת לצווארון · <span dir="ltr">4.2" × 4.7"</span></dd>
+    </dl></div>
+    <div class="dl">
+      <a class="btn pri" href="downloads/mood-crush/mood-crush.zip" download>⬇ הורד הכל (ZIP)</a>
+      <a class="btn sm" href="downloads/mood-crush/mood-crush-mockup-front.jpg" download>תמונת חזית לאתר</a>
+      <a class="btn sm" href="downloads/mood-crush/mood-crush-mockup-back.jpg" download>תמונת גב לאתר</a>
+      <a class="btn sm" href="downloads/mood-crush/mood-crush-print-front.png" download>קובץ הדפסה – חזית</a>
+      <a class="btn sm" href="downloads/mood-crush/mood-crush-print-back.png" download>קובץ הדפסה – גב</a>
+    </div>
+  </div>
+  <div class="mock">
+    <figure><img src="downloads/mood-crush/mood-crush-mockup-front.jpg" alt="Mood · Crush – חזית" loading="lazy"><figcaption>חזית</figcaption></figure>
+    <figure><img src="downloads/mood-crush/mood-crush-mockup-back.jpg" alt="Mood · Crush – גב" loading="lazy"><figcaption>גב</figcaption></figure>
+  </div>
+</div></div></section>
+
+<section class="slide" id="s-mood-zzz"><div class="in"><div class="shirt-grid">
+  <div class="info">
+    <div class="idx">חולצה 26 / 27 · סדרת Moods</div>
+    <h2 class="disp">Mood · Zzz</h2>
+    <span class="chip">סדרת Moods</span>
+    <div class="price"><b>₪99</b><span>מחיר מומלץ ללקוח (כולל מע״מ)</span></div>
+    <div class="blk"><h3>למה אני ממליץ עליה</h3><ul><li>הכי מזוהה עם &quot;יום שני בבוקר&quot; – מתחבר לכולם.</li><li>מתאים גם כחולצת שינה/לאונג׳.</li><li>הומור שכולם מבינים.</li></ul></div>
+    <div class="blk"><h3>קהל יעד</h3>ישנוניים · 14–40</div>
+    <div class="blk"><h3>פרטי מוצר</h3><dl class="meta">
+      <dt>צבע חולצה</dt><dd><span class="sw" style="background:#17161B"></span>שחור</dd>
+      <dt>הדפס קדימה</dt><dd>מרכז החזה · <span dir="ltr">11" × 12.7"</span> · <span dir="ltr">"DO NOT WAKE"</span></dd>
+      <dt>הדפס אחורה</dt><dd>קטן בגב העליון, מתחת לצווארון · <span dir="ltr">4.2" × 4.7"</span></dd>
+    </dl></div>
+    <div class="dl">
+      <a class="btn pri" href="downloads/mood-zzz/mood-zzz.zip" download>⬇ הורד הכל (ZIP)</a>
+      <a class="btn sm" href="downloads/mood-zzz/mood-zzz-mockup-front.jpg" download>תמונת חזית לאתר</a>
+      <a class="btn sm" href="downloads/mood-zzz/mood-zzz-mockup-back.jpg" download>תמונת גב לאתר</a>
+      <a class="btn sm" href="downloads/mood-zzz/mood-zzz-print-front.png" download>קובץ הדפסה – חזית</a>
+      <a class="btn sm" href="downloads/mood-zzz/mood-zzz-print-back.png" download>קובץ הדפסה – גב</a>
+    </div>
+  </div>
+  <div class="mock">
+    <figure><img src="downloads/mood-zzz/mood-zzz-mockup-front.jpg" alt="Mood · Zzz – חזית" loading="lazy"><figcaption>חזית</figcaption></figure>
+    <figure><img src="downloads/mood-zzz/mood-zzz-mockup-back.jpg" alt="Mood · Zzz – גב" loading="lazy"><figcaption>גב</figcaption></figure>
+  </div>
+</div></div></section>
+
+<section class="slide" id="s-angel-vexo"><div class="in"><div class="shirt-grid">
+  <div class="info">
+    <div class="idx">חולצה 27 / 27 · סדרת Moods</div>
+    <h2 class="disp">Angel Vexo</h2>
+    <span class="chip">מתנה · פרימיום</span>
+    <div class="price"><b>₪119</b><span>מחיר מומלץ ללקוח (כולל מע״מ)</span></div>
+    <div class="blk"><h3>למה אני ממליץ עליה</h3><ul><li>הילה זהובה + שתי אנטנות – גרסה &quot;מלאכית&quot; של הדמות (מבוסס על עיצוב הרקמה).</li><li>המסר החיובי מתאים למתנה.</li><li>המחיר מעט גבוה כי יש בו צבע נוסף (זהב).</li></ul></div>
+    <div class="blk"><h3>קהל יעד</h3>נשים 16–35 · מתנות</div>
+    <div class="blk"><h3>פרטי מוצר</h3><dl class="meta">
+      <dt>צבע חולצה</dt><dd><span class="sw" style="background:#F3EFE6"></span>לבן שבור</dd>
+      <dt>הדפס קדימה</dt><dd>מרכז החזה · <span dir="ltr">11" × 12.7"</span> · <span dir="ltr">"GOOD VIBES ONLY"</span></dd>
+      <dt>הדפס אחורה</dt><dd>הדפס גדול על הגב · <span dir="ltr">11" × 11.5"</span> · <span dir="ltr">"BLESSED"</span></dd>
+    </dl></div>
+    <div class="dl">
+      <a class="btn pri" href="downloads/angel-vexo/angel-vexo.zip" download>⬇ הורד הכל (ZIP)</a>
+      <a class="btn sm" href="downloads/angel-vexo/angel-vexo-mockup-front.jpg" download>תמונת חזית לאתר</a>
+      <a class="btn sm" href="downloads/angel-vexo/angel-vexo-mockup-back.jpg" download>תמונת גב לאתר</a>
+      <a class="btn sm" href="downloads/angel-vexo/angel-vexo-print-front.png" download>קובץ הדפסה – חזית</a>
+      <a class="btn sm" href="downloads/angel-vexo/angel-vexo-print-back.png" download>קובץ הדפסה – גב</a>
+    </div>
+  </div>
+  <div class="mock">
+    <figure><img src="downloads/angel-vexo/angel-vexo-mockup-front.jpg" alt="Angel Vexo – חזית" loading="lazy"><figcaption>חזית</figcaption></figure>
+    <figure><img src="downloads/angel-vexo/angel-vexo-mockup-back.jpg" alt="Angel Vexo – גב" loading="lazy"><figcaption>גב</figcaption></figure>
+  </div>
+</div></div></section>
+<section class="slide" id="favs-intro"><div class="in"><h2 class="sec-title disp">הלוגואים האהובים עליי + מוצרים נוספים</h2><p class="lead">בחרתי 5 לוגואים שעובדים הכי טוב מעבר לחולצה, ולכל אחד הכנתי 5 מוצרים: כובע רקום, ספל, תיק בד, מדבקה וכיסוי לטלפון. מוצרים קטנים מעלים את סל הקנייה ומכניסים לקוחות חדשים בזול.</p>
+    <div class="cards"><a class="card" href="#f-classic" style="display:block"><img src="logos/vexo-logo-classic-purple.png" alt="" style="width:90px;background:#F4F0E8;border-radius:16px;padding:8px;margin-bottom:10px"><h3 class="disp" style="font-size:20px">Classic</h3><p>הלוגו הראשי – חייב להופיע על כל מוצר. עובד על כל צבע ורקע, ואפשר לזהות אותו גם בקטן.</p></a><a class="card" href="#f-badge" style="display:block"><img src="logos/vexo-logo-badge-purple.png" alt="" style="width:90px;background:#F4F0E8;border-radius:16px;padding:8px;margin-bottom:10px"><h3 class="disp" style="font-size:20px">Badge</h3><p>עיגול מושלם למדבקות, תיקים ומעטפות – צורה שמתאימה בדיוק לפורמט &quot;תווית&quot;.</p></a><a class="card" href="#f-angel" style="display:block"><img src="logos/vexo-logo-angel-purple.png" alt="" style="width:90px;background:#F4F0E8;border-radius:16px;padding:8px;margin-bottom:10px"><h3 class="disp" style="font-size:20px">Angel</h3><p>מבוסס על עיצוב הרקמה שהעלית – הילה זהובה. קורא &quot;פרימיום&quot; ונראה מעולה כרקמה על כובע.</p></a><a class="card" href="#f-pixel" style="display:block"><img src="logos/vexo-logo-pixel-purple.png" alt="" style="width:90px;background:#F4F0E8;border-radius:16px;padding:8px;margin-bottom:10px"><h3 class="disp" style="font-size:20px">Pixel</h3><p>פיקסל־ארט – מדבקות ומחזיקי מפתחות של גיימרים מתים על זה, ואין לו בעיית איכות בהדפסה.</p></a><a class="card" href="#f-heart" style="display:block"><img src="logos/vexo-logo-heart-purple.png" alt="" style="width:90px;background:#F4F0E8;border-radius:16px;padding:8px;margin-bottom:10px"><h3 class="disp" style="font-size:20px">Love Alien</h3><p>הכי מתנתי בקולקציה. ספל, כיסוי לטלפון או תיק – מוצרים שקונים לאחרים.</p></a></div></div></section>
+
+<section class="slide" id="f-classic"><div class="in">
+  <div class="fav-top"><img src="logos/vexo-logo-classic-purple.png" alt="Classic"><div class="t">
+    <div class="idx">לוגו אהוב 1 / 5 · מוצרים נוספים</div>
+    <h2 class="sec-title disp">Classic</h2><p class="lead" style="margin:0">הלוגו הראשי – חייב להופיע על כל מוצר. עובד על כל צבע ורקע, ואפשר לזהות אותו גם בקטן.</p>
+    <div class="dl" style="margin-top:12px"><a class="btn sm" href="logos/vexo-logo-classic-purple.png" download>לוגו – סגול על בהיר</a><a class="btn sm" href="logos/vexo-logo-classic-light-on-dark.png" download>לוגו – לרקע כהה</a></div>
+  </div></div>
+  <div class="prod-grid"><div class="prod"><img src="downloads/merch/classic-cap-mockup.jpg" alt="כובע Dad Hat עם רקמה" loading="lazy"><div class="b"><h4>כובע Dad Hat עם רקמה</h4><p>רקמה 3" על החזית. סכום רקמה מוסיף ערך נתפס.</p><div class="pr">₪89</div>
+      <div class="dl"><a class="btn sm" href="downloads/merch/classic-cap-mockup.jpg" download>תמונה</a><a class="btn sm" href="downloads/merch/classic-cap-embroidery-3in.png" download>קובץ הדפסה</a></div></div></div><div class="prod"><img src="downloads/merch/classic-mug-mockup.jpg" alt="ספל קרמי 330 מ״ל" loading="lazy"><div class="b"><h4>ספל קרמי 330 מ״ל</h4><p>ספל לבן עם הדפס אחד – מתנה זולה שמעלה סל קנייה.</p><div class="pr">₪49</div>
+      <div class="dl"><a class="btn sm" href="downloads/merch/classic-mug-mockup.jpg" download>תמונה</a><a class="btn sm" href="downloads/merch/classic-mug-wrap-9x3.6in.png" download>קובץ הדפסה</a></div></div></div><div class="prod"><img src="downloads/merch/classic-tote-mockup.jpg" alt="תיק בד (Tote)" loading="lazy"><div class="b"><h4>תיק בד (Tote)</h4><p>קנבס טבעי, הדפס חזית. מוצר פרסום הליכה.</p><div class="pr">₪69</div>
+      <div class="dl"><a class="btn sm" href="downloads/merch/classic-tote-mockup.jpg" download>תמונה</a><a class="btn sm" href="downloads/merch/classic-tote-print-10x10in.png" download>קובץ הדפסה</a></div></div></div><div class="prod"><img src="downloads/merch/classic-sticker-mockup.jpg" alt="מדבקה Die-Cut" loading="lazy"><div class="b"><h4>מדבקה Die-Cut</h4><p>מדבקה בחיתוך לפי קו עם מסגרת לבנה. מתאימה לחבילות (3 ב־35₪).</p><div class="pr">₪15</div>
+      <div class="dl"><a class="btn sm" href="downloads/merch/classic-sticker-mockup.jpg" download>תמונה</a><a class="btn sm" href="downloads/merch/classic-sticker-diecut-3in.png" download>קובץ הדפסה</a></div></div></div><div class="prod"><img src="downloads/merch/classic-phone-mockup.jpg" alt="כיסוי לטלפון" loading="lazy"><div class="b"><h4>כיסוי לטלפון</h4><p>כיסוי קשיח עם הדפס מרכזי. בחרו דגמים נפוצים.</p><div class="pr">₪69</div>
+      <div class="dl"><a class="btn sm" href="downloads/merch/classic-phone-mockup.jpg" download>תמונה</a><a class="btn sm" href="downloads/merch/classic-phone-print-4in.png" download>קובץ הדפסה</a></div></div></div></div>
+</div></section>
+
+<section class="slide" id="f-badge"><div class="in">
+  <div class="fav-top"><img src="logos/vexo-logo-badge-purple.png" alt="Badge"><div class="t">
+    <div class="idx">לוגו אהוב 2 / 5 · מוצרים נוספים</div>
+    <h2 class="sec-title disp">Badge</h2><p class="lead" style="margin:0">עיגול מושלם למדבקות, תיקים ומעטפות – צורה שמתאימה בדיוק לפורמט &quot;תווית&quot;.</p>
+    <div class="dl" style="margin-top:12px"><a class="btn sm" href="logos/vexo-logo-badge-purple.png" download>לוגו – סגול על בהיר</a><a class="btn sm" href="logos/vexo-logo-badge-light-on-dark.png" download>לוגו – לרקע כהה</a></div>
+  </div></div>
+  <div class="prod-grid"><div class="prod"><img src="downloads/merch/badge-cap-mockup.jpg" alt="כובע Dad Hat עם רקמה" loading="lazy"><div class="b"><h4>כובע Dad Hat עם רקמה</h4><p>רקמה 3" על החזית. סכום רקמה מוסיף ערך נתפס.</p><div class="pr">₪89</div>
+      <div class="dl"><a class="btn sm" href="downloads/merch/badge-cap-mockup.jpg" download>תמונה</a><a class="btn sm" href="downloads/merch/badge-cap-embroidery-3in.png" download>קובץ הדפסה</a></div></div></div><div class="prod"><img src="downloads/merch/badge-mug-mockup.jpg" alt="ספל קרמי 330 מ״ל" loading="lazy"><div class="b"><h4>ספל קרמי 330 מ״ל</h4><p>ספל לבן עם הדפס אחד – מתנה זולה שמעלה סל קנייה.</p><div class="pr">₪49</div>
+      <div class="dl"><a class="btn sm" href="downloads/merch/badge-mug-mockup.jpg" download>תמונה</a><a class="btn sm" href="downloads/merch/badge-mug-wrap-9x3.6in.png" download>קובץ הדפסה</a></div></div></div><div class="prod"><img src="downloads/merch/badge-tote-mockup.jpg" alt="תיק בד (Tote)" loading="lazy"><div class="b"><h4>תיק בד (Tote)</h4><p>קנבס טבעי, הדפס חזית. מוצר פרסום הליכה.</p><div class="pr">₪69</div>
+      <div class="dl"><a class="btn sm" href="downloads/merch/badge-tote-mockup.jpg" download>תמונה</a><a class="btn sm" href="downloads/merch/badge-tote-print-10x10in.png" download>קובץ הדפסה</a></div></div></div><div class="prod"><img src="downloads/merch/badge-sticker-mockup.jpg" alt="מדבקה Die-Cut" loading="lazy"><div class="b"><h4>מדבקה Die-Cut</h4><p>מדבקה בחיתוך לפי קו עם מסגרת לבנה. מתאימה לחבילות (3 ב־35₪).</p><div class="pr">₪15</div>
+      <div class="dl"><a class="btn sm" href="downloads/merch/badge-sticker-mockup.jpg" download>תמונה</a><a class="btn sm" href="downloads/merch/badge-sticker-diecut-3in.png" download>קובץ הדפסה</a></div></div></div><div class="prod"><img src="downloads/merch/badge-phone-mockup.jpg" alt="כיסוי לטלפון" loading="lazy"><div class="b"><h4>כיסוי לטלפון</h4><p>כיסוי קשיח עם הדפס מרכזי. בחרו דגמים נפוצים.</p><div class="pr">₪69</div>
+      <div class="dl"><a class="btn sm" href="downloads/merch/badge-phone-mockup.jpg" download>תמונה</a><a class="btn sm" href="downloads/merch/badge-phone-print-4in.png" download>קובץ הדפסה</a></div></div></div></div>
+</div></section>
+
+<section class="slide" id="f-angel"><div class="in">
+  <div class="fav-top"><img src="logos/vexo-logo-angel-purple.png" alt="Angel"><div class="t">
+    <div class="idx">לוגו אהוב 3 / 5 · מוצרים נוספים</div>
+    <h2 class="sec-title disp">Angel</h2><p class="lead" style="margin:0">מבוסס על עיצוב הרקמה שהעלית – הילה זהובה. קורא &quot;פרימיום&quot; ונראה מעולה כרקמה על כובע.</p>
+    <div class="dl" style="margin-top:12px"><a class="btn sm" href="logos/vexo-logo-angel-purple.png" download>לוגו – סגול על בהיר</a><a class="btn sm" href="logos/vexo-logo-angel-light-on-dark.png" download>לוגו – לרקע כהה</a></div>
+  </div></div>
+  <div class="prod-grid"><div class="prod"><img src="downloads/merch/angel-cap-mockup.jpg" alt="כובע Dad Hat עם רקמה" loading="lazy"><div class="b"><h4>כובע Dad Hat עם רקמה</h4><p>רקמה 3" על החזית. סכום רקמה מוסיף ערך נתפס.</p><div class="pr">₪89</div>
+      <div class="dl"><a class="btn sm" href="downloads/merch/angel-cap-mockup.jpg" download>תמונה</a><a class="btn sm" href="downloads/merch/angel-cap-embroidery-3in.png" download>קובץ הדפסה</a></div></div></div><div class="prod"><img src="downloads/merch/angel-mug-mockup.jpg" alt="ספל קרמי 330 מ״ל" loading="lazy"><div class="b"><h4>ספל קרמי 330 מ״ל</h4><p>ספל לבן עם הדפס אחד – מתנה זולה שמעלה סל קנייה.</p><div class="pr">₪49</div>
+      <div class="dl"><a class="btn sm" href="downloads/merch/angel-mug-mockup.jpg" download>תמונה</a><a class="btn sm" href="downloads/merch/angel-mug-wrap-9x3.6in.png" download>קובץ הדפסה</a></div></div></div><div class="prod"><img src="downloads/merch/angel-tote-mockup.jpg" alt="תיק בד (Tote)" loading="lazy"><div class="b"><h4>תיק בד (Tote)</h4><p>קנבס טבעי, הדפס חזית. מוצר פרסום הליכה.</p><div class="pr">₪69</div>
+      <div class="dl"><a class="btn sm" href="downloads/merch/angel-tote-mockup.jpg" download>תמונה</a><a class="btn sm" href="downloads/merch/angel-tote-print-10x10in.png" download>קובץ הדפסה</a></div></div></div><div class="prod"><img src="downloads/merch/angel-sticker-mockup.jpg" alt="מדבקה Die-Cut" loading="lazy"><div class="b"><h4>מדבקה Die-Cut</h4><p>מדבקה בחיתוך לפי קו עם מסגרת לבנה. מתאימה לחבילות (3 ב־35₪).</p><div class="pr">₪15</div>
+      <div class="dl"><a class="btn sm" href="downloads/merch/angel-sticker-mockup.jpg" download>תמונה</a><a class="btn sm" href="downloads/merch/angel-sticker-diecut-3in.png" download>קובץ הדפסה</a></div></div></div><div class="prod"><img src="downloads/merch/angel-phone-mockup.jpg" alt="כיסוי לטלפון" loading="lazy"><div class="b"><h4>כיסוי לטלפון</h4><p>כיסוי קשיח עם הדפס מרכזי. בחרו דגמים נפוצים.</p><div class="pr">₪69</div>
+      <div class="dl"><a class="btn sm" href="downloads/merch/angel-phone-mockup.jpg" download>תמונה</a><a class="btn sm" href="downloads/merch/angel-phone-print-4in.png" download>קובץ הדפסה</a></div></div></div></div>
+</div></section>
+
+<section class="slide" id="f-pixel"><div class="in">
+  <div class="fav-top"><img src="logos/vexo-logo-pixel-purple.png" alt="Pixel"><div class="t">
+    <div class="idx">לוגו אהוב 4 / 5 · מוצרים נוספים</div>
+    <h2 class="sec-title disp">Pixel</h2><p class="lead" style="margin:0">פיקסל־ארט – מדבקות ומחזיקי מפתחות של גיימרים מתים על זה, ואין לו בעיית איכות בהדפסה.</p>
+    <div class="dl" style="margin-top:12px"><a class="btn sm" href="logos/vexo-logo-pixel-purple.png" download>לוגו – סגול על בהיר</a><a class="btn sm" href="logos/vexo-logo-pixel-light-on-dark.png" download>לוגו – לרקע כהה</a></div>
+  </div></div>
+  <div class="prod-grid"><div class="prod"><img src="downloads/merch/pixel-cap-mockup.jpg" alt="כובע Dad Hat עם רקמה" loading="lazy"><div class="b"><h4>כובע Dad Hat עם רקמה</h4><p>רקמה 3" על החזית. סכום רקמה מוסיף ערך נתפס.</p><div class="pr">₪89</div>
+      <div class="dl"><a class="btn sm" href="downloads/merch/pixel-cap-mockup.jpg" download>תמונה</a><a class="btn sm" href="downloads/merch/pixel-cap-embroidery-3in.png" download>קובץ הדפסה</a></div></div></div><div class="prod"><img src="downloads/merch/pixel-mug-mockup.jpg" alt="ספל קרמי 330 מ״ל" loading="lazy"><div class="b"><h4>ספל קרמי 330 מ״ל</h4><p>ספל לבן עם הדפס אחד – מתנה זולה שמעלה סל קנייה.</p><div class="pr">₪49</div>
+      <div class="dl"><a class="btn sm" href="downloads/merch/pixel-mug-mockup.jpg" download>תמונה</a><a class="btn sm" href="downloads/merch/pixel-mug-wrap-9x3.6in.png" download>קובץ הדפסה</a></div></div></div><div class="prod"><img src="downloads/merch/pixel-tote-mockup.jpg" alt="תיק בד (Tote)" loading="lazy"><div class="b"><h4>תיק בד (Tote)</h4><p>קנבס טבעי, הדפס חזית. מוצר פרסום הליכה.</p><div class="pr">₪69</div>
+      <div class="dl"><a class="btn sm" href="downloads/merch/pixel-tote-mockup.jpg" download>תמונה</a><a class="btn sm" href="downloads/merch/pixel-tote-print-10x10in.png" download>קובץ הדפסה</a></div></div></div><div class="prod"><img src="downloads/merch/pixel-sticker-mockup.jpg" alt="מדבקה Die-Cut" loading="lazy"><div class="b"><h4>מדבקה Die-Cut</h4><p>מדבקה בחיתוך לפי קו עם מסגרת לבנה. מתאימה לחבילות (3 ב־35₪).</p><div class="pr">₪15</div>
+      <div class="dl"><a class="btn sm" href="downloads/merch/pixel-sticker-mockup.jpg" download>תמונה</a><a class="btn sm" href="downloads/merch/pixel-sticker-diecut-3in.png" download>קובץ הדפסה</a></div></div></div><div class="prod"><img src="downloads/merch/pixel-phone-mockup.jpg" alt="כיסוי לטלפון" loading="lazy"><div class="b"><h4>כיסוי לטלפון</h4><p>כיסוי קשיח עם הדפס מרכזי. בחרו דגמים נפוצים.</p><div class="pr">₪69</div>
+      <div class="dl"><a class="btn sm" href="downloads/merch/pixel-phone-mockup.jpg" download>תמונה</a><a class="btn sm" href="downloads/merch/pixel-phone-print-4in.png" download>קובץ הדפסה</a></div></div></div></div>
+</div></section>
+
+<section class="slide" id="f-heart"><div class="in">
+  <div class="fav-top"><img src="logos/vexo-logo-heart-purple.png" alt="Love Alien"><div class="t">
+    <div class="idx">לוגו אהוב 5 / 5 · מוצרים נוספים</div>
+    <h2 class="sec-title disp">Love Alien</h2><p class="lead" style="margin:0">הכי מתנתי בקולקציה. ספל, כיסוי לטלפון או תיק – מוצרים שקונים לאחרים.</p>
+    <div class="dl" style="margin-top:12px"><a class="btn sm" href="logos/vexo-logo-heart-purple.png" download>לוגו – סגול על בהיר</a><a class="btn sm" href="logos/vexo-logo-heart-light-on-dark.png" download>לוגו – לרקע כהה</a></div>
+  </div></div>
+  <div class="prod-grid"><div class="prod"><img src="downloads/merch/heart-cap-mockup.jpg" alt="כובע Dad Hat עם רקמה" loading="lazy"><div class="b"><h4>כובע Dad Hat עם רקמה</h4><p>רקמה 3" על החזית. סכום רקמה מוסיף ערך נתפס.</p><div class="pr">₪89</div>
+      <div class="dl"><a class="btn sm" href="downloads/merch/heart-cap-mockup.jpg" download>תמונה</a><a class="btn sm" href="downloads/merch/heart-cap-embroidery-3in.png" download>קובץ הדפסה</a></div></div></div><div class="prod"><img src="downloads/merch/heart-mug-mockup.jpg" alt="ספל קרמי 330 מ״ל" loading="lazy"><div class="b"><h4>ספל קרמי 330 מ״ל</h4><p>ספל לבן עם הדפס אחד – מתנה זולה שמעלה סל קנייה.</p><div class="pr">₪49</div>
+      <div class="dl"><a class="btn sm" href="downloads/merch/heart-mug-mockup.jpg" download>תמונה</a><a class="btn sm" href="downloads/merch/heart-mug-wrap-9x3.6in.png" download>קובץ הדפסה</a></div></div></div><div class="prod"><img src="downloads/merch/heart-tote-mockup.jpg" alt="תיק בד (Tote)" loading="lazy"><div class="b"><h4>תיק בד (Tote)</h4><p>קנבס טבעי, הדפס חזית. מוצר פרסום הליכה.</p><div class="pr">₪69</div>
+      <div class="dl"><a class="btn sm" href="downloads/merch/heart-tote-mockup.jpg" download>תמונה</a><a class="btn sm" href="downloads/merch/heart-tote-print-10x10in.png" download>קובץ הדפסה</a></div></div></div><div class="prod"><img src="downloads/merch/heart-sticker-mockup.jpg" alt="מדבקה Die-Cut" loading="lazy"><div class="b"><h4>מדבקה Die-Cut</h4><p>מדבקה בחיתוך לפי קו עם מסגרת לבנה. מתאימה לחבילות (3 ב־35₪).</p><div class="pr">₪15</div>
+      <div class="dl"><a class="btn sm" href="downloads/merch/heart-sticker-mockup.jpg" download>תמונה</a><a class="btn sm" href="downloads/merch/heart-sticker-diecut-3in.png" download>קובץ הדפסה</a></div></div></div><div class="prod"><img src="downloads/merch/heart-phone-mockup.jpg" alt="כיסוי לטלפון" loading="lazy"><div class="b"><h4>כיסוי לטלפון</h4><p>כיסוי קשיח עם הדפס מרכזי. בחרו דגמים נפוצים.</p><div class="pr">₪69</div>
+      <div class="dl"><a class="btn sm" href="downloads/merch/heart-phone-mockup.jpg" download>תמונה</a><a class="btn sm" href="downloads/merch/heart-phone-print-4in.png" download>קובץ הדפסה</a></div></div></div></div>
+</div></section>
+
+<section class="slide" id="summary"><div class="in">
+  <h2 class="sec-title disp">סיכום מחירים ומבצעים</h2>
+  <p class="lead">כל החולצות במחיר ₪99–₪119 (ממוצע ₪105). הצעות לחבילות: <b>סדרת Moods – 3 חולצות ב־₪269</b> · <b>סדרת גיימינג (Arcade Ghost + Chomp + Pixel) – 3 ב־₪299</b> · <b>Love Alien זוגי – 2 ב־₪199</b> · <b>3 מדבקות – ₪35</b>.</p>
+  <div class="tbl"><table><thead><tr><th>חולצה</th><th>צבע</th><th>מחיר</th></tr></thead><tbody><tr><td><a href="#s-vexo-original">Vexo Original</a></td><td>שחור</td><td class="p">₪99</td></tr><tr><td><a href="#s-ghost-line">Ghost Line</a></td><td>לבן שבור</td><td class="p">₪99</td></tr><tr><td><a href="#s-vexo-badge">Vexo Badge</a></td><td>לבנדר</td><td class="p">₪109</td></tr><tr><td><a href="#s-arcade-ghost">Arcade Ghost</a></td><td>שחור</td><td class="p">₪109</td></tr><tr><td><a href="#s-grumpy-vexo">Grumpy Vexo</a></td><td>לבן שבור</td><td class="p">₪99</td></tr><tr><td><a href="#s-seal-of-vexo">Seal of Vexo</a></td><td>שחור</td><td class="p">₪109</td></tr><tr><td><a href="#s-bean-buddy">Bean Buddy</a></td><td>לבנדר</td><td class="p">₪99</td></tr><tr><td><a href="#s-vexo-zoom">Vexo Zoom</a></td><td>שחור</td><td class="p">₪109</td></tr><tr><td><a href="#s-love-alien">Love Alien</a></td><td>לבן שבור</td><td class="p">₪109</td></tr><tr><td><a href="#s-wink-wink">Wink Wink</a></td><td>סגול Vexo</td><td class="p">₪99</td></tr><tr><td><a href="#s-vexo-app">Vexo App</a></td><td>שחור</td><td class="p">₪109</td></tr><tr><td><a href="#s-big-iris">Big Iris</a></td><td>לבן שבור</td><td class="p">₪119</td></tr><tr><td><a href="#s-chomp">Chomp</a></td><td>שחור</td><td class="p">₪109</td></tr><tr><td><a href="#s-thin-ring">Thin Ring</a></td><td>לבן שבור</td><td class="p">₪99</td></tr></tbody></table><table><thead><tr><th>חולצה</th><th>צבע</th><th>מחיר</th></tr></thead><tbody><tr><td><a href="#s-pixel-vexo">Pixel Vexo</a></td><td>שחור</td><td class="p">₪109</td></tr><tr><td><a href="#s-peek">Peek</a></td><td>לבנדר</td><td class="p">₪109</td></tr><tr><td><a href="#s-vexo-shield">Vexo Shield</a></td><td>אפור פחם</td><td class="p">₪109</td></tr><tr><td><a href="#s-watcher">Watcher</a></td><td>שחור</td><td class="p">₪99</td></tr><tr><td><a href="#s-one-eye">One Eye</a></td><td>סגול Vexo</td><td class="p">₪109</td></tr><tr><td><a href="#s-vexo-orbit">Vexo Orbit</a></td><td>אפור פחם</td><td class="p">₪119</td></tr><tr><td><a href="#s-mood-hey">Mood · Hey</a></td><td>לבן שבור</td><td class="p">₪99</td></tr><tr><td><a href="#s-mood-wink">Mood · Wink</a></td><td>לבנדר</td><td class="p">₪99</td></tr><tr><td><a href="#s-mood-grr">Mood · Grr</a></td><td>לבן שבור</td><td class="p">₪99</td></tr><tr><td><a href="#s-mood-whoa">Mood · Whoa</a></td><td>שחור</td><td class="p">₪99</td></tr><tr><td><a href="#s-mood-crush">Mood · Crush</a></td><td>לבן שבור</td><td class="p">₪99</td></tr><tr><td><a href="#s-mood-zzz">Mood · Zzz</a></td><td>שחור</td><td class="p">₪99</td></tr><tr><td><a href="#s-angel-vexo">Angel Vexo</a></td><td>לבן שבור</td><td class="p">₪119</td></tr></tbody></table></div>
+  <div class="cards" style="margin-top:26px">
+    <div class="card"><h3>המלצה להשקה</h3><p>להתחיל ב־8–10 חולצות: Vexo Original, Vexo Badge, Grumpy, Love Alien, Pixel, Mood · Whoa, Angel + כובע ומדבקות. אחרי שבועיים להסתכל על נתוני מכירות ולהרחיב.</p></div>
+    <div class="card"><h3>מה חסר לי כדי לדייק</h3><ul><li>עלות ייצור + משלוח לכל מוצר</li><li>שם המפעל / כלי ההדפסה (מידות קבצים)</li><li>האם רוצים הדפסה בלבן (על שחור) או רק צבעים</li></ul></div>
+    <div class="card"><h3>קבצי עזר</h3><p><a class="btn sm" href="vexo-catalog.csv" download>⬇ קטלוג CSV (שם, מחיר, צבע, קהל)</a></p></div>
+  </div>
+</div></section>
+<div id="hud"><button id="pv" aria-label="הקודם">›</button><span id="cnt">1 / 38</span><button id="nx" aria-label="הבא">‹</button></div>
+<script>
+(function(){var S=[].slice.call(document.querySelectorAll('.slide')),cnt=document.getElementById('cnt'),cur=0;
+function upd(){var y=window.innerHeight*.4,best=0;S.forEach(function(s,i){if(s.getBoundingClientRect().top<=y)best=i});cur=best;cnt.textContent=(best+1)+' / '+S.length}
+function go(i){i=Math.max(0,Math.min(S.length-1,i));S[i].scrollIntoView({behavior:'smooth',block:'start'})}
+window.addEventListener('scroll',upd,{passive:true});upd();
+document.getElementById('nx').onclick=function(){go(cur+1)};document.getElementById('pv').onclick=function(){go(cur-1)};
+document.addEventListener('keydown',function(e){if(e.key==='ArrowDown'||e.key==='PageDown'||e.key==='ArrowLeft'){e.preventDefault();go(cur+1)}if(e.key==='ArrowUp'||e.key==='PageUp'||e.key==='ArrowRight'){e.preventDefault();go(cur-1)}});})();
+</script></body></html>
