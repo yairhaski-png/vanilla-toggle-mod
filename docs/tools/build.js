@@ -5,7 +5,8 @@ const fs = require('fs');
 const path = require('path');
 const { PALETTES, LOGOS, SYMBOLS, symbolSvg, logoSvg } = require('./art');
 const M = require('./mockups');
-const { SHIRTS, FAVORITES, PRODUCTS } = require('./data');
+const { SHIRTS, CUTS, FAVORITES, PRODUCTS } = require('./data');
+const { D } = require('./designs');
 const { makeRenderer } = require('./render');
 
 const ROOT = path.resolve(__dirname, '..');
@@ -17,21 +18,15 @@ const artSvg = (a) => `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 ${a.
 const inch = (n) => (n / 100).toFixed(1).replace(/\.0$/, '');
 const dims = (a) => `<span dir="ltr">${inch(a.W)}" × ${inch(a.H)}"</span>`;
 
-const PLACE_TXT = {
-  slogan: (a) => `משפט + סמל במרכז החזה · ${dims(a)}`,
-  center: (a) => `מרכז החזה · ${dims(a)}`,
-  giant: (a) => `הדפס גדול על כל החזה · ${dims(a)}`,
-  chest: (a) => `חזה שמאל (מבט הלובש) · ${dims(a)}`,
-  nape: (a) => `קטן בגב העליון, מתחת לצווארון · ${dims(a)}`,
-  big: (a) => `הדפס גדול על הגב · ${dims(a)}`,
-  text: (a) => `כיתוב גדול על הגב · ${dims(a)}`,
+const placeTxt = (a, side) => {
+  const big = a.W > 500 || a.H > 500;
+  const where = side === 'front' ? (big ? 'איור גדול במרכז החזה' : 'לוגו קטן בחזה שמאל') : big ? 'איור גדול על הגב' : 'הדפס קטן בגב העליון';
+  return `${where} · ${dims(a)}`;
 };
-
 const prepared = SHIRTS.map((s) => {
   const P = PALETTES[M.SHIRTS[s.color].pal];
-  const front = M.layoutArt(s.front[0], s.logo, P, s.front[1], s.sym);
-  const back = M.layoutArt(s.back[0], s.logo, P, s.back[1]);
-  return { ...s, P, frontArt: front, backArt: back };
+  const dz = D[s.design];
+  return { ...s, P, frontArt: dz.front(P), backArt: dz.back(P) };
 });
 
 const LOGO_IDS = Object.keys(LOGOS);
@@ -63,6 +58,7 @@ function productPrint(key, logoId) {
 async function renderAll() {
   const r = await makeRenderer();
   mk(DL); mk(LG); mk(path.join(DL, 'merch'));
+  for (const d of fs.readdirSync(DL)) if (d !== 'merch') fs.rmSync(path.join(DL, d), { recursive: true, force: true });
 
   // --- shirts
   for (const s of prepared) {
@@ -134,6 +130,8 @@ h1,h2,h3{margin:0;font-weight:800;line-height:1.1}
 .blk ul{margin:0;padding:0 18px 0 0}.blk li{margin:3px 0}
 .meta{display:grid;grid-template-columns:auto 1fr;gap:4px 14px;font-size:14.5px}.meta dt{color:var(--mu)}.meta dd{margin:0}
 .sw{display:inline-block;width:13px;height:13px;border-radius:50%;border:1px solid rgba(255,255,255,.35);vertical-align:-1px;margin-left:6px}
+.promo p{margin:4px 0;color:#e8defc;font-size:14.5px}.promo b{color:var(--ac2)}
+.cuts{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:12px}.cut{background:var(--s1);border:1px solid var(--bd);border-radius:16px;padding:14px 16px;display:flex;flex-direction:column;gap:4px}.cut b{color:var(--ac2);font-size:14px}.cut span{color:#d6ccf0;font-size:14px}
 .dl{display:flex;flex-wrap:wrap;gap:8px;margin-top:16px}
 .mock{display:grid;grid-template-columns:1fr 1fr;gap:16px;direction:ltr}
 .mock figure{margin:0;background:var(--s1);border:1px solid var(--bd);border-radius:22px;overflow:hidden;position:relative}
@@ -182,16 +180,18 @@ function shirtSlide(s, i, total) {
   return `
 <section class="slide" id="s-${s.id}"><div class="in"><div class="shirt-grid">
   <div class="info">
-    <div class="idx">חולצה ${String(i + 1).padStart(2, '0')} / ${total} · ${s.series === 'slogan' ? 'סדרת משפט + סמל' : s.logo.startsWith('m_') || s.logo === 'angel' ? 'סדרת Moods' : 'קולקציית לוגואים'}</div>
+    <div class="idx">חולצה ${String(i + 1).padStart(2, '0')} / ${total} · ${esc(s.tag)}</div>
     <h2 class="disp">${esc(s.name)}</h2>
     <span class="chip">${esc(s.tag)}</span>
     <div class="price"><b>₪${s.price}</b><span>מחיר מומלץ ללקוח (כולל מע״מ)</span></div>
     <div class="blk"><h3>למה אני ממליץ עליה</h3><ul>${s.why.map((w) => `<li>${esc(w)}</li>`).join('')}</ul></div>
+    <div class="blk"><h3>האם הייתי קונה?</h3>${esc(s.verdict)}</div>
     <div class="blk"><h3>קהל יעד</h3>${esc(s.who)}</div>
+    <div class="blk promo"><h3>איך לפרסם</h3><p><b>אינסטגרם:</b> ${esc(s.ig)}</p><p><b>טיקטוק:</b> ${esc(s.tt)}</p></div>
     <div class="blk"><h3>פרטי מוצר</h3><dl class="meta">
       <dt>צבע חולצה</dt><dd><span class="sw" style="background:${hex}"></span>${M.SHIRTS[s.color].label}</dd>
-      <dt>הדפס קדימה</dt><dd>${PLACE_TXT[s.front[0]](s.frontArt)}${s.front[1] ? ` · <span dir="ltr">"${esc(s.front[1].replace('\n', ' '))}"</span>` : ''}</dd>
-      <dt>הדפס אחורה</dt><dd>${PLACE_TXT[s.back[0]](s.backArt)}${s.back[1] ? ` · <span dir="ltr">"${esc(s.back[1].replace('\n', ' '))}"</span>` : ''}</dd>
+      <dt>הדפס קדימה</dt><dd>${placeTxt(s.frontArt, 'front')}</dd>
+      <dt>הדפס אחורה</dt><dd>${placeTxt(s.backArt, 'back')}</dd>
     </dl></div>
     <div class="dl">
       ${dlBtn(`${d}/${s.id}.zip`, '⬇ הורד הכל (ZIP)', 'pri')}
@@ -274,6 +274,9 @@ function buildDeck() {
 </div></section>`);
 
   slides.push(`<section class="slide" id="overview"><div class="in"><h2 class="sec-title disp">כל הקולקציה</h2><p class="lead">לחיצה על חולצה פותחת את השקף שלה.</p><div class="ov">${ov}</div></div></section>`);
+  slides.push(`<section class="slide" id="review"><div class="in"><h2 class="sec-title disp">ביקורת – מה נשאר ומה יצא</h2>
+  <p class="lead">צדקת, הסבב הראשון היה פשוט מדי: 39 חולצות ובעיקר לוגו. עברתי על כל אחת ושאלתי שלושה דברים: האם יש בה רעיון מעבר ללוגו, האם הייתי קונה, והאם אפשר להסביר בסרטון של עשר שניות. ${CUTS.length} קבוצות הוסרו או אוחדו, ו־${total} חולצות חדשות נבנו מחדש עם איורים, סצנות ופרטים. בכל שקף יש "האם הייתי קונה?" ורעיון פרסום.</p>
+  <div class="cuts">${CUTS.map(([n, why]) => `<div class="cut"><b>${esc(n)}</b><span>${esc(why)}</span></div>`).join('')}</div></div></section>`);
   prepared.forEach((s, i) => slides.push(shirtSlide(s, i, total)));
   slides.push(`<section class="slide" id="favs-intro"><div class="in"><h2 class="sec-title disp">הלוגואים האהובים עליי + מוצרים נוספים</h2><p class="lead">בחרתי ${FAVORITES.length} לוגואים שעובדים הכי טוב מעבר לחולצה, ולכל אחד הכנתי ${PRODUCTS.length} מוצרים: כובע רקום, ספל, תיק בד, מדבקה וכיסוי לטלפון. מוצרים קטנים מעלים את סל הקנייה ומכניסים לקוחות חדשים בזול.</p>
     <div class="cards">${FAVORITES.map((f) => `<a class="card" href="#f-${f.logo}" style="display:block"><img src="logos/vexo-logo-${f.logo}-purple.png" alt="" style="width:90px;background:#F4F0E8;border-radius:16px;padding:8px;margin-bottom:10px"><h3 class="disp" style="font-size:20px">${esc(f.name)}</h3><p>${esc(f.pitch)}</p></a>`).join('')}</div></div></section>`);
@@ -282,10 +285,10 @@ function buildDeck() {
   slides.push(`
 <section class="slide" id="summary"><div class="in">
   <h2 class="sec-title disp">סיכום מחירים ומבצעים</h2>
-  <p class="lead">כל החולצות במחיר ₪${Math.min(...prepared.map((s) => s.price))}–₪${Math.max(...prepared.map((s) => s.price))} (ממוצע ₪${avg}). הצעות לחבילות: <b>סדרת Moods – 3 חולצות ב־₪269</b> · <b>סדרת גיימינג (Arcade Ghost + Chomp + Pixel) – 3 ב־₪299</b> · <b>Love Alien זוגי – 2 ב־₪199</b> · <b>3 חולצות משפט + סמל – ₪239</b> · <b>3 מדבקות – ₪35</b>.</p>
+  <p class="lead">כל החולצות במחיר ₪${Math.min(...prepared.map((s) => s.price))}–₪${Math.max(...prepared.map((s) => s.price))} (ממוצע ₪${avg}). הצעות לחבילות: <b>Good vs Bad – שתי חולצות ב־₪229</b> · <b>3 חולצות לבחירה – ₪329</b> · <b>3 מדבקות – ₪35</b>.</p>
   <div class="tbl">${tbl(prepared.slice(0, half))}${tbl(prepared.slice(half))}</div>
   <div class="cards" style="margin-top:26px">
-    <div class="card"><h3>המלצה להשקה</h3><p>להתחיל ב־8–10 חולצות: Vexo Original, Vexo Badge, Grumpy, Love Alien, Pixel, Mood · Whoa, Angel + כובע ומדבקות. אחרי שבועיים להסתכל על נתוני מכירות ולהרחיב.</p></div>
+    <div class="card"><h3>המלצה להשקה</h3><p>להתחיל ב־8 חולצות: Abduction Report, World Tour, Trading Card, Arcade Champion, Mood Chart, Sunset Club, Good vs Bad ו־Vexo Original (בסיסית) + כובע ומדבקות. אחרי שבועיים להסתכל על נתוני מכירות ולהרחיב.</p></div>
     <div class="card"><h3>מה חסר לי כדי לדייק</h3><ul><li>עלות ייצור + משלוח לכל מוצר</li><li>שם המפעל / כלי ההדפסה (מידות קבצים)</li><li>האם רוצים הדפסה בלבן (על שחור) או רק צבעים</li></ul></div>
     <div class="card"><h3>קבצי עזר</h3><p><a class="btn sm" href="vexo-catalog.csv" download>⬇ קטלוג CSV (שם, מחיר, צבע, קהל)</a></p></div>
   </div>
@@ -307,7 +310,7 @@ document.addEventListener('keydown',function(e){if(e.key==='ArrowDown'||e.key===
 function buildCsv() {
   const head = ['Handle', 'Title', 'Price ILS', 'Shirt colour', 'Front print', 'Back print', 'Audience', 'Tag', 'Front image', 'Back image'];
   const q = (v) => `"${String(v).replace(/"/g, '""').replace(/\n/g, ' ')}"`;
-  const rows = prepared.map((s) => [s.id, s.name, s.price, M.SHIRTS[s.color].label, PLACE_TXT[s.front[0]](s.frontArt).replace(/<[^>]+>/g, ''), PLACE_TXT[s.back[0]](s.backArt).replace(/<[^>]+>/g, ''), s.who, s.tag, `downloads/${s.id}/${s.id}-mockup-front.jpg`, `downloads/${s.id}/${s.id}-mockup-back.jpg`]);
+  const rows = prepared.map((s) => [s.id, s.name, s.price, M.SHIRTS[s.color].label, placeTxt(s.frontArt, 'front').replace(/<[^>]+>/g, ''), placeTxt(s.backArt, 'back').replace(/<[^>]+>/g, ''), s.who, s.tag, `downloads/${s.id}/${s.id}-mockup-front.jpg`, `downloads/${s.id}/${s.id}-mockup-back.jpg`]);
   return '﻿' + [head, ...rows].map((r) => r.map(q).join(',')).join('\n') + '\n';
 }
 

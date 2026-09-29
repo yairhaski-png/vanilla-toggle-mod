@@ -89,7 +89,7 @@ function layoutArt(kind, logoId, P, text = '', sym = '') {
 // ---------- T-shirt mockup ----------
 const TEE = 'M285 70 C300 118 400 118 415 70 L545 105 L660 235 L590 300 L515 255 L515 735 Q350 752 185 735 L185 255 L110 300 L40 235 L155 105 Z';
 const TEE_BACK = 'M285 70 C305 90 395 90 415 70 L545 105 L660 235 L590 300 L515 255 L515 735 Q350 752 185 735 L185 255 L110 300 L40 235 L155 105 Z';
-const K = 0.23; // mockup units per art unit
+const K = 0.27; // mockup units per art unit
 
 function stage(inner, bgA = '#F2EEFB', bgB = '#DCD3F3') {
   return `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 700 800" width="700" height="800">

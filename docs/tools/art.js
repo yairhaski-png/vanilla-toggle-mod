@@ -101,10 +101,35 @@ function eyes(type, P, mode = 'color', ink = '#141018') {
 
 // ---------- mascot ----------
 // fill 'none' + outline => transparent line-art version.
-function mascot({ P, fill, outline = null, ow = 0, eyesType = 'classic', mode = 'color', ink, body = 'scallop', ant = 'single', gloss = false, halo = false }) {
+const INK = '#141018';
+function accessory(acc, P) {
+  switch (acc) {
+    case 'shades':
+      return `<g><path d="M54 104 L36 98 M146 104 L164 98" stroke="${INK}" stroke-width="5" stroke-linecap="round"/><rect x="52" y="93" width="46" height="32" rx="13" fill="${INK}"/><rect x="102" y="93" width="46" height="32" rx="13" fill="${INK}"/><path d="M98 104 H102" stroke="${INK}" stroke-width="6"/><path d="M60 101 L76 101 M110 101 L126 101" stroke="#fff" stroke-width="3.5" opacity=".55" stroke-linecap="round"/></g>`;
+    case 'headphones':
+      return `<g><path d="M34 118 C28 30 172 30 166 118" fill="none" stroke="${INK}" stroke-width="10" stroke-linecap="round"/><rect x="22" y="98" width="24" height="42" rx="11" fill="${P.pink}" stroke="${INK}" stroke-width="5"/><rect x="154" y="98" width="24" height="42" rx="11" fill="${P.pink}" stroke="${INK}" stroke-width="5"/></g>`;
+    case 'helmet':
+      return `<g><circle cx="100" cy="100" r="104" fill="#BFE8FF" fill-opacity=".14" stroke="#EAF6FF" stroke-width="6"/><path d="M34 62 A76 76 0 0 1 78 22" fill="none" stroke="#fff" stroke-width="7" stroke-linecap="round" opacity=".7"/></g>`;
+    case 'horns':
+      return `<g fill="#E5484D" stroke="${INK}" stroke-width="4" stroke-linejoin="round"><path d="M56 68 L40 26 L82 52 Z"/><path d="M144 68 L160 26 L118 52 Z"/></g>`;
+    case 'crown':
+      return `<g transform="rotate(-14 84 54)" fill="#E9C46A" stroke="${INK}" stroke-width="4" stroke-linejoin="round"><path d="M58 70 L60 36 L74 52 L86 30 L98 52 L112 36 L114 70 Z"/></g>`;
+    case 'chef':
+      return `<g fill="#F6F1E7" stroke="${INK}" stroke-width="4"><circle cx="78" cy="42" r="20"/><circle cx="100" cy="32" r="22"/><circle cx="124" cy="44" r="20"/><rect x="74" y="46" width="52" height="24" rx="4"/></g>`;
+    default:
+      return '';
+  }
+}
+
+function mascot({ P, fill, outline = null, ow = 0, eyesType = 'classic', mode = 'color', ink, body = 'scallop', ant = 'single', gloss = false, halo = false, acc = '', arms = [] }) {
   const shapes = BODIES[body]();
   const a = ANTENNAE[ant];
   let out = '';
+  if (arms.length) {
+    const aw = 14;
+    if (outline) out += arms.map((d) => `<path d="${d}" fill="none" stroke="${outline}" stroke-width="${aw + ow * 2}" stroke-linecap="round"/>`).join('');
+    out += arms.map((d) => `<path d="${d}" fill="none" stroke="${fill === 'none' ? outline : fill}" stroke-width="${aw}" stroke-linecap="round"/>`).join('');
+  }
   if (fill === 'none') {
     const id = nid('m');
     out += `<mask id="${id}" maskUnits="userSpaceOnUse" x="-30" y="-30" width="260" height="260"><rect x="-30" y="-30" width="260" height="260" fill="#fff"/>${bodyLayer(shapes, a, '#000', 0)}</mask>`;
@@ -115,6 +140,7 @@ function mascot({ P, fill, outline = null, ow = 0, eyesType = 'classic', mode = 
   }
   if (gloss) out += `<path d="M46 118 C44 88 60 68 82 60" fill="none" stroke="${P.gloss}" stroke-width="5.5" stroke-linecap="round" opacity=".55"/>`;
   out += eyes(eyesType, P, mode, ink || outline || P.pupil);
+  out += accessory(acc, P);
   if (halo) out += `<ellipse cx="100" cy="17" rx="30" ry="8" fill="none" stroke="${P.gold}" stroke-width="5.5"/>`;
   return `<g>${out}</g>`;
 }
