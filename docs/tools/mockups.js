@@ -1,5 +1,5 @@
 'use strict';
-const { LOGOS, PALETTES, mascot } = require('./art');
+const { LOGOS, SYMBOLS, PALETTES, mascot } = require('./art');
 
 const SHIRTS = {
   black: { hex: '#17161B', pal: 'dark', label: 'שחור' },
@@ -22,7 +22,10 @@ const wordmark = (x, y, size, fill) =>
   `<text x="${x}" y="${y}" text-anchor="middle" font-family="Fredoka" font-weight="700" font-size="${size}" fill="${fill}" letter-spacing="${size * 0.06}">vexo</text>`;
 
 // ---------- print layouts (units: 1 = 0.01 inch) ----------
-function layoutArt(kind, logoId, P, text = '') {
+const symBox = (id, P, x, y, size) =>
+  `<svg x="${x}" y="${y}" width="${size}" height="${size}" viewBox="-6 -6 212 212" overflow="visible">${SYMBOLS[id].draw(P)}</svg>`;
+
+function layoutArt(kind, logoId, P, text = '', sym = '') {
   switch (kind) {
     case 'center': {
       const W = 1100;
@@ -35,6 +38,18 @@ function layoutArt(kind, logoId, P, text = '') {
       svg += wordmark(W / 2, H + 95, 84, P.accent);
       H += 130;
       return { W, H, svg, place: { top: 150 } };
+    }
+    case 'slogan': {
+      const W = 1100;
+      const lines = text.split('\n');
+      const size = Math.min(...lines.map((l) => fitFont(l.length, 1040, 250)));
+      let svg = symBox(sym, P, W / 2 - 170, 0, 340);
+      let y = 340 + 40 + size * 0.85;
+      lines.forEach((l, i) => { svg += bungee(l, W / 2, y, size, i % 2 ? P.text : P.main); y += size * 1.08; });
+      y += 10;
+      svg += logoBox(logoId, P, W / 2 - 95, y, 190);
+      svg += wordmark(W / 2, y + 190 + 90, 84, P.accent);
+      return { W, H: y + 190 + 130, svg, place: { top: 140 } };
     }
     case 'giant': {
       const W = 1300;
@@ -192,4 +207,4 @@ function phoneSvg({ P, logoId, body = '#CDBDF2' }) {
 ${logoBox(logoId, P, 270, 330, 160)}`);
 }
 
-module.exports = { SHIRTS, layoutArt, teeSvg, mugSvg, toteSvg, capSvg, stickerSvg, phoneSvg, logoBox, wordmark, bungee, fitFont, stage, mascotSticker };
+module.exports = { symBox, SHIRTS, layoutArt, teeSvg, mugSvg, toteSvg, capSvg, stickerSvg, phoneSvg, logoBox, wordmark, bungee, fitFont, stage, mascotSticker };

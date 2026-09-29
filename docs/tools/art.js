@@ -227,9 +227,92 @@ const LOGOS = {
   angel: { name: 'Angel', draw: (P) => mascot({ P, fill: P.main, outline: P.outline, ow: 5, eyesType: 'classic', ant: 'double', gloss: true, halo: true }) },
 };
 
+
+// ---------- symbols (used by the slogan series) ----------
+const SYMBOLS = {
+  bolt: { name: 'Bolt', draw: (P) => `<path d="M118 8 L38 112 H92 L76 192 L162 78 H108 Z" fill="${P.main}" stroke="${P.main}" stroke-width="8" stroke-linejoin="round"/>` },
+  star: {
+    name: 'Star',
+    draw: (P) => {
+      const pts = [];
+      for (let i = 0; i < 10; i++) { const r = i % 2 ? 42 : 96, a = -Math.PI / 2 + (i * Math.PI) / 5; pts.push(`${(100 + r * Math.cos(a)).toFixed(1)},${(106 + r * Math.sin(a)).toFixed(1)}`); }
+      return `<polygon points="${pts.join(' ')}" fill="${P.main}" stroke="${P.main}" stroke-width="8" stroke-linejoin="round"/>`;
+    },
+  },
+  moon: {
+    name: 'Moon',
+    draw: (P) => {
+      const id = nid('mo');
+      return `<mask id="${id}" maskUnits="userSpaceOnUse" x="-30" y="-30" width="260" height="260"><rect x="-30" y="-30" width="260" height="260" fill="#fff"/><circle cx="142" cy="80" r="68" fill="#000"/></mask>` +
+        `<circle cx="96" cy="104" r="86" fill="${P.main}" mask="url(#${id})"/>` +
+        `<circle cx="178" cy="162" r="7" fill="${P.main}"/><circle cx="176" cy="112" r="5" fill="${P.main}"/><circle cx="120" cy="30" r="5" fill="${P.main}"/>`;
+    },
+  },
+  ufo: {
+    name: 'UFO',
+    draw: (P) =>
+      `<path d="M72 134 L30 196 H170 L128 134 Z" fill="${P.main}" opacity=".22"/>` +
+      `<path d="M56 110 C56 44 144 44 144 110 Z" fill="${P.paper}" stroke="${P.main}" stroke-width="8" stroke-linejoin="round"/>` +
+      `<ellipse cx="100" cy="118" rx="92" ry="26" fill="${P.main}"/>` +
+      [52, 100, 148].map((x) => `<circle cx="${x}" cy="122" r="6" fill="${P.paper}"/>`).join(''),
+  },
+  rocket: {
+    name: 'Rocket',
+    draw: (P) =>
+      `<path d="M100 194 C88 176 92 168 100 160 C108 168 112 176 100 194 Z" fill="${P.gold}"/>` +
+      `<path d="M68 128 L38 158 L40 116 L68 84 Z M132 128 L162 158 L160 116 L132 84 Z" fill="${P.main}"/>` +
+      `<path d="M100 6 C144 40 150 100 136 150 H64 C50 100 56 40 100 6 Z" fill="${P.main}"/>` +
+      `<circle cx="100" cy="84" r="17" fill="${P.paper}"/><rect x="72" y="138" width="56" height="10" rx="5" fill="${P.paper}" opacity=".9"/>`,
+  },
+  eye: {
+    name: 'Eye',
+    draw: (P) =>
+      `<path d="M6 102 C48 40 152 40 194 102 C152 164 48 164 6 102 Z" fill="${P.main}"/>` +
+      `<circle cx="100" cy="102" r="36" fill="${P.paper}"/><circle cx="106" cy="104" r="20" fill="${P.iris}"/><circle cx="113" cy="96" r="6" fill="${P.paper}"/>`,
+  },
+  crown: {
+    name: 'Crown',
+    draw: (P) =>
+      `<path d="M18 152 L26 58 L70 100 L100 36 L130 100 L174 58 L182 152 Z" fill="${P.main}" stroke="${P.main}" stroke-width="8" stroke-linejoin="round"/>` +
+      `<rect x="18" y="162" width="164" height="24" rx="8" fill="${P.main}"/>` +
+      [[26, 52], [100, 30], [174, 52]].map(([x, y]) => `<circle cx="${x}" cy="${y}" r="9" fill="${P.main}"/>`).join('') +
+      `<circle cx="100" cy="126" r="10" fill="${P.paper}"/>`,
+  },
+  flame: {
+    name: 'Flame',
+    draw: (P) =>
+      `<path d="M100 4 C112 52 166 80 160 138 C154 180 122 196 100 196 C76 196 44 180 42 138 C40 100 72 90 78 58 C92 78 98 46 100 4 Z" fill="${P.main}"/>` +
+      `<path d="M100 96 C106 124 130 132 126 156 C122 176 108 182 100 182 C90 182 76 174 76 156 C76 138 96 130 100 96 Z" fill="${P.paper}"/>`,
+  },
+  heart: {
+    name: 'Heart',
+    draw: (P) => `<path d="M100 190 C18 130 6 88 28 60 C50 32 88 42 100 72 C112 42 150 32 172 60 C194 88 182 130 100 190 Z" fill="${P.main}" stroke="${P.main}" stroke-width="6" stroke-linejoin="round"/>`,
+  },
+  cloud: {
+    name: 'Cloud',
+    draw: (P) =>
+      `<g fill="${P.main}"><circle cx="62" cy="122" r="40"/><circle cx="108" cy="92" r="54"/><circle cx="150" cy="122" r="38"/><rect x="24" y="122" width="164" height="40" rx="20"/></g>` +
+      `<g fill="${P.paper}"><ellipse cx="86" cy="118" rx="7" ry="10"/><ellipse cx="122" cy="118" rx="7" ry="10"/></g>`,
+  },
+  smile: {
+    name: 'Smile',
+    draw: (P) =>
+      `<circle cx="100" cy="100" r="92" fill="${P.main}"/><ellipse cx="70" cy="80" rx="10" ry="15" fill="${P.paper}"/><ellipse cx="130" cy="80" rx="10" ry="15" fill="${P.paper}"/>` +
+      `<path d="M54 118 Q100 170 146 118" fill="none" stroke="${P.paper}" stroke-width="10" stroke-linecap="round"/>`,
+  },
+  diamond: {
+    name: 'Diamond',
+    draw: (P) =>
+      `<path d="M52 28 H148 L192 82 L100 192 L8 82 Z" fill="${P.main}" stroke="${P.main}" stroke-width="6" stroke-linejoin="round"/>` +
+      `<path d="M8 82 H192 M72 82 L100 192 M128 82 L100 192 M72 82 L52 28 M128 82 L148 28 M72 82 L100 28 M128 82 L100 28" fill="none" stroke="${P.paper}" stroke-width="4" stroke-linejoin="round" opacity=".85"/>`,
+  },
+};
+
+const symbolSvg = (id, P, size = 200) => `<svg xmlns="http://www.w3.org/2000/svg" viewBox="-6 -6 212 212" width="${size}" height="${size}">${SYMBOLS[id].draw(P)}</svg>`;
+
 // wrap a logo as a standalone <svg> string of a given pixel size
 function logoSvg(id, P, size = 200, extra = '') {
   return `<svg xmlns="http://www.w3.org/2000/svg" viewBox="-6 -6 212 212" width="${size}" height="${size}">${extra}${LOGOS[id].draw(P)}</svg>`;
 }
 
-module.exports = { PALETTES, LOGOS, logoSvg, mascot, fit, nid, heart };
+module.exports = { PALETTES, LOGOS, SYMBOLS, symbolSvg, logoSvg, mascot, fit, nid, heart };

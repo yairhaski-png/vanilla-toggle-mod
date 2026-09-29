@@ -3,7 +3,7 @@
 //   NODE_PATH=<dir with playwright> node build.js [--skip-render]
 const fs = require('fs');
 const path = require('path');
-const { PALETTES, LOGOS, logoSvg } = require('./art');
+const { PALETTES, LOGOS, SYMBOLS, symbolSvg, logoSvg } = require('./art');
 const M = require('./mockups');
 const { SHIRTS, FAVORITES, PRODUCTS } = require('./data');
 const { makeRenderer } = require('./render');
@@ -18,6 +18,7 @@ const inch = (n) => (n / 100).toFixed(1).replace(/\.0$/, '');
 const dims = (a) => `<span dir="ltr">${inch(a.W)}" × ${inch(a.H)}"</span>`;
 
 const PLACE_TXT = {
+  slogan: (a) => `משפט + סמל במרכז החזה · ${dims(a)}`,
   center: (a) => `מרכז החזה · ${dims(a)}`,
   giant: (a) => `הדפס גדול על כל החזה · ${dims(a)}`,
   chest: (a) => `חזה שמאל (מבט הלובש) · ${dims(a)}`,
@@ -28,12 +29,13 @@ const PLACE_TXT = {
 
 const prepared = SHIRTS.map((s) => {
   const P = PALETTES[M.SHIRTS[s.color].pal];
-  const front = M.layoutArt(s.front[0], s.logo, P, s.front[1]);
+  const front = M.layoutArt(s.front[0], s.logo, P, s.front[1], s.sym);
   const back = M.layoutArt(s.back[0], s.logo, P, s.back[1]);
   return { ...s, P, frontArt: front, backArt: back };
 });
 
 const LOGO_IDS = Object.keys(LOGOS);
+const SYM_IDS = Object.keys(SYMBOLS);
 
 // product mockups for favourites
 function productSvg(key, logoId) {
@@ -78,6 +80,11 @@ async function renderAll() {
   for (const id of LOGO_IDS) {
     for (const [tag, P] of [['purple', PALETTES.light], ['light-on-dark', PALETTES.dark]]) {
       fs.writeFileSync(path.join(LG, `vexo-logo-${id}-${tag}.png`), await r.shot(logoSvg(id, P, 400), 400, 400, { scale: 5, transparent: true }));
+    }
+  }
+  for (const id of SYM_IDS) {
+    for (const [tag, P] of [['purple', PALETTES.light], ['light-on-dark', PALETTES.dark]]) {
+      fs.writeFileSync(path.join(LG, `vexo-symbol-${id}-${tag}.png`), await r.shot(symbolSvg(id, P, 400), 400, 400, { scale: 5, transparent: true }));
     }
   }
   process.stdout.write('logos done\n');
@@ -175,7 +182,7 @@ function shirtSlide(s, i, total) {
   return `
 <section class="slide" id="s-${s.id}"><div class="in"><div class="shirt-grid">
   <div class="info">
-    <div class="idx">חולצה ${String(i + 1).padStart(2, '0')} / ${total} · ${s.logo.startsWith('m_') || s.logo === 'angel' ? 'סדרת Moods' : 'קולקציית לוגואים'}</div>
+    <div class="idx">חולצה ${String(i + 1).padStart(2, '0')} / ${total} · ${s.series === 'slogan' ? 'סדרת משפט + סמל' : s.logo.startsWith('m_') || s.logo === 'angel' ? 'סדרת Moods' : 'קולקציית לוגואים'}</div>
     <h2 class="disp">${esc(s.name)}</h2>
     <span class="chip">${esc(s.tag)}</span>
     <div class="price"><b>₪${s.price}</b><span>מחיר מומלץ ללקוח (כולל מע״מ)</span></div>
@@ -183,7 +190,7 @@ function shirtSlide(s, i, total) {
     <div class="blk"><h3>קהל יעד</h3>${esc(s.who)}</div>
     <div class="blk"><h3>פרטי מוצר</h3><dl class="meta">
       <dt>צבע חולצה</dt><dd><span class="sw" style="background:${hex}"></span>${M.SHIRTS[s.color].label}</dd>
-      <dt>הדפס קדימה</dt><dd>${PLACE_TXT[s.front[0]](s.frontArt)}${s.front[1] ? ` · <span dir="ltr">"${esc(s.front[1])}"</span>` : ''}</dd>
+      <dt>הדפס קדימה</dt><dd>${PLACE_TXT[s.front[0]](s.frontArt)}${s.front[1] ? ` · <span dir="ltr">"${esc(s.front[1].replace('\n', ' '))}"</span>` : ''}</dd>
       <dt>הדפס אחורה</dt><dd>${PLACE_TXT[s.back[0]](s.backArt)}${s.back[1] ? ` · <span dir="ltr">"${esc(s.back[1].replace('\n', ' '))}"</span>` : ''}</dd>
     </dl></div>
     <div class="dl">
@@ -222,6 +229,7 @@ function favSlide(f, i) {
 function buildDeck() {
   const total = prepared.length;
   const logoCards = LOGO_IDS.map((id) => `<a href="logos/vexo-logo-${id}-purple.png" download title="הורדה"><img src="logos/vexo-logo-${id}-purple.png" alt="${esc(LOGOS[id].name)}" loading="lazy">${esc(LOGOS[id].name)}</a>`).join('');
+  const symCards = SYM_IDS.map((id) => `<a href="logos/vexo-symbol-${id}-purple.png" download title="הורדה"><img src="logos/vexo-symbol-${id}-purple.png" alt="${esc(SYMBOLS[id].name)}" loading="lazy">${esc(SYMBOLS[id].name)}</a>`).join('');
   const ov = prepared.map((s) => `<a href="#s-${s.id}"><img src="downloads/${s.id}/${s.id}-mockup-front.jpg" alt="${esc(s.name)}" loading="lazy"><div><span>${esc(s.name)}</span><b>₪${s.price}</b></div></a>`).join('');
   const avg = Math.round(prepared.reduce((a, s) => a + s.price, 0) / total);
   const half = Math.ceil(total / 2);
@@ -261,6 +269,7 @@ function buildDeck() {
 <section class="slide" id="logos"><div class="in">
   <h2 class="sec-title disp">מערכת הלוגואים</h2><p class="lead">${LOGO_IDS.length} וריאציות – ${LOGO_IDS.length - 7} לוגואים בסגנון גריד הלוגואים שהעלית + 6 הבעות + הרקמה עם ההילה. לחיצה על לוגו מורידה אותו (PNG שקוף, 2000px).</p>
   <div class="logo-grid">${logoCards}</div>
+  <h3 style="margin:26px 0 10px">${SYM_IDS.length} סמלים לסדרת משפט + סמל</h3><div class="logo-grid">${symCards}</div>
   <div class="dl" style="margin-top:20px"><a class="btn pri" href="vexo-logos.zip" download>⬇ חבילת לוגואים (סגול + לרקע כהה)</a></div>
 </div></section>`);
 
@@ -273,7 +282,7 @@ function buildDeck() {
   slides.push(`
 <section class="slide" id="summary"><div class="in">
   <h2 class="sec-title disp">סיכום מחירים ומבצעים</h2>
-  <p class="lead">כל החולצות במחיר ₪99–₪119 (ממוצע ₪${avg}). הצעות לחבילות: <b>סדרת Moods – 3 חולצות ב־₪269</b> · <b>סדרת גיימינג (Arcade Ghost + Chomp + Pixel) – 3 ב־₪299</b> · <b>Love Alien זוגי – 2 ב־₪199</b> · <b>3 מדבקות – ₪35</b>.</p>
+  <p class="lead">כל החולצות במחיר ₪${Math.min(...prepared.map((s) => s.price))}–₪${Math.max(...prepared.map((s) => s.price))} (ממוצע ₪${avg}). הצעות לחבילות: <b>סדרת Moods – 3 חולצות ב־₪269</b> · <b>סדרת גיימינג (Arcade Ghost + Chomp + Pixel) – 3 ב־₪299</b> · <b>Love Alien זוגי – 2 ב־₪199</b> · <b>3 חולצות משפט + סמל – ₪239</b> · <b>3 מדבקות – ₪35</b>.</p>
   <div class="tbl">${tbl(prepared.slice(0, half))}${tbl(prepared.slice(half))}</div>
   <div class="cards" style="margin-top:26px">
     <div class="card"><h3>המלצה להשקה</h3><p>להתחיל ב־8–10 חולצות: Vexo Original, Vexo Badge, Grumpy, Love Alien, Pixel, Mood · Whoa, Angel + כובע ומדבקות. אחרי שבועיים להסתכל על נתוני מכירות ולהרחיב.</p></div>
