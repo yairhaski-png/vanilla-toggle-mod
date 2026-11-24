@@ -642,6 +642,10 @@ const WEAPONS=[
  {id:"rem870",n:"רמינגטון 870",sil:"rem870",type:"רובה ציד",country:"ארה\"ב",year:"1950",by:"רמינגטון",cal:"12 גאוג'",act:"פאמפ (ידני)",mag:"4-7 (צינור)",rng:"כ-40 מ'",kg:"כ-3.6 ק\"ג",fact:"רובה הציד הנמכר ביותר בהיסטוריה: יוצרו ממנו יותר מ-11 מיליון."},
  {id:"thompson",n:"תומפסון",sil:"thompson",type:"תת-מקלע",country:"ארה\"ב",year:"1921",by:"ג'ון ט. תומפסון",cal:".45 ACP",act:"הדף",mag:"20, 30 או תוף של 50",rng:"כ-50-100 מ'",kg:"כ-4.9 ק\"ג",fact:"ה'טומי גאן' המפורסם מתקופת היובש בארה\"ב, ששימש גם במלחמת העולם השנייה."},
  {id:"enfield",n:"לי-אנפילד",sil:"bolt",gen:1,type:"רובה בריח",country:"בריטניה",year:"1895",by:"ג'יימס פריס לי (מנגנון הבריח)",cal:".303 בריטי",act:"בריח ידני",mag:"10",rng:"כ-500 מ'",kg:"כ-4 ק\"ג",fact:"הבריח המהיר שלו אפשר את 'הדקה המטורפת': חיילים מאומנים ירו יותר מ-15 יריות מכוונות בדקה."},
+
+ {id:"python",n:"קולט פייתון",sil:"python",type:"אקדח תופי",country:"ארה\"ב",year:"1955",by:"קולט",cal:".357 מגנום",act:"תופי, פעולה כפולה",mag:"6 (בתוף)",rng:"כ-50 מ'",kg:"כ-1.2 ק\"ג",fact:"מפורסם בזכות הדק חלק במיוחד ובזכות הפס המחורר שמעל הקנה. קולט החזירה אותו לייצור ב-2020."},
+ {id:"p90",n:"FN P90",sil:"p90",type:"נשק הגנה אישי",country:"בלגיה",year:"1990",by:"FN Herstal",cal:"5.7×28 מ\"מ",act:"הדף, בריח סגור",mag:"50 (מעל הנשק)",rng:"כ-200 מ'",kg:"כ-2.6 ק\"ג (ריק)",fact:"המחסנית השקופה מונחת לרוחב מעל הנשק, והתרמילים נפלטים כלפי מטה, כך שהוא נוח גם לשמאליים."},
+ {id:"m4",n:"M4A1",sil:"m4",type:"קרבין",country:"ארה\"ב",year:"1994",by:"קולט",cal:"5.56×45 מ\"מ נאט\"ו",act:"גזים ישירים, בריח מסתובב",mag:"30",rng:"כ-500 מ'",kg:"כ-3 ק\"ג (ריק)",fact:"גרסה קצרה של ה-M16: קנה של 368 מ\"מ, קת נשלפת ומסילות להרכבת כוונות ואביזרים."},
 ];
 const WMAP=Object.fromEntries(WEAPONS.map(w=>[w.id,w]));
 
@@ -662,6 +666,9 @@ const SIL={
  thompson:`<path class="ms" d="M166 44q-10 0-10 10h10"/><path class="w" d="M236 32l-62-2v12l58 12 4-4z"/><rect class="m" x="80" y="28" width="94" height="15" rx="2"/><rect class="m" x="30" y="32" width="50" height="7"/><path class="hl" d="M36 32v7M42 32v7M48 32v7M54 32v7M60 32v7M66 32v7" stroke="#000" stroke-width="1.5" opacity=".35"/><rect class="m" x="22" y="30" width="10" height="11" rx="2"/><path class="w" d="M96 43h12l-2 22h-10z"/><circle class="m" cx="138" cy="60" r="18"/><circle class="s" cx="138" cy="60" r="5"/><circle cx="138" cy="60" r="13" fill="none" stroke="#fff" stroke-width="1" opacity=".25"/><path class="w" d="M180 43h-12l-4 22h12z"/><rect class="m" x="160" y="22" width="6" height="6"/><rect class="m" x="26" y="25" width="4" height="5"/><rect class="hl" x="82" y="29" width="90" height="2" rx="1"/>`,
  m1911:`<path class="ms" d="M154 54q-18 0-18 14h20"/><path class="m" d="M190 46h-36l6 44h38z"/><path class="w" d="M186 54h-24l4 30h24z"/><rect class="m" x="60" y="46" width="124" height="7" rx="2"/><rect class="m" x="50" y="28" width="138" height="18" rx="2"/><path class="m" d="M186 26l9-7 4 4-7 7z"/><rect class="m" x="54" y="23" width="5" height="5"/><rect class="m" x="176" y="23" width="6" height="5"/><path class="hl" d="M150 31h30v12h-30z" opacity=".08"/><path d="M152 32v10M156 32v10M160 32v10M164 32v10" stroke="#000" stroke-width="1.4" opacity=".35"/><rect class="hl" x="52" y="29" width="134" height="2" rx="1"/>`,
  aug:`<path class="tr" d="M186 52h-14l-3 28h14z"/><path class="od" d="M232 32 120 28l-10 8v12l70 4 48 6 8-4z"/><path class="od" d="M118 28l6-14h52l6 14z"/><rect class="o" x="120" y="17" width="6" height="8" rx="1"/><path class="od" d="M118 48l-6 26h10l6-26z"/><path class="ms" d="M128 48v20q0 6 6 6h20q6 0 6-6V48" style="stroke:#454A26;stroke-width:4"/><path class="od" d="M152 48h-10l2 22h10z"/><rect class="m" x="40" y="35" width="72" height="5"/><rect class="m" x="34" y="33" width="8" height="9" rx="1"/><rect class="hl" x="122" y="16" width="52" height="2" rx="1"/><rect class="hl" x="124" y="30" width="100" height="2" rx="1"/>`,
+ python:`<path class="ms" d="M152 52q-2 14 12 14h6"/><path class="w" d="M172 42l24 4 8 40-6 4h-20l-8-32z"/><rect class="s" x="28" y="24" width="92" height="7" rx="2"/><path d="M36 24v7M48 24v7M60 24v7M72 24v7M84 24v7M96 24v7M108 24v7" stroke="#000" stroke-width="2" opacity=".35"/><rect class="s" x="28" y="31" width="92" height="11" rx="1"/><rect class="s" x="28" y="42" width="92" height="8" rx="3"/><path class="s" d="M30 24l6-7h5v7z"/><path class="s" d="M118 26h52l6 6v20h-58z"/><rect class="s" x="122" y="29" width="38" height="24" rx="6"/><path d="M128 31v20M136 31v20M144 31v20M152 31v20" stroke="#000" stroke-width="1.6" opacity=".3"/><path class="s" d="M170 26l10-9 4 4-9 9z"/><rect class="hl" x="30" y="32" width="88" height="2" rx="1"/>`,
+ p90:`<path class="p" fill-rule="evenodd" d="M60 38q0-12 12-12h128q26 0 30 14l2 20q0 10-12 10h-32l-12-14h-56l-8 8H96q-12 0-16-12H66q-6-4-6-14zM100 42h16l-6 13H98z"/><rect class="tr" x="92" y="16" width="112" height="11" rx="3"/><rect class="p" x="112" y="7" width="30" height="9" rx="2"/><rect class="o" x="113" y="9" width="5" height="5" rx="1"/><rect class="m" x="40" y="36" width="22" height="5"/><rect class="m" x="35" y="34" width="7" height="9" rx="1"/><rect class="hl" x="74" y="28" width="124" height="2" rx="1"/>`,
+ m4:`<path class="ms" d="M150 46q-2 10 6 12"/><rect class="m" x="182" y="34" width="30" height="6"/><path class="p" d="M206 27h30v28l-30-7z"/><path class="m" d="M136 46h-14l-2 28h14z"/><rect class="m" x="112" y="30" width="70" height="16" rx="2"/><rect class="m" x="110" y="25" width="74" height="5"/><rect class="p" x="130" y="13" width="26" height="12" rx="3"/><rect class="o" x="131" y="15" width="5" height="7" rx="1"/><path class="p" d="M158 46h-10l4 20h10z"/><rect class="p" x="66" y="28" width="46" height="18" rx="2"/><path d="M70 28v18M76 28v18M82 28v18M88 28v18M94 28v18M100 28v18M106 28v18" stroke="#000" stroke-width="1.2" opacity=".35"/><path class="m" d="M66 28l-5-13h-4v13z"/><rect class="m" x="22" y="34" width="44" height="4"/><rect class="m" x="16" y="32" width="8" height="8" rx="1"/><rect class="hl" x="114" y="31" width="66" height="2" rx="1"/>`,
  bolt:`<path class="ms" d="M150 44q-4 10 6 12"/><path class="w" d="M236 36l-60-6-10 6v8l24 4 40 10 6-4z"/><rect class="w" x="40" y="34" width="130" height="10" rx="4"/><rect class="m" x="110" y="28" width="50" height="8" rx="2"/><path class="m" d="M148 34l6-10h6l-4 10z"/><circle class="s" cx="158" cy="24" r="3"/><rect class="m" x="6" y="36" width="36" height="4"/><rect class="m" x="12" y="30" width="4" height="6"/><rect class="hl" x="112" y="29" width="46" height="2" rx="1"/>`,
 };
 const PARTS={
@@ -745,6 +752,7 @@ const COURSE = [
   { name:"תבור, גליל ו-FAL", qs:[
    {t:"id", w:"tavor", q:"איזה נשק זה?"},
    {t:"pic", w:"aug"},
+   {t:"id", w:"m4"},
    {t:"gap", s:"התבור הוא רובה מסוג ___, שבו המחסנית נמצאת מאחורי ההדק", a:["בולפאפ","בריח","תופי"], c:0, e:"גם ה-Steyr AUG האוסטרי בנוי כך."},
    {t:"tf", q:"בתבור המחסנית נמצאת מאחורי ידית האחיזה.", c:true, e:"זה תכנון 'בולפאפ', שמקצר את הרובה בלי לקצר את הקנה."},
    {t:"mc", q:"על מנגנון של איזה רובה מבוסס הגליל?", a:["AK (דרך הוולמט הפיני)","M16","מאוזר 98","M1 גאראנד"], c:0, e:"ישראל גלילי לקח את האמינות של ה-AK והתאים אותה לתחמושת נאט\"ו."},
@@ -757,6 +765,8 @@ const COURSE = [
    {t:"id", w:"glock17", q:"איזה נשק זה?"},
    {t:"pic", w:"glock17"},
    {t:"id", w:"m1911"},
+   {t:"pic", w:"python"},
+   {t:"tf", q:"באקדח תופי כמו הקולט פייתון, הכדורים נמצאים בתוף מסתובב ולא במחסנית.", c:true, e:"בתוף של הפייתון יש 6 כדורים בקליבר ‎.357 מגנום."},
    {t:"gap", s:"אקדח ה-M1911 של ג'ון בראונינג יורה תחמושת ___", a:[".45 ACP","9×19 מ\"מ",".50 BMG"], c:0, e:"הוא היה אקדח השירות של צבא ארה\"ב יותר מ-70 שנה."},
    {t:"mc", q:"כמה כדורים יש במחסנית סטנדרטית של גלוק 17?", a:["17","7","30","10"], c:0, e:"קל לזכור: 17 כדורים בגלוק 17."},
    {t:"tf", q:"לגלוק 17 אין נצרה ידנית בצד. הנצרה בנויה בתוך ההדק.", c:true, e:"לכן משמעת האצבע מחוץ להדק חשובה בו במיוחד."},
@@ -768,6 +778,8 @@ const COURSE = [
    {t:"id", w:"uzi", q:"איזה נשק זה?"},
    {t:"mc", q:"איפה נמצאת המחסנית בעוזי?", a:["בתוך ידית האחיזה","מעל הקנה","מאחורי הקת","בצד שמאל"], c:0, e:"יד מוצאת יד: אפשר להחליף מחסנית גם בחושך."},
    {t:"id", w:"mp5", q:"איזה נשק זה?"},
+   {t:"id", w:"p90"},
+   {t:"gap", s:"ה-FN P90 יורה תחמושת מיוחדת: ___", a:["5.7×28 מ\"מ","9×19 מ\"מ","7.62×39 מ\"מ"], c:0, e:"המחסנית שלו מחזיקה 50 כדורים ומונחת לרוחב מעל הנשק."},
    {t:"mc", q:"איזו חברה גרמנית מייצרת את ה-MP5?", a:["הקלר אנד קוך","וולטר","מאוזר","גלוק"], c:0, e:"ה-MP5 יורה מבריח סגור, ולכן הוא מדויק מאוד לתת-מקלע."},
    {t:"gap", s:"צבא ארה\"ב השתמש באקדח ברטה 92 תחת השם ___", a:["M9","M16","M4"], c:0, e:"מ-1985 ובמשך כשלושים שנה."},
    {t:"tf", q:"תת-מקלע יורה בדרך כלל תחמושת של אקדח.", c:true, e:"זה מה שמבדיל אותו מרובה סער, שיורה תחמושת רובה."},
@@ -1249,7 +1261,7 @@ function renderQ(){
     const w=WMAP[q.w], pool=shuffle(WEAPONS.filter(x=>!x.gen&&x.id!==w.id)).slice(0,3);
     L.cur={t:"mc",a:[w.n,...pool.map(x=>x.n)],c:0,e:`${w.type} · ${w.country} · ${w.cal}. ${w.fact}`};
     L.order=shuffle([0,1,2,3]);
-    frame(`${kick}<h1 class="l-title">${esc(q.q)}</h1><div class="id-card">${silSvg(w,"sil")}</div>
+    frame(`${kick}<h1 class="l-title">${esc(q.q||"איזה נשק זה?")}</h1><div class="id-card">${silSvg(w,"sil")}</div>
       <div class="opts id-opts">${L.order.map((ai,k)=>optBtn(ai,k,L.cur.a[ai])).join("")}</div>`,"בדיקה",true,"",tm);
     return bindChoice();
   }
