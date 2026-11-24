@@ -540,6 +540,19 @@ button.stat:hover{background:var(--soft)}
 .ga-done{display:flex;align-items:center;justify-content:center;gap:6px;margin-top:10px;font-weight:800;color:var(--gold-d);animation:popIn2 .5s cubic-bezier(.3,1.8,.5,1)}
 .ga-done svg{width:20px;height:20px;fill:var(--gold-d)}
 .node.chest.cur svg{animation:chestShake .7s ease-in-out infinite;transform-origin:50% 90%}
+.vs-grid{position:relative;grid-template-columns:1fr 1fr;gap:14px}
+.vs-card{flex-direction:column;align-items:stretch;text-align:center;gap:4px;padding:16px 10px 14px;position:relative}
+.vs-card .sil{width:100%;max-width:none;margin-bottom:6px}
+.vs-card b{font-size:18px;font-weight:800}
+.vs-card small{color:var(--muted);font-weight:500}
+.vs-card.from-r{animation:vsR .5s cubic-bezier(.3,1.3,.5,1) backwards .1s}
+.vs-card.from-l{animation:vsL .5s cubic-bezier(.3,1.3,.5,1) backwards .1s}
+.vs-card.right{animation:okPop .45s cubic-bezier(.3,1.8,.5,1)}
+.vs-card.wrong{animation:shake .4s}
+@keyframes vsR{from{transform:translateX(60px);opacity:0}} @keyframes vsL{from{transform:translateX(-60px);opacity:0}}
+.vs-badge{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);width:48px;height:48px;border-radius:50%;display:grid;place-items:center;background:var(--orange);color:#fff;font-weight:900;font-size:16px;letter-spacing:.04em;box-shadow:0 4px 0 #DA7C00,0 0 0 5px var(--bg);z-index:2;pointer-events:none;animation:vsBadge .6s cubic-bezier(.3,1.8,.5,1) .45s backwards}
+@keyframes vsBadge{from{transform:translate(-50%,-50%) scale(0) rotate(-180deg)}}
+.vs-yr{display:inline-block;align-self:center;margin-top:6px;padding:3px 14px;border-radius:99px;background:var(--ink-strong);color:var(--bg);font-weight:800;font-size:17px;font-variant-numeric:tabular-nums;animation:popIn2 .45s cubic-bezier(.3,1.8,.5,1)}
 @media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
 </style>
 
@@ -753,6 +766,7 @@ const COURSE = [
    {t:"id", w:"tavor", q:"איזה נשק זה?"},
    {t:"pic", w:"aug"},
    {t:"id", w:"m4"},
+   {t:"vs"},
    {t:"gap", s:"התבור הוא רובה מסוג ___, שבו המחסנית נמצאת מאחורי ההדק", a:["בולפאפ","בריח","תופי"], c:0, e:"גם ה-Steyr AUG האוסטרי בנוי כך."},
    {t:"tf", q:"בתבור המחסנית נמצאת מאחורי ידית האחיזה.", c:true, e:"זה תכנון 'בולפאפ', שמקצר את הרובה בלי לקצר את הקנה."},
    {t:"mc", q:"על מנגנון של איזה רובה מבוסס הגליל?", a:["AK (דרך הוולמט הפיני)","M16","מאוזר 98","M1 גאראנד"], c:0, e:"ישראל גלילי לקח את האמינות של ה-AK והתאים אותה לתחמושת נאט\"ו."},
@@ -825,6 +839,7 @@ const COURSE = [
    {t:"mc", q:"באיזו ארץ הומצא אבק השריפה?", a:["סין","יוון","מצרים","אנגליה"], c:0, e:"אלכימאים סינים גילו אותו בערך במאה ה-9, ככל הנראה בזמן חיפוש אחרי סם חיים."},
    {t:"mc", q:"מה מאפיין מוסקט קלאסי?", a:["קנה חלק וטעינה מלוע הקנה","מחסנית של 30 כדורים","ירי אוטומטי","כוונת אופטית"], c:0, e:"מוסקטים נטענו מהלוע, עם אבק שריפה וכדור עופרת, ודיוקם היה נמוך."},
    {t:"tf", q:"החריקה (Rifling) היא חריצים ספירליים בתוך הקנה שגורמים לקליע להסתובב.", c:true, e:"הסיבוב מייצב את הקליע במעופו ומשפר מאוד את הדיוק."},
+   {t:"vs"},
    {t:"order", q:"סדר מהמוקדם למאוחר", items:["אבק השריפה","המוסקט","מקלע גטלינג","הטנק הראשון"], e:"אבק השריפה בסין (המאה ה-9), מוסקטים (המאה ה-16), גטלינג (1862), הטנק הראשון (1916)."},
    {t:"mc", q:"מי המציא את מכונת הירייה הידנית בעלת הקנים המסתובבים ב-1862?", a:["ריצ'רד גטלינג","סמואל קולט","הירם מקסים","ג'ון בראונינג"], c:0, e:"מקלע גטלינג הופעל בסיבוב ידית ושימש במלחמת האזרחים האמריקנית."},
    {t:"mc", q:"מה היה חדשני במקלע של הירם מקסים (1884)?", a:["הוא היה אוטומטי לגמרי והשתמש בכוח הרתע","הוא ירה חיצים","הוא הופעל בקיטור","הוא היה עשוי עץ"], c:0, e:"זה היה המקלע האוטומטי המעשי הראשון, והוא שינה את פני מלחמות סוף המאה ה-19."}
@@ -833,6 +848,7 @@ const COURSE = [
    {t:"mc", q:"איפה הופיעו לראשונה טנקים בשדה הקרב?", a:["בקרב על הסום, 1916","בווטרלו, 1815","בנורמנדי, 1944","בגטיסברג, 1863"], c:0, e:"הטנקים הבריטיים מסוג Mark I הופיעו בספטמבר 1916."},
    {t:"tf", q:"השם 'טנק' (מיכל) נבחר כדי להסתיר מהאויב שמדובר בכלי מלחמה.", c:true, e:"במפעלים אמרו לעובדים שמדובר במכלי מים לחזית."},
    {t:"id", w:"garand", q:"איזה נשק זה?"},
+   {t:"vs"},
    {t:"mc", q:"איזה רובה כינה הגנרל פטון 'כלי הקרב הגדול ביותר שנוצר'?", a:["M1 גאראנד","מאוזר 98","לי-אנפילד","AK-47"], c:0, e:"ה-M1 גאראנד היה רובה חצי-אוטומטי, יתרון גדול על רובי בריח במלחמת העולם השנייה."},
    {t:"match", q:"התאם טנק למדינה", p:[["T-34","ברית המועצות"],["טייגר","גרמניה"],["שרמן","ארה\"ב"],["Mark I","בריטניה"]]},
    {t:"gap", s:"רובה הלי-אנפילד הבריטי התפרסם בירי מהיר שנקרא ___", a:["הדקה המטורפת","הצרור הארוך","הירייה השקטה"], c:0, e:"חיילים מאומנים ירו בו יותר מ-15 יריות מכוונות בדקה, עם רובה בריח."},
@@ -882,6 +898,7 @@ const COURSE = [
   ]},
   { name:"כינויים וסיפורים", qs:[
    {t:"pic", w:"thompson"},
+   {t:"vs"},
    {t:"order", q:"סדר לפי שנת ההופעה, מהמוקדם למאוחר", items:["מאוזר 98","M1 גאראנד","AK-47","גלוק 17"], e:"מאוזר 98 (1898), M1 גאראנד (1936), AK-47 (1947), גלוק 17 (1982)."},
    {t:"mc", q:"איזה נשק קיבל את הכינוי 'טומי גאן'?", a:["תת-מקלע תומפסון","קולט 45","וינצ'סטר","מאוזר"], c:0, e:"הוא נקרא על שם ג'ון ט. תומפסון והתפרסם בתקופת היובש בארה\"ב."},
    {t:"mc", q:"איזה אקדח נקרא 'עושה השלום' (Peacemaker)?", a:["קולט סינגל אקשן ארמי, 1873","גלוק 17","דזרט איגל","וולטר PPK"], c:0, e:"זה האקדח המזוהה ביותר עם 'המערב הפרוע'."},
@@ -1257,6 +1274,7 @@ function renderQ(){
   if(q.t==="pic") return renderPic(q,kick,tm);
   if(q.t==="gap") return renderGap(q,kick,tm);
   if(q.t==="order") return renderOrder(q,kick,tm);
+  if(q.t==="vs") return renderVs(q,kick,tm);
   if(q.t==="id"){
     const w=WMAP[q.w], pool=shuffle(WEAPONS.filter(x=>!x.gen&&x.id!==w.id)).slice(0,3);
     L.cur={t:"mc",a:[w.n,...pool.map(x=>x.n)],c:0,e:`${w.type} · ${w.country} · ${w.cal}. ${w.fact}`};
@@ -1309,11 +1327,12 @@ function timeUp(){
 }
 function check(timeout){
   const q0=L.qs[L.i]; if(L.sel===null)return;
-  const q=(q0.t==="id"||q0.t==="pic")?L.cur:q0.t==="gap"?{...q0,t:"mc"}:q0;
+  const q=(q0.t==="id"||q0.t==="pic"||q0.t==="vs")?L.cur:q0.t==="gap"?{...q0,t:"mc"}:q0;
   const ok=!timeout&&(q.t==="mc"?L.sel===q.c:(L.sel===1)===q.c), right=q.t==="mc"?q.c:(q.c?1:0);
   if(q0.t==="id"&&ok) S.ids=(S.ids||0)+1;
   $$(".opts .opt").forEach(b=>{b.disabled=true;b.classList.remove("sel"); if(+b.dataset.a===right)b.classList.add("right"); else if(+b.dataset.a===L.sel)b.classList.add("wrong");});
   L.state="checked"; feedback(ok,(timeout?"נגמר הזמן. ":"")+(q.e||""),q);
+  if(q0.t==="vs") $$(".vs-yr").forEach((e,k)=>setTimeout(()=>{e.hidden=false;},k*180));
   if(q0.t==="gap"){ const g=$("#gap"); g.classList.add(ok?"ok":"no"); if(!ok){ g.textContent=q.a[q.c]; g.classList.add("filled"); } }
   if(ok) burst(q0.t==="gap"?$("#gap"):$(".opt.right"),["#58C21B","#A8E66F","#FFC800"],16);
 }
@@ -1655,6 +1674,17 @@ function checkOrder(timeout){
   L.state="checked";
   feedback(ok,(timeout?"נגמר הזמן. ":"")+(ok?"":"הסדר הנכון: "+q.items.map((t,i)=>`${i+1}. ${t}`).join("  ")+". ")+(q.e||""));
   if(ok) burst($("#slots"),["#58C21B","#A8E66F","#FFC800"],20);
+}
+
+/* ---- versus: which came first */
+function renderVs(q,kick,tm){
+  const pool=WEAPONS.filter(w=>!w.gen&&/^\d{4}$/.test(w.year));
+  let a,b; for(let t=0;t<50;t++){ [a,b]=shuffle(pool); if(Math.abs(+a.year-+b.year)>=3) break; }
+  const first=+a.year<+b.year?0:1;
+  L.cur={t:"mc",a:[a.n,b.n],c:first,e:`${a.n}: ${a.year}. ${b.n}: ${b.year}.`};
+  frame(`${kick}<h1 class="l-title">${esc(q.q||"איזה נשק הופיע קודם?")}</h1>
+    <div class="opts vs-grid">${[a,b].map((w,k)=>`<button class="opt vs-card ${k?"from-l":"from-r"}" data-a="${k}">${silSvg(w)}<b>${esc(w.n)}</b><small>${esc(w.country)}</small><span class="vs-yr" hidden>${w.year}</span></button>`).join("")}<span class="vs-badge">VS</span></div>`,"בדיקה",true,"",tm);
+  bindChoice();
 }
 
 /* ---- boot */
