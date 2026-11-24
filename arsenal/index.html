@@ -374,6 +374,85 @@ main{padding:0 max(16px,env(safe-area-inset-right,0px)) calc(110px + env(safe-ar
 .chest-shake{animation:chestShake .3s ease-in-out infinite}
 @keyframes chestShake{25%{transform:rotate(-6deg) scale(1.03)}75%{transform:rotate(6deg) scale(1.03)}}
 .chest-pop{animation:popIn2 .5s cubic-bezier(.3,1.8,.5,1)}
+/* ---------- round 6: tiles, voice, quests, league, hearts, onboarding */
+.nav-item{position:relative}
+.nav-item.dot::after{content:"";position:absolute;top:4px;inset-inline-end:8px;width:12px;height:12px;border-radius:50%;background:var(--red);border:2px solid var(--surface);animation:popIn2 .4s cubic-bezier(.3,1.6,.5,1)}
+@media (max-width:999px){.nav-item{padding:6px 8px}.nav-item svg{width:30px;height:30px}}
+button.stat{cursor:pointer;border-radius:12px}
+button.stat:hover{background:var(--soft)}
+.linkish{color:var(--blue);font-weight:800}
+.spk{float:inline-start;margin-inline-end:10px;width:38px;height:38px;border-radius:12px;background:var(--blue);display:grid;place-items:center;box-shadow:0 3px 0 var(--blue-d)}
+.spk svg{width:22px;height:22px;fill:#fff}
+.spk:active{transform:translateY(3px);box-shadow:none}
+.spk.talk{animation:okPop .4s}
+/* word tiles */
+.build-line{min-height:118px;display:flex;flex-wrap:wrap;align-content:flex-start;gap:8px;padding:6px 0;margin-bottom:22px;background:repeating-linear-gradient(to bottom,transparent 0 54px,var(--line) 54px 56px)}
+.build-line.ok .tile{border-color:var(--green);color:var(--green-ink);background:var(--green-bg)}
+.build-line.no .tile{border-color:var(--red);color:var(--red-ink);background:var(--red-bg)}
+.bank{display:flex;flex-wrap:wrap;justify-content:center;gap:8px}
+.tile{border:2px solid var(--line);border-bottom-width:4px;border-radius:12px;padding:8px 14px;font-size:18px;font-weight:500;color:var(--ink-strong);background:var(--surface);min-height:46px;animation:optIn .35s cubic-bezier(.3,1.4,.5,1) backwards;animation-delay:calc(.15s + var(--d,0)*.04s)}
+.tile:active:not(:disabled){transform:translateY(2px);border-bottom-width:2px}
+.tile.in{animation:tileIn .25s cubic-bezier(.3,1.6,.5,1)}
+@keyframes tileIn{from{transform:translateY(30px) scale(.8);opacity:.3}}
+.tile.used{background:var(--line);border-color:var(--line);color:transparent;pointer-events:none;animation:none}
+/* quests */
+.quest-list{display:grid;gap:16px}
+.quest-row{display:flex;align-items:center;gap:12px}
+.quest-row .qi{width:38px;height:38px;flex:none}
+.quest-row .q-txt{flex:1;min-width:0}
+.quest-row b{display:block;font-weight:700;margin-bottom:6px;color:var(--ink-strong)}
+.q-chest{width:52px;height:48px;flex:none}
+.q-chest svg{width:52px;height:48px}
+.q-chest:disabled{cursor:default}
+.q-chest:disabled:not(.ready) svg{filter:grayscale(.2)}
+.q-chest.ready{animation:chestShake .5s ease-in-out infinite}
+.q-banner{display:flex;align-items:center;gap:14px;margin-top:20px;padding:20px;border-radius:18px;color:#fff;background:linear-gradient(135deg,#C27DF5,#8B5CF6);box-shadow:0 4px 0 #6D3FD6}
+.q-banner h1{margin:0;font-size:24px;font-weight:800}
+.q-banner p{margin:4px 0 0;font-weight:500;opacity:.95}
+.qb-kd{width:96px;height:96px;flex:none}
+/* league */
+.shield{width:54px;height:60px}
+.shield.sm{width:48px;height:52px;flex:none}
+.shields{display:flex;justify-content:center;align-items:flex-end;gap:8px;margin-top:20px}
+.shield.cur{width:84px;height:94px;animation:popIn2 .6s cubic-bezier(.3,1.6,.5,1)}
+.shield.lock{opacity:.6}
+.board{border:2px solid var(--line);border-radius:16px;overflow:hidden}
+.board .row{display:flex;align-items:center;gap:12px;padding:10px 14px;border-top:2px solid var(--line);animation:qIn .35s backwards;animation-delay:calc(var(--d)*.04s)}
+.board .row:first-child{border-top:none}
+.board .row.me{background:var(--blue-bg)}
+.board .pos{width:28px;text-align:center;font-weight:800;color:var(--muted);font-size:17px}
+.board .pos.p1{color:#E3A600}.board .pos.p2{color:#9AA7B4}.board .pos.p3{color:#CD7F32}
+.board .av{width:44px;height:44px;border-radius:50%;display:grid;place-items:center;color:#fff;font-weight:800;font-size:19px;flex:none;overflow:hidden}
+.board .av svg{width:44px;height:44px;margin-top:6px}
+.board .nm{flex:1;min-width:0;font-weight:700;color:var(--ink-strong)}
+.board .nm small{display:block;font-size:12px;color:var(--muted);font-weight:500}
+.board .pts{font-weight:700;color:var(--muted);font-variant-numeric:tabular-nums}
+.board .row.me .nm,.board .row.me .pts{color:var(--blue)}
+.zone{display:flex;align-items:center;justify-content:center;gap:6px;padding:6px;font-size:13px;font-weight:800;letter-spacing:.04em;border-top:2px solid var(--line)}
+.zone svg{width:16px;height:16px;fill:currentColor}
+.zone.up{color:var(--green-ink);background:var(--green-bg)}
+.zone.down{color:var(--red-ink);background:var(--red-bg)}
+.league-msg{margin-bottom:14px;padding:12px 16px;border-radius:14px;font-weight:800;display:flex;gap:8px;align-items:center;justify-content:center;animation:popIn2 .5s cubic-bezier(.3,1.6,.5,1)}
+.league-msg svg{width:20px;height:20px;fill:currentColor}
+.league-msg.up{background:var(--green-bg);color:var(--green-ink)} .league-msg.down{background:var(--red-bg);color:var(--red-ink)}
+/* hearts sheet */
+.heart-row{display:flex;gap:8px;justify-content:center}
+.heart-row svg{width:46px;height:46px;color:var(--locked);animation:popIn2 .4s cubic-bezier(.3,1.6,.5,1) backwards;animation-delay:calc(var(--d)*.06s)}
+.heart-row svg.on{color:var(--heart)}
+/* onboarding */
+.onb{position:fixed;inset:0;z-index:50;background:var(--bg);display:flex;flex-direction:column;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px);animation:fadeIn .3s}
+.onb.bye{animation:fadeOut .25s forwards}
+@keyframes fadeIn{from{opacity:0}} @keyframes fadeOut{to{opacity:0;transform:scale(1.03)}}
+.onb-top{display:flex;align-items:center;gap:14px;width:100%;max-width:700px;margin:0 auto;padding:20px max(16px,env(safe-area-inset-right,0px)) 10px max(16px,env(safe-area-inset-left,0px))}
+.onb-top .x svg{width:30px;height:30px;fill:var(--locked-i)}
+.onb-top .pbar>i{background:var(--green);transition:width .5s cubic-bezier(.3,1.3,.5,1)}
+.onb-body{flex:1;overflow-y:auto;width:100%;max-width:600px;margin:0 auto;padding:30px max(16px,env(safe-area-inset-right,0px)) 20px max(16px,env(safe-area-inset-left,0px));display:flex;flex-direction:column;justify-content:center}
+.onb-body .speak.solo{flex-direction:column;align-items:center;text-align:center}
+.onb-body .speak.solo .bubble{margin-bottom:0;font-size:21px}
+.onb-body .speak.solo .bubble::before{display:none}
+.onb-body .opt .oi{width:30px;height:30px;fill:var(--blue)}
+.onb-foot{border-top:2px solid var(--line)}
+.onb-foot .btn{display:flex;max-width:600px;margin:18px auto 22px;width:calc(100% - 32px)}
 @media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
 </style>
 
@@ -411,6 +490,9 @@ main{padding:0 max(16px,env(safe-area-inset-right,0px)) calc(110px + env(safe-ar
   <symbol id="n-trophy" viewBox="0 0 32 32"><path d="M8 4h16v4h4v4a6 6 0 0 1-5.6 6 8 8 0 0 1-4.4 4V25h5v4H9v-4h5v-3a8 8 0 0 1-4.4-4A6 6 0 0 1 4 12V8h4z" fill="#FFC800"/><path d="M8 8v8a4 4 0 0 1-2-3.5V10zm16 0v8a4 4 0 0 0 2-3.5V10z" fill="#E3A600"/><rect x="9" y="25" width="14" height="4" rx="1" fill="#C98A00"/><path d="M13 8l-1 7" stroke="#fff" stroke-width="2" opacity=".5" stroke-linecap="round"/></symbol>
   <symbol id="n-shop" viewBox="0 0 32 32"><path d="M6 10h20l-2 17H8z" fill="#FF4F4F"/><path d="M11 12V9a5 5 0 0 1 10 0v3" stroke="#C42B2B" stroke-width="2.6" fill="none" stroke-linecap="round"/><path d="M6 10h20l-.4 3H6.4z" fill="#E03A3A"/><path d="M12 20l4 3 4-3" stroke="#fff" stroke-width="2.2" fill="none" stroke-linecap="round"/></symbol>
   <symbol id="n-armory" viewBox="0 0 32 32"><circle cx="16" cy="16" r="13" fill="#14B8A6"/><circle cx="16" cy="16" r="8" fill="none" stroke="#fff" stroke-width="2.4"/><path d="M16 3v8M16 21v8M3 16h8M21 16h8" stroke="#fff" stroke-width="2.4" stroke-linecap="round"/><circle cx="16" cy="16" r="2.2" fill="#fff"/></symbol>
+  <symbol id="i-shield" viewBox="0 0 24 24"><path d="M12 1.5 3.5 4.8v6.4c0 5.4 3.6 10 8.5 11.3 4.9-1.3 8.5-5.9 8.5-11.3V4.8z" fill="var(--sc,#CD7F32)"/><path d="M12 1.5v21c4.9-1.3 8.5-5.9 8.5-11.3V4.8z" fill="#000" opacity=".12"/><path d="m12 7 1.6 3.3 3.6.5-2.6 2.5.6 3.6L12 15.2l-3.2 1.7.6-3.6-2.6-2.5 3.6-.5z" fill="#fff" opacity=".9"/></symbol>
+  <symbol id="n-league" viewBox="0 0 32 32"><path d="M16 2 5 6.4v8.4C5 22 9.7 28 16 30c6.3-2 11-8 11-15.2V6.4z" fill="#FFC800"/><path d="M16 2v28c6.3-2 11-8 11-15.2V6.4z" fill="#E3A600"/><path d="m16 9 2.1 4.3 4.7.7-3.4 3.3.8 4.7-4.2-2.2-4.2 2.2.8-4.7-3.4-3.3 4.7-.7z" fill="#fff"/></symbol>
+  <symbol id="n-quests" viewBox="0 0 32 32"><rect x="4" y="13" width="24" height="15" rx="3" fill="#B8642B"/><path d="M4 15a8 6 0 0 1 8-6h8a8 6 0 0 1 8 6z" fill="#D9843F"/><rect x="4" y="15" width="24" height="3" fill="#9A4E1D"/><rect x="13" y="14" width="6" height="7" rx="1.5" fill="#FFC800"/></symbol>
   <symbol id="n-me" viewBox="0 0 32 32"><circle cx="16" cy="16" r="14" fill="#C27DF5"/><circle cx="16" cy="13" r="5" fill="#fff"/><path d="M7 25a10 8 0 0 1 18 0 12 12 0 0 1-18 0z" fill="#fff"/></symbol>
   <symbol id="chest" viewBox="0 0 86 78"><ellipse cx="43" cy="72" rx="34" ry="5" fill="#000" opacity=".1"/><rect x="8" y="30" width="70" height="38" rx="8" fill="#B8642B"/><rect x="8" y="30" width="70" height="8" fill="#9A4E1D"/><path d="M8 32a20 16 0 0 1 20-16h30a20 16 0 0 1 20 16z" fill="#D9843F"/><rect x="18" y="16" width="8" height="52" fill="#FFC800"/><rect x="60" y="16" width="8" height="52" fill="#FFC800"/><rect x="35" y="30" width="16" height="18" rx="4" fill="#FFC800"/><circle cx="43" cy="38" r="3" fill="#9A4E1D"/><path d="M14 26c4-5 10-7 16-7" stroke="#fff" stroke-width="3" opacity=".35" fill="none" stroke-linecap="round"/></symbol>
   <symbol id="chest-open" viewBox="0 0 86 78"><ellipse cx="43" cy="72" rx="34" ry="5" fill="#000" opacity=".1"/><path d="M14 4h58l6 26H8z" fill="#D9843F"/><path d="M8 30h70v4H8z" fill="#9A4E1D"/><rect x="8" y="34" width="70" height="34" rx="6" fill="#B8642B"/><path d="M20 34l10-14 6 14zm18 0 8-18 8 18zm18 0 8-12 6 12z" fill="#1EA5F0"/><path d="M30 20l2 6m14-10 2 8" stroke="#fff" stroke-width="2" opacity=".7"/><rect x="18" y="34" width="8" height="34" fill="#FFC800"/><rect x="60" y="34" width="8" height="34" fill="#FFC800"/></symbol>
@@ -422,7 +504,8 @@ main{padding:0 max(16px,env(safe-area-inset-right,0px)) calc(110px + env(safe-ar
     <div class="nav-list">
       <button class="nav-item" data-tab="learn"><svg viewBox="0 0 32 32"><use href="#n-home"/></svg><span>לימוד</span></button>
       <button class="nav-item" data-tab="armory"><svg viewBox="0 0 32 32"><use href="#n-armory"/></svg><span>נשקייה</span></button>
-      <button class="nav-item" data-tab="badges"><svg viewBox="0 0 32 32"><use href="#n-trophy"/></svg><span>הישגים</span></button>
+      <button class="nav-item" data-tab="league"><svg viewBox="0 0 32 32"><use href="#n-league"/></svg><span>ליגה</span></button>
+      <button class="nav-item" data-tab="quests"><svg viewBox="0 0 32 32"><use href="#n-quests"/></svg><span>משימות</span></button>
       <button class="nav-item" data-tab="shop"><svg viewBox="0 0 32 32"><use href="#n-shop"/></svg><span>חנות</span></button>
       <button class="nav-item" data-tab="me"><svg viewBox="0 0 32 32"><use href="#n-me"/></svg><span>פרופיל</span></button>
     </div>
@@ -690,7 +773,6 @@ let S=fresh();
 try{const raw=localStorage.getItem(KEY); if(raw) S={...S,...JSON.parse(raw)};}catch(e){}
 // migrate old "unit:0" keys to "unit:l0"
 for(const k of Object.keys(S.done)){ const m=k.match(/^(\w+):(\d+)$/); if(m){ S.done[m[1]+":l"+m[2]]=S.done[k]; delete S.done[k]; } }
-if(S.heartsDay!==today()){S.hearts=5;S.heartsDay=today();}
 if(!S.daily||S.daily.d!==today()) S.daily={d:today(),xp:0};
 if(S.last){ const gap=(new Date(today())-new Date(S.last))/864e5; if(gap>1){ if(S.freeze>0&&gap===2){S.freeze--;S.last=new Date(Date.now()-864e5).toISOString().slice(0,10);} else S.streak=0; } }
 function save(){try{localStorage.setItem(KEY,JSON.stringify(S));}catch(e){}}
@@ -745,7 +827,7 @@ function statRow(){
   return `<svg class="course-flag" viewBox="0 0 34 26" aria-label="קורס בעברית"><use href="#flag"/></svg>
    <div class="stat streak ${S.streak?"":"off"}" title="רצף ימים">${ico("i-fire")}<span>${S.streak}</span></div>
    <div class="stat gems" title="יהלומים">${ico("i-gem")}<span>${S.gems}</span></div>
-   <div class="stat hearts" title="לבבות">${ico("i-heart")}<span>${S.hearts}</span></div>`;
+   <button class="stat hearts" data-hearts title="לבבות">${ico("i-heart")}<span>${S.hearts}</span></button>`;
 }
 function goalCard(){
   const p=Math.min(100,S.daily.xp/S.goal*100);
@@ -767,11 +849,14 @@ function nextBadgeCard(){
    <div class="q-txt"><b>${esc(b.n)}</b><div class="pbar" style="height:14px"><i style="width:${Math.min(100,b.v()/b.max*100)}%"></i></div><p style="font-size:14px;margin-top:4px">${esc(b.d)}</p></div></div></div>`;
 }
 function render(){
+  regenHearts();
   $$(".nav-item").forEach(b=>b.dataset.tab===tab?b.setAttribute("aria-current","page"):b.removeAttribute("aria-current"));
   $("#topStats").innerHTML=statRow();
-  $("#aside").innerHTML=`<div class="statrow">${statRow()}</div>${goalCard()}${rankCard()}${nextBadgeCard()}`;
-  ({learn:renderLearn,armory:renderArmory,badges:renderBadges,shop:renderShop,me:renderMe})[tab]();
-  $$("[data-go]").forEach(b=>b.onclick=()=>{tab=b.dataset.go;render();});
+  $("#aside").innerHTML=`<div class="statrow">${statRow()}</div>${leagueCard()}${questsCard()}${rankCard()}`;
+  ({learn:renderLearn,armory:renderArmory,league:renderLeague,quests:renderQuests,badges:renderBadges,shop:renderShop,me:renderMe})[tab]();
+  $$("[data-go]").forEach(b=>b.onclick=()=>{tab=b.dataset.go;render();scrollTo(0,0);});
+  $$("[data-hearts]").forEach(b=>b.onclick=heartsSheet); bindClaims();
+  $$(".nav-item[data-tab=quests]").forEach(b=>b.classList.toggle("dot",claimable()>0));
 }
 
 /* ------------------------------------------------------------------ learn (path) */
@@ -909,7 +994,7 @@ function renderMe(){
    </div>
    <h2 class="page-title" style="font-size:21px">XP בשבוע האחרון</h2>
    <div class="card"><div class="week">${days.map(d=>`<div class="d"><small style="color:var(--ink)">${d.v||""}</small><div class="b ${d.v?"on":""}" style="height:${Math.max(4,d.v/mx*80)}px"></div><small>${d.l}</small></div>`).join("")}</div></div>
-   <div class="me-cards" style="display:grid;gap:16px;margin-top:20px">${goalCard()}${rankCard()}</div>
+   <div class="me-cards" style="display:grid;gap:16px;margin-top:20px">${leagueCard()}${questsCard()}${rankCard()}</div>
    <h2 class="page-title" style="font-size:21px">יעד יומי</h2>
    <div class="goal-opts">${[[20,"רגוע"],[50,"רציני"],[100,"מטורף"]].map(([g,n])=>`<button class="goal-opt" aria-pressed="${S.goal===g}" data-g="${g}"><span>${n}</span><span>${g} XP ביום</span></button>`).join("")}</div>
    <button class="danger" id="reset">איפוס התקדמות</button>`;
@@ -953,18 +1038,20 @@ sfx.pop=()=>tone([880],"sine"); sfx.heart=()=>tone([392,262],"sawtooth",.12); sf
 
 /* ------------------------------------------------------------------ lesson engine */
 let L=null;
-function startLesson(f){
+function startLesson(f,custom){
   const u=f.u, all=u.lessons.flatMap(l=>l.qs), st=stageOf(f), full=isFull(f);
   let qs, timed=false;
-  if(f.n.t==="lesson"){
+  if(custom) qs=custom;
+  else if(f.n.t==="lesson"){
     const own=u.lessons[f.n.li].qs, stage=full?0:st;
     if(stage===1){ const extra=shuffle(all.filter(q=>!own.includes(q)&&q.t!=="match")).slice(0,2); qs=shuffle([...own,...extra]); }
     else qs=shuffle(own);
     timed=stage===2;
   } else qs=f.n.t==="review"?shuffle(all).slice(0,6):shuffle(all);
-  L={f,qs,i:0,first:0,firstTotal:qs.length,mistakes:[],state:"answer",sel:null,combo:0,t0:Date.now(),timed,stage:full?-1:st,pct:0,xpRun:0};
+  qs=toBuild(qs);
+  L={practice:f.n.t==="practice",f,qs,i:0,first:0,firstTotal:qs.length,mistakes:[],state:"answer",sel:null,combo:0,t0:Date.now(),timed,stage:full?-1:st,pct:0,xpRun:0};
   $("#lesson").hidden=false; document.body.style.overflow="hidden";
-  if(S.hearts<=0) return noHearts();
+  if(S.hearts<=0&&!(L&&L.practice)) return noHearts();
   renderQ();
 }
 function closeLesson(){ $("#lesson").hidden=true; document.body.style.overflow=""; L=null; render(); }
@@ -992,7 +1079,8 @@ const optBtn=(ai,k,label)=>`<button class="opt" style="--d:${k}" data-a="${ai}">
 function renderQ(){
   const q=L.qs[L.i]; L.state="answer"; L.sel=null; L.cur=null;
   const kick=kicker(), tm=L.timed?{timer:T_SEC}:{};
-  const bubble=t=>`<div class="speak">${mascot("neutral")}<div class="bubble">${esc(t)}</div></div>`;
+  const bubble=t=>`<div class="speak">${mascot("neutral")}<div class="bubble">${spk(t)}${esc(t)}</div></div>`;
+  if(q.t==="build") return renderBuild(q,kick,tm,bubble);
   if(q.t==="id"){
     const w=WMAP[q.w], pool=shuffle(WEAPONS.filter(x=>!x.gen&&x.id!==w.id)).slice(0,3);
     L.cur={t:"mc",a:[w.n,...pool.map(x=>x.n)],c:0,e:`${w.type} · ${w.country} · ${w.cal}. ${w.fact}`};
@@ -1033,10 +1121,11 @@ function renderPairs(q,kick,tm){
     else { sfx.no(); m.miss=true; [a,b].forEach(x=>{x.classList.remove("sel");x.classList.add("wrong");setTimeout(()=>x.classList.remove("wrong"),450);}); }
   });
 }
-function onGo(){ if(L.state==="answer")return check(); if(L.state==="checked")return advance(); if(L.state==="screens")return nextScreen(); closeLesson(); }
+function onGo(){ if(L.state==="answer")return L.qs[L.i].t==="build"?checkBuild():check(); if(L.state==="checked")return advance(); if(L.state==="screens")return nextScreen(); closeLesson(); }
 function stopTimer(){ const t=$("#tbar"); if(t) t.style.animationPlayState="paused"; }
 function timeUp(){
   const q0=L.qs[L.i];
+  if(q0.t==="build") return checkBuild(true);
   if(q0.t==="match"){ L.state="checked"; return feedback(false,"נגמר הזמן."); }
   L.sel=-1; check(true);
 }
@@ -1053,8 +1142,8 @@ function feedback(ok,expl,qv){
   stopTimer();
   const q0=L.qs[L.i], q=qv||q0, first=L.i<L.firstTotal;
   S.answered++;
-  if(ok){ S.correct++; L.combo++; if(first)L.first++; }
-  else { L.combo=0; if(q0.t!=="match")L.mistakes.push(q0); S.hearts=Math.max(0,S.hearts-1); }
+  if(ok){ S.correct++; L.combo++; if(first)L.first++; const qs_=qState(); qs_.combo=Math.max(qs_.combo,L.combo); }
+  else { L.combo=0; if(q0.t!=="match")L.mistakes.push(q0); if(!L.practice){ if(S.hearts>=5)S.hRef=Date.now(); S.hearts=Math.max(0,S.hearts-1);} }
   save();
   const foot=$("#foot"); foot.classList.add(ok?"ok":"no");
   const praise=L.combo>=5?"בלתי ניתן לעצירה!":L.combo>=3?"ברצף!":["מצוין!","בול!","יפה מאוד!","נהדר!","אלוף!"][Math.random()*5|0];
@@ -1063,11 +1152,11 @@ function feedback(ok,expl,qv){
   const go=$("#go"); go.disabled=false; go.textContent=ok?"המשך":"הבנתי"; go.focus({preventScroll:true});
   setMood(ok?"happy":"sad");
   if(ok){ sfx.ok(); if(first) floatText($("#pfill"),`+2 XP`,"var(--gold-d)"); if(L.combo>=3){ const p=$("#pfill"); if(p)p.classList.add("hot"); } }
-  else { sfx.no(); setTimeout(sfx.heart,150); const h=$("#lhBox"); h.classList.remove("hit"); void h.offsetWidth; h.classList.add("hit"); $("#lh").textContent=S.hearts; floatText(h,`<svg viewBox="0 0 24 24" width="26" height="26"><use href="#i-heart"/></svg> -1`,"var(--heart)"); }
+  else { sfx.no(); if(!L.practice){ setTimeout(sfx.heart,150); const h=$("#lhBox"); h.classList.remove("hit"); void h.offsetWidth; h.classList.add("hit"); $("#lh").textContent=S.hearts; floatText(h,`<svg viewBox="0 0 24 24" width="26" height="26"><use href="#i-heart"/></svg> -1`,"var(--heart)");} }
   const p=$("#pfill"); if(p) p.style.width=Math.min(100,(L.i+1)/L.qs.length*100)+"%"; L.pct=Math.min(100,(L.i+1)/L.qs.length*100);
 }
 function advance(){
-  if(S.hearts<=0) return noHearts();
+  if(S.hearts<=0&&!(L&&L.practice)) return noHearts();
   L.i++;
   if(L.i===L.qs.length&&L.mistakes.length){L.qs=L.qs.concat(L.mistakes);L.mistakes=[];L.pct=L.i/L.qs.length*100;}
   if(L.i>=L.qs.length) return finish();
@@ -1075,13 +1164,16 @@ function advance(){
 }
 /* ---- end-of-lesson screens: result → streak → rank-up → unit trophy */
 function finish(){
+  if(L.practice){ const xp=5+L.first; S.xp+=xp;S.daily.xp+=xp;S.days[today()]=(S.days[today()]||0)+xp; S.hearts=Math.min(5,S.hearts+1); if(S.hearts>=5)S.hRef=null; save();
+    L.screens=[()=>screenResult({perfect:L.first===L.firstTotal,xp,acc:Math.round(L.first/L.firstTotal*100),secs:Math.round((Date.now()-L.t0)/1000),gems:0,nb:0,sub:"תרגול הושלם · קיבלת לב אחד"})];
+    L.state="screens"; L.i=L.qs.length; return nextScreen(); }
   const f=L.f, perfect=L.first===L.firstTotal, wasFull=isFull(f);
   const xp=wasFull?5+L.first:({lesson:10,review:15,test:25})[f.n.t]+L.first*2+(perfect?5:0)+(f.n.t==="lesson"?L.stage*5:0)+(L.timed?10:0);
   const gems=perfect&&!wasFull?5:0;
   const rankBefore=rankInfo().name, unitBefore=unitDone(f.u.id), streakBefore=S.streak, before=BADGES.filter(earned).length;
   S.xp+=xp; S.gems+=gems; S.daily.xp+=xp; S.days[today()]=(S.days[today()]||0)+xp; S.done[f.key]=(S.done[f.key]||0)+1; if(perfect)S.perfect++;
   const t=today(); if(S.last!==t){const g=S.last?(new Date(t)-new Date(S.last))/864e5:99; S.streak=g===1?S.streak+1:1; S.last=t;}
-  S.best=Math.max(S.best||0,S.streak); save();
+  S.best=Math.max(S.best||0,S.streak); qState().lessons++; save();
   const nb=BADGES.filter(earned).length-before, secs=Math.round((Date.now()-L.t0)/1000), acc=Math.round(L.first/L.firstTotal*100);
   const sub=f.n.t==="lesson"&&!wasFull?`שלב ${Math.min(3,S.done[f.key])} מתוך 3 · ${esc(f.n.name)}`:esc(f.n.name);
   L.screens=[()=>screenResult({perfect,xp,acc,secs,gems,nb,sub})];
@@ -1121,8 +1213,8 @@ function screenUnit(u){
 function noHearts(){
   L.state="done";
   frame(`<div class="done-screen">${mascot("sad","who sad big-kd")}<h2 style="color:var(--red-ink)">נגמרו הלבבות</h2>
-    <p>הלבבות מתמלאים מחר, או מיד בחנות תמורת 25 יהלומים.</p></div>`,"לחנות",false,"blue");
-  $("#go").onclick=()=>{tab="shop";closeLesson();};
+    <p>לב חדש מגיע כל 4 שעות. אפשר גם לתרגל ולהרוויח לב, או למלא בחנות.</p></div>`,"להרוויח לבבות",false,"blue");
+  $("#go").onclick=()=>{closeLesson();heartsSheet();};
 }
 document.addEventListener("keydown",e=>{
   if(e.key==="Escape")closePop();
@@ -1132,5 +1224,165 @@ document.addEventListener("keydown",e=>{
   if(e.key==="Enter"){const g=$("#go"); if(g&&!g.disabled){e.preventDefault();g.click();} return;}
   const n=parseInt(e.key,10); if(n>=1&&n<=4&&L.state==="answer"){const b=$$(".opts .opt")[n-1]; if(b)b.click();}
 });
-render();
+/* ================================================================== features: hearts timer, quests, league, practice, word tiles, voice, onboarding */
+
+/* ---- hearts refill over time: one heart every 4 hours */
+const HEART_MS=4*36e5;
+function regenHearts(){
+  if(S.hearts>=5){S.hRef=null;return;}
+  if(!S.hRef) S.hRef=Date.now();
+  while(S.hearts<5&&Date.now()-S.hRef>=HEART_MS){S.hearts++;S.hRef+=HEART_MS;}
+  if(S.hearts>=5)S.hRef=null;
+  save();
+}
+const fmtT=ms=>{ms=Math.max(0,ms);const h=Math.floor(ms/36e5),m=Math.floor(ms%36e5/6e4),s=Math.floor(ms%6e4/1e3);return `${h}:${String(m).padStart(2,"0")}:${String(s).padStart(2,"0")}`;};
+let heartTick=null;
+function heartsSheet(){
+  regenHearts();
+  const canPractice=FLAT.some(f=>f.n.t!=="chest"&&isDone(f));
+  sheet(`<div class="center"><h2>לבבות</h2>
+    <div class="heart-row">${[0,1,2,3,4].map(i=>`<svg viewBox="0 0 24 24" class="${i<S.hearts?"on":""}" style="--d:${i}"><use href="#i-heart"/></svg>`).join("")}</div>
+    <p class="page-sub" style="margin:0" id="hTimer">${S.hearts>=5?"הלבבות מלאים. אפשר ללמוד!":`הלב הבא בעוד <b>${fmtT(HEART_MS-(Date.now()-S.hRef))}</b>`}</p>
+    <div class="list" style="width:100%;text-align:start">
+     <div class="li"><div class="ic" style="--c:var(--soft);width:56px;height:56px"><svg viewBox="0 0 24 24" style="color:var(--heart)"><use href="#i-heart"/></svg></div><div class="t"><b>מילוי מלא</b><small style="margin:0">חזרה ל-5 לבבות</small></div>
+       <button class="btn ghost" id="hBuy" ${S.hearts<5&&S.gems>=25?"":"disabled"}>${ico("i-gem")}<span style="color:var(--gem)">25</span></button></div>
+     <div class="li"><div class="ic" style="--c:var(--soft);width:56px;height:56px"><svg viewBox="0 0 24 24" style="fill:var(--green)"><use href="#i-dumbbell"/></svg></div><div class="t"><b>תרגול כדי להרוויח לב</b><small style="margin:0">5 שאלות ממה שכבר למדת. אין בו פסילות.</small></div>
+       <button class="btn" id="hPrac" ${S.hearts<5&&canPractice?"":"disabled"}>תרגול</button></div>
+    </div><button class="btn wide ghost" id="sx">סגור</button></div>`);
+  $("#sx").onclick=()=>{clearInterval(heartTick);closeSheet();};
+  $("#hBuy").onclick=()=>{S.gems-=25;S.hearts=5;S.hRef=null;save();sfx.ok();clearInterval(heartTick);closeSheet();render();};
+  $("#hPrac").onclick=()=>{clearInterval(heartTick);closeSheet();startPractice();};
+  clearInterval(heartTick); heartTick=setInterval(()=>{const t=$("#hTimer"); if(!t){clearInterval(heartTick);return;} regenHearts(); if(S.hearts<5)t.innerHTML=`הלב הבא בעוד <b>${fmtT(HEART_MS-(Date.now()-S.hRef))}</b>`;},1000);
+}
+function startPractice(){
+  const pool=FLAT.filter(f=>f.n.t==="lesson"&&isDone(f)).flatMap(f=>f.u.lessons[f.n.li].qs);
+  if(!pool.length) return;
+  startLesson({u:COURSE[0],ui:0,n:{t:"practice",name:"תרגול לב"},key:"practice"},shuffle(pool).slice(0,5));
+}
+
+/* ---- daily quests */
+function qState(){ if(!S.q||S.q.d!==today()) S.q={d:today(),lessons:0,combo:0,perfect:0,claimed:{}}; return S.q; }
+function QUESTS(){ const q=qState(); return [
+  {id:"xp",n:`צבור ${S.goal} XP`,ic:"i-bolt",col:"var(--gold)",v:S.daily.xp,max:S.goal},
+  {id:"les",n:"השלם 2 שיעורים",ic:"i-star",col:"var(--blue)",v:q.lessons,max:2},
+  {id:"combo",n:"ענה נכון 5 פעמים ברצף",ic:"i-fire",col:"var(--orange)",v:q.combo,max:5},
+];}
+const claimable=()=>QUESTS().filter(x=>x.v>=x.max&&!qState().claimed[x.id]).length;
+function questRows(){
+  return QUESTS().map(x=>{const done=x.v>=x.max, got=qState().claimed[x.id];
+    return `<div class="quest-row"><svg viewBox="0 0 24 24" class="qi" style="color:${x.col};fill:${x.col}"><use href="#${x.ic}"/></svg>
+      <div class="q-txt"><b>${esc(x.n)}</b><div class="pbar"><i style="width:${Math.min(100,x.v/x.max*100)}%"></i><span>${Math.min(x.v,x.max)} / ${x.max}</span></div></div>
+      <button class="q-chest ${done&&!got?"ready":""}" data-claim="${x.id}" ${done&&!got?"":"disabled"} aria-label="${got?"נאסף":done?"אסוף פרס":"פרס"}"><svg viewBox="0 0 86 78"><use href="#${got?"chest-open":"chest"}"/></svg></button></div>`;}).join("");
+}
+function questsCard(){ return `<div class="card"><h3>משימות יומיות <button data-go="quests">הצג הכל</button></h3><div class="quest-list">${questRows()}</div></div>`; }
+function bindClaims(){
+  $$("[data-claim]").forEach(b=>b.onclick=()=>{ const q=qState(); if(q.claimed[b.dataset.claim])return; q.claimed[b.dataset.claim]=1; S.gems+=10; save();
+    burst(b,["#1EA5F0","#84D8FF","#FFC800"],18); floatText(b,`+10 ${'<svg viewBox="0 0 24 24" width="20" height="20" style="fill:var(--gem)"><use href="#i-gem"/></svg>'}`,"var(--gem)"); sfx.win(); setTimeout(render,650); });
+}
+function renderQuests(){
+  const mid=new Date(); mid.setHours(24,0,0,0);
+  $("#main").innerHTML=`<div class="q-banner">${mascot("happy","qb-kd")}<div><h1>משימות יומיות</h1><p>השלם משימות וקבל יהלומים. מתחדש בעוד ${Math.ceil((mid-Date.now())/36e5)} שעות.</p></div></div>
+    <div class="card" style="margin-top:16px"><div class="quest-list">${questRows()}</div></div>
+    <h2 class="page-title" style="font-size:21px">הישגים</h2><p class="page-sub">${BADGES.filter(earned).length} מתוך ${BADGES.length} עיטורים · <button class="linkish" data-go="badges">לכל ההישגים</button></p>`;
+  bindClaims();
+}
+
+/* ---- weekly league (computer opponents) */
+const TIERS=[["ארד","#CD7F32"],["כסף","#9AA7B4"],["זהב","#FFC800"],["פלטינה","#4FC7D8"],["יהלום","#7C8CF8"]];
+const BOTS=["נץ","עקרב","ברק","זאב","סער","רעם","נמר","חוד","צפע"];
+const weekStart=(d=new Date())=>{const x=new Date(d);x.setHours(0,0,0,0);x.setDate(x.getDate()-x.getDay());return x;};
+const wkKey=d=>d.toISOString().slice(0,10);
+function hash(s){let h=2166136261;for(const c of s){h^=c.charCodeAt(0);h=Math.imul(h,16777619);}return h>>>0;}
+function myWeekXP(ws){let t=0;for(let i=0;i<7;i++){const d=new Date(ws.getTime()+i*864e5);t+=S.days[d.toISOString().slice(0,10)]||0;}return t;}
+function standings(ws,full){
+  const k=wkKey(ws), el=full?7:Math.min(7,(Date.now()-ws)/864e5), tier=(S.league&&S.league.tier)||0;
+  const bots=BOTS.map(n=>{const h=hash(k+n), rate=(8+h%40)*(1+tier*.35), lazy=h%7===0; return {n,bot:1,xp:lazy?Math.round(rate*.3*el):Math.round(rate*el*(.6+(h>>5)%50/100))};});
+  return [...bots,{n:"אתה",me:1,xp:myWeekXP(ws)}].sort((a,b)=>b.xp-a.xp||(a.me?-1:1));
+}
+function leagueTick(){
+  const ws=weekStart(), k=wkKey(ws);
+  if(!S.league){S.league={tier:0,week:k,result:null};return save();}
+  if(S.league.week!==k){
+    const prev=new Date(S.league.week), played=myWeekXP(prev)>0;
+    if(played){ const rk=standings(prev,true).findIndex(r=>r.me)+1;
+      if(rk<=3&&S.league.tier<TIERS.length-1){S.league.tier++;S.league.result="up";}
+      else if(rk>=9&&S.league.tier>0){S.league.tier--;S.league.result="down";} else S.league.result="stay"; }
+    S.league.week=k; save();
+  }
+}
+function leagueCard(){ const rows=standings(weekStart()), me=rows.findIndex(r=>r.me)+1, T=TIERS[S.league.tier];
+  return `<div class="card"><h3>ליגת ${T[0]} <button data-go="league">הצג ליגה</button></h3><div class="rank-row"><svg class="shield sm" viewBox="0 0 24 24" style="--sc:${T[1]}"><use href="#i-shield"/></svg>
+   <div><b style="font-size:18px;color:var(--ink-strong)">אתה במקום ${me}</b><p>${me<=3?"אתה באזור העלייה!":"3 הראשונים עולים לליגה הבאה"}</p></div></div></div>`; }
+function renderLeague(){
+  const ws=weekStart(), rows=standings(ws), T=TIERS[S.league.tier], left=Math.ceil((ws.getTime()+7*864e5-Date.now())/864e5);
+  const res=S.league.result; S.league.result=null; save();
+  $("#main").innerHTML=`<div class="league-head"><div class="shields">${TIERS.map((t,i)=>`<svg class="shield ${i===S.league.tier?"cur":i>S.league.tier?"lock":""}" viewBox="0 0 24 24" style="--sc:${i>S.league.tier?"var(--locked)":t[1]}"><use href="#i-shield"/></svg>`).join("")}</div>
+    <h1 class="page-title" style="text-align:center;margin-top:10px">ליגת ${T[0]}</h1>
+    <p class="page-sub" style="text-align:center">3 הראשונים עולים לליגה הבאה · נשארו ${left} ${left===1?"יום":"ימים"}</p></div>
+    ${res==="up"?`<div class="league-msg up">עלית לליגת ${T[0]}! ${ico("i-star")}</div>`:res==="down"?`<div class="league-msg down">ירדת לליגת ${T[0]}. השבוע מתקנים.</div>`:""}
+    <div class="board">${rows.map((r,i)=>`${i===3?`<div class="zone up">${ico("i-star")}אזור עלייה</div>`:""}${i===rows.length-2&&S.league.tier>0?`<div class="zone down">אזור ירידה</div>`:""}
+      <div class="row ${r.me?"me":""}" style="--d:${i}"><span class="pos ${i<3?"p"+(i+1):""}">${i+1}</span>
+      <span class="av" style="background:${r.me?"var(--green)":`hsl(${hash(r.n)%360} 60% 55%)`}">${r.me?`<svg viewBox="0 0 120 120"><use href="#kasdi"/></svg>`:esc(r.n[0])}</span>
+      <span class="nm">${esc(r.n)}${r.bot?`<small>יריב ממוחשב</small>`:""}</span><span class="pts">${r.xp} XP</span></div>`).join("")}</div>
+    <p class="page-sub" style="text-align:center;margin-top:14px;font-size:14px">היריבים בליגה הם שחקנים ממוחשבים. XP שאתה צובר השבוע נספר כאן.</p>`;
+  if(res==="up"){confetti();sfx.win();}
+}
+
+/* ---- voice */
+const canSpeak="speechSynthesis" in window;
+function say(t){ try{ speechSynthesis.cancel(); const u=new SpeechSynthesisUtterance(t); u.lang="he-IL"; u.rate=.95; const v=speechSynthesis.getVoices().find(v=>/^he/i.test(v.lang)); if(v)u.voice=v; speechSynthesis.speak(u);}catch(e){} }
+const spk=t=>canSpeak?`<button class="spk" data-say="${esc(t)}" aria-label="השמע את השאלה"><svg viewBox="0 0 24 24"><path d="M3 9v6h4l5 5V4L7 9z"/><path d="M16.5 12A4.5 4.5 0 0 0 14 8v8a4.5 4.5 0 0 0 2.5-4zM14 3.2v2.1a7 7 0 0 1 0 13.4v2.1a9 9 0 0 0 0-17.6z"/></svg></button>`:"";
+document.addEventListener("click",e=>{const b=e.target.closest("[data-say]"); if(b){e.stopPropagation(); say(b.dataset.say); b.classList.remove("talk"); void b.offsetWidth; b.classList.add("talk");}});
+
+/* ---- word-tile questions (built from multiple-choice answers) */
+const words=s=>String(s).split(/\s+/).filter(Boolean);
+const buildable=q=>q.t==="mc"&&words(q.a[q.c]).length>=3&&words(q.a[q.c]).length<=8;
+function toBuild(qs){ return qs.map(q=>buildable(q)&&Math.random()<.45?{t:"build",base:q}:q); }
+function renderBuild(q,kick,tm,bubble){
+  const ans=words(q.base.a[q.base.c]);
+  const extra=[...new Set(q.base.a.filter((_,i)=>i!==q.base.c).flatMap(words))].filter(w=>!ans.includes(w));
+  L.tiles=shuffle([...ans,...shuffle(extra).slice(0,Math.min(3,extra.length))]); L.build=[];
+  frame(`${kick}<h1 class="l-title">בנה את התשובה</h1>${bubble(q.base.q)}
+    <div class="build-line" id="bl"></div><div class="bank" id="bank">${L.tiles.map((t,i)=>`<button class="tile" style="--d:${i}" data-t="${i}">${esc(t)}</button>`).join("")}</div>`,"בדיקה",true,"",tm);
+  const sync=()=>{ $("#bl").innerHTML=L.build.map(i=>`<button class="tile in" data-b="${i}">${esc(L.tiles[i])}</button>`).join("");
+    $$("#bank .tile").forEach(b=>b.classList.toggle("used",L.build.includes(+b.dataset.t))); $("#go").disabled=!L.build.length;
+    $$("#bl .tile").forEach(b=>b.onclick=()=>{ if(L.state!=="answer")return; L.build=L.build.filter(x=>x!==+b.dataset.b); sfx.tap(); sync(); }); };
+  $$("#bank .tile").forEach(b=>b.onclick=()=>{ if(L.state!=="answer"||L.build.includes(+b.dataset.t))return; L.build.push(+b.dataset.t); sfx.pop(); sync(); });
+}
+function checkBuild(timeout){
+  const q=L.qs[L.i].base, ok=!timeout&&L.build.map(i=>L.tiles[i]).join(" ")===words(q.a[q.c]).join(" ");
+  $$(".tile").forEach(b=>b.disabled=true); $("#bl").classList.add(ok?"ok":"no");
+  L.state="checked"; feedback(ok,(timeout?"נגמר הזמן. ":"")+(q.e||""),q);
+  if(ok) burst($("#bl"),["#58C21B","#A8E66F","#FFC800"],18);
+}
+
+/* ---- onboarding */
+function onboarding(){
+  const o=document.createElement("div"); o.className="onb"; o.id="onb"; document.body.appendChild(o);
+  const A={why:null,level:null,goal:50}; let step=0;
+  const STEPS=[
+    {say:"היי! אני קסדי. אני אלמד אותך הכל על נשק: בטיחות, איך זה עובד, ואת כל הנשקים המפורסמים.",btn:"המשך"},
+    {say:"למה אתה רוצה ללמוד על נשק?",key:"why",opts:[["curious","סתם מעניין אותי","i-star"],["army","מתכונן לצבא","i-trophy"],["sport","ירי ספורטיבי ומטווחים","i-dumbbell"],["history","היסטוריה צבאית","i-book"]]},
+    {say:"כמה אתה כבר יודע?",key:"level",opts:[["0","אני מתחיל מאפס","i-star"],["1","אני מכיר כמה נשקים","i-bolt"],["2","אני יודע די הרבה","i-trophy"]]},
+    {say:"מה היעד היומי שלך?",key:"goal",opts:[[20,"רגוע · 20 XP ביום","i-heart"],[50,"רציני · 50 XP ביום","i-bolt"],[100,"מטורף · 100 XP ביום","i-fire"]]},
+    {say:"מעולה! מתחילים בכללי הבטיחות. זה הדבר הכי חשוב.",btn:"יאללה, מתחילים"},
+  ];
+  function draw(){
+    const st=STEPS[step], sel=st.key?A[st.key]:null;
+    o.innerHTML=`<div class="onb-top"><button class="x" id="ob" aria-label="חזרה" ${step?"":"style=\"visibility:hidden\""}><svg viewBox="0 0 24 24"><path d="M8.6 5.4 15.2 12l-6.6 6.6 1.4 1.4 8-8-8-8z"/></svg></button>
+      <div class="pbar big" style="flex:1"><i style="width:${step/(STEPS.length-1)*100}%"></i></div></div>
+      <div class="onb-body q-anim" key="${step}"><div class="speak ${st.key?"":"solo"}">${mascot(step===0||step===4?"happy":"neutral",step===0||step===4?"who jump big-kd":"who")}<div class="bubble">${esc(st.say)}</div></div>
+      ${st.opts?`<div class="opts">${st.opts.map(([v,l,ic],k)=>`<button class="opt ${String(sel)===String(v)?"sel":""}" style="--d:${k}" data-v="${v}"><svg viewBox="0 0 24 24" class="oi"><use href="#${ic}"/></svg>${esc(l)}</button>`).join("")}</div>`:""}</div>
+      <div class="onb-foot"><button class="btn wide" id="on" ${st.key&&A[st.key]===null?"disabled":""}>${st.btn||"המשך"}</button></div>`;
+    $$("#onb .opt").forEach(b=>b.onclick=()=>{A[st.key]=st.key==="goal"?+b.dataset.v:b.dataset.v;sfx.tap();draw();});
+    $("#ob").onclick=()=>{if(step){step--;draw();}};
+    $("#on").onclick=()=>{ if(step<STEPS.length-1){step++;draw();return;}
+      S.onboarded=1;S.goal=A.goal;S.why=A.why;save(); o.classList.add("bye"); setTimeout(()=>{o.remove();render();startLesson(FLAT[0]);},250); };
+  }
+  draw();
+}
+
+/* ---- boot */
+regenHearts(); leagueTick(); qState(); save();
+if(!S.onboarded&&!Object.keys(S.done).length){ render(); onboarding(); } else { S.onboarded=1; save(); render(); }
 </script>
