@@ -491,6 +491,17 @@ button.stat:hover{background:var(--soft)}
 .splash .pips svg{width:20px;height:20px;fill:var(--u,var(--green))}
 @keyframes pulse{50%{transform:scale(1.15)}}
 @keyframes splashOut{to{opacity:0;transform:scale(1.08);visibility:hidden}}
+.part-sub{margin:-14px 0 16px;color:var(--muted);font-weight:500}
+.part-card{padding:26px 10px}
+.part-svg{max-width:520px!important;overflow:visible}
+.hot{transform-box:fill-box;transform-origin:center;fill:transparent;stroke:transparent;stroke-width:2.2;cursor:pointer;transition:fill .15s}
+.hot:hover{fill:rgb(30 165 240 / .12)}
+.hot.sel{fill:rgb(30 165 240 / .22);stroke:var(--blue);stroke-dasharray:6 4;animation:dash 1s linear infinite}
+.hot.good{fill:rgb(88 194 27 / .28);stroke:var(--green);animation:okPop .45s}
+.hot.bad{fill:rgb(255 79 79 / .25);stroke:var(--red)}
+@keyframes dash{to{stroke-dashoffset:-20}}
+.plab{transform-box:fill-box;transform-origin:center;animation:popIn2 .4s cubic-bezier(.3,1.6,.5,1)}
+.plab rect{fill:var(--green)} .plab text{fill:#fff;font:800 11px var(--font)}
 @media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
 </style>
 
@@ -603,6 +614,11 @@ const SIL={
  garand:`<path class="ms" d="M170 50q-8 8 0 12h10"/><path class="w" d="M238 56l-6 4-52-10-40-2-80-2v-6l40-2 80-6 52 2z"/><rect class="m" x="140" y="27" width="44" height="10" rx="2"/><rect class="w" x="64" y="31" width="76" height="7" rx="3"/><rect class="m" x="10" y="34" width="56" height="4"/><rect class="m" x="14" y="27" width="4" height="7"/><rect class="m" x="176" y="21" width="6" height="7"/><rect class="hl" x="142" y="28" width="40" height="2" rx="1"/>`,
  bolt:`<path class="ms" d="M150 44q-4 10 6 12"/><path class="w" d="M236 36l-60-6-10 6v8l24 4 40 10 6-4z"/><rect class="w" x="40" y="34" width="130" height="10" rx="4"/><rect class="m" x="110" y="28" width="50" height="8" rx="2"/><path class="m" d="M148 34l6-10h6l-4 10z"/><circle class="s" cx="158" cy="24" r="3"/><rect class="m" x="6" y="36" width="36" height="4"/><rect class="m" x="12" y="30" width="4" height="6"/><rect class="hl" x="112" y="29" width="46" height="2" rx="1"/>`,
 };
+const PARTS={
+ ak:{barrel:["הקנה",4,22,62,20],hand:["מגן הידיים",66,22,46,24],recv:["בית המכלול",112,22,68,22],stock:["הקת",180,26,58,36],mag:["המחסנית",100,44,38,40],grip:["ידית האחיזה",140,44,22,26]},
+ m16:{barrel:["הקנה",2,26,56,16],hand:["מגן הידיים",58,26,54,22],stock:["הקת",182,26,56,34],handle:["ידית הנשיאה",124,10,54,14],mag:["המחסנית",116,46,26,32],grip:["ידית האחיזה",144,46,22,24]},
+};
+const PART_INFO={barrel:"הקנה מוביל את הקליע ונותן לו כיוון.",hand:"מגן הידיים מאפשר לאחוז בנשק מקדימה בלי להיכוות מהקנה החם.",recv:"בבית המכלול נמצא המנגנון: נושא הבריח והבריח.",stock:"הקת נשענת על הכתף ומייצבת את הנשק.",mag:"המחסנית מזינה כדורים לנשק בעזרת קפיץ.",grip:"ידית האחיזה היא המקום של היד החזקה, ליד ההדק.",handle:"ידית הנשיאה של ה-M16 הישן משמשת גם כבסיס לכוונת האחורית."};
 const silSvg=(w,cls="sil")=>`<svg class="${cls} gun" viewBox="0 0 240 96" aria-label="${w?esc(w.n):""}"><ellipse class="gsh" cx="120" cy="90" rx="100" ry="4"/>${SIL[w.sil]||SIL.bolt}</svg>`;
 
 /* ------------------------------------------------------------------
@@ -629,10 +645,12 @@ const COURSE = [
  ]},
  { id:"parts", c:["#14B8A6","#0E8F81"], title:"חלקי הנשק", sub:"ממה בנוי נשק, ומה יש בתוך כדור", lessons:[
   { name:"מבנה הרובה", qs:[
+   {t:"part", w:"ak47"},
    {t:"mc", q:"איך נקרא החלק שדרכו הקליע יוצא?", a:["קנה","קת","מחסנית","הדק"], c:0, e:"הקנה מוביל את הקליע. הפתח בקצה שלו נקרא לוע."},
    {t:"mc", q:"מה התפקיד של הקת?", a:["להישען על הכתף ולייצב את הנשק","להחזיק כדורים","לכוון","לקרר את הקנה"], c:0, e:"הקת מעבירה את הרתע לכתף ועוזרת להחזיק את הנשק יציב."},
    {t:"mc", q:"מהי נצרה?", a:["מתג שנועל את ההדק ומונע ירי בטעות","סוג של כוונת","חלק מהמחסנית","רצועת נשיאה"], c:0, e:"הנצרה נשארת במצב 'נצור' עד הרגע שבו מחליטים לירות."},
    {t:"tf", q:"בית הבליעה הוא המקום בקצה האחורי של הקנה שבו נמצא הכדור ברגע הירי.", c:true, e:"באנגלית Chamber. 'בדיקת בית בליעה' מוודאת שאין בו כדור."},
+   {t:"part", w:"m16"},
    {t:"match", q:"התאם חלק לתפקיד", p:[["קנה","מוביל את הקליע"],["הדק","משחרר את הירייה"],["מחסנית","מזינה כדורים"],["כוונות","עוזרות לכוון"]]}
   ]},
   { name:"מה יש בכדור", qs:[
@@ -665,6 +683,7 @@ const COURSE = [
    {t:"id", w:"m16", q:"איזה נשק זה?"},
    {t:"mc", q:"מה הקליבר של ה-AK-47 המקורי?", a:["7.62×39 מ\"מ","5.56×45 מ\"מ","9×19 מ\"מ","12.7×99 מ\"מ"], c:0, e:"קליע כבד יחסית, שנשאר יציב גם כשעובר דרך צמחייה."},
    {t:"mc", q:"באיזו תחמושת יורה ה-M16?", a:["5.56×45 מ\"מ נאט\"ו","7.62×39 מ\"מ","9×19 מ\"מ","‎.50 BMG"], c:0, e:"קליע קל ומהיר. חייל יכול לשאת יותר כדורים באותו משקל."},
+   {t:"part", w:"ak47", p:"mag"},
    {t:"tf", q:"ה-AK-47 ידוע באמינות שלו גם בבוץ, בחול ובקור.", c:true, e:"החלקים הנעים שלו מרווחים, ולכן לכלוך פחות תוקע אותו."},
    {t:"mc", q:"מה ההבדל העיקרי בין M4 ל-M16?", a:["ה-M4 קצר יותר, עם קנה קצר וקת נשלפת","ה-M4 יורה כדורים אחרים","ה-M4 הוא אקדח","אין הבדל"], c:0, e:"ה-M4 הוא 'קרבין': גרסה קצרה ונוחה יותר."}
   ]},
@@ -1154,6 +1173,7 @@ function renderQ(){
   const kick=kicker(), tm=L.timed?{timer:T_SEC}:{};
   const bubble=t=>`<div class="speak">${mascot("neutral")}<div class="bubble">${spk(t)}${esc(t)}</div></div>`;
   if(q.t==="build") return renderBuild(q,kick,tm,bubble);
+  if(q.t==="part") return renderPart(q,kick,tm);
   if(q.t==="id"){
     const w=WMAP[q.w], pool=shuffle(WEAPONS.filter(x=>!x.gen&&x.id!==w.id)).slice(0,3);
     L.cur={t:"mc",a:[w.n,...pool.map(x=>x.n)],c:0,e:`${w.type} · ${w.country} · ${w.cal}. ${w.fact}`};
@@ -1194,11 +1214,12 @@ function renderPairs(q,kick,tm){
     else { sfx.no(); m.miss=true; [a,b].forEach(x=>{x.classList.remove("sel");x.classList.add("wrong");setTimeout(()=>x.classList.remove("wrong"),450);}); }
   });
 }
-function onGo(){ if(L.state==="answer")return L.qs[L.i].t==="build"?checkBuild():check(); if(L.state==="checked")return advance(); if(L.state==="screens")return nextScreen(); closeLesson(); }
+function onGo(){ if(L.state==="answer"){ const t=L.qs[L.i].t; return t==="build"?checkBuild():t==="part"?checkPart():check(); } if(L.state==="checked")return advance(); if(L.state==="screens")return nextScreen(); closeLesson(); }
 function stopTimer(){ const t=$("#tbar"); if(t) t.style.animationPlayState="paused"; }
 function timeUp(){
   const q0=L.qs[L.i];
   if(q0.t==="build") return checkBuild(true);
+  if(q0.t==="part") return checkPart(true);
   if(q0.t==="match"){ L.state="checked"; return feedback(false,"נגמר הזמן."); }
   L.sel=-1; check(true);
 }
@@ -1471,6 +1492,24 @@ function startMistakes(){
 function mistakesCard(){
   const n=(S.miss||[]).filter(r=>QBYREF[r]).length; if(!n) return "";
   return `<div class="miss-card"><svg viewBox="0 0 24 24"><use href="#i-dumbbell"/></svg><div class="t"><b>תרגול טעויות</b><p>${n===1?"שאלה אחת":n+" שאלות"} שטעית בהן מחכות לך</p></div><button class="btn" id="missGo">תרגל</button></div>`;
+}
+
+/* ---- "tap the part" questions */
+function renderPart(q,kick,tm){
+  const w=WMAP[q.w], parts=PARTS[w.sil], keys=Object.keys(parts);
+  L.part=q.p||keys[Math.random()*keys.length|0]; L.psel=null;
+  const hs=keys.map(k=>{const [,x,y,ww,hh]=parts[k];return `<rect class="hot" data-p="${k}" x="${x}" y="${y}" width="${ww}" height="${hh}" rx="6"/>`;}).join("");
+  frame(`${kick}<h1 class="l-title">גע ב${esc(parts[L.part][0].replace(/^ה/,""))}</h1><p class="part-sub">${esc(w.n)} · לחץ על החלק הנכון בציור</p>
+    <div class="id-card part-card"><svg class="sil gun part-svg" viewBox="0 0 240 96"><ellipse class="gsh" cx="120" cy="90" rx="100" ry="4"/>${SIL[w.sil]}<g id="hots">${hs}</g><g id="plabel"></g></svg></div>`,"בדיקה",true,"",tm);
+  $$(".hot").forEach(r=>r.addEventListener("click",()=>{ if(L.state!=="answer")return; $$(".hot").forEach(x=>x.classList.remove("sel")); r.classList.add("sel"); L.psel=r.dataset.p; $("#go").disabled=false; sfx.tap(); }));
+}
+function checkPart(timeout){
+  const w=WMAP[L.qs[L.i].w], parts=PARTS[w.sil], ok=!timeout&&L.psel===L.part;
+  $$(".hot").forEach(r=>{ r.classList.remove("sel"); if(r.dataset.p===L.part) r.classList.add("good"); else if(r.dataset.p===L.psel) r.classList.add("bad"); });
+  const [name,x,y,ww,hh]=parts[L.part], ly=y<20?y+hh+12:y-6;
+  $("#plabel").innerHTML=`<g class="plab"><rect x="${x+ww/2-34}" y="${ly-13}" width="68" height="18" rx="9"/><text x="${x+ww/2}" y="${ly}" text-anchor="middle">${esc(name.replace(/^ה/,""))}</text></g>`;
+  L.state="checked"; feedback(ok,(timeout?"נגמר הזמן. ":"")+(ok?"":`החלק הנכון: ${name}. `)+PART_INFO[L.part]);
+  if(ok) burst($(".hot.good"),["#58C21B","#A8E66F","#FFC800"],16);
 }
 
 /* ---- boot */
