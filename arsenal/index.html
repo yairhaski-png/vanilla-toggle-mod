@@ -2,235 +2,307 @@
 <meta name="claude:viewport-fit-sides" content="cover">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Rubik:wght@500;700;800;900&family=JetBrains+Mono:wght@700&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Rubik:wght@500;600;700;800;900&display=swap">
 <style>
-/* Layout: phone-first game shell. Sticky stat bar on top, scrolling path of chunky 3D lesson nodes grouped by colored unit bands, fixed tab bar at the bottom; lessons open as a full-screen sheet. Each unit owns a hue (--u / --u-d). */
+/* Layout: language-app shell. Phone: sticky stat bar, zig-zag path of round 3D nodes, fixed bottom tabs.
+   Laptop (>=1000px): three columns — nav sidebar | path | stats & cards. Lessons open full-screen. */
 :root{
-  --bg:#F4F6EF; --surface:#FFFFFF; --surface-2:#EEF1E7; --ink:#1F2619; --muted:#6A735E; --line:#DDE2D3; --line-d:#C7CDBC;
-  --brass:#F0A81C; --brass-d:#C98410;
-  --good:#3BA84A; --good-d:#2A8237; --good-bg:#E3F5DF;
-  --bad:#E0483B;  --bad-d:#B3352A;  --bad-bg:#FDE5E1;
-  --locked:#E2E5DB; --locked-d:#C9CDBF; --locked-i:#A9AF9D;
+  --bg:#FFFFFF; --surface:#FFFFFF; --soft:#F7F7F7; --ink:#3C3C3C; --ink-strong:#4B4B4B; --muted:#8A8A8A;
+  --line:#E5E5E5; --line-2:#D6D6D6;
+  --green:#58C21B; --green-d:#45A00A; --green-bg:#D7FFB8; --green-ink:#4A9E12;
+  --blue:#1EA5F0;  --blue-d:#1683C0;  --blue-bg:#DDF4FF; --blue-line:#84D8FF;
+  --red:#FF4F4F;   --red-d:#E03A3A;   --red-bg:#FFDFE0;  --red-ink:#EA2B2B;
+  --gold:#FFC800;  --gold-d:#E3A600;
+  --orange:#FF9B1A; --gem:#1EA5F0; --heart:#FF4F4F;
+  --locked:#E5E5E5; --locked-d:#CDCDCD; --locked-i:#AFAFAF;
   --font:"Rubik","Assistant",system-ui,-apple-system,"Arial Hebrew",sans-serif;
-  --mono:"JetBrains Mono",ui-monospace,monospace;
 }
 @media (prefers-color-scheme: dark){ :root:not([data-theme="light"]){
-  --bg:#11150E; --surface:#1A2015; --surface-2:#222A1C; --ink:#EEF2E6; --muted:#9BA58E; --line:#2D3626; --line-d:#232A1D;
-  --good-bg:#183020; --bad-bg:#3A1A17; --locked:#283022; --locked-d:#1C2218; --locked-i:#56604B; color-scheme:dark;
+  --bg:#131F24; --surface:#131F24; --soft:#1B2B32; --ink:#F1F7FB; --ink-strong:#F1F7FB; --muted:#8FA1AA;
+  --line:#37464F; --line-2:#2A3940;
+  --green-bg:#1F3A12; --green-ink:#79D93C; --blue-bg:#16324A; --blue-line:#3F86B5; --red-bg:#3D1C1F; --red-ink:#FF7A7A;
+  --locked:#37464F; --locked-d:#27353C; --locked-i:#52656D; color-scheme:dark;
 }}
 :root[data-theme="dark"]{
-  --bg:#11150E; --surface:#1A2015; --surface-2:#222A1C; --ink:#EEF2E6; --muted:#9BA58E; --line:#2D3626; --line-d:#232A1D;
-  --good-bg:#183020; --bad-bg:#3A1A17; --locked:#283022; --locked-d:#1C2218; --locked-i:#56604B; color-scheme:dark;
+  --bg:#131F24; --surface:#131F24; --soft:#1B2B32; --ink:#F1F7FB; --ink-strong:#F1F7FB; --muted:#8FA1AA;
+  --line:#37464F; --line-2:#2A3940;
+  --green-bg:#1F3A12; --green-ink:#79D93C; --blue-bg:#16324A; --blue-line:#3F86B5; --red-bg:#3D1C1F; --red-ink:#FF7A7A;
+  --locked:#37464F; --locked-d:#27353C; --locked-i:#52656D; color-scheme:dark;
 }
 *{box-sizing:border-box}
 [hidden]{display:none!important}
 html,body{height:100%}
 body{background:var(--bg);color:var(--ink);font-family:var(--font);font-size:17px;line-height:1.45;direction:rtl;-webkit-tap-highlight-color:transparent}
-button{font:inherit;color:inherit;cursor:pointer;-webkit-user-select:none;user-select:none}
-button:focus-visible{outline:3px solid var(--brass);outline-offset:3px}
-.wrap{max-width:600px;margin:0 auto;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
+button{font:inherit;color:inherit;cursor:pointer;user-select:none;-webkit-user-select:none;background:none;border:none;padding:0}
+button:focus-visible{outline:3px solid var(--blue);outline-offset:3px}
+svg{flex:none}
 
-/* ---------- top bar */
+/* ---------- 3D buttons (shared) */
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;border-radius:16px;padding:13px 20px;font-weight:800;font-size:16px;letter-spacing:.04em;color:#fff;background:var(--green);box-shadow:0 4px 0 var(--green-d);transition:filter .1s}
+.btn:hover{filter:brightness(1.06)}
+.btn:active{transform:translateY(4px);box-shadow:none}
+.btn.blue{background:var(--blue);box-shadow:0 4px 0 var(--blue-d)}
+.btn.red{background:var(--red);box-shadow:0 4px 0 var(--red-d)}
+.btn.ghost{background:var(--surface);color:var(--blue);border:2px solid var(--line);box-shadow:0 4px 0 var(--line)}
+.btn:disabled{background:var(--locked);color:var(--locked-i);box-shadow:0 4px 0 var(--locked-d);cursor:default;transform:none;filter:none}
+.btn.wide{width:100%}
+
+/* ---------- shell */
+.shell{min-height:100%}
+.side-nav{position:fixed;inset:auto 0 0;z-index:8;background:var(--surface);border-top:2px solid var(--line);padding-bottom:env(safe-area-inset-bottom,0px);padding-left:max(8px,env(safe-area-inset-left,0px));padding-right:max(8px,env(safe-area-inset-right,0px))}
+.side-nav .logo{display:none}
+.nav-list{display:flex;justify-content:space-around;gap:4px;padding-block:6px}
+.nav-item{display:flex;align-items:center;justify-content:center;gap:16px;border:2px solid transparent;border-radius:14px;padding:6px 14px;font-weight:700;font-size:15px;letter-spacing:.03em;color:var(--muted)}
+.nav-item svg{width:32px;height:32px}
+.nav-item span{display:none}
+.nav-item[aria-current="page"]{border-color:var(--blue-line);background:var(--blue-bg);color:var(--blue)}
+.nav-item:hover:not([aria-current]){background:var(--soft)}
+
 body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset-top,0px);z-index:10;background:var(--surface)}
-.top{position:sticky;top:env(safe-area-inset-top,0px);z-index:5;background:var(--surface);border-bottom:2px solid var(--line)}
-.top .wrap{display:flex;align-items:center;gap:8px;padding-block:10px}
-.brand{font-weight:900;font-size:24px;letter-spacing:-.5px;margin-inline-end:auto;display:flex;align-items:center;gap:6px;color:var(--ink)}
-.brand svg{width:34px;height:34px}
-.pill{display:flex;align-items:center;gap:5px;font-weight:800;font-family:var(--mono);font-size:16px;padding:6px 10px;border-radius:12px;background:var(--surface-2)}
-.pill svg{width:22px;height:22px}
-.pill.streak{color:#F07A1C}.pill.xp{color:var(--brass)}.pill.hearts{color:var(--bad)}
-.pill.streak.off{color:var(--locked-i)}
+.topbar{position:sticky;top:env(safe-area-inset-top,0px);z-index:7;background:var(--surface);border-bottom:2px solid var(--line)}
+.statrow{display:flex;align-items:center;justify-content:space-between;gap:8px;padding:10px max(16px,env(safe-area-inset-right,0px)) 10px max(16px,env(safe-area-inset-left,0px));max-width:640px;margin:0 auto}
+.stat{display:flex;align-items:center;gap:6px;font-weight:800;font-size:17px;padding:6px 8px;border-radius:12px;font-variant-numeric:tabular-nums}
+.stat svg{width:28px;height:28px}
+.stat.streak{color:var(--orange)} .stat.streak.off{color:var(--locked-i)}
+.stat.gems{color:var(--gem)} .stat.hearts{color:var(--heart)}
+.course-flag{width:34px;height:26px;border-radius:6px;border:2px solid var(--line);overflow:hidden;display:block}
 
-/* ---------- views */
-main{padding-bottom:calc(96px + env(safe-area-inset-bottom,0px))}
-.view-title{font-weight:900;font-size:28px;margin:24px 0 4px}
-.view-sub{color:var(--muted);margin:0 0 18px;font-weight:500}
+main{padding:0 max(16px,env(safe-area-inset-right,0px)) calc(110px + env(safe-area-inset-bottom,0px)) max(16px,env(safe-area-inset-left,0px))}
+.col{max-width:600px;margin:0 auto}
+.aside{display:none}
 
-/* daily card */
-.daily{display:flex;align-items:center;gap:14px;margin-top:18px;padding:14px 16px;border:2px solid var(--line);border-radius:20px;background:var(--surface)}
-.daily .chest{flex:none;width:52px;height:52px}
-.daily .txt{flex:1;min-width:0}
-.daily b{display:block;font-weight:800}
-.bar{height:16px;border-radius:99px;background:var(--surface-2);overflow:hidden;margin-top:6px;position:relative}
-.bar>i{display:block;height:100%;background:var(--brass);border-radius:99px;transition:width .5s cubic-bezier(.2,.9,.3,1.2);box-shadow:inset 0 -4px 0 rgb(0 0 0 / .12)}
-.bar>i::after{content:"";position:absolute;inset:3px 8px auto;height:4px;border-radius:9px;background:rgb(255 255 255 / .35)}
-.bar>i{position:relative}
+@media (min-width:1000px){
+  .shell{display:grid;grid-template-columns:250px minmax(0,1fr) 360px;gap:0 40px;max-width:1280px;margin:0 auto}
+  .side-nav{position:sticky;top:0;inset:auto;height:100vh;border-top:none;border-inline-end:2px solid var(--line);padding:24px 16px;align-self:start}
+  .side-nav .logo{display:flex;align-items:center;gap:10px;font-weight:900;font-size:30px;color:var(--green);letter-spacing:-.5px;padding:0 14px 28px}
+  .side-nav .logo svg{width:42px;height:42px}
+  .nav-list{flex-direction:column;justify-content:flex-start;gap:8px}
+  .nav-item{justify-content:flex-start;padding:10px 14px}
+  .nav-item span{display:inline}
+  .topbar{display:none}
+  main{padding:24px 0 60px}
+  .aside{display:flex;flex-direction:column;gap:22px;position:sticky;top:0;align-self:start;padding-block:24px;max-height:100vh;overflow:auto}
+  .aside .statrow{padding:0;margin:0}
+}
 
-/* unit band */
-.unit{margin-top:28px}
-.band{position:relative;overflow:hidden;border-radius:20px;padding:16px 18px;color:#fff;background:var(--u);box-shadow:0 5px 0 var(--u-d);display:flex;align-items:center;gap:14px}
-.band::before{content:"";position:absolute;inset:0;opacity:.18;pointer-events:none;
-  background:radial-gradient(28px 18px at 12% 30%,#000 98%,#0000),radial-gradient(34px 22px at 40% 80%,#000 98%,#0000),radial-gradient(24px 30px at 70% 20%,#fff 98%,#0000),radial-gradient(40px 20px at 88% 70%,#000 98%,#0000),radial-gradient(20px 16px at 55% 45%,#fff 98%,#0000);background-size:180px 90px}
-.band .txt{position:relative;flex:1;min-width:0}
-.band .eyebrow{font-size:13px;font-weight:800;letter-spacing:.08em;opacity:.85}
-.band h2{margin:0;font-weight:900;font-size:22px;line-height:1.2}
-.band p{margin:2px 0 0;font-size:15px;opacity:.92;font-weight:500}
-.band .emb{position:relative;flex:none;width:56px;height:56px;border-radius:16px;background:rgb(255 255 255 / .18);display:grid;place-items:center}
-.band .emb svg{width:34px;height:34px;fill:#fff}
-.band .uprog{position:relative;font-family:var(--mono);font-size:13px;background:rgb(0 0 0 / .18);border-radius:8px;padding:2px 8px;display:inline-block;margin-top:6px}
+/* ---------- cards (aside + profile) */
+.card{border:2px solid var(--line);border-radius:16px;padding:18px 20px;background:var(--surface)}
+.card h3{margin:0 0 12px;font-size:20px;font-weight:800;color:var(--ink-strong);display:flex;align-items:center;justify-content:space-between;gap:8px}
+.card h3 a,.card h3 button{font-size:14px;color:var(--blue);font-weight:800;letter-spacing:.03em}
+.card p{margin:0;color:var(--muted);font-weight:500}
+.quest{display:flex;align-items:center;gap:14px}
+.quest svg{width:46px;height:46px}
+.quest .q-txt{flex:1;min-width:0}
+.quest b{display:block;font-weight:700;margin-bottom:6px}
+.pbar{position:relative;height:18px;border-radius:99px;background:var(--line);overflow:hidden}
+.pbar>i{position:absolute;inset:0 0 0 auto;border-radius:99px;background:var(--gold);transition:width .5s cubic-bezier(.2,.9,.3,1.2)}
+.pbar>i::after{content:"";position:absolute;top:4px;inset-inline:8px;height:5px;border-radius:9px;background:rgb(255 255 255 / .35)}
+.pbar>span{position:absolute;inset:0;display:grid;place-items:center;font-size:12px;font-weight:800;color:var(--muted)}
+.rank-row{display:flex;align-items:center;gap:14px}
+.rank-badge{width:56px;height:56px;border-radius:14px;display:grid;place-items:center;background:var(--soft)}
+.rank-badge svg{width:40px;height:40px}
 
-.path{position:relative;display:flex;flex-direction:column;align-items:center;gap:22px;padding-block:30px 8px}
-.node-wrap{display:flex;flex-direction:column;align-items:center;gap:8px;position:relative}
-.ring{position:absolute;top:-9px;width:98px;height:98px;pointer-events:none}
-.node{position:relative;width:80px;height:72px;border:none;border-radius:50%;background:var(--u);box-shadow:0 8px 0 var(--u-d);display:grid;place-items:center;transition:transform .08s,box-shadow .08s}
-.node::before{content:"";position:absolute;inset:8px 14px auto;height:12px;border-radius:50%;background:rgb(255 255 255 / .28)}
+/* ---------- path */
+.unit{margin-top:26px}
+.unit:first-child{margin-top:8px}
+.unit-head{display:flex;align-items:center;gap:12px;color:#fff;background:var(--u);border-radius:16px;padding:16px 18px;box-shadow:0 4px 0 var(--u-d)}
+.unit-head .t{flex:1;min-width:0}
+.unit-head .eyebrow{font-size:14px;font-weight:800;opacity:.8;letter-spacing:.06em}
+.unit-head h2{margin:2px 0 0;font-size:21px;font-weight:800;line-height:1.25}
+.guide{display:flex;align-items:center;gap:8px;border:2px solid rgb(0 0 0 / .14);border-radius:14px;padding:10px 14px;font-weight:800;font-size:14px;letter-spacing:.04em;color:#fff;box-shadow:0 3px 0 rgb(0 0 0 / .14)}
+.guide svg{width:24px;height:24px;fill:#fff}
+.guide:active{transform:translateY(3px);box-shadow:none}
+@media (max-width:420px){.guide span{display:none}.guide{padding:10px}}
+
+.path{position:relative;display:flex;flex-direction:column;align-items:center;gap:16px;padding-block:44px 16px}
+.nw{position:relative;display:grid;place-items:center;width:110px;height:104px}
+.node{position:relative;width:72px;height:66px;border-radius:50%;background:var(--u);box-shadow:0 8px 0 var(--u-d);display:grid;place-items:center;transition:transform .08s,box-shadow .08s,filter .1s}
+.node:hover{filter:brightness(1.05)}
 .node:active{transform:translateY(6px);box-shadow:0 2px 0 var(--u-d)}
-.node svg{width:36px;height:36px;fill:#fff;position:relative}
-.node.done{background:var(--brass);box-shadow:0 8px 0 var(--brass-d)}
+.node svg{width:36px;height:36px;fill:#fff}
+.node.done{background:var(--gold);box-shadow:0 8px 0 var(--gold-d)}
 .node.locked{background:var(--locked);box-shadow:0 8px 0 var(--locked-d);cursor:not-allowed}
 .node.locked svg{fill:var(--locked-i)}
-.tip{position:absolute;top:-48px;white-space:nowrap;background:var(--surface);color:var(--u);border:2px solid var(--line);font-weight:900;font-size:15px;padding:5px 14px;border-radius:12px;animation:bob 1.4s ease-in-out infinite;z-index:1}
-.tip::after{content:"";position:absolute;bottom:-8px;left:50%;width:12px;height:12px;background:var(--surface);border:2px solid var(--line);border-top:none;border-left:none;transform:translateX(-50%) rotate(45deg)}
-.crown{position:absolute;bottom:-4px;inset-inline-start:-6px;background:var(--surface);border:2px solid var(--brass);border-radius:99px;font-size:12px;font-weight:800;padding:0 7px;color:var(--brass-d);font-family:var(--mono)}
-.node-label{font-size:14px;color:var(--muted);font-weight:700;margin-top:2px}
-.buddy{position:absolute;top:50%;width:96px;height:96px;transform:translateY(-50%);opacity:.95}
+.node.chest,.node.chest.locked,.node.chest.done{background:none;box-shadow:none;width:86px;height:78px}
+.node.chest svg{width:86px;height:78px}
+.node.chest.locked{filter:grayscale(1) opacity(.55)}
+.ring{position:absolute;inset:0;width:110px;height:104px;pointer-events:none}
+.start{position:absolute;top:-40px;z-index:2;white-space:nowrap;border:2px solid var(--line);background:var(--surface);color:var(--u);font-weight:800;font-size:15px;letter-spacing:.05em;padding:8px 14px;border-radius:12px;animation:bob 1.3s ease-in-out infinite}
+.start::after{content:"";position:absolute;bottom:-8px;left:50%;width:12px;height:12px;background:var(--surface);border:2px solid var(--line);border-top:0;border-left:0;transform:translateX(-50%) rotate(45deg)}
 @keyframes bob{50%{transform:translateY(-5px)}}
+.me-av{width:84px;height:84px}
+.buddy{position:absolute;top:120px;width:130px;height:130px;pointer-events:none}
+.path-end{text-align:center;color:var(--muted);font-weight:600;padding-block:30px}
 
-/* tab bar */
-.tabs{position:fixed;inset:auto 0 0;z-index:6;background:var(--surface);border-top:2px solid var(--line);padding-bottom:env(safe-area-inset-bottom,0px)}
-.tabs .wrap{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;padding-block:8px}
-.tab{border:2px solid transparent;background:none;border-radius:14px;padding:6px;display:flex;flex-direction:column;align-items:center;gap:2px;font-size:13px;font-weight:800;color:var(--muted)}
-.tab svg{width:28px;height:28px;fill:currentColor}
-.tab[aria-current="page"]{color:#2F6FD6;border-color:#9DBDF2;background:color-mix(in srgb,#2F6FD6 10%,var(--surface))}
+/* ---------- pages */
+.page-title{font-size:26px;font-weight:800;margin:20px 0 6px;color:var(--ink-strong)}
+.page-sub{color:var(--muted);margin:0 0 20px;font-weight:500}
+.list{display:grid;gap:0;border:2px solid var(--line);border-radius:16px;overflow:hidden}
+.li{display:flex;align-items:center;gap:16px;padding:16px 18px;border-top:2px solid var(--line)}
+.li:first-child{border-top:none}
+.li .ic{flex:none;width:70px;height:70px;display:grid;place-items:center;border-radius:50%;background:var(--c,var(--soft))}
+.li .ic svg{width:40px;height:40px}
+.li.off .ic{background:var(--locked)} .li.off .ic svg{filter:grayscale(1);opacity:.5}
+.li .t{flex:1;min-width:0}
+.li b{display:block;font-size:18px;font-weight:700;color:var(--ink-strong)}
+.li small{display:block;color:var(--muted);font-size:15px;font-weight:500;margin-bottom:8px}
+.li .btn{padding:10px 14px;font-size:14px;white-space:nowrap}
+.stats4{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.tile{display:flex;align-items:center;gap:10px;border:2px solid var(--line);border-radius:14px;padding:12px 14px}
+.tile svg{width:28px;height:28px}
+.tile b{display:block;font-size:19px;font-weight:800;color:var(--ink-strong);line-height:1.1}
+.tile small{color:var(--muted);font-weight:500}
+.goal-opts{display:grid;gap:10px}
+.goal-opt{display:flex;justify-content:space-between;border:2px solid var(--line);border-bottom-width:4px;border-radius:14px;padding:14px 16px;font-weight:700}
+.goal-opt[aria-pressed="true"]{border-color:var(--blue-line);background:var(--blue-bg);color:var(--blue)}
+.week{display:flex;align-items:flex-end;gap:8px;height:120px;padding-top:8px}
+.week .d{flex:1;display:flex;flex-direction:column;align-items:center;gap:6px;height:100%;justify-content:flex-end}
+.week .b{width:100%;max-width:34px;border-radius:8px 8px 4px 4px;background:var(--line);min-height:6px}
+.week .b.on{background:var(--orange)}
+.week small{font-size:12px;color:var(--muted);font-weight:700}
+.danger{color:var(--red-ink);font-weight:800;letter-spacing:.03em;padding:14px;width:100%;margin-top:22px;border:2px solid var(--line);border-radius:14px}
 
-/* achievements & profile */
-.badges{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:12px}
-.badge{border:2px solid var(--line);border-radius:20px;background:var(--surface);padding:16px 12px;text-align:center;display:flex;flex-direction:column;align-items:center;gap:6px;box-shadow:0 4px 0 var(--line)}
-.badge .medal{width:64px;height:64px;border-radius:50%;display:grid;place-items:center;background:var(--c);box-shadow:inset 0 -6px 0 rgb(0 0 0 / .18),0 0 0 4px color-mix(in srgb,var(--c) 30%,transparent)}
-.badge .medal svg{width:32px;height:32px;fill:#fff}
-.badge.off .medal{background:var(--locked);box-shadow:none}.badge.off .medal svg{fill:var(--locked-i)}
-.badge b{font-weight:800}.badge small{color:var(--muted);font-weight:500;font-size:13px;line-height:1.3}
-.badge .prog{font-family:var(--mono);font-size:12px;color:var(--muted)}
-.statgrid{display:grid;grid-template-columns:1fr 1fr;gap:12px}
-.st{border:2px solid var(--line);border-radius:18px;padding:14px;display:flex;gap:10px;align-items:center;background:var(--surface)}
-.st svg{width:30px;height:30px;flex:none}
-.st b{display:block;font-family:var(--mono);font-size:22px;line-height:1}
-.st small{color:var(--muted);font-weight:700}
-.btn-ghost{margin-top:20px;width:100%;border:2px solid var(--line);background:var(--surface);border-radius:14px;padding:12px;font-weight:800;color:var(--bad);box-shadow:0 4px 0 var(--line)}
-.btn-ghost.seg{color:var(--ink)}
-.seg-row{display:flex;gap:8px;margin-top:12px}
-.seg-row button{flex:1;border:2px solid var(--line);background:var(--surface);border-radius:12px;padding:10px;font-weight:800;box-shadow:0 3px 0 var(--line)}
-.seg-row button[aria-pressed="true"]{border-color:#2F6FD6;color:#2F6FD6;box-shadow:0 3px 0 #9DBDF2}
-.prof-head{display:flex;align-items:center;gap:16px;margin-top:22px}
-.avatar{width:88px;height:88px;border-radius:50%;background:var(--surface-2);border:3px dashed var(--line-d);display:grid;place-items:center}
-.avatar svg{width:70px;height:70px}
-.rank{display:inline-block;margin-top:4px;font-weight:800;font-size:14px;color:#fff;background:#6E8B2E;padding:2px 10px;border-radius:8px}
+/* ---------- modal sheet */
+.overlay{position:fixed;inset:0;z-index:40;background:rgb(0 0 0 / .45);display:grid;place-items:end center;padding:0}
+.sheet{width:100%;max-width:560px;max-height:88vh;overflow:auto;background:var(--surface);border-radius:20px 20px 0 0;padding:24px max(20px,env(safe-area-inset-left,0px)) calc(24px + env(safe-area-inset-bottom,0px));animation:rise .25s ease-out}
+@media (min-width:700px){.overlay{place-items:center}.sheet{border-radius:20px}}
+@keyframes rise{from{transform:translateY(40px);opacity:0}}
+.sheet h2{margin:0 0 4px;font-size:24px;font-weight:800;color:var(--ink-strong)}
+.sheet .center{text-align:center;display:flex;flex-direction:column;align-items:center;gap:12px}
+.sheet .big{width:150px;height:140px}
+.tips{display:grid;gap:12px;margin:16px 0 20px}
+.tip{border:2px solid var(--line);border-radius:14px;padding:12px 14px}
+.tip b{display:block;font-size:14px;color:var(--u);letter-spacing:.04em;margin-bottom:2px}
+.tip p{margin:0;font-weight:500}
 
-/* ---------- lesson sheet */
-.lesson{position:fixed;inset:0;background:var(--bg);z-index:20;display:flex;flex-direction:column;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
-.lesson-top{display:flex;align-items:center;gap:14px;padding-block:16px}
-.x{background:none;border:none;padding:4px;color:var(--locked-i)}
-.x svg{width:28px;height:28px}
-.lesson-top .bar{flex:1;margin:0}
-.lesson-top .bar>i{background:var(--good)}
-.lesson-body{flex:1;overflow-y:auto;padding-bottom:16px}
-.qtype{font-size:20px;font-weight:900;margin:6px 0 14px}
-.speak{display:flex;align-items:flex-end;gap:10px;margin-bottom:22px}
-.speak .who{flex:none;width:96px;height:96px}
-.bubble{position:relative;flex:1;min-width:0;border:2px solid var(--line);border-radius:18px;padding:14px 16px;background:var(--surface);font-size:19px;font-weight:700;line-height:1.35;text-wrap:balance;margin-bottom:22px}
-.bubble::after{content:"";position:absolute;bottom:18px;right:-9px;width:14px;height:14px;background:var(--surface);border:2px solid var(--line);border-left:none;border-bottom:none;transform:rotate(45deg)}
-.opts{display:grid;gap:12px}
-.opt{display:flex;align-items:center;gap:12px;text-align:start;width:100%;padding:14px 16px;border-radius:16px;border:2px solid var(--line);background:var(--surface);box-shadow:0 4px 0 var(--line);font-size:18px;font-weight:700;transition:transform .06s}
-.opt:active{transform:translateY(3px);box-shadow:0 1px 0 var(--line)}
-.opt .k{flex:none;width:30px;height:30px;border-radius:9px;border:2px solid var(--line);display:grid;place-items:center;font-size:14px;color:var(--muted);font-family:var(--mono)}
-.opt.sel{border-color:#7FB0F5;background:color-mix(in srgb,#2F6FD6 10%,var(--surface));box-shadow:0 4px 0 #7FB0F5;color:#2F6FD6}
-.opt.sel .k{border-color:#7FB0F5;color:#2F6FD6}
-.opt.right{border-color:var(--good);background:var(--good-bg);box-shadow:0 4px 0 var(--good);color:var(--good-d)}
-.opt.wrong{border-color:var(--bad);background:var(--bad-bg);box-shadow:0 4px 0 var(--bad);color:var(--bad-d)}
+/* ---------- lesson */
+.lesson{position:fixed;inset:0;z-index:30;background:var(--bg);display:flex;flex-direction:column;padding-top:env(safe-area-inset-top,0px)}
+.l-top{display:flex;align-items:center;gap:16px;width:100%;max-width:1000px;margin:0 auto;padding:20px max(16px,env(safe-area-inset-right,0px)) 10px max(16px,env(safe-area-inset-left,0px))}
+.l-top .x svg{width:30px;height:30px;fill:var(--locked-i)}
+.l-top .pbar{flex:1;height:16px}
+.l-top .pbar>i{background:var(--green)}
+.l-top .stat{padding:0}
+.combo{position:absolute;top:-24px;inset-inline-end:0;font-size:13px;font-weight:800;color:var(--orange);letter-spacing:.04em}
+.l-body{flex:1;overflow-y:auto;display:flex;justify-content:center;padding:16px max(16px,env(safe-area-inset-right,0px)) 24px max(16px,env(safe-area-inset-left,0px))}
+.l-inner{width:100%;max-width:600px;display:flex;flex-direction:column}
+@media (min-width:700px){.l-inner{justify-content:center;min-height:100%}}
+.l-kicker{font-size:14px;font-weight:800;letter-spacing:.05em;color:var(--purple,#A55FD8);margin-bottom:6px;display:flex;align-items:center;gap:6px}
+.l-title{margin:0 0 22px;font-size:26px;font-weight:800;color:var(--ink-strong);line-height:1.25;text-wrap:balance}
+.speak{display:flex;align-items:flex-end;gap:8px;margin-bottom:26px}
+.speak .who{width:120px;height:120px;margin-bottom:-6px}
+.bubble{position:relative;flex:1;min-width:0;border:2px solid var(--line);border-radius:16px;padding:14px 18px;font-size:19px;font-weight:500;line-height:1.4;margin-bottom:34px;color:var(--ink-strong)}
+.bubble::before{content:"";position:absolute;bottom:20px;right:-10px;width:16px;height:16px;background:var(--surface);border:2px solid var(--line);border-left:0;border-bottom:0;transform:rotate(45deg)}
+@media (max-width:420px){.speak .who{width:84px;height:84px}.bubble{font-size:17px}.l-title{font-size:22px}}
+.opts{display:grid;gap:10px}
+.opt{display:flex;align-items:center;gap:14px;width:100%;text-align:start;padding:14px 16px;border:2px solid var(--line);border-bottom-width:4px;border-radius:14px;font-size:18px;font-weight:500;color:var(--ink-strong);background:var(--surface)}
+.opt:hover:not(:disabled){background:var(--soft)}
+.opt:active:not(:disabled){border-bottom-width:2px;transform:translateY(2px)}
+.opt .k{flex:none;width:30px;height:30px;display:grid;place-items:center;border:2px solid var(--line);border-radius:8px;font-size:14px;font-weight:700;color:var(--muted)}
+.opt.sel{border-color:var(--blue-line);background:var(--blue-bg);color:var(--blue)}
+.opt.sel .k{border-color:var(--blue-line);color:var(--blue)}
+.opt.right{border-color:var(--green);background:var(--green-bg);color:var(--green-ink)}
+.opt.right .k{border-color:var(--green);color:var(--green-ink)}
+.opt.wrong{border-color:var(--red);background:var(--red-bg);color:var(--red-ink)}
+.opt.wrong .k{border-color:var(--red);color:var(--red-ink)}
 .opt:disabled{cursor:default}
-.tfgrid{grid-template-columns:1fr 1fr}
-.tfgrid .opt{flex-direction:column;justify-content:center;padding:20px 10px;font-size:20px}
-.tfgrid .opt svg{width:40px;height:40px;fill:currentColor}
-.match{display:grid;grid-template-columns:1fr 1fr;gap:12px}
-.match .col{display:grid;gap:12px;align-content:start}
-.match .opt{justify-content:center;text-align:center;font-size:16px;min-height:62px}
-.match .opt.gone{opacity:.35;box-shadow:none;border-style:dashed;color:var(--muted)}
-.check-bar{border-top:2px solid var(--line);background:var(--bg)}
-.check-bar .wrap{display:flex;flex-direction:column;gap:12px;padding-block:16px 20px}
-.check-bar.ok{background:var(--good-bg);border-color:transparent;animation:up .25s ease-out}
-.check-bar.no{background:var(--bad-bg);border-color:transparent;animation:up .25s ease-out}
-@keyframes up{from{transform:translateY(30px);opacity:.4}}
-.fb{display:none;gap:10px;align-items:flex-start}
-.check-bar.ok .fb,.check-bar.no .fb{display:flex}
-.fb .ic{flex:none;width:44px;height:44px;border-radius:50%;background:var(--surface);display:grid;place-items:center}
-.fb .ic svg{width:28px;height:28px}
-.check-bar.ok .fb .ic svg{fill:var(--good)} .check-bar.no .fb .ic svg{fill:var(--bad)}
-.fb .t{display:flex;flex-direction:column;gap:2px;min-width:0}
-.fb strong{font-weight:900;font-size:22px}
-.check-bar.ok .fb{color:var(--good-d)} .check-bar.no .fb{color:var(--bad-d)}
-.fb span{font-size:16px;font-weight:500}
-.cta{width:100%;border:none;border-radius:16px;padding:15px;font-size:18px;font-weight:900;letter-spacing:.04em;color:#fff;background:var(--good);box-shadow:0 5px 0 var(--good-d)}
-.cta:active{transform:translateY(4px);box-shadow:0 1px 0 var(--good-d)}
-.cta:disabled{background:var(--locked);box-shadow:0 5px 0 var(--locked-d);color:var(--locked-i);cursor:default;transform:none}
-.check-bar.no .cta{background:var(--bad);box-shadow:0 5px 0 var(--bad-d)}
-.combo{font-weight:900;color:#F07A1C;font-size:15px;white-space:nowrap}
+.tf{grid-template-columns:1fr 1fr}
+.tf .opt{flex-direction:column;justify-content:center;padding:22px 10px;font-size:20px;font-weight:700}
+.tf .opt svg{width:48px;height:48px;fill:currentColor}
+.pairs{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.pairs .c{display:grid;gap:12px;align-content:start}
+.pairs .opt{justify-content:center;text-align:center;min-height:60px;font-size:17px}
+.pairs .opt.gone{opacity:.4;border-bottom-width:2px;color:var(--locked-i);background:var(--surface)}
 
-/* result */
-.result{text-align:center;display:flex;flex-direction:column;align-items:center;gap:12px;padding-block:28px}
-.result .who{width:150px;height:150px;animation:pop .5s cubic-bezier(.2,1.6,.4,1)}
-@keyframes pop{from{transform:scale(.4)}}
-.result h2{font-weight:900;font-size:32px;margin:0;color:var(--brass)}
-.result p{margin:0;color:var(--muted);font-weight:700}
-.tiles{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;width:100%;margin-top:10px}
-.tile{border:2px solid var(--c);border-radius:16px;overflow:hidden;background:var(--c)}
-.tile small{display:block;color:#fff;font-weight:900;font-size:13px;padding:4px;letter-spacing:.05em}
-.tile b{direction:ltr;display:block;font-size:24px;font-variant-numeric:tabular-nums;font-family:var(--mono);background:var(--surface);color:var(--c);padding:12px 4px;border-radius:12px 12px 0 0}
-#confetti{position:fixed;inset:0;pointer-events:none;z-index:30;width:100%;height:100%}
+.l-foot{border-top:2px solid var(--line);padding-bottom:env(safe-area-inset-bottom,0px)}
+.l-foot.ok{background:var(--green-bg);border-color:transparent}
+.l-foot.no{background:var(--red-bg);border-color:transparent}
+.l-foot .in{max-width:1000px;margin:0 auto;display:flex;flex-direction:column;gap:14px;padding:18px max(16px,env(safe-area-inset-right,0px)) 22px max(16px,env(safe-area-inset-left,0px))}
+@media (min-width:700px){.l-foot .in{flex-direction:row;align-items:center;justify-content:space-between;padding-block:30px;min-height:140px}.l-foot .btn{width:auto;min-width:180px}}
+.fb{display:none;align-items:flex-start;gap:14px}
+.l-foot.ok .fb,.l-foot.no .fb{display:flex}
+.fb .ic{flex:none;width:64px;height:64px;border-radius:50%;background:var(--surface);display:grid;place-items:center}
+.fb .ic svg{width:38px;height:38px}
+.l-foot.ok .fb .ic svg{fill:var(--green)} .l-foot.no .fb .ic svg{fill:var(--red)}
+.fb .t{min-width:0}
+.fb strong{display:block;font-size:24px;font-weight:800}
+.l-foot.ok .fb{color:var(--green-ink)} .l-foot.no .fb{color:var(--red-ink)}
+.fb span{display:block;font-size:16px;font-weight:500}
+.l-foot.ok .btn{background:var(--green);box-shadow:0 4px 0 var(--green-d)}
+.l-foot.no .btn{background:var(--red);box-shadow:0 4px 0 var(--red-d)}
+
+.done-screen{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:14px;text-align:center;padding-block:20px}
+.done-screen .who{width:190px;height:190px;animation:pop .55s cubic-bezier(.2,1.6,.4,1)}
+@keyframes pop{from{transform:scale(.3)}}
+.done-screen h2{margin:0;font-size:32px;font-weight:800;color:var(--gold-d)}
+.done-screen p{margin:0;color:var(--muted);font-weight:600}
+.res{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;width:100%;max-width:440px;margin-top:10px}
+.res .r{border:2px solid var(--c);border-radius:16px;background:var(--c);overflow:hidden}
+.res small{display:block;color:#fff;font-weight:800;font-size:13px;letter-spacing:.06em;padding:4px 2px}
+.res b{display:flex;align-items:center;justify-content:center;gap:4px;direction:ltr;background:var(--surface);color:var(--c);font-size:22px;font-weight:800;padding:14px 4px;border-radius:14px 14px 0 0}
+.res b svg{width:22px;height:22px;fill:currentColor}
+
+#confetti{position:fixed;inset:0;width:100%;height:100%;pointer-events:none;z-index:60}
 .shake{animation:shake .35s}
 @keyframes shake{25%{transform:translateX(-6px)}75%{transform:translateX(6px)}}
 @media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
-@media (max-width:380px){.speak .who{width:72px;height:72px}.bubble{font-size:17px}.buddy{display:none}}
 </style>
 
-<header class="top"><div class="wrap">
-  <div class="brand"><svg viewBox="0 0 64 64" aria-hidden="true"><use href="#helmet"/></svg>ארסנל</div>
-  <div class="pill streak" id="pStreak" title="רצף ימים"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2c1 4 5 5.5 5 10.5A5 5 0 0 1 7 12.5c0-2 1-3.5 2-4.5 0 2 1 3 2 3 0-3-1-6 1-9z"/></svg><span id="sStreak">0</span></div>
-  <div class="pill xp" title="נקודות ניסיון"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M13 2 4 14h7l-1 8 9-12h-7z"/></svg><span id="sXp">0</span></div>
-  <div class="pill hearts" title="לבבות"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 21s-8-5.3-8-11a4.5 4.5 0 0 1 8-2.8A4.5 4.5 0 0 1 20 10c0 5.7-8 11-8 11z"/></svg><span id="sHearts">5</span></div>
-</div></header>
+<svg width="0" height="0" style="position:absolute" aria-hidden="true"><defs>
+  <!-- Mascot "Kasdi": a round green recruit in an olive helmet (original character) -->
+  <symbol id="kasdi" viewBox="0 0 120 120">
+    <ellipse cx="60" cy="113" rx="30" ry="5" fill="#000" opacity=".1"/>
+    <path d="M44 104c-2 6-12 7-12 3s6-5 10-6zM76 104c2 6 12 7 12 3s-6-5-10-6z" fill="#F5A623"/>
+    <circle cx="60" cy="68" r="40" fill="#58C21B"/>
+    <path d="M24 78a40 40 0 0 0 72 0c-8 14-22 22-36 22S32 92 24 78z" fill="#45A00A"/>
+    <ellipse cx="60" cy="84" rx="22" ry="16" fill="#A8E66F"/>
+    <path d="M22 66c-10 2-14 12-8 16 4 2 8-6 10-10zM98 66c10 2 14 12 8 16-4 2-8-6-10-10z" fill="#45A00A"/>
+    <circle cx="45" cy="62" r="13" fill="#fff"/><circle cx="75" cy="62" r="13" fill="#fff"/>
+    <circle cx="47" cy="64" r="7" fill="#2B2B2B"/><circle cx="73" cy="64" r="7" fill="#2B2B2B"/>
+    <circle cx="49.5" cy="61" r="2.6" fill="#fff"/><circle cx="75.5" cy="61" r="2.6" fill="#fff"/>
+    <path d="M52 80q8 7 16 0" stroke="#2B5E07" stroke-width="3.5" fill="none" stroke-linecap="round"/>
+    <path d="M18 44c0-22 18-36 42-36s42 14 42 36z" fill="#6B7F2E"/>
+    <path d="M12 42h96a5 5 0 0 1 0 10H12a5 5 0 0 1 0-10z" fill="#55671E"/>
+    <path d="M30 30c4-8 12-13 20-14" stroke="#8FA544" stroke-width="5" fill="none" stroke-linecap="round"/>
+    <circle cx="70" cy="24" r="4" fill="#55671E"/><circle cx="84" cy="34" r="3" fill="#55671E"/><circle cx="56" cy="32" r="2.5" fill="#8FA544"/>
+  </symbol>
+  <symbol id="flag" viewBox="0 0 34 26"><rect width="34" height="26" fill="#fff"/><rect y="3" width="34" height="3" fill="#1B5FC1"/><rect y="20" width="34" height="3" fill="#1B5FC1"/><path d="M17 8.2l3.6 6.2h-7.2zM17 17.8l-3.6-6.2h7.2z" fill="none" stroke="#1B5FC1" stroke-width="1.2"/></symbol>
+  <symbol id="i-fire" viewBox="0 0 24 24"><path fill="currentColor" d="M12 1.5c1.2 4.5 6.5 6 6.5 12a6.5 6.5 0 0 1-13 0c0-2.6 1.3-4.5 2.7-5.8.1 2.4 1.2 3.6 2.5 3.8-.3-3.6-.6-7 1.3-10z"/><path fill="#FFD84D" d="M12 21a3.3 3.3 0 0 1-3.3-3.3c0-2.2 2-3 3.1-5.2.6 2.3 3.5 3 3.5 5.2A3.3 3.3 0 0 1 12 21z" opacity=".9"/></symbol>
+  <symbol id="i-gem" viewBox="0 0 24 24"><path fill="currentColor" d="M6 3h12l4 6-10 13L2 9z"/><path fill="#fff" opacity=".45" d="M6 3l3 6H2zm6 0l3 6H9zm6 0l4 6h-7z"/></symbol>
+  <symbol id="i-heart" viewBox="0 0 24 24"><path fill="currentColor" d="M12 21.5S2.5 15.6 2.5 9A5 5 0 0 1 12 6.2 5 5 0 0 1 21.5 9c0 6.6-9.5 12.5-9.5 12.5z"/><ellipse cx="7.5" cy="9" rx="2" ry="1.4" fill="#fff" opacity=".5" transform="rotate(-30 7.5 9)"/></symbol>
+  <symbol id="i-bolt" viewBox="0 0 24 24"><path fill="currentColor" d="M13.5 1.5 4 14h7l-1.5 8.5L20 10h-7z"/></symbol>
+  <symbol id="i-star" viewBox="0 0 24 24"><path d="m12 1.8 3.1 6.5 7.1.9-5.2 4.9 1.3 7L12 17.7l-6.3 3.4 1.3-7-5.2-4.9 7.1-.9z"/></symbol>
+  <symbol id="i-check" viewBox="0 0 24 24"><path d="M9.2 17.6 3.8 12.2l1.9-1.9 3.5 3.5 9.1-9.1 1.9 1.9z"/></symbol>
+  <symbol id="i-x" viewBox="0 0 24 24"><path d="M19 6.4 17.6 5 12 10.6 6.4 5 5 6.4 10.6 12 5 17.6 6.4 19l5.6-5.6 5.6 5.6 1.4-1.4-5.6-5.6z"/></symbol>
+  <symbol id="i-lock" viewBox="0 0 24 24"><path d="M7 10V7a5 5 0 0 1 10 0v3h1a1.5 1.5 0 0 1 1.5 1.5v9A1.5 1.5 0 0 1 18 22H6a1.5 1.5 0 0 1-1.5-1.5v-9A1.5 1.5 0 0 1 6 10zm2.2 0h5.6V7a2.8 2.8 0 0 0-5.6 0z"/></symbol>
+  <symbol id="i-dumbbell" viewBox="0 0 24 24"><path d="M3 9h2V7h3v10H5v-2H3zm18 0h-2V7h-3v10h3v-2h2zM9 11h6v2H9z"/></symbol>
+  <symbol id="i-trophy" viewBox="0 0 24 24"><path d="M6 2h12v2h4v3.5a5 5 0 0 1-4.6 5 6 6 0 0 1-4.4 3.4V19h4v3H7v-3h4v-3.1a6 6 0 0 1-4.4-3.4A5 5 0 0 1 2 7.5V4h4zm12 4v4.3a3 3 0 0 0 2-2.8V6zM4 6v1.5a3 3 0 0 0 2 2.8V6z"/></symbol>
+  <symbol id="i-book" viewBox="0 0 24 24"><path d="M3 4.5C5.5 3.5 9 3.5 11 5v15c-2-1.4-5.5-1.4-8-.5zm18 0c-2.5-1-6-1-8 .5v15c2-1.4 5.5-1.4 8-.5z"/></symbol>
+  <symbol id="n-home" viewBox="0 0 32 32"><path d="M4 14 16 4l12 10v13a1 1 0 0 1-1 1h-7v-8h-8v8H5a1 1 0 0 1-1-1z" fill="#FF9B1A"/><path d="M2 15 16 3l14 12" stroke="#E07B00" stroke-width="3" fill="none" stroke-linecap="round" stroke-linejoin="round"/><rect x="12" y="20" width="8" height="8" rx="1" fill="#8A4B12"/></symbol>
+  <symbol id="n-trophy" viewBox="0 0 32 32"><path d="M8 4h16v4h4v4a6 6 0 0 1-5.6 6 8 8 0 0 1-4.4 4V25h5v4H9v-4h5v-3a8 8 0 0 1-4.4-4A6 6 0 0 1 4 12V8h4z" fill="#FFC800"/><path d="M8 8v8a4 4 0 0 1-2-3.5V10zm16 0v8a4 4 0 0 0 2-3.5V10z" fill="#E3A600"/><rect x="9" y="25" width="14" height="4" rx="1" fill="#C98A00"/><path d="M13 8l-1 7" stroke="#fff" stroke-width="2" opacity=".5" stroke-linecap="round"/></symbol>
+  <symbol id="n-shop" viewBox="0 0 32 32"><path d="M6 10h20l-2 17H8z" fill="#FF4F4F"/><path d="M11 12V9a5 5 0 0 1 10 0v3" stroke="#C42B2B" stroke-width="2.6" fill="none" stroke-linecap="round"/><path d="M6 10h20l-.4 3H6.4z" fill="#E03A3A"/><path d="M12 20l4 3 4-3" stroke="#fff" stroke-width="2.2" fill="none" stroke-linecap="round"/></symbol>
+  <symbol id="n-me" viewBox="0 0 32 32"><circle cx="16" cy="16" r="14" fill="#C27DF5"/><circle cx="16" cy="13" r="5" fill="#fff"/><path d="M7 25a10 8 0 0 1 18 0 12 12 0 0 1-18 0z" fill="#fff"/></symbol>
+  <symbol id="chest" viewBox="0 0 86 78"><ellipse cx="43" cy="72" rx="34" ry="5" fill="#000" opacity=".1"/><rect x="8" y="30" width="70" height="38" rx="8" fill="#B8642B"/><rect x="8" y="30" width="70" height="8" fill="#9A4E1D"/><path d="M8 32a20 16 0 0 1 20-16h30a20 16 0 0 1 20 16z" fill="#D9843F"/><rect x="18" y="16" width="8" height="52" fill="#FFC800"/><rect x="60" y="16" width="8" height="52" fill="#FFC800"/><rect x="35" y="30" width="16" height="18" rx="4" fill="#FFC800"/><circle cx="43" cy="38" r="3" fill="#9A4E1D"/><path d="M14 26c4-5 10-7 16-7" stroke="#fff" stroke-width="3" opacity=".35" fill="none" stroke-linecap="round"/></symbol>
+  <symbol id="chest-open" viewBox="0 0 86 78"><ellipse cx="43" cy="72" rx="34" ry="5" fill="#000" opacity=".1"/><path d="M14 4h58l6 26H8z" fill="#D9843F"/><path d="M8 30h70v4H8z" fill="#9A4E1D"/><rect x="8" y="34" width="70" height="34" rx="6" fill="#B8642B"/><path d="M20 34l10-14 6 14zm18 0 8-18 8 18zm18 0 8-12 6 12z" fill="#1EA5F0"/><path d="M30 20l2 6m14-10 2 8" stroke="#fff" stroke-width="2" opacity=".7"/><rect x="18" y="34" width="8" height="34" fill="#FFC800"/><rect x="60" y="34" width="8" height="34" fill="#FFC800"/></symbol>
+</defs></svg>
 
-<svg width="0" height="0" style="position:absolute" aria-hidden="true">
-  <defs>
-    <!-- original mascot: "Kasdi", a little helmet -->
-    <symbol id="helmet" viewBox="0 0 64 64">
-      <ellipse cx="32" cy="60" rx="18" ry="3" fill="#000" opacity=".12"/>
-      <path d="M14 40h36v10a8 8 0 0 1-8 8H22a8 8 0 0 1-8-8z" fill="#F1C99B"/>
-      <path d="M7 40c0-16 11-28 25-28s25 12 25 28z" fill="#6E8B2E"/>
-      <path d="M12 38c1-4 3-7 6-10M26 18c3-1 6-1 9 0M42 24c3 3 6 7 7 12" stroke="#4C6420" stroke-width="3.2" fill="none" stroke-linecap="round"/>
-      <circle cx="22" cy="28" r="3" fill="#4C6420"/><circle cx="40" cy="20" r="2.4" fill="#8FAA45"/><circle cx="47" cy="31" r="2.6" fill="#4C6420"/>
-      <path d="M3 39h58a3 3 0 0 1 0 6H3a3 3 0 0 1 0-6z" fill="#55701F"/>
-      <ellipse cx="25" cy="50" rx="4" ry="4.6" fill="#1F2619"/><ellipse cx="39" cy="50" rx="4" ry="4.6" fill="#1F2619"/>
-      <circle cx="26.4" cy="48.4" r="1.5" fill="#fff"/><circle cx="40.4" cy="48.4" r="1.5" fill="#fff"/>
-      <path d="M28.5 55q3.5 2.6 7 0" stroke="#1F2619" stroke-width="2.2" fill="none" stroke-linecap="round"/>
-      <circle cx="19" cy="54" r="2.4" fill="#F08A7A" opacity=".55"/><circle cx="45" cy="54" r="2.4" fill="#F08A7A" opacity=".55"/>
-    </symbol>
-    <symbol id="i-star" viewBox="0 0 24 24"><path d="m12 2 3 6.6 7 .7-5.3 4.8 1.5 7L12 17.6 5.8 21l1.5-7L2 9.3l7-.7z"/></symbol>
-    <symbol id="i-lock" viewBox="0 0 24 24"><path d="M7 10V7a5 5 0 0 1 10 0v3h1a1 1 0 0 1 1 1v10a1 1 0 0 1-1 1H6a1 1 0 0 1-1-1V11a1 1 0 0 1 1-1zm2 0h6V7a3 3 0 0 0-6 0z"/></symbol>
-    <symbol id="i-check" viewBox="0 0 24 24"><path d="M9 16.2 4.8 12l-1.4 1.4L9 19 21 7l-1.4-1.4z"/></symbol>
-    <symbol id="i-x" viewBox="0 0 24 24"><path d="M18.3 5.7 12 12l6.3 6.3-1.4 1.4L12 13.4l-4.9 6.3-1.4-1.4L10.6 12 4.3 5.7l1.4-1.4L12 10.6l4.9-6.3z"/></symbol>
-    <symbol id="i-trophy" viewBox="0 0 24 24"><path d="M7 3h10v2h4v3a5 5 0 0 1-4.6 5A5 5 0 0 1 13 16v3h4v2H7v-2h4v-3a5 5 0 0 1-3.4-3A5 5 0 0 1 3 8V5h4zm10 4v4a3 3 0 0 0 2-3V7zM5 7v1a3 3 0 0 0 2 3V7z"/></symbol>
-    <symbol id="i-user" viewBox="0 0 24 24"><path d="M12 12a5 5 0 1 0 0-10 5 5 0 0 0 0 10zm0 2c-5 0-9 2.5-9 6v2h18v-2c0-3.5-4-6-9-6z"/></symbol>
-    <symbol id="i-map" viewBox="0 0 24 24"><path d="M12 2a7 7 0 0 0-7 7c0 5 7 13 7 13s7-8 7-13a7 7 0 0 0-7-7zm0 9.5A2.5 2.5 0 1 1 12 6.5a2.5 2.5 0 0 1 0 5z"/></symbol>
-    <!-- unit emblems -->
-    <symbol id="e-safety" viewBox="0 0 24 24"><path d="M12 2 4 5v6c0 5 3.4 9.7 8 11 4.6-1.3 8-6 8-11V5zm-1.2 14.2L7 12.4l1.4-1.4 2.4 2.4 4.8-4.8 1.4 1.4z"/></symbol>
-    <symbol id="e-history" viewBox="0 0 24 24"><path d="M6 2h12v2h-1v3l-3 3 3 3v3h1v2H6v-2h1v-3l3-3-3-3V4H6zm3 2v2.2l3 3 3-3V4zm3 10.8-3 3V18h6v-.2z"/></symbol>
-    <symbol id="e-israel" viewBox="0 0 24 24"><path d="M12 2 9.1 7H3.3l2.9 5-2.9 5h5.8l2.9 5 2.9-5h5.8l-2.9-5 2.9-5h-5.8zm0 4 1.2 2H10.8zm-4.2 3h8.4L18 12l-1.8 3H7.8L6 12zm3 8h2.4L12 18z"/></symbol>
-    <symbol id="e-famous" viewBox="0 0 24 24"><path d="M12 1 9 7l-6.5.9 4.7 4.6L6 19l6-3.2 6 3.2-1.2-6.5 4.7-4.6L15 7zM5 21h14v2H5z"/></symbol>
-    <symbol id="e-terms" viewBox="0 0 24 24"><path d="M4 3h7a3 3 0 0 1 3 3v15a2 2 0 0 0-2-2H4zm16 0h-4a3 3 0 0 0-3 3v15a2 2 0 0 1 2-2h5zM6 7v2h5V7zm0 4v2h5v-2z"/></symbol>
-    <symbol id="i-fire" viewBox="0 0 24 24"><path d="M12 2c1 4 5 5.5 5 10.5A5 5 0 0 1 7 12.5c0-2 1-3.5 2-4.5 0 2 1 3 2 3 0-3-1-6 1-9z"/></symbol>
-    <symbol id="i-bolt" viewBox="0 0 24 24"><path d="M13 2 4 14h7l-1 8 9-12h-7z"/></symbol>
-    <symbol id="i-target" viewBox="0 0 24 24"><path d="M12 2a10 10 0 1 0 0 20 10 10 0 0 0 0-20zm0 3a7 7 0 1 1 0 14 7 7 0 0 1 0-14zm0 3a4 4 0 1 0 0 8 4 4 0 0 0 0-8zm0 2.5a1.5 1.5 0 1 1 0 3 1.5 1.5 0 0 1 0-3z"/></symbol>
-    <symbol id="i-chest" viewBox="0 0 48 48"><rect x="6" y="18" width="36" height="22" rx="4" fill="#B5653A"/><path d="M6 22a12 10 0 0 1 12-10h12a12 10 0 0 1 12 10z" fill="#D07C4A"/><rect x="6" y="22" width="36" height="4" fill="#8E4A26"/><rect x="20" y="20" width="8" height="10" rx="2" fill="#F0A81C"/><circle cx="24" cy="25" r="1.6" fill="#8E4A26"/></symbol>
-  </defs>
-</svg>
-
-<main id="app"></main>
-<nav class="tabs" aria-label="ניווט"><div class="wrap">
-  <button class="tab" data-tab="learn"><svg><use href="#i-map"/></svg>מסלול</button>
-  <button class="tab" data-tab="badges"><svg><use href="#i-trophy"/></svg>הישגים</button>
-  <button class="tab" data-tab="me"><svg><use href="#i-user"/></svg>פרופיל</button>
-</div></nav>
+<div class="shell">
+  <nav class="side-nav" aria-label="ניווט">
+    <div class="logo"><svg viewBox="0 0 120 120"><use href="#kasdi"/></svg>ארסנל</div>
+    <div class="nav-list">
+      <button class="nav-item" data-tab="learn"><svg viewBox="0 0 32 32"><use href="#n-home"/></svg><span>לימוד</span></button>
+      <button class="nav-item" data-tab="badges"><svg viewBox="0 0 32 32"><use href="#n-trophy"/></svg><span>הישגים</span></button>
+      <button class="nav-item" data-tab="shop"><svg viewBox="0 0 32 32"><use href="#n-shop"/></svg><span>חנות</span></button>
+      <button class="nav-item" data-tab="me"><svg viewBox="0 0 32 32"><use href="#n-me"/></svg><span>פרופיל</span></button>
+    </div>
+  </nav>
+  <div>
+    <header class="topbar"><div class="statrow" id="topStats"></div></header>
+    <main><div class="col" id="main"></div></main>
+  </div>
+  <aside class="aside" id="aside"></aside>
+</div>
 <section class="lesson" id="lesson" hidden></section>
+<div class="overlay" id="overlay" hidden></div>
 <canvas id="confetti" hidden></canvas>
 
 <script>
@@ -318,277 +390,320 @@ const COURSE = [
 ];
 
 
-const THEME={ safety:["#E79A12","#B87608"], history:["#C0693A","#934823"], israel:["#2F6FD6","#1F4FA3"], famous:["#6E8B2E","#4E671C"], terms:["#8A4FD1","#653699"] };
+const UC={ safety:["#58C21B","#45A00A"], history:["#FF9B1A","#DA7C00"], israel:["#1EA5F0","#1683C0"], famous:["#C27DF5","#9E5AD6"], terms:["#FF5A5A","#DB3E3E"] };
+const uv=u=>`--u:${UC[u.id][0]};--u-d:${UC[u.id][1]}`;
+
+/* path nodes per unit: lesson, chest, lesson..., review, unit test */
+function nodesOf(u){
+  const n=[];
+  u.lessons.forEach((l,i)=>{ n.push({k:"l"+i,t:"lesson",li:i,name:l.name}); if(i===0) n.push({k:"chest",t:"chest",name:"תיבת אוצר"}); });
+  n.push({k:"rev",t:"review",name:"תרגול חוזר"});
+  n.push({k:"test",t:"test",name:"מבחן יחידה"});
+  return n;
+}
+const FLAT=[]; COURSE.forEach((u,ui)=>nodesOf(u).forEach((n,ni)=>FLAT.push({u,ui,n,ni,key:u.id+":"+n.k})));
+const LESSON_COUNT=FLAT.filter(f=>f.n.t!=="chest").length;
 
 /* ------------------------------------------------------------------ state */
 const KEY="arsenal-v1";
-const todayStr=()=>new Date().toISOString().slice(0,10);
-const fresh=()=>({xp:0,hearts:5,streak:0,best:0,last:null,done:{},daily:{d:todayStr(),xp:0},heartsDay:todayStr(),perfect:0,answered:0,correct:0,combo:0,goal:50,days:{}});
+const today=()=>new Date().toISOString().slice(0,10);
+const fresh=()=>({xp:0,gems:50,hearts:5,streak:0,best:0,last:null,done:{},daily:{d:today(),xp:0},heartsDay:today(),perfect:0,answered:0,correct:0,goal:50,days:{},freeze:0});
 let S=fresh();
 try{const raw=localStorage.getItem(KEY); if(raw) S={...S,...JSON.parse(raw)};}catch(e){}
+// migrate old "unit:0" keys to "unit:l0"
+for(const k of Object.keys(S.done)){ const m=k.match(/^(\w+):(\d+)$/); if(m){ S.done[m[1]+":l"+m[2]]=S.done[k]; delete S.done[k]; } }
+if(S.heartsDay!==today()){S.hearts=5;S.heartsDay=today();}
+if(!S.daily||S.daily.d!==today()) S.daily={d:today(),xp:0};
+if(S.last){ const gap=(new Date(today())-new Date(S.last))/864e5; if(gap>1){ if(S.freeze>0&&gap===2){S.freeze--;S.last=new Date(Date.now()-864e5).toISOString().slice(0,10);} else S.streak=0; } }
 function save(){try{localStorage.setItem(KEY,JSON.stringify(S));}catch(e){}}
-if(S.heartsDay!==todayStr()){S.hearts=5;S.heartsDay=todayStr();}
-if(!S.daily||S.daily.d!==todayStr()) S.daily={d:todayStr(),xp:0};
-if(S.last){const diff=(new Date(todayStr())-new Date(S.last))/864e5; if(diff>1) S.streak=0;}
 save();
 
-const $=s=>document.querySelector(s);
+const $=s=>document.querySelector(s), $$=s=>[...document.querySelectorAll(s)];
 const esc=s=>String(s).replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
 const shuffle=a=>{a=[...a];for(let i=a.length-1;i>0;i--){const j=Math.random()*(i+1)|0;[a[i],a[j]]=[a[j],a[i]];}return a;};
-const uvars=u=>`--u:${THEME[u.id][0]};--u-d:${THEME[u.id][1]}`;
-const TOTAL=COURSE.reduce((n,u)=>n+u.lessons.length,0);
+const ico=(id,cls="")=>`<svg class="${cls}" viewBox="0 0 24 24"><use href="#${id}"/></svg>`;
+const kasdi=(cls="who")=>`<svg class="${cls}" viewBox="0 0 120 120" aria-hidden="true"><use href="#kasdi"/></svg>`;
 
-/* sound */
+/* ------------------------------------------------------------------ sound + confetti */
 let AC=null;
-function tone(seq,type){try{AC=AC||new (window.AudioContext||window.webkitAudioContext)();const t=AC.currentTime;
- seq.forEach((f,i)=>{const o=AC.createOscillator(),g=AC.createGain();o.type=type;o.frequency.value=f;const s=t+i*.085;
-  g.gain.setValueAtTime(.0001,s);g.gain.exponentialRampToValueAtTime(.12,s+.02);g.gain.exponentialRampToValueAtTime(.0001,s+.2);
-  o.connect(g).connect(AC.destination);o.start(s);o.stop(s+.22);});}catch(e){}}
-const beep=ok=>ok?tone([660,880],"triangle"):tone([220,165],"square");
-const fanfare=()=>tone([523,659,784,1047],"triangle");
-
-/* confetti */
+function tone(seq,type="triangle",gap=.085){try{AC=AC||new (window.AudioContext||window.webkitAudioContext)();const t=AC.currentTime;
+ seq.forEach((f,i)=>{const o=AC.createOscillator(),g=AC.createGain();o.type=type;o.frequency.value=f;const s=t+i*gap;
+  g.gain.setValueAtTime(.0001,s);g.gain.exponentialRampToValueAtTime(.13,s+.02);g.gain.exponentialRampToValueAtTime(.0001,s+.22);
+  o.connect(g).connect(AC.destination);o.start(s);o.stop(s+.24);});}catch(e){}}
+const sfx={ok:()=>tone([784,1047]),no:()=>tone([233,175],"square"),tap:()=>tone([600],"sine"),win:()=>tone([523,659,784,1047,1319],"triangle",.1)};
 function confetti(){
   if(matchMedia("(prefers-reduced-motion: reduce)").matches)return;
-  const c=$("#confetti"),x=c.getContext("2d");c.hidden=false;
-  const W=c.width=innerWidth*devicePixelRatio,H=c.height=innerHeight*devicePixelRatio;
-  const cols=["#F0A81C","#2F6FD6","#3BA84A","#E0483B","#8A4FD1","#6E8B2E"];
-  const P=Array.from({length:140},()=>({x:W/2+(Math.random()-.5)*W*.3,y:H*.35,vx:(Math.random()-.5)*16*devicePixelRatio,vy:(-Math.random()*16-6)*devicePixelRatio,r:Math.random()*6+4,a:Math.random()*6,va:(Math.random()-.5)*.3,c:cols[Math.random()*cols.length|0]}));
-  let f=0;(function step(){x.clearRect(0,0,W,H);P.forEach(p=>{p.vy+=.45*devicePixelRatio;p.vx*=.99;p.x+=p.vx;p.y+=p.vy;p.a+=p.va;
-    x.save();x.translate(p.x,p.y);x.rotate(p.a);x.fillStyle=p.c;x.fillRect(-p.r*devicePixelRatio/2,-p.r*devicePixelRatio/4,p.r*devicePixelRatio,p.r*devicePixelRatio/2);x.restore();});
-    if(++f<150)requestAnimationFrame(step);else c.hidden=true;})();
+  const c=$("#confetti"),x=c.getContext("2d"),d=devicePixelRatio||1;c.hidden=false;
+  const W=c.width=innerWidth*d,H=c.height=innerHeight*d;
+  const cols=["#58C21B","#1EA5F0","#FFC800","#FF4F4F","#C27DF5","#FF9B1A"];
+  const P=Array.from({length:160},()=>({x:W/2+(Math.random()-.5)*W*.4,y:H*.4,vx:(Math.random()-.5)*18*d,vy:(-Math.random()*18-6)*d,r:(Math.random()*6+5)*d,a:Math.random()*6,va:(Math.random()-.5)*.3,c:cols[Math.random()*6|0]}));
+  let f=0;(function step(){x.clearRect(0,0,W,H);for(const p of P){p.vy+=.5*d;p.vx*=.99;p.x+=p.vx;p.y+=p.vy;p.a+=p.va;x.save();x.translate(p.x,p.y);x.rotate(p.a);x.fillStyle=p.c;x.fillRect(-p.r/2,-p.r/4,p.r,p.r/2);x.restore();}
+    if(++f<160)requestAnimationFrame(step);else c.hidden=true;})();
 }
 
-/* ------------------------------------------------------------------ achievements */
-const unitDone=id=>{const u=COURSE.find(u=>u.id===id);return u.lessons.every((_,i)=>S.done[lid(u,i)]);};
+/* ------------------------------------------------------------------ progress helpers */
+const isDone=f=>!!S.done[f.key];
+const isOpen=i=>i===0||isDone(FLAT[i-1]);
+const unitDone=id=>FLAT.filter(f=>f.u.id===id).every(isDone);
+const lessonsDone=()=>FLAT.filter(f=>f.n.t!=="chest"&&isDone(f)).length;
+const RANKS=[[0,"טירון"],[60,"טוראי"],[150,"רב\"ט"],[300,"סמל"],[500,"סמ\"ר"],[800,"רס\"ל"],[1200,"קצין"]];
+const rankInfo=()=>{let i=RANKS.findLastIndex(r=>S.xp>=r[0]);const cur=RANKS[i],nx=RANKS[i+1];return{name:cur[1],next:nx&&nx[1],pct:nx?(S.xp-cur[0])/(nx[0]-cur[0])*100:100,need:nx?nx[0]-S.xp:0};};
 const BADGES=[
-  {n:"טירון",d:"השלם את השיעור הראשון",ic:"i-star",c:"#3BA84A",v:()=>Object.keys(S.done).length,max:1},
-  {n:"בוער",d:"רצף של 3 ימים",ic:"i-fire",c:"#F07A1C",v:()=>S.best,max:3},
-  {n:"צלף",d:"3 שיעורים בלי אף טעות",ic:"i-target",c:"#E0483B",v:()=>S.perfect,max:3},
-  {n:"מלא אנרגיה",d:"צבור 200 XP",ic:"i-bolt",c:"#F0A81C",v:()=>S.xp,max:200},
-  {n:"קצין בטיחות",d:"סיים את יחידת הבטיחות",ic:"e-safety",c:THEME.safety[0],v:()=>+unitDone("safety"),max:1},
-  {n:"היסטוריון",d:"סיים את יחידת ההיסטוריה",ic:"e-history",c:THEME.history[0],v:()=>+unitDone("history"),max:1},
-  {n:"כחול-לבן",d:"סיים את יחידת תוצרת ישראל",ic:"e-israel",c:THEME.israel[0],v:()=>+unitDone("israel"),max:1},
-  {n:"אספן",d:"סיים את הקלאסיקות",ic:"e-famous",c:THEME.famous[0],v:()=>+unitDone("famous"),max:1},
-  {n:"מילונאי",d:"סיים את מילון המונחים",ic:"e-terms",c:THEME.terms[0],v:()=>+unitDone("terms"),max:1},
-  {n:"מפקד",d:"סיים את כל הקורס",ic:"i-trophy",c:"#B5653A",v:()=>Object.keys(S.done).length,max:TOTAL},
+  {n:"טירון",d:"השלם שיעור ראשון",ic:"i-star",c:"#58C21B",v:()=>lessonsDone(),max:1},
+  {n:"בוער",d:"רצף של 3 ימים",ic:"i-fire",c:"#FF9B1A",v:()=>S.best,max:3},
+  {n:"צלף",d:"3 שיעורים בלי טעויות",ic:"i-check",c:"#FF4F4F",v:()=>S.perfect,max:3},
+  {n:"מלא אנרגיה",d:"צבור 300 XP",ic:"i-bolt",c:"#FFC800",v:()=>S.xp,max:300},
+  {n:"קצין בטיחות",d:"סיים את יחידת הבטיחות",ic:"i-star",c:UC.safety[0],v:()=>+unitDone("safety"),max:1},
+  {n:"היסטוריון",d:"סיים את יחידת ההיסטוריה",ic:"i-book",c:UC.history[0],v:()=>+unitDone("history"),max:1},
+  {n:"כחול-לבן",d:"סיים את יחידת תוצרת ישראל",ic:"i-star",c:UC.israel[0],v:()=>+unitDone("israel"),max:1},
+  {n:"אספן",d:"סיים את הקלאסיקות",ic:"i-trophy",c:UC.famous[0],v:()=>+unitDone("famous"),max:1},
+  {n:"מילונאי",d:"סיים את מילון המונחים",ic:"i-book",c:UC.terms[0],v:()=>+unitDone("terms"),max:1},
+  {n:"מפקד",d:"סיים את כל הקורס",ic:"i-trophy",c:"#FFC800",v:()=>lessonsDone(),max:LESSON_COUNT},
 ];
 const earned=b=>b.v()>=b.max;
-const RANKS=[[0,"טירון"],[60,"טוראי"],[150,"רב\"ט"],[300,"סמל"],[500,"סמ\"ר"],[800,"קצין"]];
-const rank=()=>RANKS.filter(r=>S.xp>=r[0]).pop()[1];
 
-/* ------------------------------------------------------------------ shell */
+/* ------------------------------------------------------------------ chrome */
 let tab="learn";
-function stats(){ $("#sStreak").textContent=S.streak; $("#pStreak").classList.toggle("off",S.streak===0); $("#sXp").textContent=S.xp; $("#sHearts").textContent=S.hearts; }
-document.querySelectorAll(".tab").forEach(b=>b.onclick=()=>{tab=b.dataset.tab;render();scrollTo(0,0);});
+$$(".nav-item").forEach(b=>b.onclick=()=>{tab=b.dataset.tab;render();scrollTo(0,0);});
+function statRow(){
+  return `<svg class="course-flag" viewBox="0 0 34 26" aria-label="קורס בעברית"><use href="#flag"/></svg>
+   <div class="stat streak ${S.streak?"":"off"}" title="רצף ימים">${ico("i-fire")}<span>${S.streak}</span></div>
+   <div class="stat gems" title="יהלומים">${ico("i-gem")}<span>${S.gems}</span></div>
+   <div class="stat hearts" title="לבבות">${ico("i-heart")}<span>${S.hearts}</span></div>`;
+}
+function goalCard(){
+  const p=Math.min(100,S.daily.xp/S.goal*100);
+  return `<div class="card"><h3>משימות יומיות</h3><div class="quest"><svg viewBox="0 0 24 24" style="color:var(--gold)"><use href="#i-bolt"/></svg>
+    <div class="q-txt"><b>צבור ${S.goal} XP</b><div class="pbar"><i style="width:${p}%"></i><span>${S.daily.xp} / ${S.goal}</span></div></div>
+    <svg viewBox="0 0 86 78" style="width:44px;height:40px"><use href="#${S.daily.xp>=S.goal?"chest-open":"chest"}"/></svg></div></div>`;
+}
+function rankCard(){
+  const r=rankInfo();
+  return `<div class="card"><h3>הדרגה שלך</h3><div class="rank-row"><div class="rank-badge"><svg viewBox="0 0 32 32"><use href="#n-trophy"/></svg></div>
+   <div style="flex:1;min-width:0"><b style="font-size:19px;color:var(--ink-strong)">${esc(r.name)}</b>
+   <p>${r.next?`עוד ${r.need} XP לדרגת ${esc(r.next)}`:"הגעת לדרגה הגבוהה ביותר"}</p>
+   <div class="pbar" style="margin-top:8px;height:14px"><i style="width:${r.pct}%;background:var(--blue)"></i></div></div></div></div>`;
+}
+function nextBadgeCard(){
+  const b=BADGES.find(b=>!earned(b)); if(!b) return "";
+  return `<div class="card"><h3>העיטור הבא <button data-go="badges">הצג הכל</button></h3><div class="quest">
+   <div class="li" style="padding:0;border:0"><div class="ic" style="--c:${b.c};width:54px;height:54px"><svg viewBox="0 0 24 24" style="fill:#fff;width:30px;height:30px"><use href="#${b.ic}"/></svg></div></div>
+   <div class="q-txt"><b>${esc(b.n)}</b><div class="pbar" style="height:14px"><i style="width:${Math.min(100,b.v()/b.max*100)}%"></i></div><p style="font-size:14px;margin-top:4px">${esc(b.d)}</p></div></div></div>`;
+}
 function render(){
-  stats();
-  document.querySelectorAll(".tab").forEach(b=>{ if(b.dataset.tab===tab) b.setAttribute("aria-current","page"); else b.removeAttribute("aria-current"); });
-  ({learn:renderLearn,badges:renderBadges,me:renderMe})[tab]();
+  $$(".nav-item").forEach(b=>b.dataset.tab===tab?b.setAttribute("aria-current","page"):b.removeAttribute("aria-current"));
+  $("#topStats").innerHTML=statRow();
+  $("#aside").innerHTML=`<div class="statrow">${statRow()}</div>${goalCard()}${rankCard()}${nextBadgeCard()}`;
+  ({learn:renderLearn,badges:renderBadges,shop:renderShop,me:renderMe})[tab]();
+  $$("[data-go]").forEach(b=>b.onclick=()=>{tab=b.dataset.go;render();});
 }
 
-/* ------------------------------------------------------------------ learn */
-const lid=(u,i)=>u.id+":"+i;
-function isUnlocked(ui,li){
-  if(ui===0&&li===0) return true;
-  const prev = li>0 ? lid(COURSE[ui],li-1) : lid(COURSE[ui-1],COURSE[ui-1].lessons.length-1);
-  return !!S.done[prev];
-}
+/* ------------------------------------------------------------------ learn (path) */
 function renderLearn(){
-  const done=Object.keys(S.done).length;
-  let firstOpen=null;
-  const pct=Math.min(100,S.daily.xp/S.goal*100);
-  let h=`<div class="wrap"><div class="daily"><svg class="chest" viewBox="0 0 48 48"><use href="#i-chest"/></svg>
-    <div class="txt"><b>${S.daily.xp>=S.goal?"השגת את היעד היומי!":"יעד יומי: "+S.goal+" XP"}</b>
-    <div class="bar"><i style="width:${pct}%"></i></div></div>
-    <span class="pill xp" style="background:none">${S.daily.xp}/${S.goal}</span></div>`;
+  let h="", cur=FLAT.findIndex((f,i)=>isOpen(i)&&!isDone(f));
   COURSE.forEach((u,ui)=>{
-    const ud=u.lessons.filter((_,i)=>S.done[lid(u,i)]).length;
-    h+=`<section class="unit" style="${uvars(u)}"><div class="band"><div class="emb"><svg><use href="#e-${u.id}"/></svg></div>
-      <div class="txt"><div class="eyebrow">יחידה ${ui+1}</div><h2>${esc(u.title)}</h2><p>${esc(u.sub)}</p><span class="uprog">${ud}/${u.lessons.length}</span></div></div><div class="path">`;
-    u.lessons.forEach((l,li)=>{
-      const id=lid(u,li), d=S.done[id], open=isUnlocked(ui,li);
-      const cur=open&&!d&&!firstOpen; if(cur) firstOpen=id;
-      const away=ui%2?-1:1; /* buddy sits left on even units, right on odd: nodes swing the other way */
-      const off=li===0?0:(li%2?away*70:away*35);
-      h+=`<div class="node-wrap" style="transform:translateX(${off}px)">
-        ${cur?`<svg class="ring" viewBox="0 0 100 100"><circle cx="50" cy="50" r="46" fill="none" stroke="var(--line)" stroke-width="7"/><circle cx="50" cy="50" r="46" fill="none" stroke="var(--u)" stroke-width="7" stroke-dasharray="70 300" stroke-linecap="round" transform="rotate(-90 50 50)"/></svg><div class="tip">התחל</div>`:""}
-        <button class="node ${d?"done":""} ${!open?"locked":""}" data-u="${ui}" data-l="${li}" ${!open?'aria-disabled="true"':""} aria-label="${esc(l.name)}${!open?" (נעול)":""}">
-        <svg><use href="#${!open?"i-lock":d?"i-check":"i-star"}"/></svg>${d?`<span class="crown">×${d}</span>`:""}</button>
-        <div class="node-label">${esc(l.name)}</div></div>`;
+    const side=ui%2?-1:1;               // which way this unit's path bulges
+    h+=`<section class="unit" style="${uv(u)}"><div class="unit-head"><div class="t"><div class="eyebrow">חלק 1, יחידה ${ui+1}</div><h2>${esc(u.title)}</h2></div>
+      <button class="guide" data-guide="${ui}">${ico("i-book")}<span>מדריך</span></button></div><div class="path">`;
+    const nodes=FLAT.filter(f=>f.ui===ui), N=nodes.length;
+    nodes.forEach((f,j)=>{
+      const gi=FLAT.indexOf(f), open=isOpen(gi), done=isDone(f), isCur=gi===cur;
+      const off=Math.round(Math.sin(j/(N-1)*Math.PI)*80*side);
+      const icon=f.n.t==="review"?"i-dumbbell":f.n.t==="test"?"i-trophy":done?"i-check":open?"i-star":"i-lock";
+      const cls=`node ${f.n.t==="chest"?"chest":""} ${done?"done":""} ${!open?"locked":""}`;
+      const inner=f.n.t==="chest"?`<svg viewBox="0 0 86 78"><use href="#${done?"chest-open":"chest"}"/></svg>`:`<svg viewBox="0 0 24 24"><use href="#${icon}"/></svg>`;
+      h+=`<div class="nw" style="transform:translateX(${off}px)">
+        ${isCur&&f.n.t!=="chest"?`<svg class="ring" viewBox="0 0 110 104"><ellipse cx="55" cy="55" rx="50" ry="47" fill="none" stroke="var(--line)" stroke-width="8"/><ellipse cx="55" cy="55" rx="50" ry="47" fill="none" stroke="var(--u)" stroke-width="8" stroke-linecap="round" stroke-dasharray="40 400" transform="rotate(-90 55 55)"/></svg>`:""}
+        ${isCur?`<div class="start">${f.n.t==="chest"?"פתח":"התחל"}</div>`:""}
+        <button class="${cls}" data-i="${gi}" aria-label="${esc(f.n.name)}${open?"":" (נעול)"}">${inner}</button></div>`;
     });
-    // mascot buddy sits beside each unit's path, on the side the nodes don't swing to
-    h+=`<svg class="buddy" style="${ui%2?"right":"left"}:2%" viewBox="0 0 64 64" aria-hidden="true"><use href="#helmet"/></svg></div></section>`;
+    h+=`${kasdi("buddy")}</div></section>`.replace('class="buddy"',`class="buddy" style="${side>0?"left":"right"}:2%"`);
   });
-  h+=`<p class="view-sub" style="text-align:center;margin-top:34px">${done===TOTAL?"סיימת הכל. אפשר לחזור על כל שיעור ולצבור עוד XP.":"עוד יחידות בדרך."}</p></div>`;
-  $("#app").innerHTML=h;
-  document.querySelectorAll(".node").forEach(b=>b.onclick=()=>{
-    const ui=+b.dataset.u, li=+b.dataset.l;
-    if(!isUnlocked(ui,li)){b.classList.remove("shake");void b.offsetWidth;b.classList.add("shake");return;}
-    startLesson(ui,li);
+  h+=`<p class="path-end">${lessonsDone()===LESSON_COUNT?"סיימת את כל הקורס. אפשר לחזור על כל שיעור ולצבור עוד XP.":"יחידות נוספות בדרך"}</p>`;
+  $("#main").innerHTML=h;
+  $$(".node").forEach(b=>b.onclick=()=>{
+    const i=+b.dataset.i; if(!isOpen(i)){b.classList.remove("shake");void b.offsetWidth;b.classList.add("shake");return;}
+    openNode(FLAT[i]);
   });
-  const cur=document.querySelector(".tip"); if(cur&&!render.scrolled){render.scrolled=1;cur.scrollIntoView({block:"center"});}
+  $$("[data-guide]").forEach(b=>b.onclick=()=>guide(COURSE[+b.dataset.guide]));
+  if(!renderLearn.scrolled){renderLearn.scrolled=1;const s=$(".start");if(s&&s.getBoundingClientRect().top>innerHeight*.7)s.scrollIntoView({block:"center"});}
 }
 
-/* ------------------------------------------------------------------ badges / profile */
+/* ------------------------------------------------------------------ overlays */
+function sheet(html,style=""){ const o=$("#overlay"); o.innerHTML=`<div class="sheet" style="${style}" role="dialog" aria-modal="true">${html}</div>`; o.hidden=false;
+  o.onclick=e=>{if(e.target===o)closeSheet();}; }
+function closeSheet(){ $("#overlay").hidden=true; $("#overlay").innerHTML=""; }
+function guide(u){
+  const tips=u.lessons.flatMap(l=>l.qs.filter(q=>q.e).map(q=>({l:l.name,e:q.e})));
+  sheet(`<h2>מדריך: ${esc(u.title)}</h2><p class="page-sub" style="margin:0">${esc(u.sub)}. הנקודות החשובות ביחידה:</p>
+    <div class="tips">${tips.map(t=>`<div class="tip"><b>${esc(t.l)}</b><p>${esc(t.e)}</p></div>`).join("")}</div>
+    <button class="btn wide" id="sx">הבנתי</button>`,uv(u));
+  $("#sx").onclick=closeSheet;
+}
+function openNode(f){
+  if(f.n.t==="chest"){
+    const g=10+(Math.random()*11|0);
+    sheet(`<div class="center"><svg class="big" viewBox="0 0 86 78"><use href="#chest-open"/></svg><h2>מצאת תיבת אוצר!</h2>
+      <p class="page-sub" style="margin:0">קיבלת <b style="color:var(--gem)">${g} יהלומים</b>. אפשר להשתמש בהם בחנות.</p><button class="btn wide blue" id="sx">אסוף</button></div>`);
+    sfx.win(); confetti();
+    $("#sx").onclick=()=>{ if(!isDone(f)){S.gems+=g;S.done[f.key]=1;save();} closeSheet(); render(); };
+    return;
+  }
+  startLesson(f);
+}
+
+/* ------------------------------------------------------------------ badges / shop / me */
 function renderBadges(){
   const n=BADGES.filter(earned).length;
-  $("#app").innerHTML=`<div class="wrap"><h1 class="view-title">הישגים</h1><p class="view-sub">${n} מתוך ${BADGES.length} עיטורים</p>
-  <div class="badges">${BADGES.map(b=>{const e=earned(b);return `<div class="badge ${e?"":"off"}" style="--c:${b.c}"><div class="medal"><svg><use href="#${b.ic}"/></svg></div><b>${esc(b.n)}</b><small>${esc(b.d)}</small>${e?"":`<span class="prog">${Math.min(b.v(),b.max)}/${b.max}</span>`}</div>`;}).join("")}</div></div>`;
+  $("#main").innerHTML=`<h1 class="page-title">הישגים</h1><p class="page-sub">${n} מתוך ${BADGES.length} עיטורים</p>
+   <div class="list">${BADGES.map(b=>{const e=earned(b),v=Math.min(b.v(),b.max);return `<div class="li ${e?"":"off"}"><div class="ic" style="--c:${b.c}"><svg viewBox="0 0 24 24" style="fill:#fff"><use href="#${b.ic}"/></svg></div>
+     <div class="t"><b>${esc(b.n)}</b><small>${esc(b.d)}</small><div class="pbar" style="height:14px"><i style="width:${v/b.max*100}%"></i><span style="font-size:11px">${v}/${b.max}</span></div></div></div>`;}).join("")}</div>`;
+}
+function renderShop(){
+  const items=[
+    {id:"hearts",n:"מילוי לבבות",d:"חזרה ל-5 לבבות ולהמשיך ללמוד",ic:"i-heart",c:"var(--heart)",cost:25,ok:S.hearts<5,why:"הלבבות מלאים"},
+    {id:"freeze",n:"הקפאת רצף",d:`שומרת על הרצף אם פספסת יום. ברשותך: ${S.freeze}/2`,ic:"i-fire",c:"var(--blue)",cost:40,ok:S.freeze<2,why:"יש לך כבר 2"},
+  ];
+  $("#main").innerHTML=`<h1 class="page-title">חנות</h1><p class="page-sub">יש לך <b style="color:var(--gem)">${S.gems} יהלומים</b>. מקבלים יהלומים מתיבות אוצר ומשיעורים מושלמים.</p>
+   <div class="list">${items.map(it=>`<div class="li"><div class="ic" style="--c:var(--soft)"><svg viewBox="0 0 24 24" style="color:${it.c}"><use href="#${it.ic}"/></svg></div>
+     <div class="t"><b>${it.n}</b><small style="margin:0">${it.d}</small></div>
+     <button class="btn ghost" data-buy="${it.id}" ${it.ok&&S.gems>=it.cost?"":"disabled"} title="${!it.ok?it.why:S.gems<it.cost?"אין מספיק יהלומים":""}">${ico("i-gem")}<span style="color:var(--gem)">${it.cost}</span></button></div>`).join("")}</div>`;
+  $$("[data-buy]").forEach(b=>b.onclick=()=>{const it=items.find(i=>i.id===b.dataset.buy); if(S.gems<it.cost)return;
+    S.gems-=it.cost; if(it.id==="hearts")S.hearts=5; else S.freeze++; save(); sfx.ok(); render();});
 }
 function renderMe(){
   const acc=S.answered?Math.round(S.correct/S.answered*100):0;
-  $("#app").innerHTML=`<div class="wrap"><div class="prof-head"><div class="avatar"><svg viewBox="0 0 64 64"><use href="#helmet"/></svg></div>
-   <div><h1 class="view-title" style="margin:0">הפרופיל שלי</h1><span class="rank">דרגה: ${esc(rank())}</span></div></div>
-   <h2 class="view-title" style="font-size:20px">סטטיסטיקה</h2>
-   <div class="statgrid">
-    <div class="st"><svg style="fill:#F07A1C"><use href="#i-fire"/></svg><div><b>${S.streak}</b><small>רצף נוכחי</small></div></div>
-    <div class="st"><svg style="fill:var(--brass)"><use href="#i-bolt"/></svg><div><b>${S.xp}</b><small>סה"כ XP</small></div></div>
-    <div class="st"><svg style="fill:var(--good)"><use href="#i-check"/></svg><div><b>${Object.keys(S.done).length}/${TOTAL}</b><small>שיעורים</small></div></div>
-    <div class="st"><svg style="fill:var(--bad)"><use href="#i-target"/></svg><div><b>${acc}%</b><small>דיוק</small></div></div>
+  const days=[...Array(7)].map((_,i)=>{const d=new Date(Date.now()-(6-i)*864e5);const k=d.toISOString().slice(0,10);return{l:["א","ב","ג","ד","ה","ו","ש"][d.getDay()],v:S.days[k]||0};});
+  const mx=Math.max(S.goal,...days.map(d=>d.v));
+  $("#main").innerHTML=`<div style="display:flex;align-items:center;gap:16px;margin-top:20px">${kasdi("me-av")}<div><h1 class="page-title" style="margin:0">הפרופיל שלי</h1><p class="page-sub" style="margin:0">דרגה: ${esc(rankInfo().name)}</p></div></div>
+   <h2 class="page-title" style="font-size:21px">סטטיסטיקה</h2>
+   <div class="stats4">
+    <div class="tile"><svg viewBox="0 0 24 24" style="color:var(--orange)"><use href="#i-fire"/></svg><div><b>${S.streak}</b><small>רצף ימים</small></div></div>
+    <div class="tile"><svg viewBox="0 0 24 24" style="color:var(--gold)"><use href="#i-bolt"/></svg><div><b>${S.xp}</b><small>סה"כ XP</small></div></div>
+    <div class="tile"><svg viewBox="0 0 24 24" style="fill:var(--green)"><use href="#i-check"/></svg><div><b>${lessonsDone()}/${LESSON_COUNT}</b><small>שיעורים</small></div></div>
+    <div class="tile"><svg viewBox="0 0 24 24" style="fill:var(--blue)"><use href="#i-star"/></svg><div><b>${acc}%</b><small>דיוק</small></div></div>
    </div>
-   <h2 class="view-title" style="font-size:20px">יעד יומי</h2>
-   <div class="seg-row" id="goals">${[20,50,100].map(g=>`<button aria-pressed="${S.goal===g}" data-g="${g}">${g===20?"רגוע":g===50?"רציני":"מטורף"}<br><small>${g} XP</small></button>`).join("")}</div>
-   <button class="btn-ghost" id="reset">איפוס התקדמות</button></div>`;
-  document.querySelectorAll("#goals button").forEach(b=>b.onclick=()=>{S.goal=+b.dataset.g;save();renderMe();});
-  let armed=false;
-  $("#reset").onclick=e=>{ if(!armed){armed=true;e.target.textContent="בטוח? לחץ שוב לאישור";setTimeout(()=>{armed=false;if(e.target.isConnected)e.target.textContent="איפוס התקדמות";},3000);return;}
-    S=fresh();save();render.scrolled=0;tab="learn";render();};
+   <h2 class="page-title" style="font-size:21px">XP בשבוע האחרון</h2>
+   <div class="card"><div class="week">${days.map(d=>`<div class="d"><small style="color:var(--ink)">${d.v||""}</small><div class="b ${d.v?"on":""}" style="height:${Math.max(4,d.v/mx*80)}px"></div><small>${d.l}</small></div>`).join("")}</div></div>
+   <div class="me-cards" style="display:grid;gap:16px;margin-top:20px">${goalCard()}${rankCard()}</div>
+   <h2 class="page-title" style="font-size:21px">יעד יומי</h2>
+   <div class="goal-opts">${[[20,"רגוע"],[50,"רציני"],[100,"מטורף"]].map(([g,n])=>`<button class="goal-opt" aria-pressed="${S.goal===g}" data-g="${g}"><span>${n}</span><span>${g} XP ביום</span></button>`).join("")}</div>
+   <button class="danger" id="reset">איפוס התקדמות</button>`;
+  $$(".goal-opt").forEach(b=>b.onclick=()=>{S.goal=+b.dataset.g;save();render();});
+  $("#reset").onclick=()=>{ sheet(`<div class="center">${kasdi("big")}<h2>לאפס את כל ההתקדמות?</h2><p class="page-sub" style="margin:0">ה-XP, הרצף, היהלומים והשיעורים שסיימת יימחקו.</p>
+    <button class="btn wide red" id="yes">אפס הכל</button><button class="btn wide ghost" id="sx">ביטול</button></div>`);
+    $("#sx").onclick=closeSheet; $("#yes").onclick=()=>{S=fresh();save();closeSheet();tab="learn";renderLearn.scrolled=0;render();}; };
+  if(matchMedia("(min-width:1000px)").matches) $(".me-cards").hidden=true;
 }
 
-/* ------------------------------------------------------------------ lesson */
+/* ------------------------------------------------------------------ lesson engine */
 let L=null;
-function startLesson(ui,li){
-  const les=COURSE[ui].lessons[li];
-  L={ui,li,qs:shuffle(les.qs),i:0,right:0,mistakes:[],state:"answer",sel:null,first:0,firstTotal:les.qs.length,combo:0};
+function startLesson(f){
+  const u=f.u, all=u.lessons.flatMap(l=>l.qs);
+  const qs=f.n.t==="lesson"?shuffle(u.lessons[f.n.li].qs):f.n.t==="review"?shuffle(all).slice(0,6):shuffle(all);
+  L={f,qs,i:0,first:0,firstTotal:qs.length,mistakes:[],state:"answer",sel:null,combo:0,t0:Date.now()};
   $("#lesson").hidden=false; document.body.style.overflow="hidden";
-  if(S.hearts<=0) return outOfHearts();
+  if(S.hearts<=0) return noHearts();
   renderQ();
 }
-function close(){ $("#lesson").hidden=true; document.body.style.overflow=""; L=null; render(); }
-
-function shell(inner,ctaLabel,ctaDisabled){
-  const pct=L&&L.qs.length?Math.round(L.i/L.qs.length*100):100;
-  $("#lesson").innerHTML=`<div class="wrap lesson-top">
-     <button class="x" id="quit" aria-label="יציאה"><svg viewBox="0 0 24 24" fill="currentColor"><use href="#i-x"/></svg></button>
-     <div class="bar"><i style="width:${pct}%"></i></div>
-     ${L&&L.combo>=3?`<span class="combo">${L.combo} ברצף!</span>`:""}
-     <div class="pill hearts" style="background:none"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 21s-8-5.3-8-11a4.5 4.5 0 0 1 8-2.8A4.5 4.5 0 0 1 20 10c0 5.7-8 11-8 11z"/></svg><span id="lh">${S.hearts}</span></div>
-   </div>
-   <div class="lesson-body"><div class="wrap">${inner}</div></div>
-   <div class="check-bar" id="cb"><div class="wrap"><div class="fb" id="fb"></div><button class="cta" id="cta" ${ctaDisabled?"disabled":""}>${ctaLabel}</button></div></div>`;
-  $("#quit").onclick=close; $("#cta").onclick=onCta;
+function closeLesson(){ $("#lesson").hidden=true; document.body.style.overflow=""; L=null; render(); }
+function frame(body,btnLabel,btnDisabled,btnClass=""){
+  const pct=L.qs.length?L.i/L.qs.length*100:100;
+  $("#lesson").innerHTML=`<div class="l-top"><button class="x" id="quit" aria-label="יציאה מהשיעור"><svg viewBox="0 0 24 24"><use href="#i-x"/></svg></button>
+     <div style="position:relative;flex:1">${L.combo>=2?`<span class="combo">${L.combo} ברצף!</span>`:""}<div class="pbar" style="height:16px"><i style="width:${pct}%;background:var(--green)"></i></div></div>
+     <div class="stat hearts">${ico("i-heart")}<span id="lh">${S.hearts}</span></div></div>
+   <div class="l-body"><div class="l-inner">${body}</div></div>
+   <div class="l-foot" id="foot"><div class="in"><div class="fb" id="fb"></div><button class="btn wide ${btnClass}" id="go" ${btnDisabled?"disabled":""}>${btnLabel}</button></div></div>`;
+  $("#quit").onclick=closeLesson; $("#go").onclick=onGo;
 }
-const speak=t=>`<div class="speak"><svg class="who" viewBox="0 0 64 64" aria-hidden="true"><use href="#helmet"/></svg><div class="bubble">${esc(t)}</div></div>`;
-
+const KIND={lesson:"",review:"תרגול חוזר",test:"מבחן יחידה"};
 function renderQ(){
   const q=L.qs[L.i]; L.state="answer"; L.sel=null;
-  const again=L.i>=L.firstTotal?`<div class="qtype" style="color:var(--bad);font-size:14px;margin-bottom:-8px">טעות קודמת, ננסה שוב</div>`:"";
+  const kick=L.i>=L.firstTotal?`<div class="l-kicker" style="color:var(--red-ink)">טעות קודמת, ננסה שוב</div>`:KIND[L.f.n.t]?`<div class="l-kicker">${KIND[L.f.n.t]}</div>`:"";
+  const bubble=t=>`<div class="speak">${kasdi()}<div class="bubble">${esc(t)}</div></div>`;
   if(q.t==="mc"){
     L.order=shuffle(q.a.map((_,i)=>i));
-    shell(`${again}<div class="qtype">בחר את התשובה הנכונה</div>${speak(q.q)}
+    frame(`${kick}<h1 class="l-title">בחר את התשובה הנכונה</h1>${bubble(q.q)}
       <div class="opts">${L.order.map((ai,k)=>`<button class="opt" data-a="${ai}"><span class="k">${k+1}</span>${esc(q.a[ai])}</button>`).join("")}</div>`,"בדיקה",true);
-    bindOpts();
+    bindChoice();
   } else if(q.t==="tf"){
-    shell(`${again}<div class="qtype">נכון או לא נכון?</div>${speak(q.q)}
-      <div class="opts tfgrid"><button class="opt" data-a="1"><svg><use href="#i-check"/></svg>נכון</button><button class="opt" data-a="0"><svg><use href="#i-x"/></svg>לא נכון</button></div>`,"בדיקה",true);
-    bindOpts();
-  } else renderMatch(q);
+    frame(`${kick}<h1 class="l-title">נכון או לא נכון?</h1>${bubble(q.q)}
+      <div class="opts tf"><button class="opt" data-a="1"><svg viewBox="0 0 24 24"><use href="#i-check"/></svg>נכון</button><button class="opt" data-a="0"><svg viewBox="0 0 24 24"><use href="#i-x"/></svg>לא נכון</button></div>`,"בדיקה",true);
+    bindChoice();
+  } else renderPairs(q,kick);
 }
-function bindOpts(){
-  document.querySelectorAll(".opts .opt").forEach(b=>b.onclick=()=>{
-    if(L.state!=="answer")return;
-    document.querySelectorAll(".opts .opt").forEach(x=>x.classList.remove("sel"));
-    b.classList.add("sel"); L.sel=+b.dataset.a; $("#cta").disabled=false; tone([520],"sine");
-  });
+function bindChoice(){
+  $$(".opts .opt").forEach(b=>b.onclick=()=>{ if(L.state!=="answer")return;
+    $$(".opts .opt").forEach(x=>x.classList.remove("sel")); b.classList.add("sel"); L.sel=+b.dataset.a; $("#go").disabled=false; sfx.tap(); });
 }
-function renderMatch(q){
-  const left=shuffle(q.p.map((p,i)=>({i,s:p[0]}))), right=shuffle(q.p.map((p,i)=>({i,s:p[1]})));
+function renderPairs(q,kick){
+  const A=shuffle(q.p.map((p,i)=>({i,s:p[0]}))), B=shuffle(q.p.map((p,i)=>({i,s:p[1]})));
   L.m={pick:null,miss:false,done:0};
-  shell(`<div class="qtype">${esc(q.q)}</div>
-    <div class="match"><div class="col">${left.map(x=>`<button class="opt" data-side="L" data-i="${x.i}">${esc(x.s)}</button>`).join("")}</div>
-    <div class="col">${right.map(x=>`<button class="opt" data-side="R" data-i="${x.i}">${esc(x.s)}</button>`).join("")}</div></div>`,"המשך",true);
-  document.querySelectorAll(".match .opt").forEach(b=>b.onclick=()=>{
-    if(b.classList.contains("gone")||L.state!=="answer")return;
-    const m=L.m;
-    if(!m.pick||m.pick.dataset.side===b.dataset.side){ if(m.pick)m.pick.classList.remove("sel"); m.pick=b; b.classList.add("sel"); return; }
-    const a=m.pick,c=b; m.pick=null;
-    if(a.dataset.i===c.dataset.i){ beep(true);
-      [a,c].forEach(x=>{x.classList.remove("sel");x.classList.add("right");setTimeout(()=>{x.classList.remove("right");x.classList.add("gone");x.disabled=true;},350);});
-      if(++m.done===q.p.length){ L.state="checked"; finishAnswer(!m.miss, m.miss?"היו כמה טעויות בדרך, אבל סיימת.":"התאמה מושלמת."); }
-    } else { beep(false); m.miss=true;
-      [a,c].forEach(x=>{x.classList.remove("sel");x.classList.add("wrong");setTimeout(()=>x.classList.remove("wrong"),450);});
-    }
+  frame(`${kick}<h1 class="l-title">${esc(q.q)}</h1><div class="pairs"><div class="c">${A.map(x=>`<button class="opt" data-s="A" data-i="${x.i}">${esc(x.s)}</button>`).join("")}</div>
+     <div class="c">${B.map(x=>`<button class="opt" data-s="B" data-i="${x.i}">${esc(x.s)}</button>`).join("")}</div></div>`,"המשך",true);
+  $$(".pairs .opt").forEach(b=>b.onclick=()=>{
+    if(b.classList.contains("gone")||L.state!=="answer")return; const m=L.m;
+    if(!m.pick||m.pick.dataset.s===b.dataset.s){ if(m.pick)m.pick.classList.remove("sel"); m.pick=b; b.classList.add("sel"); sfx.tap(); return; }
+    const a=m.pick; m.pick=null;
+    if(a.dataset.i===b.dataset.i){ sfx.ok(); [a,b].forEach(x=>{x.classList.remove("sel");x.classList.add("right");setTimeout(()=>{x.classList.remove("right");x.classList.add("gone");x.disabled=true;},320);});
+      if(++m.done===q.p.length){ L.state="checked"; feedback(!m.miss,m.miss?"היו כמה טעויות בדרך, אבל סיימת.":"כל הזוגות נכונים."); } }
+    else { sfx.no(); m.miss=true; [a,b].forEach(x=>{x.classList.remove("sel");x.classList.add("wrong");setTimeout(()=>x.classList.remove("wrong"),450);}); }
   });
 }
-function onCta(){
-  if(L.state==="answer") return check();
-  if(L.state==="checked") return next();
-  if(L.state==="result") return close();
-}
+function onGo(){ if(L.state==="answer")return check(); if(L.state==="checked")return advance(); closeLesson(); }
 function check(){
   const q=L.qs[L.i]; if(L.sel===null)return;
-  const ok = q.t==="mc" ? L.sel===q.c : (L.sel===1)===q.c;
-  const correctVal = q.t==="mc" ? q.c : (q.c?1:0);
-  document.querySelectorAll(".opts .opt").forEach(b=>{b.disabled=true;b.classList.remove("sel");
-    if(+b.dataset.a===correctVal) b.classList.add("right"); else if(+b.dataset.a===L.sel) b.classList.add("wrong");});
-  L.state="checked"; beep(ok);
-  finishAnswer(ok,q.e);
+  const ok=q.t==="mc"?L.sel===q.c:(L.sel===1)===q.c, right=q.t==="mc"?q.c:(q.c?1:0);
+  $$(".opts .opt").forEach(b=>{b.disabled=true;b.classList.remove("sel"); if(+b.dataset.a===right)b.classList.add("right"); else if(+b.dataset.a===L.sel)b.classList.add("wrong");});
+  L.state="checked"; feedback(ok,q.e);
 }
-function finishAnswer(ok,expl){
-  const q=L.qs[L.i], firstPass=L.i<L.firstTotal;
-  S.answered++; if(ok)S.correct++;
-  if(ok){ L.right++; L.combo++; if(firstPass)L.first++; }
-  else { L.combo=0; if(q.t!=="match")L.mistakes.push(q); S.hearts=Math.max(0,S.hearts-1); }
-  save();
-  const cb=$("#cb"); cb.classList.add(ok?"ok":"no");
-  const praise=["מצוין!","בול!","יפה מאוד!","בדיוק!","אלוף!"][Math.random()*5|0];
-  let answerLine="";
-  if(!ok&&q.t==="mc") answerLine=`<span><b>התשובה הנכונה:</b> ${esc(q.a[q.c])}</span>`;
-  if(!ok&&q.t==="tf") answerLine=`<span><b>התשובה הנכונה:</b> ${q.c?"נכון":"לא נכון"}</span>`;
-  $("#fb").innerHTML=`<div class="ic"><svg><use href="#${ok?"i-check":"i-x"}"/></svg></div><div class="t"><strong>${ok?praise:"לא בדיוק"}</strong>${answerLine}<span>${esc(expl||"")}</span></div>`;
-  const cta=$("#cta"); cta.disabled=false; cta.textContent="המשך"; cta.focus();
-  $("#lh").textContent=S.hearts; stats();
+function feedback(ok,expl){
+  const q=L.qs[L.i], first=L.i<L.firstTotal;
+  S.answered++; if(ok){S.correct++;L.combo++; if(first)L.first++;} else {L.combo=0; if(q.t!=="match")L.mistakes.push(q); S.hearts=Math.max(0,S.hearts-1);}
+  save(); ok?sfx.ok():sfx.no();
+  $("#foot").classList.add(ok?"ok":"no");
+  const praise=["מצוין!","בול!","יפה מאוד!","נהדר!","אלוף!"][Math.random()*5|0];
+  let ans=""; if(!ok&&q.t==="mc")ans=`<span><b>התשובה הנכונה:</b> ${esc(q.a[q.c])}</span>`; if(!ok&&q.t==="tf")ans=`<span><b>התשובה הנכונה:</b> ${q.c?"נכון":"לא נכון"}</span>`;
+  $("#fb").innerHTML=`<div class="ic"><svg viewBox="0 0 24 24"><use href="#${ok?"i-check":"i-x"}"/></svg></div><div class="t"><strong>${ok?praise:"לא נכון"}</strong>${ans}<span>${esc(expl||"")}</span></div>`;
+  const go=$("#go"); go.disabled=false; go.textContent=ok?"המשך":"הבנתי"; go.focus();
+  $("#lh").textContent=S.hearts;
 }
-function next(){
-  if(S.hearts<=0) return outOfHearts();
+function advance(){
+  if(S.hearts<=0) return noHearts();
   L.i++;
-  if(L.i===L.qs.length && L.mistakes.length){ L.qs=L.qs.concat(L.mistakes); L.mistakes=[]; }
-  if(L.i>=L.qs.length) return result();
+  if(L.i===L.qs.length&&L.mistakes.length){L.qs=L.qs.concat(L.mistakes);L.mistakes=[];}
+  if(L.i>=L.qs.length) return finish();
   renderQ();
 }
-function countUp(el,to){let v=0;const st=Math.max(1,Math.ceil(to/20));const t=setInterval(()=>{v=Math.min(to,v+st);el.textContent="+"+v;if(v>=to)clearInterval(t);},40);}
-function result(){
-  const id=lid(COURSE[L.ui],L.li);
-  const perfect=L.first===L.firstTotal;
-  const gained=10+L.first*2+(perfect?5:0);
+function finish(){
+  const f=L.f, perfect=L.first===L.firstTotal;
+  const base={lesson:10,review:15,test:25}[f.n.t], xp=base+L.first*2+(perfect?5:0), gems=perfect?5:0;
   const before=BADGES.filter(earned).length;
-  S.xp+=gained; S.daily.xp+=gained; S.done[id]=(S.done[id]||0)+1; if(perfect)S.perfect++;
-  const t=todayStr(); if(S.last!==t){ const diff=S.last?(new Date(t)-new Date(S.last))/864e5:99; S.streak=diff===1?S.streak+1:1; S.last=t; }
-  S.best=Math.max(S.best||0,S.streak);
-  save(); L.state="result";
-  const newB=BADGES.filter(earned).length-before;
-  const acc=Math.round(L.first/L.firstTotal*100);
-  shell(`<div class="result"><svg class="who" viewBox="0 0 64 64"><use href="#helmet"/></svg>
-    <h2>${perfect?"שיעור מושלם!":"השיעור הושלם!"}</h2><p>${esc(COURSE[L.ui].lessons[L.li].name)}${newB?` · קיבלת ${newB>1?newB+" עיטורים חדשים":"עיטור חדש"}!`:""}</p>
-    <div class="tiles">
-      <div class="tile" style="--c:var(--brass)"><small>XP</small><b id="gxp">+0</b></div>
-      <div class="tile" style="--c:var(--good)"><small>דיוק</small><b>${acc}%</b></div>
-      <div class="tile" style="--c:#F07A1C"><small>רצף</small><b>${S.streak}</b></div></div></div>`,"המשך",false);
-  countUp($("#gxp"),gained); fanfare(); confetti(); stats();
+  S.xp+=xp; S.gems+=gems; S.daily.xp+=xp; S.days[today()]=(S.days[today()]||0)+xp; S.done[f.key]=(S.done[f.key]||0)+1; if(perfect)S.perfect++;
+  const t=today(); if(S.last!==t){const g=S.last?(new Date(t)-new Date(S.last))/864e5:99; S.streak=g===1?S.streak+1:1; S.last=t;}
+  S.best=Math.max(S.best||0,S.streak); save();
+  const nb=BADGES.filter(earned).length-before, secs=Math.round((Date.now()-L.t0)/1000), acc=Math.round(L.first/L.firstTotal*100);
+  L.state="done"; L.i=L.qs.length;
+  frame(`<div class="done-screen">${kasdi()}<h2>${perfect?"שיעור מושלם!":"השיעור הושלם!"}</h2>
+     <p>${esc(f.n.name)}${gems?` · +${gems} יהלומים`:""}${nb?` · ${nb>1?nb+" עיטורים חדשים":"עיטור חדש"}!`:""}</p>
+     <div class="res"><div class="r" style="--c:var(--gold)"><small>סה"כ XP</small><b>${ico("i-bolt")}<span id="cx">0</span></b></div>
+      <div class="r" style="--c:var(--green)"><small>${perfect?"מושלם":"דיוק"}</small><b>${acc}%</b></div>
+      <div class="r" style="--c:var(--blue)"><small>זמן</small><b>${Math.floor(secs/60)}:${String(secs%60).padStart(2,"0")}</b></div></div></div>`,"המשך",false);
+  let v=0; const st=Math.max(1,Math.ceil(xp/20)), tm=setInterval(()=>{v=Math.min(xp,v+st); const e=$("#cx"); if(!e)return clearInterval(tm); e.textContent=v; if(v>=xp)clearInterval(tm);},40);
+  sfx.win(); confetti();
 }
-function outOfHearts(){
-  L.state="result";
-  shell(`<div class="result"><svg class="who" viewBox="0 0 64 64"><use href="#helmet"/></svg>
-    <h2 style="color:var(--bad)">נגמרו הלבבות</h2><p>הלבבות יתמלאו מחר. אפשר בינתיים לעבור על ההסברים בשיעורים שכבר סיימת.</p></div>`,"חזרה למסלול",false);
+function noHearts(){
+  L.state="done";
+  frame(`<div class="done-screen">${kasdi()}<h2 style="color:var(--red-ink)">נגמרו הלבבות</h2>
+    <p>הלבבות מתמלאים מחר, או מיד בחנות תמורת 25 יהלומים.</p></div>`,"לחנות",false,"blue");
+  $("#go").onclick=()=>{tab="shop";closeLesson();};
 }
-
 document.addEventListener("keydown",e=>{
+  if(!$("#overlay").hidden&&e.key==="Escape")return closeSheet();
   if(!L||$("#lesson").hidden)return;
-  if(e.key==="Escape")return close();
-  if(e.key==="Enter"){ const c=$("#cta"); if(c&&!c.disabled){e.preventDefault();c.click();} return; }
-  const n=parseInt(e.key,10); if(n>=1&&n<=4&&L.state==="answer"){ const b=document.querySelectorAll(".opts .opt")[n-1]; if(b)b.click(); }
+  if(e.key==="Escape")return closeLesson();
+  if(e.key==="Enter"){const g=$("#go"); if(g&&!g.disabled){e.preventDefault();g.click();} return;}
+  const n=parseInt(e.key,10); if(n>=1&&n<=4&&L.state==="answer"){const b=$$(".opts .opt")[n-1]; if(b)b.click();}
 });
-
 render();
 </script>
