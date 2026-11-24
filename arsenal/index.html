@@ -524,6 +524,14 @@ button.stat:hover{background:var(--soft)}
 .toast-kd{width:44px;height:44px}
 .toast .ti{width:24px;height:24px;fill:var(--orange)}
 @keyframes toast{0%{transform:translate(-50%,-30px) scale(.7);opacity:0}12%{transform:translate(-50%,0) scale(1);opacity:1}85%{transform:translate(-50%,0);opacity:1}100%{transform:translate(-50%,-20px);opacity:0}}
+.slots{display:grid;gap:10px;margin-bottom:24px}
+.slot{display:flex;align-items:center;gap:12px;min-height:58px;padding:6px 10px;border:2px dashed var(--line-2);border-radius:14px;animation:optIn .35s cubic-bezier(.3,1.4,.5,1) backwards;animation-delay:calc(.12s + var(--d)*.05s)}
+.slot .n{flex:none;width:32px;height:32px;border-radius:50%;display:grid;place-items:center;background:var(--soft);color:var(--muted);font-weight:800}
+.slot .fill{flex:1;min-width:0}
+.slot .fill .tile{width:100%;text-align:start}
+.slot.ok{border-style:solid;border-color:var(--green);background:var(--green-bg)} .slot.ok .n{background:var(--green);color:#fff}
+.slot.no{border-style:solid;border-color:var(--red);background:var(--red-bg)} .slot.no .n{background:var(--red);color:#fff}
+.slot.ok,.slot.no{animation:okPop .4s cubic-bezier(.3,1.6,.5,1);animation-delay:calc(var(--d)*.08s)}
 @media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
 </style>
 
@@ -707,6 +715,7 @@ const COURSE = [
   ]},
   { name:"מאיפה בא הכוח", qs:[
    {t:"mc", q:"ב-AK-47 ובתבור, מה מפעיל את המנגנון אחרי כל ירייה?", a:["חלק מגזי הירי, שנלקחים מהקנה ודוחפים בוכנה","קפיץ שהיורה מותח ביד","סוללה","כוח הכבידה"], c:0, e:"זה נקרא 'מנגנון גזים', והוא הנפוץ ברובי סער."},
+   {t:"order", q:"סדר את שלבי הירייה", items:["הנוקר פוגע בפיקה","הפיקה מציתה את ההודף","הגזים דוחפים את הקליע","הקליע יוצא מהלוע"], e:"כך זה עובד בכל כדור מודרני, מאקדח ועד מקלע."},
    {t:"tf", q:"במנגנון 'הדף' (Blowback), הלחץ של הירייה דוחף את המכלול אחורה ישירות.", c:true, e:"זה מנגנון פשוט שנפוץ בתת-מקלעים כמו העוזי."},
    {t:"mc", q:"מה תפקיד קפיץ ההחזר?", a:["להחזיר את המכלול קדימה אחרי שנדחף לאחור","להחזיק את המחסנית","להגדיל את הטווח","לנצור את הנשק"], c:0, e:"בדרך חזרה קדימה, המכלול גם דוחף כדור חדש לבית הבליעה."},
    {t:"mc", q:"מה ההבדל בין ירי מ'בריח סגור' לירי מ'בריח פתוח'?", a:["בבריח סגור הכדור כבר בבית הבליעה לפני הלחיצה. בבריח פתוח המכלול מאחור ונע קדימה בלחיצה","אין הבדל","בריח פתוח רק ברובי ציד","בבריח סגור אי אפשר לירות"], c:0, e:"העוזי יורה מבריח פתוח. רוב הרובים המודרניים יורים מבריח סגור, שמדויק יותר."},
@@ -796,6 +805,7 @@ const COURSE = [
    {t:"mc", q:"באיזו ארץ הומצא אבק השריפה?", a:["סין","יוון","מצרים","אנגליה"], c:0, e:"אלכימאים סינים גילו אותו בערך במאה ה-9, ככל הנראה בזמן חיפוש אחרי סם חיים."},
    {t:"mc", q:"מה מאפיין מוסקט קלאסי?", a:["קנה חלק וטעינה מלוע הקנה","מחסנית של 30 כדורים","ירי אוטומטי","כוונת אופטית"], c:0, e:"מוסקטים נטענו מהלוע, עם אבק שריפה וכדור עופרת, ודיוקם היה נמוך."},
    {t:"tf", q:"החריקה (Rifling) היא חריצים ספירליים בתוך הקנה שגורמים לקליע להסתובב.", c:true, e:"הסיבוב מייצב את הקליע במעופו ומשפר מאוד את הדיוק."},
+   {t:"order", q:"סדר מהמוקדם למאוחר", items:["אבק השריפה","המוסקט","מקלע גטלינג","הטנק הראשון"], e:"אבק השריפה בסין (המאה ה-9), מוסקטים (המאה ה-16), גטלינג (1862), הטנק הראשון (1916)."},
    {t:"mc", q:"מי המציא את מכונת הירייה הידנית בעלת הקנים המסתובבים ב-1862?", a:["ריצ'רד גטלינג","סמואל קולט","הירם מקסים","ג'ון בראונינג"], c:0, e:"מקלע גטלינג הופעל בסיבוב ידית ושימש במלחמת האזרחים האמריקנית."},
    {t:"mc", q:"מה היה חדשני במקלע של הירם מקסים (1884)?", a:["הוא היה אוטומטי לגמרי והשתמש בכוח הרתע","הוא ירה חיצים","הוא הופעל בקיטור","הוא היה עשוי עץ"], c:0, e:"זה היה המקלע האוטומטי המעשי הראשון, והוא שינה את פני מלחמות סוף המאה ה-19."}
   ]},
@@ -834,6 +844,7 @@ const COURSE = [
    {t:"match", q:"התאם נשק לסוג שלו", p:[["עוזי","תת-מקלע"],["תבור","רובה סער"],["נגב","מקלע קל"],["יריחו","אקדח"]]}
   ]},
   { name:"מערכות גדולות", qs:[
+   {t:"order", q:"סדר את מערכות הנשק הישראליות לפי שנת ההופעה", items:["עוזי","גליל","מרכבה","כיפת ברזל"], e:"עוזי (1954), גליל (1972), מרכבה (1979), כיפת ברזל (2011)."},
    {t:"mc", q:"מי נחשב ל'אבי המרכבה'?", a:["ישראל טל","משה דיין","אריאל שרון","דוד בן-גוריון"], c:0, e:"האלוף ישראל טל הוביל את פיתוח הטנק, שנכנס לשירות ב-1979."},
    {t:"mc", q:"למה המנוע במרכבה נמצא בחזית ולא מאחור?", a:["כדי להוסיף שכבת הגנה לצוות","כדי שיהיה מהיר יותר","בגלל חוסר מקום","כדי לחסוך בדלק"], c:0, e:"המנוע משמש כמגן נוסף, ובחלק האחורי יש דלת לפינוי ולהעמסה."},
    {t:"tf", q:"כיפת ברזל ביצעה את היירוט המבצעי הראשון שלה ב-2011.", c:true, e:"באפריל 2011 יירטה המערכת רקטה ששוגרה לעבר באר שבע."},
@@ -851,6 +862,7 @@ const COURSE = [
   ]},
   { name:"כינויים וסיפורים", qs:[
    {t:"pic", w:"thompson"},
+   {t:"order", q:"סדר לפי שנת ההופעה, מהמוקדם למאוחר", items:["מאוזר 98","M1 גאראנד","AK-47","גלוק 17"], e:"מאוזר 98 (1898), M1 גאראנד (1936), AK-47 (1947), גלוק 17 (1982)."},
    {t:"mc", q:"איזה נשק קיבל את הכינוי 'טומי גאן'?", a:["תת-מקלע תומפסון","קולט 45","וינצ'סטר","מאוזר"], c:0, e:"הוא נקרא על שם ג'ון ט. תומפסון והתפרסם בתקופת היובש בארה\"ב."},
    {t:"mc", q:"איזה אקדח נקרא 'עושה השלום' (Peacemaker)?", a:["קולט סינגל אקשן ארמי, 1873","גלוק 17","דזרט איגל","וולטר PPK"], c:0, e:"זה האקדח המזוהה ביותר עם 'המערב הפרוע'."},
    {t:"tf", q:"הדזרט איגל יוצר בתחילת דרכו בישראל.", c:true, e:"הוא תוכנן בידי Magnum Research האמריקנית, והייצור נעשה בתעשייה הצבאית."},
@@ -1224,6 +1236,7 @@ function renderQ(){
   if(q.t==="part") return renderPart(q,kick,tm);
   if(q.t==="pic") return renderPic(q,kick,tm);
   if(q.t==="gap") return renderGap(q,kick,tm);
+  if(q.t==="order") return renderOrder(q,kick,tm);
   if(q.t==="id"){
     const w=WMAP[q.w], pool=shuffle(WEAPONS.filter(x=>!x.gen&&x.id!==w.id)).slice(0,3);
     L.cur={t:"mc",a:[w.n,...pool.map(x=>x.n)],c:0,e:`${w.type} · ${w.country} · ${w.cal}. ${w.fact}`};
@@ -1264,12 +1277,13 @@ function renderPairs(q,kick,tm){
     else { sfx.no(); m.miss=true; [a,b].forEach(x=>{x.classList.remove("sel");x.classList.add("wrong");setTimeout(()=>x.classList.remove("wrong"),450);}); }
   });
 }
-function onGo(){ if(L.state==="answer"){ const t=L.qs[L.i].t; return t==="build"?checkBuild():t==="part"?checkPart():check(); } if(L.state==="checked")return advance(); if(L.state==="screens")return nextScreen(); closeLesson(); }
+function onGo(){ if(L.state==="answer"){ const t=L.qs[L.i].t; return t==="build"?checkBuild():t==="part"?checkPart():t==="order"?checkOrder():check(); } if(L.state==="checked")return advance(); if(L.state==="screens")return nextScreen(); closeLesson(); }
 function stopTimer(){ const t=$("#tbar"); if(t) t.style.animationPlayState="paused"; }
 function timeUp(){
   const q0=L.qs[L.i];
   if(q0.t==="build") return checkBuild(true);
   if(q0.t==="part") return checkPart(true);
+  if(q0.t==="order") return checkOrder(true);
   if(q0.t==="match"){ L.state="checked"; return feedback(false,"נגמר הזמן."); }
   L.sel=-1; check(true);
 }
@@ -1593,6 +1607,27 @@ function milestone(){
   if(!msg) return;
   setTimeout(()=>{ if(!L) return; const t=document.createElement("div"); t.className="toast"; t.innerHTML=`${mascot("happy","toast-kd")}<b>${msg[0]}</b><svg viewBox="0 0 24 24" class="ti"><use href="#${msg[1]}"/></svg>`;
     $("#lesson").appendChild(t); sfx.streak(); setTimeout(()=>t.remove(),2200); },120);
+}
+
+/* ---- put in order */
+function renderOrder(q,kick,tm){
+  L.bank=shuffle(q.items.map((_,i)=>i)); if(L.bank.every((v,i)=>v===i)) L.bank.reverse(); L.ord=[];
+  frame(`${kick}<h1 class="l-title">${esc(q.q)}</h1>
+    <div class="slots" id="slots">${q.items.map((_,i)=>`<div class="slot" style="--d:${i}"><span class="n">${i+1}</span><span class="fill" data-k="${i}"></span></div>`).join("")}</div>
+    <div class="bank" id="obank">${L.bank.map((ix,k)=>`<button class="tile" style="--d:${k}" data-o="${ix}">${esc(q.items[ix])}</button>`).join("")}</div>`,"בדיקה",true,"",tm);
+  const sync=()=>{ $$("#slots .fill").forEach((f,k)=>{ const ix=L.ord[k]; const had=f.dataset.ix; f.innerHTML=ix===undefined?"":`<button class="tile in" data-back="${k}">${esc(q.items[ix])}</button>`; f.dataset.ix=ix===undefined?"":ix; if(ix!==undefined&&String(had)!==String(ix)) sfx.pop(); });
+    $$("#obank .tile").forEach(b=>b.classList.toggle("used",L.ord.includes(+b.dataset.o)));
+    $("#go").disabled=L.ord.length<q.items.length;
+    $$("[data-back]").forEach(b=>b.onclick=()=>{ if(L.state!=="answer")return; L.ord.splice(+b.dataset.back,1); sfx.tap(); sync(); }); };
+  $$("#obank .tile").forEach(b=>b.onclick=()=>{ if(L.state!=="answer"||L.ord.includes(+b.dataset.o))return; L.ord.push(+b.dataset.o); sync(); });
+}
+function checkOrder(timeout){
+  const q=L.qs[L.i], ok=!timeout&&L.ord.length===q.items.length&&L.ord.every((v,i)=>v===i);
+  $$(".tile").forEach(b=>b.disabled=true);
+  $$("#slots .slot").forEach((sl,k)=>sl.classList.add(L.ord[k]===k?"ok":"no"));
+  L.state="checked";
+  feedback(ok,(timeout?"נגמר הזמן. ":"")+(ok?"":"הסדר הנכון: "+q.items.map((t,i)=>`${i+1}. ${t}`).join("  ")+". ")+(q.e||""));
+  if(ok) burst($("#slots"),["#58C21B","#A8E66F","#FFC800"],20);
 }
 
 /* ---- boot */
