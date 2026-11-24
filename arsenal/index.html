@@ -162,6 +162,33 @@ main{padding:0 max(16px,env(safe-area-inset-right,0px)) calc(110px + env(safe-ar
 .week small{font-size:12px;color:var(--muted);font-weight:700}
 .danger{color:var(--red-ink);font-weight:800;letter-spacing:.03em;padding:14px;width:100%;margin-top:22px;border:2px solid var(--line);border-radius:14px}
 
+/* ---------- armory */
+.chips{display:flex;gap:8px;overflow-x:auto;padding-bottom:6px;margin-bottom:14px;scrollbar-width:none}
+.chip{flex:none;border:2px solid var(--line);border-bottom-width:4px;border-radius:12px;padding:7px 14px;font-weight:700;font-size:15px;color:var(--muted)}
+.chip[aria-pressed="true"]{border-color:var(--blue-line);background:var(--blue-bg);color:var(--blue)}
+.arm-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:12px}
+.arm-card{display:flex;flex-direction:column;text-align:start;border:2px solid var(--line);border-bottom-width:4px;border-radius:16px;overflow:hidden;background:var(--surface)}
+.arm-card:hover{background:var(--soft)}
+.arm-card:active{border-bottom-width:2px;transform:translateY(2px)}
+.sil-box{position:relative;background:var(--soft);display:grid;place-items:center;padding:14px 10px;color:var(--ink-strong)}
+.sil{width:100%;max-width:260px;height:auto;aspect-ratio:240/90}
+.gen{position:absolute;bottom:6px;inset-inline-start:8px;font-size:11px;font-weight:700;color:var(--muted)}
+.arm-meta{padding:12px 14px;display:flex;flex-direction:column;gap:2px}
+.arm-meta b{font-size:18px;font-weight:800;color:var(--ink-strong)}
+.arm-meta small{color:var(--muted);font-weight:500}
+.arm-meta .cal{align-self:flex-start;margin-top:6px;font-size:13px;font-weight:700;background:var(--blue-bg);color:var(--blue);padding:2px 8px;border-radius:8px}
+.big-sil{border-radius:16px;margin-bottom:14px}
+.spec{width:100%;border-collapse:collapse;margin:12px 0}
+.spec th,.spec td{text-align:start;padding:9px 4px;border-bottom:2px solid var(--line);font-size:16px;vertical-align:top}
+.spec th{color:var(--muted);font-weight:600;width:38%}
+.spec td{font-weight:700;color:var(--ink-strong)}
+.fact{border:2px solid var(--line);border-radius:14px;padding:12px 14px;margin-bottom:18px;background:var(--soft)}
+.fact b{color:var(--orange)} .fact p{margin:2px 0 0;font-weight:500}
+.id-card{border:2px solid var(--line);border-radius:18px;background:var(--soft);padding:20px 14px;display:grid;place-items:center;margin-bottom:20px;color:var(--ink-strong)}
+.id-card .sil{max-width:420px}
+.id-opts{grid-template-columns:1fr 1fr}
+@media (max-width:420px){.id-opts .opt{font-size:16px;padding:12px}}
+
 /* ---------- modal sheet */
 .overlay{position:fixed;inset:0;z-index:40;background:rgb(0 0 0 / .45);display:grid;place-items:end center;padding:0}
 .sheet{width:100%;max-width:560px;max-height:88vh;overflow:auto;background:var(--surface);border-radius:20px 20px 0 0;padding:24px max(20px,env(safe-area-inset-left,0px)) calc(24px + env(safe-area-inset-bottom,0px));animation:rise .25s ease-out}
@@ -280,6 +307,7 @@ main{padding:0 max(16px,env(safe-area-inset-right,0px)) calc(110px + env(safe-ar
   <symbol id="n-home" viewBox="0 0 32 32"><path d="M4 14 16 4l12 10v13a1 1 0 0 1-1 1h-7v-8h-8v8H5a1 1 0 0 1-1-1z" fill="#FF9B1A"/><path d="M2 15 16 3l14 12" stroke="#E07B00" stroke-width="3" fill="none" stroke-linecap="round" stroke-linejoin="round"/><rect x="12" y="20" width="8" height="8" rx="1" fill="#8A4B12"/></symbol>
   <symbol id="n-trophy" viewBox="0 0 32 32"><path d="M8 4h16v4h4v4a6 6 0 0 1-5.6 6 8 8 0 0 1-4.4 4V25h5v4H9v-4h5v-3a8 8 0 0 1-4.4-4A6 6 0 0 1 4 12V8h4z" fill="#FFC800"/><path d="M8 8v8a4 4 0 0 1-2-3.5V10zm16 0v8a4 4 0 0 0 2-3.5V10z" fill="#E3A600"/><rect x="9" y="25" width="14" height="4" rx="1" fill="#C98A00"/><path d="M13 8l-1 7" stroke="#fff" stroke-width="2" opacity=".5" stroke-linecap="round"/></symbol>
   <symbol id="n-shop" viewBox="0 0 32 32"><path d="M6 10h20l-2 17H8z" fill="#FF4F4F"/><path d="M11 12V9a5 5 0 0 1 10 0v3" stroke="#C42B2B" stroke-width="2.6" fill="none" stroke-linecap="round"/><path d="M6 10h20l-.4 3H6.4z" fill="#E03A3A"/><path d="M12 20l4 3 4-3" stroke="#fff" stroke-width="2.2" fill="none" stroke-linecap="round"/></symbol>
+  <symbol id="n-armory" viewBox="0 0 32 32"><circle cx="16" cy="16" r="13" fill="#14B8A6"/><circle cx="16" cy="16" r="8" fill="none" stroke="#fff" stroke-width="2.4"/><path d="M16 3v8M16 21v8M3 16h8M21 16h8" stroke="#fff" stroke-width="2.4" stroke-linecap="round"/><circle cx="16" cy="16" r="2.2" fill="#fff"/></symbol>
   <symbol id="n-me" viewBox="0 0 32 32"><circle cx="16" cy="16" r="14" fill="#C27DF5"/><circle cx="16" cy="13" r="5" fill="#fff"/><path d="M7 25a10 8 0 0 1 18 0 12 12 0 0 1-18 0z" fill="#fff"/></symbol>
   <symbol id="chest" viewBox="0 0 86 78"><ellipse cx="43" cy="72" rx="34" ry="5" fill="#000" opacity=".1"/><rect x="8" y="30" width="70" height="38" rx="8" fill="#B8642B"/><rect x="8" y="30" width="70" height="8" fill="#9A4E1D"/><path d="M8 32a20 16 0 0 1 20-16h30a20 16 0 0 1 20 16z" fill="#D9843F"/><rect x="18" y="16" width="8" height="52" fill="#FFC800"/><rect x="60" y="16" width="8" height="52" fill="#FFC800"/><rect x="35" y="30" width="16" height="18" rx="4" fill="#FFC800"/><circle cx="43" cy="38" r="3" fill="#9A4E1D"/><path d="M14 26c4-5 10-7 16-7" stroke="#fff" stroke-width="3" opacity=".35" fill="none" stroke-linecap="round"/></symbol>
   <symbol id="chest-open" viewBox="0 0 86 78"><ellipse cx="43" cy="72" rx="34" ry="5" fill="#000" opacity=".1"/><path d="M14 4h58l6 26H8z" fill="#D9843F"/><path d="M8 30h70v4H8z" fill="#9A4E1D"/><rect x="8" y="34" width="70" height="34" rx="6" fill="#B8642B"/><path d="M20 34l10-14 6 14zm18 0 8-18 8 18zm18 0 8-12 6 12z" fill="#1EA5F0"/><path d="M30 20l2 6m14-10 2 8" stroke="#fff" stroke-width="2" opacity=".7"/><rect x="18" y="34" width="8" height="34" fill="#FFC800"/><rect x="60" y="34" width="8" height="34" fill="#FFC800"/></symbol>
@@ -290,6 +318,7 @@ main{padding:0 max(16px,env(safe-area-inset-right,0px)) calc(110px + env(safe-ar
     <div class="logo"><svg viewBox="0 0 120 120"><use href="#kasdi"/></svg>ארסנל</div>
     <div class="nav-list">
       <button class="nav-item" data-tab="learn"><svg viewBox="0 0 32 32"><use href="#n-home"/></svg><span>לימוד</span></button>
+      <button class="nav-item" data-tab="armory"><svg viewBox="0 0 32 32"><use href="#n-armory"/></svg><span>נשקייה</span></button>
       <button class="nav-item" data-tab="badges"><svg viewBox="0 0 32 32"><use href="#n-trophy"/></svg><span>הישגים</span></button>
       <button class="nav-item" data-tab="shop"><svg viewBox="0 0 32 32"><use href="#n-shop"/></svg><span>חנות</span></button>
       <button class="nav-item" data-tab="me"><svg viewBox="0 0 32 32"><use href="#n-me"/></svg><span>פרופיל</span></button>
@@ -306,24 +335,163 @@ main{padding:0 max(16px,env(safe-area-inset-right,0px)) calc(110px + env(safe-ar
 <canvas id="confetti" hidden></canvas>
 
 <script>
+/* ------------------------------------------------------------------
+   Weapons library. Specs are typical published figures for the
+   standard model and are rounded.
+------------------------------------------------------------------ */
+const WEAPONS=[
+ {id:"ak47",n:"AK-47",sil:"ak",type:"רובה סער",country:"ברית המועצות",year:"1947",by:"מיכאיל קלשניקוב",cal:"7.62×39 מ\"מ",act:"גזים, בריח מסתובב",mag:"30",rng:"כ-350 מ'",kg:"כ-3.5 ק\"ג (ריק)",fact:"הנשק הנפוץ בעולם: יוצרו ממנו ומגרסאותיו עשרות מיליוני יחידות. הוא ידוע באמינות שלו גם בבוץ, בחול ובקור."},
+ {id:"m16",n:"M16",sil:"m16",type:"רובה סער",country:"ארה\"ב",year:"1964",by:"יוג'ין סטונר",cal:"5.56×45 מ\"מ נאט\"ו",act:"גזים ישירים, בריח מסתובב",mag:"30",rng:"כ-550 מ'",kg:"כ-3.4 ק\"ג (ריק)",fact:"צה\"ל השתמש שנים רבות ב-M16 ובגרסה הקצרה שלו, ה-M4. ידית הנשיאה למעלה היא סימן ההיכר של הדגמים הישנים."},
+ {id:"tavor",n:"תבור TAR-21",sil:"tavor",type:"רובה סער",country:"ישראל",year:"2001",by:"התעשייה הצבאית (IWI)",cal:"5.56×45 מ\"מ נאט\"ו",act:"גזים, בוכנה ארוכה",mag:"30",rng:"כ-500 מ'",kg:"כ-3.3 ק\"ג (ריק)",fact:"רובה 'בולפאפ': המנגנון והמחסנית נמצאים מאחורי ידית האחיזה, ולכן הרובה קצר ונוח ברכב ובשטח בנוי."},
+ {id:"galil",n:"גליל",sil:"ak",gen:1,type:"רובה סער",country:"ישראל",year:"1972",by:"ישראל גלילי ויעקב ליאור",cal:"5.56×45 מ\"מ נאט\"ו",act:"גזים, בריח מסתובב",mag:"35",rng:"כ-500 מ'",kg:"כ-4 ק\"ג (ריק)",fact:"מבוסס על מנגנון ה-AK דרך הוולמט הפיני. בדו-רגלי של הגליל שולב פותחן בקבוקים, כדי שחיילים לא יפתחו בקבוקים עם המחסנית."},
+ {id:"fal",n:"FN FAL",sil:"bolt",gen:1,type:"רובה קרב",country:"בלגיה",year:"1953",by:"דיודונה סייב",cal:"7.62×51 מ\"מ נאט\"ו",act:"גזים, בוכנה קצרה",mag:"20",rng:"כ-600 מ'",kg:"כ-4.3 ק\"ג (ריק)",fact:"כונה 'יד ימין של העולם החופשי' כי עשרות צבאות אימצו אותו. צה\"ל השתמש בו במלחמת ששת הימים."},
+ {id:"glock17",n:"גלוק 17",sil:"glock",type:"אקדח",country:"אוסטריה",year:"1982",by:"גסטון גלוק",cal:"9×19 מ\"מ",act:"רתע קצר",mag:"17",rng:"כ-50 מ'",kg:"כ-0.63 ק\"ג (ריק)",fact:"המסגרת עשויה פולימר. אין לו נצרה ידנית בצד: הנצרה בנויה בתוך ההדק עצמו."},
+ {id:"jericho",n:"יריחו 941",sil:"glock",gen:1,type:"אקדח",country:"ישראל",year:"1990",by:"התעשייה הצבאית",cal:"9×19 מ\"מ",act:"רתע קצר",mag:"16",rng:"כ-50 מ'",kg:"כ-1 ק\"ג (ריק)",fact:"מבוסס על האקדח הצ'כי CZ 75. נפוץ מאוד במשטרה ובקרב אזרחים בישראל."},
+ {id:"deagle",n:"דזרט איגל",sil:"glock",gen:1,type:"אקדח",country:"ארה\"ב וישראל",year:"1983",by:"Magnum Research, ייצור בתעשייה הצבאית",cal:".50 AE / .44 / .357",act:"גזים, בריח מסתובב",mag:"7 (בקליבר .50)",rng:"כ-50 מ'",kg:"כ-2 ק\"ג (ריק)",fact:"מהאקדחים הכבדים בעולם, ואחד הבודדים שעובדים במנגנון גזים כמו רובה."},
+ {id:"uzi",n:"עוזי",sil:"uzi",type:"תת-מקלע",country:"ישראל",year:"1954",by:"עוזיאל גל",cal:"9×19 מ\"מ",act:"הדף, בריח פתוח",mag:"25 או 32",rng:"כ-100 מ'",kg:"כ-3.5 ק\"ג (ריק)",fact:"המחסנית נמצאת בתוך ידית האחיזה, כך שאפשר להחליף מחסנית גם בחושך: יד מוצאת יד."},
+ {id:"mp5",n:"MP5",sil:"uzi",gen:1,type:"תת-מקלע",country:"גרמניה",year:"1966",by:"הקלר אנד קוך",cal:"9×19 מ\"מ",act:"הדף מושהה בגלגלות, בריח סגור",mag:"30",rng:"כ-100 מ'",kg:"כ-2.5 ק\"ג (ריק)",fact:"הפך לסמל של יחידות לוחמה בטרור בזכות הדיוק שלו, שנובע מירי מבריח סגור."},
+ {id:"barrett",n:"בארט M82",sil:"barrett",type:"רובה צלפים",country:"ארה\"ב",year:"1982",by:"רוני בארט",cal:".50 BMG (12.7×99 מ\"מ)",act:"רתע קצר, חצי-אוטומטי",mag:"10",rng:"כ-1,800 מ'",kg:"כ-14 ק\"ג",fact:"רובה 'אנטי-חומר': נועד לפגוע בציוד, כמו רכבים ומכ\"מים, ממרחק רב. בלם הלוע הגדול מקטין את הרתע."},
+ {id:"svd",n:"דרגונוב SVD",sil:"bolt",gen:1,type:"רובה צלפים",country:"ברית המועצות",year:"1963",by:"יבגני דרגונוב",cal:"7.62×54R מ\"מ",act:"גזים, חצי-אוטומטי",mag:"10",rng:"כ-800 מ'",kg:"כ-4.3 ק\"ג",fact:"נועד לקלע המחלקתי, שנותן ירי מדויק לטווח בינוני בתוך כוח הרגלים."},
+ {id:"negev",n:"נגב",sil:"negev",type:"מקלע קל",country:"ישראל",year:"1997",by:"התעשייה הצבאית (IWI)",cal:"5.56×45 מ\"מ נאט\"ו",act:"גזים",mag:"חגור או מחסנית",rng:"כ-800 מ'",kg:"כ-7.5 ק\"ג",fact:"מקלע שחייל אחד נושא ומפעיל. אפשר להזין אותו בחגור של כדורים או במחסנית רגילה."},
+ {id:"mag",n:"מאג (FN MAG)",sil:"negev",gen:1,type:"מקלע בינוני",country:"בלגיה",year:"1958",by:"ארנסט ורווייר",cal:"7.62×51 מ\"מ נאט\"ו",act:"גזים",mag:"חגור",rng:"כ-800 מ' (על דו-רגלי)",kg:"כ-11 ק\"ג",fact:"בצה\"ל קוראים לו פשוט 'מאג'. הוא מורכב גם על טנקים ונגמ\"שים."},
+ {id:"garand",n:"M1 גאראנד",sil:"bolt",gen:1,type:"רובה",country:"ארה\"ב",year:"1936",by:"ג'ון גאראנד",cal:".30-06",act:"גזים, חצי-אוטומטי",mag:"8 (מסרק)",rng:"כ-450 מ'",kg:"כ-4.3 ק\"ג",fact:"כשנגמרים הכדורים, המסרק נפלט עם צליל 'פינג' מפורסם. היה רובה הרגלים הראשי של ארה\"ב במלחמת העולם השנייה."},
+ {id:"mauser",n:"מאוזר 98",sil:"bolt",type:"רובה בריח",country:"גרמניה",year:"1898",by:"פאול מאוזר",cal:"7.92×57 מ\"מ",act:"בריח ידני",mag:"5 (פנימית)",rng:"כ-500 מ'",kg:"כ-4.1 ק\"ג",fact:"מנגנון הבריח שלו כל כך מוצלח שרובי ציד רבים עד היום מבוססים עליו. גם ההגנה וצה\"ל בראשיתו השתמשו בו."},
+];
+const WMAP=Object.fromEntries(WEAPONS.map(w=>[w.id,w]));
+
+/* Side-profile silhouettes, muzzle pointing left (reads naturally in RTL). viewBox 0 0 240 90 */
+const SIL={
+ ak:`<path d="M236 30l-56 4v12l52 12 4-2z"/><rect x="110" y="30" width="70" height="14" rx="2"/><path d="M152 44h-10l6 20h10z"/><path d="M132 44h-16q-2 18-12 30l14 6q12-16 14-36z"/><rect x="70" y="32" width="40" height="11" rx="3"/><rect x="55" y="27" width="57" height="5" rx="2"/><rect x="12" y="34" width="58" height="4"/><rect x="36" y="26" width="4" height="8"/><rect x="106" y="25" width="6" height="5"/><rect x="6" y="32" width="8" height="7" rx="1"/><path d="M146 44q-4 10 6 12" fill="none" stroke="currentColor" stroke-width="3"/>`,
+ m16:`<path d="M236 34l-54-2v14l50 10 4-4z"/><rect x="112" y="30" width="70" height="16" rx="2"/><rect x="128" y="16" width="46" height="5" rx="2"/><rect x="169" y="16" width="5" height="14"/><rect x="128" y="16" width="5" height="14"/><path d="M158 46h-10l4 20h10z"/><path d="M136 46h-14l-2 28h14z"/><rect x="58" y="30" width="54" height="15" rx="6"/><path d="M58 30l-8-16h-4v22h12z"/><rect x="8" y="34" width="50" height="4"/><rect x="4" y="32" width="8" height="8" rx="1"/><path d="M150 46q-2 10 6 12" fill="none" stroke="currentColor" stroke-width="3"/>`,
+ tavor:`<path d="M230 30l-140-2-12 8v10l100 4 40 8 12-4z"/><path d="M130 46h-12l4 24h12z"/><path d="M180 48h-14l-4 28h14z"/><rect x="120" y="16" width="50" height="8" rx="2"/><rect x="130" y="24" width="6" height="5"/><rect x="156" y="24" width="6" height="5"/><rect x="40" y="36" width="40" height="4"/><rect x="34" y="34" width="8" height="8" rx="1"/><path d="M140 46q-10 4-12 16h18" fill="none" stroke="currentColor" stroke-width="3"/>`,
+ uzi:`<rect x="80" y="26" width="120" height="20" rx="3"/><rect x="60" y="32" width="20" height="6"/><path d="M148 46h-16l-2 40h16z"/><path d="M128 46q-12 2-12 16h12" fill="none" stroke="currentColor" stroke-width="3"/><path d="M200 30l30 4v10l-30-2z" fill="none" stroke="currentColor" stroke-width="4"/><rect x="84" y="20" width="6" height="6"/><rect x="186" y="20" width="6" height="6"/>`,
+ glock:`<rect x="60" y="24" width="130" height="22" rx="3"/><rect x="70" y="46" width="110" height="8" rx="2"/><path d="M178 46h-36l10 42 38-4z"/><path d="M142 54q-16 0-16 14h18" fill="none" stroke="currentColor" stroke-width="3"/><rect x="66" y="19" width="5" height="5"/><rect x="180" y="19" width="6" height="5"/><path d="M146 48h-6l-2 10h6z"/>`,
+ barrett:`<path d="M236 34l-46-2v16l42 8 4-4z"/><rect x="110" y="30" width="80" height="16" rx="2"/><rect x="114" y="14" width="60" height="9" rx="4"/><rect x="124" y="23" width="6" height="7"/><rect x="158" y="23" width="6" height="7"/><rect x="122" y="46" width="18" height="18" rx="1"/><path d="M168 46h-10l4 20h10z"/><rect x="18" y="35" width="92" height="6"/><rect x="4" y="30" width="16" height="16" rx="2"/><path d="M90 41l-10 32M90 41l10 32" fill="none" stroke="currentColor" stroke-width="4" stroke-linecap="round"/>`,
+ negev:`<path d="M236 32l-56 0v14l50 12 6-4z"/><rect x="100" y="28" width="80" height="18" rx="2"/><path d="M168 46h-10l4 20h10z"/><rect x="118" y="46" width="30" height="22" rx="3"/><rect x="116" y="18" width="36" height="5" rx="2"/><rect x="146" y="18" width="5" height="10"/><rect x="117" y="18" width="5" height="10"/><rect x="14" y="34" width="86" height="6"/><rect x="6" y="32" width="10" height="10" rx="1"/><path d="M50 40l-10 30M50 40l10 30" fill="none" stroke="currentColor" stroke-width="4" stroke-linecap="round"/>`,
+ bolt:`<path d="M236 36l-60-6-10 6v8l24 4 40 10 6-4z"/><rect x="40" y="34" width="130" height="10" rx="4"/><rect x="110" y="28" width="50" height="8" rx="2"/><path d="M148 34l6-10h6l-4 10z"/><path d="M150 44q-4 10 6 12" fill="none" stroke="currentColor" stroke-width="3"/><rect x="6" y="36" width="36" height="4"/><rect x="12" y="30" width="4" height="6"/>`,
+};
+const silSvg=(w,cls="sil")=>`<svg class="${cls}" viewBox="0 0 240 90" fill="currentColor" aria-label="${w?esc(w.n):""}">${SIL[w.sil]||SIL.bolt}</svg>`;
+
+/* ------------------------------------------------------------------
+   Course content. Educational: safe handling, how firearms work,
+   identification, history and terminology.
+   q types: mc, tf, match, id (identify a weapon by its silhouette).
+------------------------------------------------------------------ */
 const COURSE = [
- { id:"safety", title:"בטיחות קודם כל", sub:"הכללים שכל אחד צריך להכיר", lessons:[
+ { id:"safety", c:["#58C21B","#45A00A"], title:"בטיחות קודם כל", sub:"הכללים שכל מי שמחזיק נשק חייב להכיר", lessons:[
   { name:"ארבעת הכללים", qs:[
    {t:"mc", q:"מהו כלל הבטיחות הראשון בטיפול בנשק?", a:["להתייחס לכל נשק כאילו הוא טעון","לבדוק שיש מחסנית","לנקות את הנשק","להחזיק אותו ביד חזקה"], c:0, e:"גם נשק שנראה ריק מטופל כאילו הוא טעון. זה הבסיס לכל השאר."},
-   {t:"tf", q:"מותר לכוון נשק לעבר אדם, כל עוד אתה בטוח שהוא ריק.", c:false, e:"לעולם לא מכוונים קנה לעבר משהו שאין כוונה לפגוע בו."},
-   {t:"mc", q:"איפה האצבע צריכה להיות כשלא יורים?", a:["מחוץ למגן ההדק, לאורך הנשק","על ההדק, בלי ללחוץ","מתחת לקנה","בתוך מגן ההדק"], c:0, e:"האצבע נכנסת להדק רק כשהכוונת על המטרה וההחלטה לירות התקבלה."},
-   {t:"tf", q:"לפני ירי במטווח צריך לדעת מה נמצא מאחורי המטרה.", c:true, e:"קליע יכול לעבור את המטרה או לפספס אותה, ולכן בודקים את כל הגזרה."},
+   {t:"tf", q:"מותר לכוון נשק לעבר אדם, כל עוד אתה בטוח שהוא ריק.", c:false, e:"לעולם לא מכוונים קנה לעבר משהו שאין כוונה לירות בו."},
+   {t:"mc", q:"איפה האצבע צריכה להיות כשלא יורים?", a:["מחוץ למגן ההדק, מונחת לאורך הנשק","על ההדק, בלי ללחוץ","מתחת לקנה","בתוך מגן ההדק"], c:0, e:"האצבע נכנסת להדק רק כשהכוונות על המטרה וההחלטה לירות התקבלה."},
+   {t:"tf", q:"לפני ירי צריך לדעת מה נמצא מאחורי המטרה.", c:true, e:"קליע יכול לעבור את המטרה או לפספס אותה, ולכן בודקים את כל הגזרה."},
    {t:"match", q:"התאם כל כלל לפירוש שלו", p:[["נשק טעון","תמיד מניחים שכן"],["כיוון הקנה","רק לכיוון בטוח"],["אצבע","מחוץ להדק"],["המטרה","לזהות, וגם מה מאחוריה"]]}
   ]},
-  { name:"מצאתי משהו חשוד", qs:[
-   {t:"mc", q:"ילד מוצא בשטח פתוח רימון ישן. מה הצעד הנכון?", a:["לא לגעת, להתרחק ולהתקשר למשטרה (100)","להביא אותו הביתה בזהירות","לזרוק אותו רחוק","לצלם מקרוב ולהזיז הצידה"], c:0, e:"תחמושת שלא התפוצצה יכולה להיות מסוכנת גם אחרי עשרות שנים. מתרחקים ומדווחים."},
-   {t:"tf", q:"תחמושת חלודה וישנה כבר לא מסוכנת.", c:false, e:"חומרי נפץ ישנים יכולים להיות אפילו פחות יציבים מחדשים."},
-   {t:"mc", q:"איך מאחסנים נשק בבית באופן בטוח?", a:["נעול בכספת, והתחמושת בנפרד","בארון הבגדים","מתחת למיטה, כדי שיהיה זמין","במגירה במטבח"], c:0, e:"אחסון נעול מונע גישה של ילדים ושל גורמים לא מורשים."},
-   {t:"tf", q:"בישראל, החזקת נשק פרטי מחייבת רישיון.", c:true, e:"רישיון נשק ניתן על ידי משרד לביטחון לאומי אחרי בדיקות ותנאים."},
-   {t:"mc", q:"מה פירוש שלט \"שטח אש\" בשטח פתוח?", a:["אזור אימונים צבאי שאסור להיכנס אליו","אזור פיקניק","שמורת טבע","אזור חניה"], c:0, e:"בשטחי אש עלולים להיות ירי פעיל ותחמושת שלא התפוצצה."}
+  { name:"בבית ובשטח", qs:[
+   {t:"mc", q:"איך מאחסנים נשק בבית באופן בטוח?", a:["נעול בכספת, והתחמושת בנפרד","בארון הבגדים","מתחת למיטה, כדי שיהיה זמין","במגירה במטבח"], c:0, e:"אחסון נעול מונע גישה של ילדים ושל אנשים לא מורשים."},
+   {t:"mc", q:"מוצאים בשטח פתוח רימון או פגז ישן. מה עושים?", a:["לא נוגעים, מתרחקים ומתקשרים למשטרה (100)","לוקחים הביתה בזהירות","זורקים רחוק","מזיזים הצידה"], c:0, e:"תחמושת שלא התפוצצה מסוכנת גם אחרי עשרות שנים."},
+   {t:"tf", q:"בישראל, החזקת נשק פרטי מחייבת רישיון.", c:true, e:"רישיון נשק ניתן אחרי בדיקות, הדרכה ומטווח."},
+   {t:"mc", q:"מה פירוש שלט \"שטח אש\"?", a:["אזור אימונים צבאי שאסור להיכנס אליו","אזור פיקניק","שמורת טבע","חניה"], c:0, e:"בשטחי אש עלולים להיות ירי פעיל ותחמושת שלא התפוצצה."},
+   {t:"tf", q:"מותר לטפל בנשק אחרי שתיית אלכוהול, אם מרגישים בסדר.", c:false, e:"אלכוהול ותרופות מסוימות פוגעים בשיקול הדעת ובתגובה. נשק ואלכוהול לא הולכים יחד."}
   ]}
  ]},
- { id:"history", title:"היסטוריה של הנשק", sub:"מאבק שריפה ועד הטנק הראשון", lessons:[
+ { id:"parts", c:["#14B8A6","#0E8F81"], title:"חלקי הנשק", sub:"ממה בנוי נשק, ומה יש בתוך כדור", lessons:[
+  { name:"מבנה הרובה", qs:[
+   {t:"mc", q:"איך נקרא החלק שדרכו הקליע יוצא?", a:["קנה","קת","מחסנית","הדק"], c:0, e:"הקנה מוביל את הקליע. הפתח בקצה שלו נקרא לוע."},
+   {t:"mc", q:"מה התפקיד של הקת?", a:["להישען על הכתף ולייצב את הנשק","להחזיק כדורים","לכוון","לקרר את הקנה"], c:0, e:"הקת מעבירה את הרתע לכתף ועוזרת להחזיק את הנשק יציב."},
+   {t:"mc", q:"מהי נצרה?", a:["מתג שנועל את ההדק ומונע ירי בטעות","סוג של כוונת","חלק מהמחסנית","רצועת נשיאה"], c:0, e:"הנצרה נשארת במצב 'נצור' עד הרגע שבו מחליטים לירות."},
+   {t:"tf", q:"בית הבליעה הוא המקום בקצה האחורי של הקנה שבו נמצא הכדור ברגע הירי.", c:true, e:"באנגלית Chamber. 'בדיקת בית בליעה' מוודאת שאין בו כדור."},
+   {t:"match", q:"התאם חלק לתפקיד", p:[["קנה","מוביל את הקליע"],["הדק","משחרר את הירייה"],["מחסנית","מזינה כדורים"],["כוונות","עוזרות לכוון"]]}
+  ]},
+  { name:"מה יש בכדור", qs:[
+   {t:"mc", q:"איזה חלק של הכדור עף לעבר המטרה?", a:["הקליע","התרמיל","הפיקה","המחסנית"], c:0, e:"רק הקליע יוצא מהקנה. התרמיל נשאר בנשק או נפלט החוצה."},
+   {t:"mc", q:"מה התפקיד של הפיקה (Primer)?", a:["ליצור ניצוץ שמצית את אבק השריפה כשהנוקר פוגע בה","לכוון את הקליע","להחזיק את המחסנית","לקרר את הקנה"], c:0, e:"הנוקר מכה בפיקה, הפיקה מציתה את ההודף, והגזים דוחפים את הקליע."},
+   {t:"tf", q:"ברובה חצי-אוטומטי, התרמיל הריק נפלט החוצה אחרי כל ירייה.", c:true, e:"המנגנון שולף את התרמיל, פולט אותו ומכניס כדור חדש."},
+   {t:"mc", q:"מה המשמעות של '5.56×45 מ\"מ'?", a:["קוטר הקליע 5.56 מ\"מ ואורך התרמיל 45 מ\"מ","5 כדורים ב-45 שניות","טווח של 545 מטר","משקל של 5.56 גרם"], c:0, e:"כך מתארים תחמושת: קוטר × אורך התרמיל."},
+   {t:"match", q:"התאם חלק בכדור לתפקיד", p:[["קליע","עף לעבר המטרה"],["תרמיל","המעטפת שמחזיקה הכל"],["פיקה","מציתה"],["הודף","בוער ודוחף את הקליע"]]}
+  ]}
+ ]},
+ { id:"works", c:["#FF9B1A","#DA7C00"], title:"איך נשק עובד", sub:"בריח, חצי-אוטומטי, גזים והדף", lessons:[
+  { name:"סוגי פעולה", qs:[
+   {t:"mc", q:"ברובה בריח, איך מכניסים כדור חדש לבית הבליעה?", a:["מושכים ודוחפים את ידית הבריח ביד","זה קורה לבד","לוחצים פעמיים על ההדק","מנערים את הרובה"], c:0, e:"כך עבדו רובי מלחמות העולם, כמו המאוזר 98, וכך עובדים רוב רובי הציד היום."},
+   {t:"mc", q:"מה קורה בנשק חצי-אוטומטי בכל לחיצה על ההדק?", a:["יוצאת ירייה אחת, והנשק נטען מחדש לבד","יוצא צרור","שום דבר עד שדורכים ביד","יוצאות שתי יריות"], c:0, e:"כדי לירות שוב צריך לשחרר את ההדק וללחוץ מחדש."},
+   {t:"tf", q:"אקדח תופי (Revolver) מחזיק את הכדורים בתוף מסתובב ולא במחסנית.", c:true, e:"בדרך כלל יש בתוף 6 כדורים."},
+   {t:"mc", q:"איך טוענים רובה ציד מסוג 'פאמפ'?", a:["מזיזים את המגן הקדמי אחורה וקדימה","לוחצים על כפתור","מסובבים את הקנה","הוא נטען לבד"], c:0, e:"זו גם הסיבה לשם Pump."},
+   {t:"match", q:"התאם סוג פעולה לתיאור", p:[["בריח","ידית ידנית"],["חצי-אוטומטי","ירייה אחת בכל לחיצה"],["אוטומטי","יורה כל עוד לוחצים"],["תופי","תוף מסתובב"]]}
+  ]},
+  { name:"מאיפה בא הכוח", qs:[
+   {t:"mc", q:"ב-AK-47 ובתבור, מה מפעיל את המנגנון אחרי כל ירייה?", a:["חלק מגזי הירי, שנלקחים מהקנה ודוחפים בוכנה","קפיץ שהיורה מותח ביד","סוללה","כוח הכבידה"], c:0, e:"זה נקרא 'מנגנון גזים', והוא הנפוץ ברובי סער."},
+   {t:"tf", q:"במנגנון 'הדף' (Blowback), הלחץ של הירייה דוחף את המכלול אחורה ישירות.", c:true, e:"זה מנגנון פשוט שנפוץ בתת-מקלעים כמו העוזי."},
+   {t:"mc", q:"מה תפקיד קפיץ ההחזר?", a:["להחזיר את המכלול קדימה אחרי שנדחף לאחור","להחזיק את המחסנית","להגדיל את הטווח","לנצור את הנשק"], c:0, e:"בדרך חזרה קדימה, המכלול גם דוחף כדור חדש לבית הבליעה."},
+   {t:"mc", q:"מה ההבדל בין ירי מ'בריח סגור' לירי מ'בריח פתוח'?", a:["בבריח סגור הכדור כבר בבית הבליעה לפני הלחיצה. בבריח פתוח המכלול מאחור ונע קדימה בלחיצה","אין הבדל","בריח פתוח רק ברובי ציד","בבריח סגור אי אפשר לירות"], c:0, e:"העוזי יורה מבריח פתוח. רוב הרובים המודרניים יורים מבריח סגור, שמדויק יותר."},
+   {t:"tf", q:"ב-M16 הגזים פועלים ישירות על נושא הבריח, בלי בוכנה.", c:true, e:"זה נקרא Direct impingement. הנשק קל יותר, אבל מתלכלך מהר יותר."}
+  ]}
+ ]},
+ { id:"rifles", c:["#1EA5F0","#1683C0"], title:"רובי סער", sub:"AK, M16, תבור, גליל ו-FAL", lessons:[
+  { name:"AK מול M16", qs:[
+   {t:"id", w:"ak47", q:"איזה נשק זה?"},
+   {t:"id", w:"m16", q:"איזה נשק זה?"},
+   {t:"mc", q:"מה הקליבר של ה-AK-47 המקורי?", a:["7.62×39 מ\"מ","5.56×45 מ\"מ","9×19 מ\"מ","12.7×99 מ\"מ"], c:0, e:"קליע כבד יחסית, שנשאר יציב גם כשעובר דרך צמחייה."},
+   {t:"mc", q:"באיזו תחמושת יורה ה-M16?", a:["5.56×45 מ\"מ נאט\"ו","7.62×39 מ\"מ","9×19 מ\"מ","‎.50 BMG"], c:0, e:"קליע קל ומהיר. חייל יכול לשאת יותר כדורים באותו משקל."},
+   {t:"tf", q:"ה-AK-47 ידוע באמינות שלו גם בבוץ, בחול ובקור.", c:true, e:"החלקים הנעים שלו מרווחים, ולכן לכלוך פחות תוקע אותו."},
+   {t:"mc", q:"מה ההבדל העיקרי בין M4 ל-M16?", a:["ה-M4 קצר יותר, עם קנה קצר וקת נשלפת","ה-M4 יורה כדורים אחרים","ה-M4 הוא אקדח","אין הבדל"], c:0, e:"ה-M4 הוא 'קרבין': גרסה קצרה ונוחה יותר."}
+  ]},
+  { name:"תבור, גליל ו-FAL", qs:[
+   {t:"id", w:"tavor", q:"איזה נשק זה?"},
+   {t:"tf", q:"בתבור המחסנית נמצאת מאחורי ידית האחיזה.", c:true, e:"זה תכנון 'בולפאפ', שמקצר את הרובה בלי לקצר את הקנה."},
+   {t:"mc", q:"על מנגנון של איזה רובה מבוסס הגליל?", a:["AK (דרך הוולמט הפיני)","M16","מאוזר 98","M1 גאראנד"], c:0, e:"ישראל גלילי לקח את האמינות של ה-AK והתאים אותה לתחמושת נאט\"ו."},
+   {t:"mc", q:"איזה רובה בלגי כונה 'יד ימין של העולם החופשי'?", a:["FN FAL","גליל","AK-47","דרגונוב"], c:0, e:"עשרות צבאות אימצו אותו, וגם צה\"ל השתמש בו ב-1967."},
+   {t:"match", q:"התאם רובה לתחמושת", p:[["AK-47","7.62×39 מ\"מ"],["M16","5.56×45 מ\"מ"],["FN FAL","7.62×51 מ\"מ"],["מאוזר 98","7.92×57 מ\"מ"]]}
+  ]}
+ ]},
+ { id:"pistols", c:["#C27DF5","#9E5AD6"], title:"אקדחים ותת-מקלעים", sub:"גלוק, יריחו, דזרט איגל, עוזי ו-MP5", lessons:[
+  { name:"אקדחים", qs:[
+   {t:"id", w:"glock17", q:"איזה נשק זה?"},
+   {t:"mc", q:"כמה כדורים יש במחסנית סטנדרטית של גלוק 17?", a:["17","7","30","10"], c:0, e:"קל לזכור: 17 כדורים בגלוק 17."},
+   {t:"tf", q:"לגלוק 17 אין נצרה ידנית בצד. הנצרה בנויה בתוך ההדק.", c:true, e:"לכן משמעת האצבע מחוץ להדק חשובה בו במיוחד."},
+   {t:"mc", q:"מה הקליבר החזק ביותר של הדזרט איגל?", a:["‎.50 AE","9×19 מ\"מ","‎.22","5.56 מ\"מ"], c:0, e:"קליבר ענק לאקדח, ולכן גם הרתע חזק מאוד."},
+   {t:"mc", q:"מה הקליבר הנפוץ בעולם לאקדחים?", a:["9×19 מ\"מ (פרבלום)","7.62×39 מ\"מ","‎.50 BMG","12 גאוג'"], c:0, e:"גלוק, יריחו, עוזי ו-MP5 יורים כולם 9 מ\"מ."}
+  ]},
+  { name:"תת-מקלעים", qs:[
+   {t:"id", w:"uzi", q:"איזה נשק זה?"},
+   {t:"mc", q:"איפה נמצאת המחסנית בעוזי?", a:["בתוך ידית האחיזה","מעל הקנה","מאחורי הקת","בצד שמאל"], c:0, e:"יד מוצאת יד: אפשר להחליף מחסנית גם בחושך."},
+   {t:"mc", q:"איזו חברה גרמנית מייצרת את ה-MP5?", a:["הקלר אנד קוך","וולטר","מאוזר","גלוק"], c:0, e:"ה-MP5 יורה מבריח סגור, ולכן הוא מדויק מאוד לתת-מקלע."},
+   {t:"tf", q:"תת-מקלע יורה בדרך כלל תחמושת של אקדח.", c:true, e:"זה מה שמבדיל אותו מרובה סער, שיורה תחמושת רובה."},
+   {t:"match", q:"התאם נשק למדינה", p:[["עוזי","ישראל"],["MP5","גרמניה"],["גלוק","אוסטריה"],["יריחו","ישראל (מבוסס על CZ 75)"]]}
+  ]}
+ ]},
+ { id:"heavy", c:["#FF5A5A","#DB3E3E"], title:"צלפים ומקלעים", sub:"בארט, דרגונוב, נגב ומאג", lessons:[
+  { name:"רובי צלפים", qs:[
+   {t:"id", w:"barrett", q:"איזה נשק זה?"},
+   {t:"mc", q:"באיזו תחמושת יורה ה-Barrett M82?", a:["‎.50 BMG (12.7×99 מ\"מ)","9×19 מ\"מ","5.56×45 מ\"מ","7.62×39 מ\"מ"], c:0, e:"זו תחמושת של מקלע כבד, ולכן הטווח שלו מגיע לכ-1,800 מטר."},
+   {t:"mc", q:"מהו הדרגונוב (SVD)?", a:["רובה צלפים סובייטי","טנק רוסי","אקדח","טיל"], c:0, e:"נועד לקלע המחלקתי, שנותן ירי מדויק לטווח בינוני."},
+   {t:"tf", q:"בירי לטווח ארוך, הצלף מתחשב ברוח ובמרחק.", c:true, e:"הקליע נופל בדרך ונסחף ברוח, ולכן מתקנים את הכיוון."},
+   {t:"mc", q:"מה התפקיד של הדו-רגלי (Bipod)?", a:["לייצב את הנשק בירי משכיבה","לשאת את הנשק על הגב","לקרר את הקנה","לכוון בלילה"], c:0, e:"יציבות היא חצי מהדיוק."}
+  ]},
+  { name:"מקלעים", qs:[
+   {t:"id", w:"negev", q:"איזה נשק זה?"},
+   {t:"mc", q:"איך מוזן מקלע כמו הנגב או המאג בירי ממושך?", a:["בחגור, שרשרת של כדורים","במחסנית של 5","ביד, כדור כדור","בתוף של אקדח"], c:0, e:"חגור מאפשר לירות הרבה בלי להחליף מחסנית."},
+   {t:"tf", q:"במקלעים מחליפים לפעמים קנה כדי שלא יתחמם יותר מדי.", c:true, e:"קנה חם מדי נשחק מהר ומאבד דיוק."},
+   {t:"mc", q:"מה פירוש 'מקלע קל'?", a:["מקלע שחייל אחד יכול לשאת ולהפעיל","מקלע מפלסטיק","מקלע לילדים","מקלע בלי כדורים"], c:0, e:"הנגב הוא מקלע קל. המאג כבד יותר ונקרא מקלע בינוני."},
+   {t:"match", q:"התאם נשק לתפקיד", p:[["בארט","צלף אנטי-חומר"],["דרגונוב","קלע מחלקתי"],["נגב","מקלע קל"],["מאג","מקלע בינוני"]]}
+  ]}
+ ]},
+ { id:"shoot", c:["#F2A900","#C98A00"], title:"עקרונות הירי", sub:"כוונון, נשימה, לחיצה ומטווח", lessons:[
+  { name:"ירי מדויק", qs:[
+   {t:"mc", q:"ברובה עם כוונות ברזל, מה צריך להיות בקו אחד?", a:["הכוונת האחורית, הכוונת הקדמית (הזבוב) והמטרה","הקנה והקת","המחסנית וההדק","העין השנייה והמטרה"], c:0, e:"זה נקרא 'יישור כוונות'. הזבוב צריך להיות במרכז הכוונת האחורית."},
+   {t:"tf", q:"בכוונון נכון, העין מתמקדת בזבוב, והמטרה נראית מעט מטושטשת.", c:true, e:"העין לא יכולה להתמקד בשלושה מרחקים יחד, ולכן בוחרים בזבוב."},
+   {t:"mc", q:"מתי עדיף ללחוץ על ההדק?", a:["בהפסקה הטבעית בסוף הנשיפה","באמצע שאיפה עמוקה","תוך כדי דיבור","מיד אחרי ריצה"], c:0, e:"בסוף הנשיפה הגוף הכי שקט, והנשק זז הכי מעט."},
+   {t:"mc", q:"איך לוחצים נכון על ההדק?", a:["לחיצה הדרגתית ורציפה, ישר לאחור","משיכה חזקה ומהירה","בשתי אצבעות","בתנועה הצידה"], c:0, e:"משיכה חדה מזיזה את הנשק ומפספסת. הירייה צריכה 'להפתיע' אותך."},
+   {t:"match", q:"התאם עיקרון להסבר", p:[["יציבות","תנוחה נוחה ויציבה"],["כוונון","יישור כוונות"],["נשימה","עצירה טבעית"],["לחיצה","הדרגתית ורציפה"]]}
+  ]},
+  { name:"במטווח", qs:[
+   {t:"mc", q:"מה עושים לפני שמניחים נשק או מוסרים אותו למישהו?", a:["מוציאים מחסנית ובודקים שבית הבליעה ריק","מכוונים לרצפה ולוחצים","משאירים אותו דרוך","שום דבר מיוחד"], c:0, e:"זו 'בדיקת נשק'. גם אחריה ממשיכים לטפל בו כאילו הוא טעון."},
+   {t:"tf", q:"במטווח, ההוראות של מנהל המטווח קודמות לכל דבר.", c:true, e:"כשנשמעת הפקודה 'חדל', מפסיקים מיד, גם באמצע ירייה."},
+   {t:"mc", q:"למה מרכיבים מגני שמיעה במטווח?", a:["רעש הירי עלול לגרום נזק קבוע לשמיעה","כדי לא לשמוע את המדריך","זה רק למראה","כדי להתרכז במוזיקה"], c:0, e:"גם יריות בודדות יכולות לפגוע בשמיעה. גם משקפי מגן חובה."},
+   {t:"mc", q:"מה זה 'איפוס' נשק?", a:["כיוון הכוונות כך שהפגיעה תהיה בנקודה שמכוונים אליה","ריקון המחסנית","ניקוי הקנה","איפוס מונה הכדורים"], c:0, e:"כל יורה מאפס את הנשק האישי שלו, כי כל אחד מחזיק ומכוון קצת אחרת."},
+   {t:"tf", q:"כשיש מעצור (הנשק לא יורה), הקנה ממשיך להיות מכוון לכיוון בטוח.", c:true, e:"מעצור הוא לא סיבה להפסיק לשמור על כללי הבטיחות. פועלים לפי ההדרכה שקיבלת."}
+  ]}
+ ]},
+ { id:"history", c:["#E0782E","#B85F1E"], title:"היסטוריה של הנשק", sub:"מאבק שריפה ועד הטנק הראשון", lessons:[
   { name:"ההתחלה", qs:[
    {t:"mc", q:"באיזו ארץ הומצא אבק השריפה?", a:["סין","יוון","מצרים","אנגליה"], c:0, e:"אלכימאים סינים גילו אותו בערך במאה ה-9, ככל הנראה בזמן חיפוש אחרי סם חיים."},
    {t:"mc", q:"מה מאפיין מוסקט קלאסי?", a:["קנה חלק וטעינה מלוע הקנה","מחסנית של 30 כדורים","ירי אוטומטי","כוונת אופטית"], c:0, e:"מוסקטים נטענו מהלוע, עם אבק שריפה וכדור עופרת, ודיוקם היה נמוך."},
@@ -339,7 +507,7 @@ const COURSE = [
    {t:"mc", q:"מה היה הבזוקה?", a:["משגר רקטות נגד טנקים אמריקני","מטוס קרב","סוג של רימון יד","צוללת"], c:0, e:"הבזוקה שימשה חיילים אמריקנים במלחמת העולם השנייה וקיבלה את שמה מכלי נגינה מאולתר."}
   ]}
  ]},
- { id:"israel", title:"תוצרת ישראל", sub:"נשק ומערכות שפותחו כאן", lessons:[
+ { id:"israel", c:["#3F7FE0","#2C63B8"], title:"תוצרת ישראל", sub:"נשק ומערכות שפותחו כאן", lessons:[
   { name:"כלי נשק קלים", qs:[
    {t:"mc", q:"על שם מי נקרא תת-המקלע עוזי?", a:["עוזיאל גל","עוזי נרקיס","עוזי דיין","עוזי חיטמן"], c:0, e:"עוזיאל גל תכנן אותו בסוף שנות ה-40, וצה\"ל אימץ אותו ב-1954."},
    {t:"mc", q:"מה מיוחד בתבנית 'בולפאפ' של רובה התבור?", a:["מנגנון הנשק נמצא מאחורי ההדק, ולכן הרובה קצר","יש לו שני קנים","הוא יורה רק בודדת","הוא עשוי כולו מעץ"], c:0, e:"כך מתקבל רובה קצר ונוח עם קנה ארוך יחסית."},
@@ -355,7 +523,7 @@ const COURSE = [
    {t:"match", q:"התאם מערכת הגנה אווירית לטווח שלה", p:[["כיפת ברזל","טווח קצר"],["קלע דוד","טווח בינוני"],["חץ","טילים בליסטיים"],["אור איתן","לייזר"]]}
   ]}
  ]},
- { id:"famous", title:"הקלאסיקות", sub:"כלי נשק שכל העולם מכיר", lessons:[
+ { id:"famous", c:["#8B5CF6","#6D3FD6"], title:"הקלאסיקות", sub:"כלי נשק שכל העולם מכיר", lessons:[
   { name:"רובים מפורסמים", qs:[
    {t:"mc", q:"מי תכנן את ה-AK-47?", a:["מיכאיל קלשניקוב","יוג'ין סטונר","ג'ון גאראנד","פול מאוזר"], c:0, e:"AK הם ראשי התיבות ברוסית של 'אבטומט קלשניקוב', ו-47 היא שנת התכנון."},
    {t:"mc", q:"מי תכנן את רובה ה-AR-15, שממנו התפתח ה-M16?", a:["יוג'ין סטונר","מיכאיל קלשניקוב","גסטון גלוק","ריצ'רד גטלינג"], c:0, e:"סטונר תכנן אותו בחברת ארמלייט בשנות ה-50."},
@@ -371,7 +539,7 @@ const COURSE = [
    {t:"tf", q:"מיכאיל קלשניקוב נפטר ב-2013.", c:true, e:"הוא נפטר בגיל 94 ברוסיה."}
   ]}
  ]},
- { id:"terms", title:"מילון מונחים", sub:"לדבר את השפה", lessons:[
+ { id:"terms", c:["#EC4899","#C02A78"], title:"מילון מונחים", sub:"לדבר את השפה", lessons:[
   { name:"בסיס", qs:[
    {t:"mc", q:"מה המשמעות של 'קליבר'?", a:["קוטר הקדח של הקנה","אורך הרובה","משקל הנשק","מספר הכדורים"], c:0, e:"לדוגמה, 9 מ\"מ או 5.56 מ\"מ. זה קובע איזו תחמושת מתאימה לנשק."},
    {t:"mc", q:"מה ההבדל בין ירי חצי-אוטומטי לאוטומטי?", a:["חצי-אוטומטי: כדור אחד לכל לחיצה. אוטומטי: יורה כל עוד לוחצים","אין הבדל","אוטומטי יורה רק בודדת","חצי-אוטומטי צריך טעינה ידנית אחרי כל כדור"], c:0, e:"נשק שצריך פעולה ידנית בין יריות הוא למשל רובה בריח."},
@@ -390,8 +558,7 @@ const COURSE = [
 ];
 
 
-const UC={ safety:["#58C21B","#45A00A"], history:["#FF9B1A","#DA7C00"], israel:["#1EA5F0","#1683C0"], famous:["#C27DF5","#9E5AD6"], terms:["#FF5A5A","#DB3E3E"] };
-const uv=u=>`--u:${UC[u.id][0]};--u-d:${UC[u.id][1]}`;
+const uv=u=>`--u:${u.c[0]};--u-d:${u.c[1]}`;
 
 /* path nodes per unit: lesson, chest, lesson..., review, unit test */
 function nodesOf(u){
@@ -407,7 +574,7 @@ const LESSON_COUNT=FLAT.filter(f=>f.n.t!=="chest").length;
 /* ------------------------------------------------------------------ state */
 const KEY="arsenal-v1";
 const today=()=>new Date().toISOString().slice(0,10);
-const fresh=()=>({xp:0,gems:50,hearts:5,streak:0,best:0,last:null,done:{},daily:{d:today(),xp:0},heartsDay:today(),perfect:0,answered:0,correct:0,goal:50,days:{},freeze:0});
+const fresh=()=>({xp:0,gems:50,hearts:5,streak:0,best:0,last:null,done:{},daily:{d:today(),xp:0},heartsDay:today(),perfect:0,answered:0,correct:0,goal:50,days:{},freeze:0,ids:0,seen:[]});
 let S=fresh();
 try{const raw=localStorage.getItem(KEY); if(raw) S={...S,...JSON.parse(raw)};}catch(e){}
 // migrate old "unit:0" keys to "unit:l0"
@@ -453,11 +620,9 @@ const BADGES=[
   {n:"בוער",d:"רצף של 3 ימים",ic:"i-fire",c:"#FF9B1A",v:()=>S.best,max:3},
   {n:"צלף",d:"3 שיעורים בלי טעויות",ic:"i-check",c:"#FF4F4F",v:()=>S.perfect,max:3},
   {n:"מלא אנרגיה",d:"צבור 300 XP",ic:"i-bolt",c:"#FFC800",v:()=>S.xp,max:300},
-  {n:"קצין בטיחות",d:"סיים את יחידת הבטיחות",ic:"i-star",c:UC.safety[0],v:()=>+unitDone("safety"),max:1},
-  {n:"היסטוריון",d:"סיים את יחידת ההיסטוריה",ic:"i-book",c:UC.history[0],v:()=>+unitDone("history"),max:1},
-  {n:"כחול-לבן",d:"סיים את יחידת תוצרת ישראל",ic:"i-star",c:UC.israel[0],v:()=>+unitDone("israel"),max:1},
-  {n:"אספן",d:"סיים את הקלאסיקות",ic:"i-trophy",c:UC.famous[0],v:()=>+unitDone("famous"),max:1},
-  {n:"מילונאי",d:"סיים את מילון המונחים",ic:"i-book",c:UC.terms[0],v:()=>+unitDone("terms"),max:1},
+  {n:"מזהה נשק",d:"זהה נכון 10 כלי נשק לפי הצללית",ic:"i-star",c:"#14B8A6",v:()=>S.ids||0,max:10},
+  {n:"חוקר",d:"פתח 10 כרטיסים בנשקייה",ic:"i-book",c:"#8B5CF6",v:()=>(S.seen||[]).length,max:10},
+  ...COURSE.map(u=>({n:"בוגר: "+u.title,d:"סיים את כל היחידה",ic:"i-trophy",c:u.c[0],v:()=>+unitDone(u.id),max:1})),
   {n:"מפקד",d:"סיים את כל הקורס",ic:"i-trophy",c:"#FFC800",v:()=>lessonsDone(),max:LESSON_COUNT},
 ];
 const earned=b=>b.v()>=b.max;
@@ -494,7 +659,7 @@ function render(){
   $$(".nav-item").forEach(b=>b.dataset.tab===tab?b.setAttribute("aria-current","page"):b.removeAttribute("aria-current"));
   $("#topStats").innerHTML=statRow();
   $("#aside").innerHTML=`<div class="statrow">${statRow()}</div>${goalCard()}${rankCard()}${nextBadgeCard()}`;
-  ({learn:renderLearn,badges:renderBadges,shop:renderShop,me:renderMe})[tab]();
+  ({learn:renderLearn,armory:renderArmory,badges:renderBadges,shop:renderShop,me:renderMe})[tab]();
   $$("[data-go]").forEach(b=>b.onclick=()=>{tab=b.dataset.go;render();});
 }
 
@@ -553,6 +718,25 @@ function openNode(f){
 }
 
 /* ------------------------------------------------------------------ badges / shop / me */
+let armFilter="הכל";
+function renderArmory(){
+  const types=["הכל",...new Set(WEAPONS.map(w=>w.type))];
+  const list=WEAPONS.filter(w=>armFilter==="הכל"||w.type===armFilter);
+  $("#main").innerHTML=`<h1 class="page-title">נשקייה</h1><p class="page-sub">${WEAPONS.length} כלי נשק: נתונים, היסטוריה ועובדות. לחץ על כרטיס לפרטים.</p>
+   <div class="chips">${types.map(t=>`<button class="chip" aria-pressed="${t===armFilter}" data-f="${esc(t)}">${esc(t)}</button>`).join("")}</div>
+   <div class="arm-grid">${list.map(w=>`<button class="arm-card" data-w="${w.id}"><div class="sil-box">${silSvg(w)}${w.gen?`<span class="gen">איור כללי</span>`:""}</div>
+     <div class="arm-meta"><b>${esc(w.n)}</b><small>${esc(w.type)} · ${esc(w.country)} · ${esc(w.year)}</small><span class="cal">${esc(w.cal)}</span></div></button>`).join("")}</div>`;
+  $$(".chip").forEach(b=>b.onclick=()=>{armFilter=b.dataset.f;renderArmory();});
+  $$(".arm-card").forEach(b=>b.onclick=()=>weaponSheet(WMAP[b.dataset.w]));
+}
+function weaponSheet(w){
+  S.seen=S.seen||[]; if(!S.seen.includes(w.id)){S.seen.push(w.id);save();}
+  const rows=[["סוג",w.type],["מדינה",w.country],["שנה",w.year],["מתכנן",w.by],["תחמושת",w.cal],["מנגנון",w.act],["מחסנית",w.mag],["טווח אפקטיבי",w.rng],["משקל",w.kg]];
+  sheet(`<div class="sil-box big-sil">${silSvg(w)}${w.gen?`<span class="gen">איור כללי</span>`:""}</div><h2>${esc(w.n)}</h2>
+    <table class="spec">${rows.map(r=>`<tr><th>${r[0]}</th><td>${esc(r[1])}</td></tr>`).join("")}</table>
+    <div class="fact"><b>הידעת?</b><p>${esc(w.fact)}</p></div><button class="btn wide" id="sx">סגור</button>`);
+  $("#sx").onclick=()=>{closeSheet();render();};
+}
 function renderBadges(){
   const n=BADGES.filter(earned).length;
   $("#main").innerHTML=`<h1 class="page-title">הישגים</h1><p class="page-sub">${n} מתוך ${BADGES.length} עיטורים</p>
@@ -621,6 +805,14 @@ function renderQ(){
   const q=L.qs[L.i]; L.state="answer"; L.sel=null;
   const kick=L.i>=L.firstTotal?`<div class="l-kicker" style="color:var(--red-ink)">טעות קודמת, ננסה שוב</div>`:KIND[L.f.n.t]?`<div class="l-kicker">${KIND[L.f.n.t]}</div>`:"";
   const bubble=t=>`<div class="speak">${kasdi()}<div class="bubble">${esc(t)}</div></div>`;
+  if(q.t==="id"){
+    const w=WMAP[q.w], pool=shuffle(WEAPONS.filter(x=>!x.gen&&x.id!==w.id)).slice(0,3);
+    L.cur={a:[w.n,...pool.map(x=>x.n)],c:0,e:`${w.type} · ${w.country} · ${w.cal}. ${w.fact}`};
+    L.order=shuffle([0,1,2,3]);
+    frame(`${kick}<h1 class="l-title">${esc(q.q)}</h1><div class="id-card">${silSvg(w,"sil")}</div>
+      <div class="opts id-opts">${L.order.map((ai,k)=>`<button class="opt" data-a="${ai}"><span class="k">${k+1}</span>${esc(L.cur.a[ai])}</button>`).join("")}</div>`,"בדיקה",true);
+    bindChoice(); return;
+  }
   if(q.t==="mc"){
     L.order=shuffle(q.a.map((_,i)=>i));
     frame(`${kick}<h1 class="l-title">בחר את התשובה הנכונה</h1>${bubble(q.q)}
@@ -652,14 +844,16 @@ function renderPairs(q,kick){
 }
 function onGo(){ if(L.state==="answer")return check(); if(L.state==="checked")return advance(); closeLesson(); }
 function check(){
-  const q=L.qs[L.i]; if(L.sel===null)return;
+  const q0=L.qs[L.i]; if(L.sel===null)return;
+  const q=q0.t==="id"?{...L.cur,t:"mc"}:q0;
   const ok=q.t==="mc"?L.sel===q.c:(L.sel===1)===q.c, right=q.t==="mc"?q.c:(q.c?1:0);
+  if(q0.t==="id"&&ok) S.ids=(S.ids||0)+1;
   $$(".opts .opt").forEach(b=>{b.disabled=true;b.classList.remove("sel"); if(+b.dataset.a===right)b.classList.add("right"); else if(+b.dataset.a===L.sel)b.classList.add("wrong");});
-  L.state="checked"; feedback(ok,q.e);
+  L.state="checked"; feedback(ok,q.e,q);
 }
-function feedback(ok,expl){
-  const q=L.qs[L.i], first=L.i<L.firstTotal;
-  S.answered++; if(ok){S.correct++;L.combo++; if(first)L.first++;} else {L.combo=0; if(q.t!=="match")L.mistakes.push(q); S.hearts=Math.max(0,S.hearts-1);}
+function feedback(ok,expl,qv){
+  const q0=L.qs[L.i], q=qv||q0, first=L.i<L.firstTotal;
+  S.answered++; if(ok){S.correct++;L.combo++; if(first)L.first++;} else {L.combo=0; if(q0.t!=="match")L.mistakes.push(q0); S.hearts=Math.max(0,S.hearts-1);}
   save(); ok?sfx.ok():sfx.no();
   $("#foot").classList.add(ok?"ok":"no");
   const praise=["מצוין!","בול!","יפה מאוד!","נהדר!","אלוף!"][Math.random()*5|0];
