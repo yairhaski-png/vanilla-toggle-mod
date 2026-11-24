@@ -502,6 +502,27 @@ button.stat:hover{background:var(--soft)}
 @keyframes dash{to{stroke-dashoffset:-20}}
 .plab{transform-box:fill-box;transform-origin:center;animation:popIn2 .4s cubic-bezier(.3,1.6,.5,1)}
 .plab rect{fill:var(--green)} .plab text{fill:#fff;font:800 11px var(--font)}
+.pic-grid{grid-template-columns:1fr 1fr}
+.opt.pic{flex-direction:column;align-items:stretch;padding:14px 10px 10px;position:relative}
+.opt.pic .k{position:absolute;top:8px;inset-inline-start:8px}
+.opt.pic .sil{width:100%;max-width:none;margin-top:14px}
+.opt.pic.sel .sil{animation:okPop .35s}
+.gap-card{display:flex;align-items:center;gap:10px;margin-bottom:26px}
+.gap-kd{width:96px;height:96px;flex:none}
+.gap-s{flex:1;min-width:0;margin:0;font-size:21px;font-weight:600;line-height:2.1;color:var(--ink-strong)}
+.gap{display:inline-flex;align-items:center;justify-content:center;min-width:96px;height:42px;margin:0 6px;padding:0 10px;border-bottom:3px dashed var(--line-2);vertical-align:middle;border-radius:4px;font-weight:700;color:var(--blue)}
+.gap.filled{border:2px solid var(--blue-line);border-bottom-width:4px;background:var(--blue-bg);border-radius:12px;animation:okPop .35s cubic-bezier(.3,1.8,.5,1)}
+.gap.ok{border-color:var(--green);background:var(--green-bg);color:var(--green-ink)}
+.gap.no{border-color:var(--red);background:var(--red-bg);color:var(--red-ink)}
+.chips{display:flex;flex-wrap:wrap;justify-content:center;gap:10px}
+.opt.chip{width:auto;padding:10px 18px;font-weight:600}
+.opt.chip.sel{opacity:.35}
+.chip-fly{position:fixed;z-index:80;display:grid;place-items:center;border:2px solid var(--blue-line);border-bottom-width:4px;border-radius:14px;background:var(--blue-bg);color:var(--blue);font:600 18px var(--font);pointer-events:none}
+.toast{position:absolute;top:calc(env(safe-area-inset-top,0px) + 64px);left:50%;z-index:6;display:flex;align-items:center;gap:10px;padding:8px 18px 8px 10px;border-radius:99px;background:var(--surface);border:2px solid var(--line);box-shadow:0 10px 30px rgb(0 0 0 / .15);font-size:17px;white-space:nowrap;animation:toast 2.2s cubic-bezier(.3,1.4,.5,1) forwards}
+.toast b{color:var(--ink-strong)}
+.toast-kd{width:44px;height:44px}
+.toast .ti{width:24px;height:24px;fill:var(--orange)}
+@keyframes toast{0%{transform:translate(-50%,-30px) scale(.7);opacity:0}12%{transform:translate(-50%,0) scale(1);opacity:1}85%{transform:translate(-50%,0);opacity:1}100%{transform:translate(-50%,-20px);opacity:0}}
 @media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
 </style>
 
@@ -596,6 +617,14 @@ const WEAPONS=[
  {id:"mag",n:"מאג (FN MAG)",sil:"negev",gen:1,type:"מקלע בינוני",country:"בלגיה",year:"1958",by:"ארנסט ורווייר",cal:"7.62×51 מ\"מ נאט\"ו",act:"גזים",mag:"חגור",rng:"כ-800 מ' (על דו-רגלי)",kg:"כ-11 ק\"ג",fact:"בצה\"ל קוראים לו פשוט 'מאג'. הוא מורכב גם על טנקים ונגמ\"שים."},
  {id:"garand",n:"M1 גאראנד",sil:"garand",type:"רובה",country:"ארה\"ב",year:"1936",by:"ג'ון גאראנד",cal:".30-06",act:"גזים, חצי-אוטומטי",mag:"8 (מסרק)",rng:"כ-450 מ'",kg:"כ-4.3 ק\"ג",fact:"כשנגמרים הכדורים, המסרק נפלט עם צליל 'פינג' מפורסם. היה רובה הרגלים הראשי של ארה\"ב במלחמת העולם השנייה."},
  {id:"mauser",n:"מאוזר 98",sil:"bolt",type:"רובה בריח",country:"גרמניה",year:"1898",by:"פאול מאוזר",cal:"7.92×57 מ\"מ",act:"בריח ידני",mag:"5 (פנימית)",rng:"כ-500 מ'",kg:"כ-4.1 ק\"ג",fact:"מנגנון הבריח שלו כל כך מוצלח שרובי ציד רבים עד היום מבוססים עליו. גם ההגנה וצה\"ל בראשיתו השתמשו בו."},
+
+ {id:"ak74",n:"AK-74",sil:"ak",gen:1,type:"רובה סער",country:"ברית המועצות",year:"1974",by:"לשכת התכנון של קלשניקוב",cal:"5.45×39 מ\"מ",act:"גזים, בריח מסתובב",mag:"30",rng:"כ-500 מ'",kg:"כ-3.3 ק\"ג (ריק)",fact:"היורש של ה-AK-47, עם תחמושת קטנה ומהירה יותר. בלם הלוע הגדול שלו מקטין מאוד את הרתע."},
+ {id:"aug",n:"Steyr AUG",sil:"tavor",gen:1,type:"רובה סער",country:"אוסטריה",year:"1977",by:"שטייר",cal:"5.56×45 מ\"מ נאט\"ו",act:"גזים, בוכנה קצרה",mag:"30",rng:"כ-500 מ'",kg:"כ-3.6 ק\"ג (ריק)",fact:"מרובי הבולפאפ הראשונים שאומצו בהיקף רחב. המחסנית שקופה, כך שרואים כמה כדורים נשארו, ויש לו כוונת מובנית."},
+ {id:"beretta92",n:"ברטה 92",sil:"glock",gen:1,type:"אקדח",country:"איטליה",year:"1975",by:"ברטה",cal:"9×19 מ\"מ",act:"רתע קצר",mag:"15",rng:"כ-50 מ'",kg:"כ-0.95 ק\"ג (ריק)",fact:"צבא ארה\"ב השתמש בו בשם M9 מ-1985 במשך כשלושים שנה."},
+ {id:"m1911",n:"קולט M1911",sil:"glock",gen:1,type:"אקדח",country:"ארה\"ב",year:"1911",by:"ג'ון בראונינג",cal:".45 ACP",act:"רתע קצר",mag:"7",rng:"כ-50 מ'",kg:"כ-1.1 ק\"ג (ריק)",fact:"היה אקדח השירות של צבא ארה\"ב יותר מ-70 שנה. השם בא משנת האימוץ, 1911."},
+ {id:"rem870",n:"רמינגטון 870",sil:"bolt",gen:1,type:"רובה ציד",country:"ארה\"ב",year:"1950",by:"רמינגטון",cal:"12 גאוג'",act:"פאמפ (ידני)",mag:"4-7 (צינור)",rng:"כ-40 מ'",kg:"כ-3.6 ק\"ג",fact:"רובה הציד הנמכר ביותר בהיסטוריה: יוצרו ממנו יותר מ-11 מיליון."},
+ {id:"thompson",n:"תומפסון",sil:"uzi",gen:1,type:"תת-מקלע",country:"ארה\"ב",year:"1921",by:"ג'ון ט. תומפסון",cal:".45 ACP",act:"הדף",mag:"20, 30 או תוף של 50",rng:"כ-50-100 מ'",kg:"כ-4.9 ק\"ג",fact:"ה'טומי גאן' המפורסם מתקופת היובש בארה\"ב, ששימש גם במלחמת העולם השנייה."},
+ {id:"enfield",n:"לי-אנפילד",sil:"bolt",gen:1,type:"רובה בריח",country:"בריטניה",year:"1895",by:"ג'יימס פריס לי (מנגנון הבריח)",cal:".303 בריטי",act:"בריח ידני",mag:"10",rng:"כ-500 מ'",kg:"כ-4 ק\"ג",fact:"הבריח המהיר שלו אפשר את 'הדקה המטורפת': חיילים מאומנים ירו יותר מ-15 יריות מכוונות בדקה."},
 ];
 const WMAP=Object.fromEntries(WEAPONS.map(w=>[w.id,w]));
 
@@ -666,6 +695,7 @@ const COURSE = [
    {t:"mc", q:"ברובה בריח, איך מכניסים כדור חדש לבית הבליעה?", a:["מושכים ודוחפים את ידית הבריח ביד","זה קורה לבד","לוחצים פעמיים על ההדק","מנערים את הרובה"], c:0, e:"כך עבדו רובי מלחמות העולם, כמו המאוזר 98, וכך עובדים רוב רובי הציד היום."},
    {t:"mc", q:"מה קורה בנשק חצי-אוטומטי בכל לחיצה על ההדק?", a:["יוצאת ירייה אחת, והנשק נטען מחדש לבד","יוצא צרור","שום דבר עד שדורכים ביד","יוצאות שתי יריות"], c:0, e:"כדי לירות שוב צריך לשחרר את ההדק וללחוץ מחדש."},
    {t:"tf", q:"אקדח תופי (Revolver) מחזיק את הכדורים בתוף מסתובב ולא במחסנית.", c:true, e:"בדרך כלל יש בתוף 6 כדורים."},
+   {t:"gap", s:"רובה הציד רמינגטון 870 נטען בתנועת ___", a:["פאמפ","בריח","תוף"], c:0, e:"זה רובה הציד הנמכר ביותר בהיסטוריה."},
    {t:"mc", q:"איך טוענים רובה ציד מסוג 'פאמפ'?", a:["מזיזים את המגן הקדמי אחורה וקדימה","לוחצים על כפתור","מסובבים את הקנה","הוא נטען לבד"], c:0, e:"זו גם הסיבה לשם Pump."},
    {t:"match", q:"התאם סוג פעולה לתיאור", p:[["בריח","ידית ידנית"],["חצי-אוטומטי","ירייה אחת בכל לחיצה"],["אוטומטי","יורה כל עוד לוחצים"],["תופי","תוף מסתובב"]]}
   ]},
@@ -684,11 +714,14 @@ const COURSE = [
    {t:"mc", q:"מה הקליבר של ה-AK-47 המקורי?", a:["7.62×39 מ\"מ","5.56×45 מ\"מ","9×19 מ\"מ","12.7×99 מ\"מ"], c:0, e:"קליע כבד יחסית, שנשאר יציב גם כשעובר דרך צמחייה."},
    {t:"mc", q:"באיזו תחמושת יורה ה-M16?", a:["5.56×45 מ\"מ נאט\"ו","7.62×39 מ\"מ","9×19 מ\"מ","‎.50 BMG"], c:0, e:"קליע קל ומהיר. חייל יכול לשאת יותר כדורים באותו משקל."},
    {t:"part", w:"ak47", p:"mag"},
+   {t:"gap", s:"ה-AK-47 יורה תחמושת ___", a:["7.62×39 מ\"מ","5.56×45 מ\"מ","9×19 מ\"מ"], c:0, e:"היורש שלו, ה-AK-74, עבר לתחמושת קטנה יותר: 5.45×39 מ\"מ."},
+   {t:"pic", w:"m16"},
    {t:"tf", q:"ה-AK-47 ידוע באמינות שלו גם בבוץ, בחול ובקור.", c:true, e:"החלקים הנעים שלו מרווחים, ולכן לכלוך פחות תוקע אותו."},
    {t:"mc", q:"מה ההבדל העיקרי בין M4 ל-M16?", a:["ה-M4 קצר יותר, עם קנה קצר וקת נשלפת","ה-M4 יורה כדורים אחרים","ה-M4 הוא אקדח","אין הבדל"], c:0, e:"ה-M4 הוא 'קרבין': גרסה קצרה ונוחה יותר."}
   ]},
   { name:"תבור, גליל ו-FAL", qs:[
    {t:"id", w:"tavor", q:"איזה נשק זה?"},
+   {t:"gap", s:"התבור הוא רובה מסוג ___, שבו המחסנית נמצאת מאחורי ההדק", a:["בולפאפ","בריח","תופי"], c:0, e:"גם ה-Steyr AUG האוסטרי בנוי כך."},
    {t:"tf", q:"בתבור המחסנית נמצאת מאחורי ידית האחיזה.", c:true, e:"זה תכנון 'בולפאפ', שמקצר את הרובה בלי לקצר את הקנה."},
    {t:"mc", q:"על מנגנון של איזה רובה מבוסס הגליל?", a:["AK (דרך הוולמט הפיני)","M16","מאוזר 98","M1 גאראנד"], c:0, e:"ישראל גלילי לקח את האמינות של ה-AK והתאים אותה לתחמושת נאט\"ו."},
    {t:"mc", q:"איזה רובה בלגי כונה 'יד ימין של העולם החופשי'?", a:["FN FAL","גליל","AK-47","דרגונוב"], c:0, e:"עשרות צבאות אימצו אותו, וגם צה\"ל השתמש בו ב-1967."},
@@ -698,6 +731,8 @@ const COURSE = [
  { id:"pistols", c:["#C27DF5","#9E5AD6"], title:"אקדחים ותת-מקלעים", sub:"גלוק, יריחו, דזרט איגל, עוזי ו-MP5", lessons:[
   { name:"אקדחים", qs:[
    {t:"id", w:"glock17", q:"איזה נשק זה?"},
+   {t:"pic", w:"glock17"},
+   {t:"gap", s:"אקדח ה-M1911 של ג'ון בראונינג יורה תחמושת ___", a:[".45 ACP","9×19 מ\"מ",".50 BMG"], c:0, e:"הוא היה אקדח השירות של צבא ארה\"ב יותר מ-70 שנה."},
    {t:"mc", q:"כמה כדורים יש במחסנית סטנדרטית של גלוק 17?", a:["17","7","30","10"], c:0, e:"קל לזכור: 17 כדורים בגלוק 17."},
    {t:"tf", q:"לגלוק 17 אין נצרה ידנית בצד. הנצרה בנויה בתוך ההדק.", c:true, e:"לכן משמעת האצבע מחוץ להדק חשובה בו במיוחד."},
    {t:"id", w:"deagle", q:"איזה נשק זה?"},
@@ -709,6 +744,7 @@ const COURSE = [
    {t:"mc", q:"איפה נמצאת המחסנית בעוזי?", a:["בתוך ידית האחיזה","מעל הקנה","מאחורי הקת","בצד שמאל"], c:0, e:"יד מוצאת יד: אפשר להחליף מחסנית גם בחושך."},
    {t:"id", w:"mp5", q:"איזה נשק זה?"},
    {t:"mc", q:"איזו חברה גרמנית מייצרת את ה-MP5?", a:["הקלר אנד קוך","וולטר","מאוזר","גלוק"], c:0, e:"ה-MP5 יורה מבריח סגור, ולכן הוא מדויק מאוד לתת-מקלע."},
+   {t:"gap", s:"צבא ארה\"ב השתמש באקדח ברטה 92 תחת השם ___", a:["M9","M16","M4"], c:0, e:"מ-1985 ובמשך כשלושים שנה."},
    {t:"tf", q:"תת-מקלע יורה בדרך כלל תחמושת של אקדח.", c:true, e:"זה מה שמבדיל אותו מרובה סער, שיורה תחמושת רובה."},
    {t:"match", q:"התאם נשק למדינה", p:[["עוזי","ישראל"],["MP5","גרמניה"],["גלוק","אוסטריה"],["יריחו","ישראל (מבוסס על CZ 75)"]]}
   ]}
@@ -725,6 +761,7 @@ const COURSE = [
   { name:"מקלעים", qs:[
    {t:"id", w:"negev", q:"איזה נשק זה?"},
    {t:"mc", q:"איך מוזן מקלע כמו הנגב או המאג בירי ממושך?", a:["בחגור, שרשרת של כדורים","במחסנית של 5","ביד, כדור כדור","בתוף של אקדח"], c:0, e:"חגור מאפשר לירות הרבה בלי להחליף מחסנית."},
+   {t:"pic", w:"negev"},
    {t:"tf", q:"במקלעים מחליפים לפעמים קנה כדי שלא יתחמם יותר מדי.", c:true, e:"קנה חם מדי נשחק מהר ומאבד דיוק."},
    {t:"mc", q:"מה פירוש 'מקלע קל'?", a:["מקלע שחייל אחד יכול לשאת ולהפעיל","מקלע מפלסטיק","מקלע לילדים","מקלע בלי כדורים"], c:0, e:"הנגב הוא מקלע קל. המאג כבד יותר ונקרא מקלע בינוני."},
    {t:"match", q:"התאם נשק לתפקיד", p:[["בארט","צלף אנטי-חומר"],["דרגונוב","קלע מחלקתי"],["נגב","מקלע קל"],["מאג","מקלע בינוני"]]}
@@ -760,6 +797,7 @@ const COURSE = [
    {t:"id", w:"garand", q:"איזה נשק זה?"},
    {t:"mc", q:"איזה רובה כינה הגנרל פטון 'כלי הקרב הגדול ביותר שנוצר'?", a:["M1 גאראנד","מאוזר 98","לי-אנפילד","AK-47"], c:0, e:"ה-M1 גאראנד היה רובה חצי-אוטומטי, יתרון גדול על רובי בריח במלחמת העולם השנייה."},
    {t:"match", q:"התאם טנק למדינה", p:[["T-34","ברית המועצות"],["טייגר","גרמניה"],["שרמן","ארה\"ב"],["Mark I","בריטניה"]]},
+   {t:"gap", s:"רובה הלי-אנפילד הבריטי התפרסם בירי מהיר שנקרא ___", a:["הדקה המטורפת","הצרור הארוך","הירייה השקטה"], c:0, e:"חיילים מאומנים ירו בו יותר מ-15 יריות מכוונות בדקה, עם רובה בריח."},
    {t:"mc", q:"מה היה הבזוקה?", a:["משגר רקטות נגד טנקים אמריקני","מטוס קרב","סוג של רימון יד","צוללת"], c:0, e:"הבזוקה שימשה חיילים אמריקנים במלחמת העולם השנייה וקיבלה את שמה מכלי נגינה מאולתר."}
   ]}
  ]},
@@ -1169,11 +1207,14 @@ function kicker(){
 }
 const optBtn=(ai,k,label)=>`<button class="opt" style="--d:${k}" data-a="${ai}"><span class="k">${k+1}</span>${esc(label)}</button>`;
 function renderQ(){
-  const q=L.qs[L.i]; L.state="answer"; L.sel=null; L.cur=null;
+  const q=L.qs[L.i]; L.state="answer"; L.sel=null; L.cur=null; L.onSel=null;
+  milestone();
   const kick=kicker(), tm=L.timed?{timer:T_SEC}:{};
   const bubble=t=>`<div class="speak">${mascot("neutral")}<div class="bubble">${spk(t)}${esc(t)}</div></div>`;
   if(q.t==="build") return renderBuild(q,kick,tm,bubble);
   if(q.t==="part") return renderPart(q,kick,tm);
+  if(q.t==="pic") return renderPic(q,kick,tm);
+  if(q.t==="gap") return renderGap(q,kick,tm);
   if(q.t==="id"){
     const w=WMAP[q.w], pool=shuffle(WEAPONS.filter(x=>!x.gen&&x.id!==w.id)).slice(0,3);
     L.cur={t:"mc",a:[w.n,...pool.map(x=>x.n)],c:0,e:`${w.type} · ${w.country} · ${w.cal}. ${w.fact}`};
@@ -1197,7 +1238,7 @@ function renderQ(){
 }
 function bindChoice(){
   $$(".opts .opt").forEach(b=>b.onclick=()=>{ if(L.state!=="answer")return;
-    $$(".opts .opt").forEach(x=>x.classList.remove("sel")); b.classList.add("sel"); L.sel=+b.dataset.a; $("#go").disabled=false; sfx.tap(); });
+    $$(".opts .opt").forEach(x=>x.classList.remove("sel")); b.classList.add("sel"); L.sel=+b.dataset.a; $("#go").disabled=false; sfx.tap(); if(L.onSel) L.onSel(b); });
 }
 function renderPairs(q,kick,tm){
   const A=shuffle(q.p.map((p,i)=>({i,s:p[0]}))), B=shuffle(q.p.map((p,i)=>({i,s:p[1]})));
@@ -1225,12 +1266,13 @@ function timeUp(){
 }
 function check(timeout){
   const q0=L.qs[L.i]; if(L.sel===null)return;
-  const q=q0.t==="id"?L.cur:q0;
+  const q=(q0.t==="id"||q0.t==="pic")?L.cur:q0.t==="gap"?{...q0,t:"mc"}:q0;
   const ok=!timeout&&(q.t==="mc"?L.sel===q.c:(L.sel===1)===q.c), right=q.t==="mc"?q.c:(q.c?1:0);
   if(q0.t==="id"&&ok) S.ids=(S.ids||0)+1;
   $$(".opts .opt").forEach(b=>{b.disabled=true;b.classList.remove("sel"); if(+b.dataset.a===right)b.classList.add("right"); else if(+b.dataset.a===L.sel)b.classList.add("wrong");});
   L.state="checked"; feedback(ok,(timeout?"נגמר הזמן. ":"")+(q.e||""),q);
-  if(ok) burst($(".opt.right"),["#58C21B","#A8E66F","#FFC800"],16);
+  if(q0.t==="gap"){ const g=$("#gap"); g.classList.add(ok?"ok":"no"); if(!ok){ g.textContent=q.a[q.c]; g.classList.add("filled"); } }
+  if(ok) burst(q0.t==="gap"?$("#gap"):$(".opt.right"),["#58C21B","#A8E66F","#FFC800"],16);
 }
 function feedback(ok,expl,qv){
   stopTimer();
@@ -1510,6 +1552,38 @@ function checkPart(timeout){
   $("#plabel").innerHTML=`<g class="plab"><rect x="${x+ww/2-34}" y="${ly-13}" width="68" height="18" rx="9"/><text x="${x+ww/2}" y="${ly}" text-anchor="middle">${esc(name.replace(/^ה/,""))}</text></g>`;
   L.state="checked"; feedback(ok,(timeout?"נגמר הזמן. ":"")+(ok?"":`החלק הנכון: ${name}. `)+PART_INFO[L.part]);
   if(ok) burst($(".hot.good"),["#58C21B","#A8E66F","#FFC800"],16);
+}
+
+/* ---- picture choice */
+function renderPic(q,kick,tm){
+  const w=WMAP[q.w], pool=shuffle(WEAPONS.filter(x=>!x.gen&&x.sil!==w.sil)).slice(0,3), all=[w,...pool];
+  L.cur={t:"mc",a:all.map(x=>x.n),c:0,e:`${w.type} · ${w.country} · ${w.cal}. ${w.fact}`};
+  L.order=shuffle([0,1,2,3]);
+  frame(`${kick}<h1 class="l-title">איזו תמונה היא ${esc(w.n)}?</h1><div class="opts pic-grid">${L.order.map((ai,k)=>`<button class="opt pic" style="--d:${k}" data-a="${ai}"><span class="k">${k+1}</span>${silSvg(all[ai])}</button>`).join("")}</div>`,"בדיקה",true,"",tm);
+  bindChoice();
+}
+/* ---- fill the gap: the chosen word flies into the sentence */
+function renderGap(q,kick,tm){
+  const [a,b]=q.s.split("___"); L.order=shuffle(q.a.map((_,i)=>i));
+  frame(`${kick}<h1 class="l-title">השלם את המשפט</h1><div class="gap-card">${mascot("neutral","gap-kd")}<p class="gap-s">${spk(q.s.replace("___","..."))}${esc(a)}<span class="gap" id="gap"></span>${esc(b||"")}</p></div>
+    <div class="opts chips">${L.order.map((ai,k)=>`<button class="opt chip" style="--d:${k}" data-a="${ai}">${esc(q.a[ai])}</button>`).join("")}</div>`,"בדיקה",true,"",tm);
+  bindChoice();
+  L.onSel=btn=>{ const g=$("#gap"), r1=btn.getBoundingClientRect(), r2=g.getBoundingClientRect(), txt=btn.textContent;
+    if(RM()){ g.textContent=txt; g.classList.add("filled"); return; }
+    const f=document.createElement("span"); f.className="chip-fly"; f.textContent=txt; f.style.cssText=`left:${r1.left}px;top:${r1.top}px;width:${r1.width}px;height:${r1.height}px`; document.body.appendChild(f);
+    g.classList.remove("filled"); g.textContent="";
+    f.animate([{transform:"translate(0,0) scale(1)"},{transform:`translate(${r2.left+r2.width/2-(r1.left+r1.width/2)}px,${r2.top+r2.height/2-(r1.top+r1.height/2)}px) scale(.9)`}],{duration:320,easing:"cubic-bezier(.3,1.2,.5,1)"}).onfinish=()=>{ f.remove(); if(L&&L.state==="answer"){ g.textContent=txt; g.classList.add("filled"); } };
+  };
+}
+/* ---- milestone toasts inside a lesson */
+function milestone(){
+  if(!L||L.i>=L.firstTotal) return;
+  let msg=null;
+  if(L.i===Math.floor(L.firstTotal/2)&&!L.halfShown&&L.firstTotal>=4){ L.halfShown=1; msg=["חצי דרך! ממשיכים","i-star"]; }
+  else if(L.combo===5&&!L.c5){ L.c5=1; msg=["5 תשובות ברצף!","i-fire"]; }
+  if(!msg) return;
+  setTimeout(()=>{ if(!L) return; const t=document.createElement("div"); t.className="toast"; t.innerHTML=`${mascot("happy","toast-kd")}<b>${msg[0]}</b><svg viewBox="0 0 24 24" class="ti"><use href="#${msg[1]}"/></svg>`;
+    $("#lesson").appendChild(t); sfx.streak(); setTimeout(()=>t.remove(),2200); },120);
 }
 
 /* ---- boot */
