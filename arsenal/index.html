@@ -453,6 +453,10 @@ button.stat:hover{background:var(--soft)}
 .onb-body .opt .oi{width:30px;height:30px;fill:var(--blue)}
 .onb-foot{border-top:2px solid var(--line)}
 .onb-foot .btn{display:flex;max-width:600px;margin:18px auto 22px;width:calc(100% - 32px)}
+.miss-card{display:flex;align-items:center;gap:14px;margin-top:14px;padding:14px 16px;border:2px solid var(--line);border-bottom-width:4px;border-radius:16px;animation:qIn .4s backwards}
+.miss-card>svg{width:44px;height:44px;flex:none;fill:var(--red);background:var(--red-bg);border-radius:12px;padding:8px}
+.miss-card .t{flex:1;min-width:0}.miss-card b{font-size:17px;color:var(--ink-strong)}.miss-card p{margin:0;color:var(--muted);font-weight:500;font-size:15px}
+.miss-card .btn{padding:10px 16px;font-size:15px}
 @media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
 </style>
 
@@ -891,7 +895,8 @@ function renderLearn(){
     h+=`${mascot("happy","buddy")}</div></section>`.replace('class="kd happy buddy"',`class="kd happy buddy" style="${side>0?"left":"right"}:0"`);
   });
   h+=`<p class="path-end">${lessonsDone()===LESSON_COUNT?"סיימת את כל הקורס. אפשר לחזור לכל שלב ולצבור עוד XP.":"יחידות נוספות בדרך"}</p>`;
-  $("#main").innerHTML=h;
+  $("#main").innerHTML=mistakesCard()+h;
+  const mg=$("#missGo"); if(mg) mg.onclick=startMistakes;
   $$(".node").forEach(b=>b.onclick=e=>{e.stopPropagation(); nodeTap(+b.dataset.i,b);});
   $$("[data-guide]").forEach(b=>b.onclick=()=>guide(COURSE[+b.dataset.guide]));
   if(!renderLearn.scrolled){renderLearn.scrolled=1;const s=$(".start");if(s&&s.getBoundingClientRect().top>innerHeight*.7)s.scrollIntoView({block:"center"});}
@@ -1141,7 +1146,7 @@ function check(timeout){
 function feedback(ok,expl,qv){
   stopTimer();
   const q0=L.qs[L.i], q=qv||q0, first=L.i<L.firstTotal;
-  S.answered++;
+  S.answered++; noteAnswer(q0,ok,first||!!L.f.mist);
   if(ok){ S.correct++; L.combo++; if(first)L.first++; const qs_=qState(); qs_.combo=Math.max(qs_.combo,L.combo); }
   else { L.combo=0; if(q0.t!=="match")L.mistakes.push(q0); if(!L.practice){ if(S.hearts>=5)S.hRef=Date.now(); S.hearts=Math.max(0,S.hearts-1);} }
   save();
@@ -1164,8 +1169,8 @@ function advance(){
 }
 /* ---- end-of-lesson screens: result → streak → rank-up → unit trophy */
 function finish(){
-  if(L.practice){ const xp=5+L.first; S.xp+=xp;S.daily.xp+=xp;S.days[today()]=(S.days[today()]||0)+xp; S.hearts=Math.min(5,S.hearts+1); if(S.hearts>=5)S.hRef=null; save();
-    L.screens=[()=>screenResult({perfect:L.first===L.firstTotal,xp,acc:Math.round(L.first/L.firstTotal*100),secs:Math.round((Date.now()-L.t0)/1000),gems:0,nb:0,sub:"תרגול הושלם · קיבלת לב אחד"})];
+  if(L.practice){ const xp=5+L.first; S.xp+=xp;S.daily.xp+=xp;S.days[today()]=(S.days[today()]||0)+xp; if(!L.f.mist){ S.hearts=Math.min(5,S.hearts+1); if(S.hearts>=5)S.hRef=null; } save();
+    L.screens=[()=>screenResult({perfect:L.first===L.firstTotal,xp,acc:Math.round(L.first/L.firstTotal*100),secs:Math.round((Date.now()-L.t0)/1000),gems:0,nb:0,sub:L.f.mist?`תרגול טעויות · נשארו ${(S.miss||[]).length} שאלות לתרגל`:"תרגול הושלם · קיבלת לב אחד"})];
     L.state="screens"; L.i=L.qs.length; return nextScreen(); }
   const f=L.f, perfect=L.first===L.firstTotal, wasFull=isFull(f);
   const xp=wasFull?5+L.first:({lesson:10,review:15,test:25})[f.n.t]+L.first*2+(perfect?5:0)+(f.n.t==="lesson"?L.stage*5:0)+(L.timed?10:0);
@@ -1380,6 +1385,23 @@ function onboarding(){
       S.onboarded=1;S.goal=A.goal;S.why=A.why;save(); o.classList.add("bye"); setTimeout(()=>{o.remove();render();startLesson(FLAT[0]);},250); };
   }
   draw();
+}
+
+/* ---- mistakes bank */
+const QREF=new Map(), QBYREF={};
+COURSE.forEach((u,ui)=>u.lessons.forEach((l,li)=>l.qs.forEach((q,qi)=>{const r=`${u.id}.${li}.${qi}`;QREF.set(q,r);QBYREF[r]=q;})));
+function noteAnswer(q0,ok,clear){
+  const base=q0&&q0.t==="build"?q0.base:q0, r=QREF.get(base); if(!r) return;
+  S.miss=(S.miss||[]).filter(x=>QBYREF[x]);
+  if(ok){ if(clear) S.miss=S.miss.filter(x=>x!==r); } else if(!S.miss.includes(r)){ S.miss.push(r); if(S.miss.length>40) S.miss.shift(); }
+}
+function startMistakes(){
+  const qs=(S.miss||[]).map(r=>QBYREF[r]).filter(Boolean); if(!qs.length) return;
+  startLesson({u:COURSE[0],ui:0,n:{t:"practice",name:"תרגול טעויות"},key:"practice",mist:1},shuffle(qs).slice(0,8));
+}
+function mistakesCard(){
+  const n=(S.miss||[]).filter(r=>QBYREF[r]).length; if(!n) return "";
+  return `<div class="miss-card"><svg viewBox="0 0 24 24"><use href="#i-dumbbell"/></svg><div class="t"><b>תרגול טעויות</b><p>${n===1?"שאלה אחת":n+" שאלות"} שטעית בהן מחכות לך</p></div><button class="btn" id="missGo">תרגל</button></div>`;
 }
 
 /* ---- boot */
