@@ -532,6 +532,14 @@ button.stat:hover{background:var(--soft)}
 .slot.ok{border-style:solid;border-color:var(--green);background:var(--green-bg)} .slot.ok .n{background:var(--green);color:#fff}
 .slot.no{border-style:solid;border-color:var(--red);background:var(--red-bg)} .slot.no .n{background:var(--red);color:#fff}
 .slot.ok,.slot.no{animation:okPop .4s cubic-bezier(.3,1.6,.5,1);animation-delay:calc(var(--d)*.08s)}
+.goal-anim{width:100%;max-width:440px;margin-top:14px;border:2px solid var(--line);border-radius:16px;padding:14px 16px;text-align:start}
+.ga-top{display:flex;justify-content:space-between;align-items:center;margin-bottom:8px;font-weight:700}
+.ga-top b{display:flex;align-items:center;gap:6px;color:var(--ink-strong)} .ga-top svg{width:20px;height:20px;fill:var(--gold)}
+.ga-top span{color:var(--muted);font-variant-numeric:tabular-nums}
+.goal-anim .pbar>i{background:var(--gold);transition:width 1s cubic-bezier(.3,1.2,.5,1)}
+.ga-done{display:flex;align-items:center;justify-content:center;gap:6px;margin-top:10px;font-weight:800;color:var(--gold-d);animation:popIn2 .5s cubic-bezier(.3,1.8,.5,1)}
+.ga-done svg{width:20px;height:20px;fill:var(--gold-d)}
+.node.chest.cur svg{animation:chestShake .7s ease-in-out infinite;transform-origin:50% 90%}
 @media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
 </style>
 
@@ -1331,12 +1339,13 @@ function finish(){
   const xp=wasFull?5+L.first:({lesson:10,review:15,test:25})[f.n.t]+L.first*2+(perfect?5:0)+(f.n.t==="lesson"?L.stage*5:0)+(L.timed?10:0);
   const gems=perfect&&!wasFull?5:0;
   const rankBefore=rankInfo().name, unitBefore=unitDone(f.u.id), streakBefore=S.streak, before=BADGES.filter(earned).length;
+  const dBefore=S.daily.xp;
   S.xp+=xp; S.gems+=gems; S.daily.xp+=xp; S.days[today()]=(S.days[today()]||0)+xp; S.done[f.key]=(S.done[f.key]||0)+1; if(perfect)S.perfect++;
   const t=today(); if(S.last!==t){const g=S.last?(new Date(t)-new Date(S.last))/864e5:99; S.streak=g===1?S.streak+1:1; S.last=t;}
   S.best=Math.max(S.best||0,S.streak); qState().lessons++; save();
   const nb=BADGES.filter(earned).length-before, secs=Math.round((Date.now()-L.t0)/1000), acc=Math.round(L.first/L.firstTotal*100);
   const sub=f.n.t==="lesson"&&!wasFull?`שלב ${Math.min(3,S.done[f.key])} מתוך 3 · ${esc(f.n.name)}`:esc(f.n.name);
-  L.screens=[()=>screenResult({perfect,xp,acc,secs,gems,nb,sub})];
+  L.screens=[()=>screenResult({perfect,xp,acc,secs,gems,nb,sub,dBefore,dAfter:S.daily.xp})];
   if(S.streak!==streakBefore) L.screens.push(()=>screenStreak(streakBefore,S.streak));
   if(rankInfo().name!==rankBefore) L.screens.push(()=>screenRank(rankInfo().name));
   if(!unitBefore&&unitDone(f.u.id)) L.screens.push(()=>screenUnit(f.u));
@@ -1348,7 +1357,13 @@ function screenResult(r){
      <p class="pop-in" style="--d:1">${r.sub}${r.gems?` · +${r.gems} יהלומים`:""}${r.nb?` · ${r.nb>1?r.nb+" עיטורים חדשים":"עיטור חדש"}!`:""}</p>
      <div class="res"><div class="r pop-in" style="--c:var(--gold);--d:2"><small>סה"כ XP</small><b>${ico("i-bolt")}<span id="cx">0</span></b></div>
       <div class="r pop-in" style="--c:var(--green);--d:3"><small>${r.perfect?"מושלם":"דיוק"}</small><b>${r.acc}%</b></div>
-      <div class="r pop-in" style="--c:var(--blue);--d:4"><small>זמן</small><b>${Math.floor(r.secs/60)}:${String(r.secs%60).padStart(2,"0")}</b></div></div></div>`,"המשך",false);
+      <div class="r pop-in" style="--c:var(--blue);--d:4"><small>זמן</small><b>${Math.floor(r.secs/60)}:${String(r.secs%60).padStart(2,"0")}</b></div></div>
+     ${r.dAfter!==undefined?`<div class="goal-anim pop-in" style="--d:5"><div class="ga-top"><b>${ico("i-bolt")}יעד יומי</b><span id="gaTxt">${Math.min(r.dBefore,S.goal)} / ${S.goal} XP</span></div>
+       <div class="pbar big"><i id="gaFill" style="width:${Math.min(100,r.dBefore/S.goal*100)}%"></i></div><div class="ga-done" id="gaDone" hidden>${ico("i-check")}השגת את היעד היומי!</div></div>`:""}</div>`,"המשך",false);
+  if(r.dAfter!==undefined) setTimeout(()=>{ const f=$("#gaFill"); if(!f)return; f.style.width=Math.min(100,r.dAfter/S.goal*100)+"%";
+    let v=r.dBefore; const tgt=Math.min(r.dAfter,S.goal), t=setInterval(()=>{ v=Math.min(tgt,v+Math.max(1,Math.ceil((tgt-r.dBefore)/15))); const e=$("#gaTxt"); if(!e)return clearInterval(t); e.textContent=`${v} / ${S.goal} XP`; if(v>=tgt)clearInterval(t); },45);
+    if(r.dBefore<S.goal&&r.dAfter>=S.goal) setTimeout(()=>{ const d=$("#gaDone"); if(!d)return; d.hidden=false; burst(d,["#FFC800","#FF9B1A","#58C21B"],22); sfx.streak(); },750);
+  },1000);
   let v=0; const st=Math.max(1,Math.ceil(r.xp/24)), tm=setInterval(()=>{v=Math.min(r.xp,v+st); const e=$("#cx"); if(!e)return clearInterval(tm); e.textContent=v; if(v>=r.xp)clearInterval(tm);},45);
   sfx.win(); confetti();
 }
