@@ -773,6 +773,12 @@ body{font-size:16px}
 @keyframes ab{0%{transform:none;opacity:1}30%{transform:translateX(108px);opacity:1}36%{transform:translateX(112px) scaleX(.35) scaleY(1.5);opacity:1}55%,100%{transform:translateX(112px) scaleX(.35) scaleY(1.5);opacity:0}}
 @keyframes crk{0%,29%{opacity:0}34%,80%{opacity:1}100%{opacity:0}}
 @keyframes bulge{0%,30%{transform:scaleX(0)}38%,80%{transform:scaleX(1)}100%{transform:scaleX(0)}}
+.dg-tl .tl-line{stroke-dasharray:300;animation:tlLine 1.2s ease-out both}
+@keyframes tlLine{from{stroke-dashoffset:300}to{stroke-dashoffset:0}}
+.dg-tl .tl-i{opacity:0;animation:tlIn .45s cubic-bezier(.3,1.6,.5,1) forwards;animation-delay:calc(.3s + var(--d)*.28s)}
+@keyframes tlIn{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
+.dg-tl .tl-y{font-weight:900}
+@media (prefers-reduced-motion:reduce){.dg-tl .tl-i{opacity:1}}
 @media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
 </style>
 
@@ -2288,7 +2294,21 @@ Object.assign(DIAGRAMS,{
    <path class="ab" d="M40 64h26q12 6 0 12h-26z" fill="#B87333"/>
    <g class="dg-lbl"><text x="187" y="140" text-anchor="middle">קרמיקה</text><text x="232" y="140" text-anchor="middle">סיבים</text><text x="70" y="104" text-anchor="middle">קליע</text></g></svg>`},
 });
-const LESSON_DIAG={"gear:0":["armor"],"technique:0":["positions"],"pistols:1":["blowback"],"heavy:1":["belt"],"pistols:0":["revolver"],"shoot:0":["sights"],"gear:1":["reddot"],"parts:0":["magazine"],"parts:1":["cartridge","firing"],"works:0":["bolt"],"works:1":["gas"],"rifles:1":["bullpup"],"technique:1":["trajectory","rifling"]};
+/* timeline diagrams: newest on the left, so the line reads right-to-left like Hebrew */
+function timelineSvg(items){
+  const n=items.length, x=i=>300-i*(280/(n-1));
+  return `<svg viewBox="0 0 320 150" class="dg dg-tl"><line class="tl-line" x1="304" y1="75" x2="16" y2="75" stroke="currentColor" stroke-width="3" opacity=".35"/>
+   ${items.map(([y,t],i)=>{const up=i%2===0;return `<g class="tl-i" style="--d:${i}"><circle cx="${x(i)}" cy="75" r="7" fill="#FF9B1A" stroke="var(--surface)" stroke-width="3"/>
+     <line x1="${x(i)}" y1="${up?68:82}" x2="${x(i)}" y2="${up?50:100}" stroke="currentColor" stroke-width="1.5" opacity=".4"/>
+     <text x="${x(i)}" y="${up?28:118}" text-anchor="middle" class="tl-y" fill="#DA7C00">${y}</text><text x="${x(i)}" y="${up?44:134}" text-anchor="middle">${t}</text></g>`;}).join("")}</svg>`;
+}
+Object.assign(DIAGRAMS,{
+ tl_world:{title:"ציר הזמן של הנשק",text:"מאבק שריפה בסין ועד מערכות יירוט: כל המצאה בנתה על הקודמת לה.",
+  svg:timelineSvg([["המאה ה-9","אבק שריפה"],["המאה ה-16","מוסקט"],["1862","גטלינג"],["1884","מקסים"],["1916","טנק"],["1947","AK-47"],["2011","כיפת ברזל"]])},
+ tl_israel:{title:"נשק ישראלי לאורך השנים",text:"התעשיות הביטחוניות בישראל פיתחו נשק משלהן כבר מהשנים הראשונות של המדינה.",
+  svg:timelineSvg([["1954","עוזי"],["1972","גליל"],["1979","מרכבה"],["1997","נגב"],["2001","תבור"],["2011","כיפת ברזל"]])},
+});
+const LESSON_DIAG={"history:0":["tl_world"],"israel:0":["tl_israel"],"gear:0":["armor"],"technique:0":["positions"],"pistols:1":["blowback"],"heavy:1":["belt"],"pistols:0":["revolver"],"shoot:0":["sights"],"gear:1":["reddot"],"parts:0":["magazine"],"parts:1":["cartridge","firing"],"works:0":["bolt"],"works:1":["gas"],"rifles:1":["bullpup"],"technique:1":["trajectory","rifling"]};
 
 /* ---- teach first: cards built from the lesson's own content, shown before the questions */
 function teachCards(qs,key){
