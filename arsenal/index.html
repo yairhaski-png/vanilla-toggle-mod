@@ -835,6 +835,13 @@ body{font-size:16px}
 .dg-pt .pt-hl{fill:rgb(88 194 27 / .28);stroke:var(--green);stroke-width:1.6}
 @keyframes ptOn{0%{opacity:0}2%,15%{opacity:1}17%,100%{opacity:0}}
 @media (prefers-reduced-motion:reduce){.dg-pt .pt:first-of-type{opacity:1}}
+#pins .pin circle{fill:var(--blue);stroke:#fff;stroke-width:2}
+#pins .pin text{fill:#fff;font:900 9px var(--font)}
+#pins .pin{transform-box:fill-box;transform-origin:center;animation:popIn2 .4s cubic-bezier(.3,1.6,.5,1) backwards;animation-delay:calc(.15s + var(--d)*.12s)}
+#pins .pin.cur circle{fill:var(--orange)}#pins .pin.cur{animation:pinPulse 1s ease-in-out infinite}
+#pins .pin.set circle{fill:var(--muted)}
+#pins .pin.ok circle{fill:var(--green)}#pins .pin.no circle{fill:#FF4B4B}
+@keyframes pinPulse{50%{transform:scale(1.25)}}
 @media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
 </style>
 
@@ -1017,6 +1024,7 @@ const COURSE = [
    {t:"tf", q:"בית הבליעה הוא המקום בקצה האחורי של הקנה שבו נמצא הכדור ברגע הירי.", c:true, e:"באנגלית Chamber. 'בדיקת בית בליעה' מוודאת שאין בו כדור."},
    {t:"part", w:"m16"},
    {t:"part", w:"glock17"},
+   {t:"label", w:"ak47"},
    {t:"match", q:"התאם חלק לתפקיד", p:[["קנה","מוביל את הקליע"],["הדק","משחרר את הירייה"],["מחסנית","מזינה כדורים"],["כוונות","עוזרות לכוון"]]}
   ]},
   { name:"מה יש בכדור", qs:[
@@ -1028,6 +1036,7 @@ const COURSE = [
   ]},
   { name:"חלקים חיצוניים", qs:[
    {t:"part", w:"tavor"},
+   {t:"label", w:"m16"},
    {t:"mc", q:"מה התפקיד של מדכא ההבזק בקצה הקנה?", a:["מפזר את הלהבה שיוצאת מהלוע כדי שלא תסנוור","מגדיל את מהירות הקליע","מקרר את הקנה","מחזיק את הכידון בלבד"], c:0, e:"בלי מדכא הבזק, הלהבה מהלוע מסנוורת את היורה בלילה ומגלה את מקומו."},
    {t:"mc", q:"מה זה 'ידית הדריכה'?", a:["הידית שמושכים כדי להכניס כדור ראשון לבית הבליעה","הידית שמשחררת את המחסנית","הידית שעליה נושאים את הנשק","הידית שמכוונת את הכוונות"], c:0, e:"ב-AK היא בצד ימין של המכלול, ב-M16 היא מאחורי הכוונת העליונה, בצורת T."},
    {t:"mc", q:"מה זה 'מסילת פיקטיני' על נשק?", a:["פס עם חריצים שעליו מרכיבים כוונות, פנס ואביזרים","החריצים בתוך הקנה","מסילה שעליה זז הבריח","חלק מהמחסנית"], c:0, e:"היא נקראת על שם ארסנל פיקטיני בארה\"ב, ומאפשרת להרכיב אביזרים מיצרנים שונים."},
@@ -1042,6 +1051,7 @@ const COURSE = [
    {t:"mc", q:"איפה נמצאת התחמושת במקלע הנגב?", a:["בחגורה, בתוך תיבה מתחת לנשק","במחסנית תוף על הקת","בתוך הקת","בצינור מתחת לקנה"], c:0, e:"הנגב יכול לקבל גם מחסנית רגילה של רובה, אבל לרוב הוא עובד עם חגורת כדורים."},
    {t:"part", w:"mp5"},
    {t:"part", w:"beretta92"},
+   {t:"label", w:"negev"},
    {t:"mc", q:"מה החלק שנע אחורה וקדימה בכל ירייה באקדח כמו הברטה?", a:["המגלשה","ידית האחיזה","מגן ההדק","הכוונת הקדמית"], c:0, e:"בברטה 92 המגלשה פתוחה בחלק העליון, וכך רואים את הקנה מבחוץ."},
    {t:"match", q:"התאם נשק לחלק שבולט בו", p:[["נגב","תיבת תחמושת"],["FAL","ידית נשיאה"],["MP5","מחסנית מעוקלת"],["ברטה 92","מגלשה פתוחה"]]}
   ]},
@@ -1052,6 +1062,7 @@ const COURSE = [
    {t:"part", w:"m1911"},
    {t:"tf", q:"לאקדח M1911 יש פטיש חיצוני שאפשר לראות בחלק האחורי.", c:true, e:"לגלוק, לעומת זאת, אין פטיש חיצוני. הנוקר שלו נדרך בפנים."},
    {t:"part", w:"galil"},
+   {t:"label", w:"barrett", n:4},
    {t:"match", q:"התאם חלק לנשק שבו הוא בולט", p:[["מעצור לוע גדול","בארט"],["קת עם חור","דרגונוב"],["פטיש חיצוני","M1911"],["קת מתקפלת","גליל"]]}
   ]},
   { name:"חלקים פנימיים", qs:[
@@ -1753,6 +1764,7 @@ function renderQ(){
   if(q.t==="pic") return renderPic(q,kick,tm);
   if(q.t==="gap") return renderGap(q,kick,tm);
   if(q.t==="order") return renderOrder(q,kick,tm);
+  if(q.t==="label") return renderLabel(q,kick,tm);
   if(q.t==="vs") return renderVs(q,kick,tm);
   if(q.t==="type") return renderType(q,kick,tm);
   if(q.t==="flag") return renderFlag(q,kick,tm);
@@ -1798,13 +1810,14 @@ function renderPairs(q,kick,tm){
     else { sfx.no(); m.miss=true; [a,b].forEach(x=>{x.classList.remove("sel");x.classList.add("wrong");setTimeout(()=>x.classList.remove("wrong"),450);}); }
   });
 }
-function onGo(){ if(L&&L.state==="moving") return; if(L&&L.state==="teach") return teachNext(); if(L&&L.state==="answer"&&L.qs[L.i].t==="story"&&!L.storyDone) return storyNext(); if(L.state==="answer"){ const t=L.qs[L.i].t; return t==="build"?checkBuild():t==="part"?checkPart():t==="order"?checkOrder():t==="type"?checkType():check(); } if(L.state==="checked")return advance(); if(L.state==="screens")return nextScreen(); closeLesson(); }
+function onGo(){ if(L&&L.state==="moving") return; if(L&&L.state==="teach") return teachNext(); if(L&&L.state==="answer"&&L.qs[L.i].t==="story"&&!L.storyDone) return storyNext(); if(L.state==="answer"){ const t=L.qs[L.i].t; return t==="build"?checkBuild():t==="part"?checkPart():t==="order"?checkOrder():t==="label"?checkLabel():t==="type"?checkType():check(); } if(L.state==="checked")return advance(); if(L.state==="screens")return nextScreen(); closeLesson(); }
 function stopTimer(){ const t=$("#tbar"); if(t) t.style.animationPlayState="paused"; }
 function timeUp(){
   const q0=L.qs[L.i];
   if(q0.t==="build") return checkBuild(true);
   if(q0.t==="part") return checkPart(true);
   if(q0.t==="order") return checkOrder(true);
+  if(q0.t==="label") return checkLabel(true);
   if(q0.t==="type") return checkType(true);
   if(q0.t==="match"){ L.state="checked"; return feedback(false,"נגמר הזמן."); }
   L.sel=-1; check(true);
@@ -2164,6 +2177,34 @@ function checkOrder(timeout){
   $$("#slots .slot").forEach((sl,k)=>sl.classList.add(L.ord[k]===k?"ok":"no"));
   L.state="checked";
   feedback(ok,(timeout?"נגמר הזמן. ":"")+(ok?"":"הסדר הנכון: "+q.items.map((t,i)=>`${i+1}. ${t}`).join("  ")+". ")+(q.e||""));
+  if(ok) burst($("#slots"),["#58C21B","#A8E66F","#FFC800"],20);
+}
+
+/* ---- label: name each numbered point on the drawing */
+function renderLabel(q,kick,tm){
+  const w=WMAP[q.w], parts=PARTS[w.sil];
+  L.lab=shuffle(Object.keys(parts)).slice(0,q.n||3);
+  L.bank=shuffle(L.lab.map((_,i)=>i)); if(L.bank.every((v,i)=>v===i)) L.bank.reverse(); L.ord=[];
+  const pins=L.lab.map((k,i)=>{const [,x,y,ww,hh]=parts[k];return `<g class="pin" style="--d:${i}"><circle cx="${x+ww/2}" cy="${y+hh/2}" r="7.5"/><text x="${x+ww/2}" y="${y+hh/2+3.6}" text-anchor="middle">${i+1}</text></g>`;}).join("");
+  frame(`${kick}<h1 class="l-title">${esc(q.q||"איך נקרא כל חלק?")}</h1><p class="part-sub">${esc(w.n)} · בחר שם לכל מספר, לפי הסדר</p>
+    <div class="id-card part-card"><svg class="sil gun part-svg" viewBox="0 0 240 96"><ellipse class="gsh" cx="120" cy="90" rx="100" ry="4"/>${SIL[w.sil]}<g id="pins">${pins}</g></svg></div>
+    <div class="slots" id="slots">${L.lab.map((_,i)=>`<div class="slot" style="--d:${i}"><span class="n">${i+1}</span><span class="fill" data-k="${i}"></span></div>`).join("")}</div>
+    <div class="bank" id="obank">${L.bank.map((ix,k)=>`<button class="tile" style="--d:${k}" data-o="${ix}">${esc(parts[L.lab[ix]][0])}</button>`).join("")}</div>`,"בדיקה",true,"",tm);
+  const sync=()=>{ $$("#slots .fill").forEach((f,k)=>{ const ix=L.ord[k]; const had=f.dataset.ix; f.innerHTML=ix===undefined?"":`<button class="tile in" data-back="${k}">${esc(parts[L.lab[ix]][0])}</button>`; f.dataset.ix=ix===undefined?"":ix; if(ix!==undefined&&String(had)!==String(ix)) sfx.pop(); });
+    $$("#pins .pin").forEach((g,k)=>{ g.classList.toggle("cur",k===L.ord.length); g.classList.toggle("set",k<L.ord.length); });
+    $$("#obank .tile").forEach(b=>b.classList.toggle("used",L.ord.includes(+b.dataset.o)));
+    $("#go").disabled=L.ord.length<L.lab.length;
+    $$("[data-back]").forEach(b=>b.onclick=()=>{ if(L.state!=="answer")return; L.ord.splice(+b.dataset.back,1); sfx.tap(); sync(); }); };
+  $$("#obank .tile").forEach(b=>b.onclick=()=>{ if(L.state!=="answer"||L.ord.includes(+b.dataset.o))return; L.ord.push(+b.dataset.o); sync(); });
+  sync();
+}
+function checkLabel(timeout){
+  const q=L.qs[L.i], parts=PARTS[WMAP[q.w].sil], ok=!timeout&&L.ord.length===L.lab.length&&L.ord.every((v,i)=>v===i);
+  $$(".tile").forEach(b=>b.disabled=true);
+  $$("#slots .slot").forEach((sl,k)=>sl.classList.add(L.ord[k]===k?"ok":"no"));
+  $$("#pins .pin").forEach((g,k)=>{ g.classList.remove("cur"); g.classList.add(L.ord[k]===k?"ok":"no"); });
+  L.state="checked";
+  feedback(ok,(timeout?"נגמר הזמן. ":"")+(ok?"כל החלקים במקום.":"התשובה הנכונה: "+L.lab.map((k,i)=>`${i+1}. ${parts[k][0]}`).join("  ")+"."));
   if(ok) burst($("#slots"),["#58C21B","#A8E66F","#FFC800"],20);
 }
 
