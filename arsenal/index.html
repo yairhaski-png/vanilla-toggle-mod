@@ -553,6 +553,10 @@ button.stat:hover{background:var(--soft)}
 .vs-badge{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);width:48px;height:48px;border-radius:50%;display:grid;place-items:center;background:var(--orange);color:#fff;font-weight:900;font-size:16px;letter-spacing:.04em;box-shadow:0 4px 0 #DA7C00,0 0 0 5px var(--bg);z-index:2;pointer-events:none;animation:vsBadge .6s cubic-bezier(.3,1.8,.5,1) .45s backwards}
 @keyframes vsBadge{from{transform:translate(-50%,-50%) scale(0) rotate(-180deg)}}
 .vs-yr{display:inline-block;align-self:center;margin-top:6px;padding:3px 14px;border-radius:99px;background:var(--ink-strong);color:var(--bg);font-weight:800;font-size:17px;font-variant-numeric:tabular-nums;animation:popIn2 .45s cubic-bezier(.3,1.8,.5,1)}
+.node.just-done{animation:justDone .8s cubic-bezier(.3,1.6,.5,1) .2s backwards}
+@keyframes justDone{0%{transform:scale(.7);filter:saturate(0) brightness(1.2)}60%{transform:scale(1.18)}100%{transform:none}}
+.node.just-open{animation:justOpen 1.2s ease-out .15s backwards}
+@keyframes justOpen{0%{filter:grayscale(1) brightness(1.1);transform:none}12%{transform:rotate(-12deg)}24%{transform:rotate(12deg)}36%{transform:rotate(-8deg)}48%{transform:rotate(6deg);filter:grayscale(1)}62%{transform:scale(1.28);filter:none}80%{transform:scale(.94)}100%{transform:none}}
 @media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
 </style>
 
@@ -1062,7 +1066,7 @@ function renderLearn(){
       const gi=FLAT.indexOf(f), open=isOpen(gi), full=isFull(f), st=stageOf(f), isCur=gi===cur;
       const off=Math.round(Math.sin(j/(N-1)*Math.PI)*80*side);
       const icon=f.n.t==="review"?"i-dumbbell":f.n.t==="test"?"i-trophy":!open?"i-lock":full?"i-check":"i-star";
-      const cls=`node ${f.n.t==="chest"?"chest":""} ${full?"done":""} ${!open?"locked":""} ${isCur?"cur":""}`;
+      const cls=`node ${f.n.t==="chest"?"chest":""} ${full?"done":""} ${!open?"locked":""} ${isCur?"cur":""} ${f.key===renderLearn.justDone?"just-done":""} ${f.key===renderLearn.justOpen?"just-open":""}`;
       const inner=f.n.t==="chest"?`<svg viewBox="0 0 86 78"><use href="#${full?"chest-open":"chest"}"/></svg>`:`<svg viewBox="0 0 24 24"><use href="#${icon}"/></svg>`;
       const ring=open&&!full&&f.n.t!=="chest"&&(isCur||st>0);
       const C=305, dash=Math.max(isCur&&st===0?0:4,C*st/STAGES(f));
@@ -1079,6 +1083,11 @@ function renderLearn(){
   const mg=$("#missGo"); if(mg) mg.onclick=startMistakes;
   $$(".node").forEach(b=>b.onclick=e=>{e.stopPropagation(); nodeTap(+b.dataset.i,b);});
   $$("[data-guide]").forEach(b=>b.onclick=()=>guide(COURSE[+b.dataset.guide]));
+  const jo=$(".node.just-open")||$(".node.just-done");
+  if(jo){ renderLearn.scrolled=1; jo.scrollIntoView({block:"center",behavior:RM()?"auto":"smooth"});
+    const isOpenAnim=jo.classList.contains("just-open");
+    setTimeout(()=>{ burst(jo,isOpenAnim?["#FFC800","#58C21B","#1EA5F0","#FF9B1A"]:["#FFC800","#FFE27A"],isOpenAnim?24:14); isOpenAnim?sfx.streak():sfx.pop(); }, isOpenAnim?900:450); }
+  renderLearn.justDone=renderLearn.justOpen=null;
   if(!renderLearn.scrolled){renderLearn.scrolled=1;const s=$(".start");if(s&&s.getBoundingClientRect().top>innerHeight*.7)s.scrollIntoView({block:"center"});}
 }
 function closePop(){ const p=$(".pop"); if(p){ p.parentElement.classList.remove("popped"); p.remove(); } }
@@ -1375,11 +1384,13 @@ function finish(){
   const f=L.f, perfect=L.first===L.firstTotal, wasFull=isFull(f);
   const xp=wasFull?5+L.first:({lesson:10,review:15,test:25})[f.n.t]+L.first*2+(perfect?5:0)+(f.n.t==="lesson"?L.stage*5:0)+(L.timed?10:0);
   const gems=perfect&&!wasFull?5:0;
+  const fi=FLAT.findIndex(x=>x.key===f.key), nextWasOpen=fi>=0&&fi+1<FLAT.length&&isOpen(fi+1);
   const rankBefore=rankInfo().name, unitBefore=unitDone(f.u.id), streakBefore=S.streak, before=BADGES.filter(earned).length;
   const dBefore=S.daily.xp;
   S.xp+=xp; S.gems+=gems; S.daily.xp+=xp; S.days[today()]=(S.days[today()]||0)+xp; S.done[f.key]=(S.done[f.key]||0)+1; if(perfect)S.perfect++;
   const t=today(); if(S.last!==t){const g=S.last?(new Date(t)-new Date(S.last))/864e5:99; S.streak=g===1?S.streak+1:1; S.last=t;}
   S.best=Math.max(S.best||0,S.streak); qState().lessons++; save();
+  renderLearn.justDone=f.key; renderLearn.justOpen=(fi>=0&&fi+1<FLAT.length&&!nextWasOpen&&isOpen(fi+1))?FLAT[fi+1].key:null;
   const nb=BADGES.filter(earned).length-before, secs=Math.round((Date.now()-L.t0)/1000), acc=Math.round(L.first/L.firstTotal*100);
   const sub=f.n.t==="lesson"&&!wasFull?`שלב ${Math.min(3,S.done[f.key])} מתוך 3 · ${esc(f.n.name)}`:esc(f.n.name);
   L.screens=[()=>screenResult({perfect,xp,acc,secs,gems,nb,sub,dBefore,dAfter:S.daily.xp})];
