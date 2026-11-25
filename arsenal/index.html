@@ -627,6 +627,10 @@ body{font-size:16px}
 @keyframes inPeek{0%{transform:translateY(60%);clip-path:inset(0 0 60% 0);opacity:.3}100%{transform:none;clip-path:inset(0 0 0 0)}}
 .bubble.b-in{animation:bubIn .4s cubic-bezier(.3,1.5,.5,1) .15s backwards;transform-origin:right bottom}
 @keyframes bubIn{from{transform:scale(.6);opacity:0}}
+.odd-n{font-size:14px;font-weight:700;color:var(--ink-strong)}
+.odd-grid .opt.wrong .sil{filter:grayscale(.6)}
+.odd-grid .opt.right{animation:oddOut .6s cubic-bezier(.3,1.6,.5,1)}
+@keyframes oddOut{30%{transform:translateY(-8px) rotate(-3deg)}60%{transform:translateY(0) rotate(2deg)}}
 @media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
 </style>
 
@@ -866,6 +870,7 @@ const COURSE = [
    {t:"part", w:"tavor", p:"mag"},
    {t:"type", w:"tavor"},
    {t:"pic", w:"fal"},
+   {t:"odd"},
    {t:"flag", w:"fal"},
    {t:"id", w:"m4"},
    {t:"vs"},
@@ -897,6 +902,7 @@ const COURSE = [
    {t:"mc", q:"איפה נמצאת המחסנית בעוזי?", a:["בתוך ידית האחיזה","מאחורי ידית האחיזה, כמו בתבור","לפני מגן ההדק, כמו ב-MP5","לרוחב מעל הנשק, כמו ב-P90"], c:0, e:"יד מוצאת יד: אפשר להחליף מחסנית גם בחושך."},
    {t:"id", w:"mp5", q:"איזה נשק זה?"},
    {t:"id", w:"p90"},
+   {t:"odd"},
    {t:"vs", k:"mag"},
    {t:"part", w:"uzi"},
    {t:"gap", s:"ה-FN P90 יורה תחמושת מיוחדת: ___", a:["5.7×28 מ\"מ","9×19 מ\"מ","7.62×39 מ\"מ"], c:0, e:"המחסנית שלו מחזיקה 50 כדורים ומונחת לרוחב מעל הנשק."},
@@ -924,6 +930,7 @@ const COURSE = [
    {t:"pic", w:"negev"},
    {t:"vs", k:"kg"},
    {t:"pic", w:"pkm"},
+   {t:"odd"},
    {t:"id", w:"mag"},
    {t:"type", w:"negev"},
    {t:"tf", q:"במקלעים מחליפים לפעמים קנה כדי שלא יתחמם יותר מדי.", c:true, e:"קנה חם מדי נשחק מהר ומאבד דיוק."},
@@ -994,6 +1001,7 @@ const COURSE = [
    {t:"id", w:"galil"},
    {t:"type", w:"uzi"},
    {t:"id", w:"jericho"},
+   {t:"odd"},
    {t:"pic", w:"x95"},
    {t:"tf", q:"ב-2009 בחר צה\"ל במיקרו תבור (X95) כרובה הרגלים הסטנדרטי.", c:true, e:"זו גרסה קצרה וקלה יותר של התבור, נוחה ללחימה בשטח בנוי."},
    {t:"tf", q:"רובה הגליל קרוי על שם ממציאו, ישראל גלילי.", c:true, e:"ישראל גלילי ויעקב ליאור פיתחו אותו, וצה\"ל אימץ אותו בתחילת שנות ה-70."},
@@ -1019,6 +1027,7 @@ const COURSE = [
   ]},
   { name:"כינויים וסיפורים", qs:[
    {t:"pic", w:"thompson"},
+   {t:"odd"},
    {t:"flag"},
    {t:"vs"},
    {t:"order", q:"סדר לפי שנת ההופעה, מהמוקדם למאוחר", items:["מאוזר 98","M1 גאראנד","AK-47","גלוק 17"], e:"מאוזר 98 (1898), M1 גאראנד (1936), AK-47 (1947), גלוק 17 (1982)."},
@@ -1440,6 +1449,7 @@ function renderQ(){
   if(q.t==="vs") return renderVs(q,kick,tm);
   if(q.t==="type") return renderType(q,kick,tm);
   if(q.t==="flag") return renderFlag(q,kick,tm);
+  if(q.t==="odd") return renderOdd(q,kick,tm);
   if(q.t==="id"){
     const w=WMAP[q.w], pool=shuffle(WEAPONS.filter(x=>!x.gen&&x.id!==w.id&&!sameLook(x,w))).slice(0,3);
     L.cur={t:"mc",a:[w.n,...pool.map(x=>x.n)],c:0,e:`${w.type} · ${w.country} · ${w.cal}. ${w.fact}`};
@@ -1493,7 +1503,7 @@ function timeUp(){
 }
 function check(timeout){
   const q0=L.qs[L.i]; if(L.sel===null)return;
-  const q=(q0.t==="id"||q0.t==="pic"||q0.t==="vs"||q0.t==="flag")?L.cur:q0.t==="gap"?{...q0,t:"mc"}:q0;
+  const q=(q0.t==="id"||q0.t==="pic"||q0.t==="vs"||q0.t==="flag"||q0.t==="odd")?L.cur:q0.t==="gap"?{...q0,t:"mc"}:q0;
   const ok=!timeout&&(q.t==="mc"?L.sel===q.c:(L.sel===1)===q.c), right=q.t==="mc"?q.c:(q.c?1:0);
   if(q0.t==="id"&&ok) S.ids=(S.ids||0)+1;
   $$(".opts .opt").forEach(b=>{b.disabled=true;b.classList.remove("sel"); if(+b.dataset.a===right)b.classList.add("right"); else if(+b.dataset.a===L.sel)b.classList.add("wrong");});
@@ -1917,7 +1927,7 @@ const BLITZ_SEC=60;
 function blitzDelay(){ const d=(Date.now()-L.f.start)/1000; return d<0?`${-d}s`:`-${Math.min(BLITZ_SEC,d)}s`; }
 function startBlitz(){
   const quick=COURSE.flatMap(u=>u.lessons.flatMap(l=>l.qs)).filter(q=>["tf","mc","id","pic"].includes(q.t));
-  const gen=[...Array(8)].map((_,i)=>i%2?{t:"flag"}:{t:"vs"});
+  const gen=[...Array(12)].map((_,i)=>[{t:"flag"},{t:"vs"},{t:"odd"}][i%3]);
   startLesson({u:COURSE[0],ui:0,n:{t:"practice",name:"אתגר בזק"},key:"practice",blitz:1,start:Date.now()+1000},shuffle([...quick,...gen])); /* clock starts after the splash */
 }
 function finishBlitz(){
@@ -1933,6 +1943,20 @@ function finishBlitz(){
 }
 function blitzCard(){
   return `<div class="miss-card blitz-card"><svg viewBox="0 0 24 24"><use href="#i-bolt"/></svg><div class="t"><b>אתגר בזק</b><p>${BLITZ_SEC} שניות, כמה שיותר תשובות נכונות${S.blitzBest?` · השיא שלך: ${S.blitzBest}`:""}</p></div><button class="btn orange" id="blitzGo">שחק</button></div>`;
+}
+
+/* ---- odd one out */
+const FAMILIES={"רובה סער":["רובה סער","קרבין"],"אקדח":["אקדח","אקדח תופי"],"מקלע":["מקלע קל","מקלע בינוני","מקלע כללי"]};
+function renderOdd(q,kick,tm){
+  const ok=WEAPONS.filter(w=>!w.gen);
+  const groups=[];
+  [...new Set(ok.map(w=>w.country))].forEach(c=>{const m=ok.filter(w=>w.country===c); if(m.length>=3) groups.push({title:`איזה נשק לא מגיע מ${c}?`,m,why:w=>`${w.n} מגיע מ${w.country}`});});
+  Object.entries(FAMILIES).forEach(([name,types])=>{const m=ok.filter(w=>types.includes(w.type)); if(m.length>=3) groups.push({title:`איזה מהם הוא לא ${name}?`,m,why:w=>`${w.n} הוא ${w.type}`});});
+  const g=shuffle(groups)[0], three=shuffle(g.m).slice(0,3), out=shuffle(ok.filter(w=>!g.m.includes(w)))[0];
+  L.cur={t:"mc",a:[out.n,...three.map(w=>w.n)],c:0,e:`${g.why(out)}. השאר: ${three.map(w=>w.n).join(", ")}.`};
+  L.order=shuffle([0,1,2,3]); const all=[out,...three];
+  frame(`${kick}<h1 class="l-title">${esc(g.title)}</h1><div class="opts pic-grid odd-grid">${L.order.map((ai,k)=>`<button class="opt pic" style="--d:${k}" data-a="${ai}"><span class="k">${k+1}</span>${silSvg(all[ai])}<b class="odd-n">${esc(all[ai].n)}</b></button>`).join("")}</div>`,"בדיקה",true,"",tm);
+  bindChoice();
 }
 
 /* ---- boot */
