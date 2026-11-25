@@ -584,6 +584,33 @@ button.stat:hover{background:var(--soft)}
 .timer.blitz{height:8px}
 .timer.blitz>i{background:linear-gradient(90deg,var(--red),var(--orange),#FFC800)}
 .blitz-score{font-size:96px;font-weight:900;line-height:1;color:var(--orange);font-variant-numeric:tabular-nums}
+/* ---------- type scale: one step smaller */
+body{font-size:16px}
+.l-title{font-size:22px;margin-bottom:18px}
+.bubble{font-size:17px;padding:12px 16px}
+.opt{font-size:16px;padding:12px 14px}
+.tf .opt{font-size:18px;padding:18px 10px}
+.tf .opt svg{width:42px;height:42px}
+.pairs .opt{font-size:15px;min-height:54px}
+.tile{font-size:16px;padding:7px 12px;min-height:42px}
+.gap-s{font-size:18px}
+.type-in{font-size:19px;padding:12px 14px}
+.fb strong{font-size:21px}
+.fb span{font-size:15px}
+.page-title{font-size:23px}
+.unit-head h2{font-size:19px}
+.unit-head .eyebrow{font-size:13px}
+.card h3{font-size:18px}
+.li b{font-size:16px} .li small{font-size:14px}
+.arm-meta b{font-size:16px}
+.spec th,.spec td{font-size:15px}
+.stat{font-size:16px}
+.btn{font-size:15px;padding:12px 18px}
+.pop b{font-size:17px} .pop p{font-size:14px}
+.done-screen h2{font-size:28px}
+.vs-card b{font-size:16px}
+.slot .fill .tile{font-size:15px}
+@media (max-width:420px){.l-title{font-size:20px}.bubble{font-size:16px}.opt{font-size:15px}}
 @media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
 </style>
 
@@ -1038,12 +1065,34 @@ const ico=(id,cls="")=>`<svg class="${cls}" viewBox="0 0 24 24"><use href="#${id
 const kasdi=(cls="who")=>`<svg class="${cls}" viewBox="0 0 120 120" aria-hidden="true"><use href="#kasdi"/></svg>`;
 
 /* ------------------------------------------------------------------ sound + confetti */
-let AC=null;
-function tone(seq,type="triangle",gap=.085){try{AC=AC||new (window.AudioContext||window.webkitAudioContext)();const t=AC.currentTime;
- seq.forEach((f,i)=>{const o=AC.createOscillator(),g=AC.createGain();o.type=type;o.frequency.value=f;const s=t+i*gap;
-  g.gain.setValueAtTime(.0001,s);g.gain.exponentialRampToValueAtTime(.13,s+.02);g.gain.exponentialRampToValueAtTime(.0001,s+.22);
-  o.connect(g).connect(AC.destination);o.start(s);o.stop(s+.24);});}catch(e){}}
-const sfx={ok:()=>tone([784,1047]),no:()=>tone([233,175],"square"),tap:()=>tone([600],"sine"),win:()=>tone([523,659,784,1047,1319],"triangle",.1)};
+/* ---- sound engine: small synthesized chimes, unlocked on the first tap */
+let AC=null, MASTER=null;
+function audio(){
+  if(S&&S.mute) return null;
+  try{ if(!AC){ AC=new (window.AudioContext||window.webkitAudioContext)(); MASTER=AC.createGain(); MASTER.gain.value=.55;
+      const comp=AC.createDynamicsCompressor(); MASTER.connect(comp).connect(AC.destination); }
+    if(AC.state==="suspended") AC.resume(); return AC; }catch(e){ return null; }
+}
+["pointerdown","keydown","touchstart"].forEach(ev=>addEventListener(ev,()=>{ if(!(S&&S.mute)) audio(); },{once:true,passive:true}));
+/* one voice: osc type, start freq, end freq (glide), when, length, peak gain, optional lowpass */
+function voice(type,f1,f2,when,len,peak,lp){
+  const a=audio(); if(!a) return; const t=a.currentTime+when;
+  const o=a.createOscillator(), g=a.createGain(); o.type=type; o.frequency.setValueAtTime(f1,t); if(f2&&f2!==f1) o.frequency.exponentialRampToValueAtTime(f2,t+len*.8);
+  g.gain.setValueAtTime(.0001,t); g.gain.exponentialRampToValueAtTime(peak,t+.012); g.gain.exponentialRampToValueAtTime(.0001,t+len);
+  let node=o; if(lp){ const f=a.createBiquadFilter(); f.type="lowpass"; f.frequency.value=lp; o.connect(f); node=f; }
+  node.connect(g).connect(MASTER); o.start(t); o.stop(t+len+.05);
+}
+const bell=(f,when,len=.5,peak=.32)=>{ voice("sine",f,f,when,len,peak); voice("sine",f*2,f*2,when,len*.6,peak*.35); voice("triangle",f*3,f*3,when,len*.25,peak*.12); };
+const sfx={
+  ok:()=>{ bell(1046.5,0,.45); bell(1568,.09,.6); },
+  no:()=>{ voice("square",196,165,0,.16,.22,900); voice("square",165,130,.13,.28,.22,800); voice("sine",98,82,0,.35,.25); },
+  tap:()=>{ voice("sine",1400,900,0,.05,.18); voice("triangle",700,500,0,.04,.08); },
+  pop:()=>{ voice("sine",500,1100,0,.11,.28); },
+  win:()=>{ [523.3,659.3,784,1046.5].forEach((f,i)=>bell(f,i*.11,.5,.28)); [523.3,659.3,784].forEach(f=>bell(f*2,.48,1.1,.16)); },
+  streak:()=>{ voice("sawtooth",220,880,0,.45,.07,2400); [784,1046.5,1318.5].forEach((f,i)=>bell(f,.32+i*.09,.55,.24)); },
+  heart:()=>{ voice("sine",180,60,0,.3,.38); voice("triangle",120,50,0,.25,.15); },
+  tick:()=>{ voice("square",1800,1800,0,.03,.06,3000); },
+};
 function confetti(){
   if(matchMedia("(prefers-reduced-motion: reduce)").matches)return;
   const c=$("#confetti"),x=c.getContext("2d"),d=devicePixelRatio||1;c.hidden=false;
@@ -1266,8 +1315,11 @@ function renderMe(){
    <div class="me-cards" style="display:grid;gap:16px;margin-top:20px">${leagueCard()}${questsCard()}${rankCard()}</div>
    <h2 class="page-title" style="font-size:21px">יעד יומי</h2>
    <div class="goal-opts">${[[20,"רגוע"],[50,"רציני"],[100,"מטורף"]].map(([g,n])=>`<button class="goal-opt" aria-pressed="${S.goal===g}" data-g="${g}"><span>${n}</span><span>${g} XP ביום</span></button>`).join("")}</div>
+   <h2 class="page-title" style="font-size:19px">הגדרות</h2>
+   <div class="goal-opts"><button class="goal-opt" id="muteT" aria-pressed="${!S.mute}"><span>צלילים</span><span>${S.mute?"כבויים":"פועלים"}</span></button></div>
    <button class="danger" id="reset">איפוס התקדמות</button>`;
   $$(".goal-opt").forEach(b=>b.onclick=()=>{S.goal=+b.dataset.g;save();render();});
+  $("#muteT").onclick=()=>{ S.mute=!S.mute; save(); if(!S.mute) sfx.ok(); render(); };
   $("#reset").onclick=()=>{ sheet(`<div class="center">${kasdi("big")}<h2>לאפס את כל ההתקדמות?</h2><p class="page-sub" style="margin:0">ה-XP, הרצף, היהלומים והשיעורים שסיימת יימחקו.</p>
     <button class="btn wide red" id="yes">אפס הכל</button><button class="btn wide ghost" id="sx">ביטול</button></div>`);
     $("#sx").onclick=closeSheet; $("#yes").onclick=()=>{S=fresh();save();closeSheet();tab="learn";renderLearn.scrolled=0;render();}; };
@@ -1303,7 +1355,7 @@ function floatText(el,html,color){
   document.body.appendChild(s); if(RM()){setTimeout(()=>s.remove(),700);return;}
   s.animate([{transform:"translate(-50%,0) scale(.6)",opacity:0},{transform:"translate(-50%,-26px) scale(1.1)",opacity:1,offset:.25},{transform:"translate(-50%,-70px) scale(1)",opacity:0}],{duration:1100,easing:"ease-out"}).onfinish=()=>s.remove();
 }
-sfx.pop=()=>tone([880],"sine"); sfx.heart=()=>tone([392,262],"sawtooth",.12); sfx.streak=()=>tone([392,523,659,784,1047],"triangle",.08); sfx.tick=()=>tone([1200],"square");
+/* sfx.pop/heart/streak/tick defined in the sound engine */ void ([1200],"square");
 
 /* ------------------------------------------------------------------ lesson engine */
 let L=null;
