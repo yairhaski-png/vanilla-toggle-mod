@@ -999,6 +999,24 @@ const COURSE = [
    {t:"tf", q:"ברובה חצי-אוטומטי, התרמיל הריק נפלט החוצה אחרי כל ירייה.", c:true, e:"המנגנון שולף את התרמיל, פולט אותו ומכניס כדור חדש."},
    {t:"mc", q:"מה המשמעות של '5.56×45 מ\"מ'?", a:["קוטר הקליע 5.56 מ\"מ ואורך התרמיל 45 מ\"מ","קוטר הקליע 45 מ\"מ ואורכו 5.56 מ\"מ","אורך הקנה 5.56 ס\"מ","טווח של 556 מטר"], c:0, e:"כך מתארים תחמושת: קוטר × אורך התרמיל."},
    {t:"match", q:"התאם חלק בכדור לתפקיד", p:[["קליע","עף לעבר המטרה"],["תרמיל","המעטפת שמחזיקה הכל"],["פיקה","מציתה"],["הודף","בוער ודוחף את הקליע"]]}
+  ]},
+  { name:"חלקים חיצוניים", qs:[
+   {t:"part", w:"tavor"},
+   {t:"mc", q:"מה התפקיד של מדכא ההבזק בקצה הקנה?", a:["מפזר את הלהבה שיוצאת מהלוע כדי שלא תסנוור","מגדיל את מהירות הקליע","מקרר את הקנה","מחזיק את הכידון בלבד"], c:0, e:"בלי מדכא הבזק, הלהבה מהלוע מסנוורת את היורה בלילה ומגלה את מקומו."},
+   {t:"mc", q:"מה זה 'ידית הדריכה'?", a:["הידית שמושכים כדי להכניס כדור ראשון לבית הבליעה","הידית שמשחררת את המחסנית","הידית שעליה נושאים את הנשק","הידית שמכוונת את הכוונות"], c:0, e:"ב-AK היא בצד ימין של המכלול, ב-M16 היא מאחורי הכוונת העליונה, בצורת T."},
+   {t:"mc", q:"מה זה 'מסילת פיקטיני' על נשק?", a:["פס עם חריצים שעליו מרכיבים כוונות, פנס ואביזרים","החריצים בתוך הקנה","מסילה שעליה זז הבריח","חלק מהמחסנית"], c:0, e:"היא נקראת על שם ארסנל פיקטיני בארה\"ב, ומאפשרת להרכיב אביזרים מיצרנים שונים."},
+   {t:"part", w:"uzi"},
+   {t:"tf", q:"מגן ההדק הוא הטבעת שמקיפה את ההדק ומגינה עליו מלחיצה בטעות.", c:true, e:"בנשקים שנועדו לשימוש עם כפפות, אפשר לפעמים להרחיב אותו או להסיר חלק ממנו."},
+   {t:"mc", q:"מה התפקיד של הדו-חצובה (ביפוד) במקלע כמו הנגב?", a:["תמיכה בקדמת הנשק כדי לייצב אותו בירי מהקרקע","כוונת לירי בלילה","מחזיק לרצועת התחמושת","מגן על הקנה מחום"], c:0, e:"שתי רגליים מתקפלות מתחת לקנה. בשכיבה הנשק נשען עליהן ויציב בהרבה."},
+   {t:"match", q:"התאם חלק לתפקיד", p:[["מדכא הבזק","מפזר את הלהבה"],["ידית דריכה","מכניסה כדור ראשון"],["דו-חצובה","מייצבת בשכיבה"],["מסילה","מחזיקה אביזרים"]]}
+  ]},
+  { name:"חלקים פנימיים", qs:[
+   {t:"mc", q:"מה התפקיד של הנוקר?", a:["פוגע בפיקה של הכדור ומצית אותה","שולף את התרמיל הריק","דוחף את הכדור מהמחסנית","נועל את ההדק"], c:0, e:"הנוקר הוא פין מתכת קטן. כשההדק נלחץ, הוא נדחף קדימה בכוח ופוגע בפיקה."},
+   {t:"mc", q:"מה עושה השולף (Extractor)?", a:["תופס את שפת התרמיל ומושך אותו מבית הבליעה","מכניס כדור חדש לבית הבליעה","מחזיר את הבריח קדימה","מודד כמה כדורים נשארו"], c:0, e:"אחרי שהתרמיל נשלף, ה'פולט' דוחף אותו החוצה דרך חלון הפליטה."},
+   {t:"mc", q:"מה התפקיד של קפיץ ההחזרה?", a:["מחזיר את הבריח קדימה אחרי שנהדף לאחור","מחזיר את ההדק למקומו","דוחף את הכדורים במחסנית למעלה","מחזיק את הקת במקום"], c:0, e:"הבריח נהדף לאחור בכל ירייה, והקפיץ מחזיר אותו ובדרך הוא גם מכניס כדור חדש."},
+   {t:"tf", q:"בתוך המחסנית יש קפיץ ומזין שדוחפים את הכדורים כלפי מעלה.", c:true, e:"המזין הוא הלוח שהכדור התחתון נשען עליו. כשהמחסנית ריקה, הוא בראש המחסנית."},
+   {t:"order", q:"סדר את מה שקורה בתוך הנשק אחרי ירייה, מההתחלה", items:["הבריח נהדף לאחור","השולף מושך את התרמיל","הפולט זורק את התרמיל החוצה","קפיץ ההחזרה דוחף את הבריח קדימה","כדור חדש נכנס לבית הבליעה"], e:"זה המחזור של כל נשק חצי-אוטומטי, ובחלק מהנשקים הוא קורה יותר מ-10 פעמים בשנייה."},
+   {t:"match", q:"התאם חלק פנימי לתפקיד", p:[["נוקר","פוגע בפיקה"],["שולף","מושך את התרמיל"],["פולט","זורק את התרמיל"],["קפיץ החזרה","מחזיר את הבריח"]]}
   ]}
  ]},
  { id:"works", c:["#FF9B1A","#DA7C00"], title:"איך נשק עובד", sub:"בריח, חצי-אוטומטי, גזים והדף", lessons:[
@@ -1298,6 +1316,9 @@ function nodesOf(u){
   n.push({k:"test",t:"test",name:"מבחן יחידה"});
   return n;
 }
+/* course focus: only the weapons themselves and their parts */
+const OFF_TOPIC=new Set(["stories","technique","shoot","gear","terms","safety"]);
+for(let i=COURSE.length-1;i>=0;i--) if(OFF_TOPIC.has(COURSE[i].id)) COURSE.splice(i,1);
 const FLAT=[]; COURSE.forEach((u,ui)=>nodesOf(u).forEach((n,ni)=>FLAT.push({u,ui,n,ni,key:u.id+":"+n.k})));
 const LESSON_COUNT=FLAT.filter(f=>f.n.t!=="chest").length;
 
@@ -1991,7 +2012,7 @@ function onboarding(){
   const o=document.createElement("div"); o.className="onb"; o.id="onb"; document.body.appendChild(o);
   const A={why:null,level:null,goal:50}; let step=0;
   const STEPS=[
-    {say:"היי! אני קסדי. אני אלמד אותך הכל על נשק: איך הוא עובד, סיפורים מאחורי הנשקים, טכניקות ירי, וכל הנשקים המפורסמים.",btn:"המשך"},
+    {say:"היי! אני קסדי. אני אלמד אותך הכל על נשק: ממה הוא בנוי, איך כל חלק עובד, וכל הנשקים המפורסמים.",btn:"המשך"},
     {say:"למה אתה רוצה ללמוד על נשק?",key:"why",opts:[["curious","סתם מעניין אותי","i-star"],["army","מתכונן לצבא","i-trophy"],["sport","ירי ספורטיבי ומטווחים","i-dumbbell"],["history","היסטוריה צבאית","i-book"]]},
     {say:"כמה אתה כבר יודע?",key:"level",opts:[["0","אני מתחיל מאפס","i-star"],["1","אני מכיר כמה נשקים","i-bolt"],["2","אני יודע די הרבה","i-trophy"]]},
     {say:"מה היעד היומי שלך?",key:"goal",opts:[[20,"רגוע · 20 XP ביום","i-heart"],[50,"רציני · 50 XP ביום","i-bolt"],[100,"מטורף · 100 XP ביום","i-fire"]]},
@@ -2421,7 +2442,7 @@ Object.assign(DIAGRAMS,{
    <line class="hand" x1="250" y1="72" x2="250" y2="30" stroke="#E0483B" stroke-width="3" stroke-linecap="round"/><circle cx="250" cy="72" r="4" fill="#E0483B"/>
    <g class="mt" style="--d:0"><rect x="148" y="30" width="8" height="22" rx="2" fill="#D4A84B"/><path d="M148 30h8l-4-8z" fill="#B87333"/></g><g class="mt" style="--d:1"><rect x="120" y="30" width="8" height="22" rx="2" fill="#D4A84B"/><path d="M120 30h8l-4-8z" fill="#B87333"/></g><g class="mt" style="--d:2"><rect x="92" y="30" width="8" height="22" rx="2" fill="#D4A84B"/><path d="M92 30h8l-4-8z" fill="#B87333"/></g><g class="mt" style="--d:3"><rect x="64" y="30" width="8" height="22" rx="2" fill="#D4A84B"/><path d="M64 30h8l-4-8z" fill="#B87333"/></g><g class="mt" style="--d:4"><rect x="36" y="30" width="8" height="22" rx="2" fill="#D4A84B"/><path d="M36 30h8l-4-8z" fill="#B87333"/></g><g class="mt" style="--d:5"><rect x="148" y="60" width="8" height="22" rx="2" fill="#D4A84B"/><path d="M148 60h8l-4-8z" fill="#B87333"/></g><g class="mt" style="--d:6"><rect x="120" y="60" width="8" height="22" rx="2" fill="#D4A84B"/><path d="M120 60h8l-4-8z" fill="#B87333"/></g><g class="mt" style="--d:7"><rect x="92" y="60" width="8" height="22" rx="2" fill="#D4A84B"/><path d="M92 60h8l-4-8z" fill="#B87333"/></g><g class="mt" style="--d:8"><rect x="64" y="60" width="8" height="22" rx="2" fill="#D4A84B"/><path d="M64 60h8l-4-8z" fill="#B87333"/></g><g class="mt" style="--d:9"><rect x="36" y="60" width="8" height="22" rx="2" fill="#D4A84B"/><path d="M36 60h8l-4-8z" fill="#B87333"/></g><g class="mt" style="--d:10"><rect x="148" y="90" width="8" height="22" rx="2" fill="#D4A84B"/><path d="M148 90h8l-4-8z" fill="#B87333"/></g><g class="mt" style="--d:11"><rect x="120" y="90" width="8" height="22" rx="2" fill="#D4A84B"/><path d="M120 90h8l-4-8z" fill="#B87333"/></g><g class="mt" style="--d:12"><rect x="92" y="90" width="8" height="22" rx="2" fill="#D4A84B"/><path d="M92 90h8l-4-8z" fill="#B87333"/></g><g class="mt" style="--d:13"><rect x="64" y="90" width="8" height="22" rx="2" fill="#D4A84B"/><path d="M64 90h8l-4-8z" fill="#B87333"/></g><g class="mt" style="--d:14"><rect x="36" y="90" width="8" height="22" rx="2" fill="#D4A84B"/><path d="M36 90h8l-4-8z" fill="#B87333"/></g><text x="250" y="144" text-anchor="middle">דקה אחת</text><text x="92" y="144" text-anchor="middle">15 יריות</text></svg>`},
 });
-const LESSON_DIAG={"stories:3":["madmin"],"famous:0":["tl_classic"],"famous:1":["drum"],"terms:1":["indirect"],"shoot:1":["zero"],"israel:1":["irondome"],"terms:0":["caliber"],"history:1":["tl_ww"],"rifles:0":["akvsm16"],"heavy:0":["scope"],"history:0":["tl_world"],"israel:0":["tl_israel"],"gear:0":["armor"],"technique:0":["positions"],"pistols:1":["blowback"],"heavy:1":["belt"],"pistols:0":["revolver"],"shoot:0":["sights"],"gear:1":["reddot"],"parts:0":["magazine"],"parts:1":["cartridge","firing"],"works:0":["bolt"],"works:1":["gas"],"rifles:1":["bullpup"],"technique:1":["trajectory","rifling"]};
+const LESSON_DIAG={"parts:3":["bolt"],"stories:3":["madmin"],"famous:0":["tl_classic"],"famous:1":["drum"],"terms:1":["indirect"],"shoot:1":["zero"],"israel:1":["irondome"],"terms:0":["caliber"],"history:1":["tl_ww"],"rifles:0":["akvsm16"],"heavy:0":["scope"],"history:0":["tl_world"],"israel:0":["tl_israel"],"gear:0":["armor"],"technique:0":["positions"],"pistols:1":["blowback"],"heavy:1":["belt"],"pistols:0":["revolver"],"shoot:0":["sights"],"gear:1":["reddot"],"parts:0":["magazine"],"parts:1":["cartridge","firing"],"works:0":["bolt"],"works:1":["gas"],"rifles:1":["bullpup"],"technique:1":["trajectory","rifling"]};
 
 /* ---- teach first: cards built from the lesson's own content, shown before the questions */
 function teachCards(qs,key){
