@@ -767,6 +767,12 @@ body{font-size:16px}
 @keyframes sway2{25%{transform:rotate(1.4deg)}75%{transform:rotate(-1.4deg)}}
 .dg-pos .pb{transform-box:fill-box;transform-origin:right center;animation:pb 2.6s ease-out infinite}
 @keyframes pb{0%{transform:scaleX(0)}45%,100%{transform:scaleX(var(--v))}}
+.dg-arm .ab{transform-box:fill-box;transform-origin:right center;animation:ab 3.2s ease-in infinite}
+.dg-arm .crk{opacity:0;animation:crk 3.2s ease-out infinite}
+.dg-arm .bulge{transform-box:fill-box;transform-origin:left center;animation:bulge 3.2s ease-out infinite}
+@keyframes ab{0%{transform:none;opacity:1}30%{transform:translateX(108px);opacity:1}36%{transform:translateX(112px) scaleX(.35) scaleY(1.5);opacity:1}55%,100%{transform:translateX(112px) scaleX(.35) scaleY(1.5);opacity:0}}
+@keyframes crk{0%,29%{opacity:0}34%,80%{opacity:1}100%{opacity:0}}
+@keyframes bulge{0%,30%{transform:scaleX(0)}38%,80%{transform:scaleX(1)}100%{transform:scaleX(0)}}
 @media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
 </style>
 
@@ -2273,7 +2279,16 @@ Object.assign(DIAGRAMS,{
    ${[[45,35],[150,65],[262,100]].map(([x,v],i)=>`<rect x="${x-35}" y="116" width="70" height="10" rx="5" fill="var(--line)"/><rect class="pb" style="--v:${v/100}" x="${x-35}" y="116" width="70" height="10" rx="5" fill="${["#E0483B","#FFC800","#58C21B"][i]}"/>`).join("")}
    <g class="dg-lbl"><text x="45" y="145" text-anchor="middle">עמידה</text><text x="150" y="145" text-anchor="middle">כריעה</text><text x="262" y="145" text-anchor="middle">שכיבה</text></g></svg>`},
 });
-const LESSON_DIAG={"technique:0":["positions"],"pistols:1":["blowback"],"heavy:1":["belt"],"pistols:0":["revolver"],"shoot:0":["sights"],"gear:1":["reddot"],"parts:0":["magazine"],"parts:1":["cartridge","firing"],"works:0":["bolt"],"works:1":["gas"],"rifles:1":["bullpup"],"technique:1":["trajectory","rifling"]};
+Object.assign(DIAGRAMS,{
+ armor:{title:"איך לוח קרמי עוצר כדור",text:"הקרמיקה הקשה מתנפצת ושוברת את הקליע, והאנרגיה מתפזרת על שטח גדול. שכבת הסיבים מאחור תופסת את השברים ומתכופפת מעט.",
+  svg:`<svg viewBox="0 0 320 150" class="dg dg-arm"><rect x="176" y="16" width="22" height="108" rx="3" fill="#E4E8EC" stroke="#AEB6BE" stroke-width="2"/>
+   <path class="fib" d="M198 16h22v108h-22z" fill="#E8C877"/>
+   <g class="crk" stroke="#6B7580" stroke-width="2" fill="none"><path d="M176 70l22-22M176 70l22 22M176 70l22-8M176 70l22 8M176 70l22 0"/></g>
+   <path class="bulge" d="M220 50q14 20 0 40" fill="#E8C877"/>
+   <path class="ab" d="M40 64h26q12 6 0 12h-26z" fill="#B87333"/>
+   <g class="dg-lbl"><text x="187" y="140" text-anchor="middle">קרמיקה</text><text x="232" y="140" text-anchor="middle">סיבים</text><text x="70" y="104" text-anchor="middle">קליע</text></g></svg>`},
+});
+const LESSON_DIAG={"gear:0":["armor"],"technique:0":["positions"],"pistols:1":["blowback"],"heavy:1":["belt"],"pistols:0":["revolver"],"shoot:0":["sights"],"gear:1":["reddot"],"parts:0":["magazine"],"parts:1":["cartridge","firing"],"works:0":["bolt"],"works:1":["gas"],"rifles:1":["bullpup"],"technique:1":["trajectory","rifling"]};
 
 /* ---- teach first: cards built from the lesson's own content, shown before the questions */
 function teachCards(qs,key){
