@@ -11,6 +11,7 @@ async function answer(){
   const st=await p.evaluate(()=>{if(!L)return null;const q=L.qs[L.i];return {s:L.state,t:q&&q.t};});
   if(!st) return 'closed';
   if(st.s==='screens'||st.s==='done'){await p.click('#go');await p.waitForTimeout(80);return 'next';}
+  if(st.s==='teach'||st.s==='moving'){await p.click('#go').catch(()=>{});await p.waitForTimeout(60);return 'next';}
   if(st.s==='checked'){await p.click('#go');await p.waitForTimeout(60);return 'next';}
   types[st.t]=(types[st.t]||0)+1;qcount++;
   const t=st.t;

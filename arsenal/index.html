@@ -653,6 +653,32 @@ body{font-size:16px}
 @keyframes stIn{from{opacity:0;transform:translateY(14px) scale(.98)}}
 .st-q{font-size:19px;font-weight:800;margin:4px 0 14px;color:var(--ink-strong)}
 .st-reveal{animation:stIn .45s cubic-bezier(.3,1.4,.5,1)}
+/* ---------- teach cards */
+.tc-top{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:8px}
+.tc-skip{color:var(--blue);font-weight:800;font-size:14px;letter-spacing:.03em}
+.tc-intro{margin-bottom:14px}
+.tc-intro .who{width:90px;height:90px}
+.tc-card{position:relative;border:2px solid var(--line);border-bottom-width:5px;border-radius:20px;padding:18px 18px 20px;background:var(--surface);animation:qIn .4s cubic-bezier(.2,.9,.3,1)}
+.tc-card>.spk{position:absolute;top:12px;inset-inline-end:12px;float:none;margin:0}
+.tc-art{margin:0 0 12px;padding:12px 8px}
+.tc-art .sil{max-width:340px}
+.tc-q{margin:0 0 6px;color:var(--muted);font-weight:600;font-size:15px;padding-inline-end:44px}
+.tc-big{margin:0 0 10px;font-size:22px;font-weight:800;color:var(--ink-strong);line-height:1.3;display:flex;align-items:center;gap:8px}
+.tc-big svg{width:26px;height:26px}
+.tc-yes{color:var(--green-ink)} .tc-yes svg{fill:var(--green)}
+.tc-no{color:var(--red-ink)} .tc-no svg{fill:var(--red)}
+.tc-e{margin:0;font-size:16px;line-height:1.55;color:var(--ink)}
+.tc-chips{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:10px}
+.tc-chips span{background:var(--blue-bg);color:var(--blue);font-weight:700;font-size:13px;padding:3px 10px;border-radius:99px}
+.tc-pairs{display:grid;gap:8px}
+.tc-pairs div{display:flex;justify-content:space-between;gap:12px;border:2px solid var(--line);border-radius:12px;padding:10px 12px}
+.tc-pairs b{color:var(--ink-strong)} .tc-pairs span{color:var(--muted);font-weight:600;text-align:end}
+.tc-list{margin:0 0 10px;padding-inline-start:22px;display:grid;gap:6px;font-weight:700;color:var(--ink-strong)}
+.tc-dots{display:flex;justify-content:center;gap:6px;margin-top:16px}
+.tc-dots i{width:9px;height:9px;border-radius:50%;background:var(--line);transition:all .2s}
+.tc-dots i.done{background:var(--green)} .tc-dots i.on{background:var(--blue);width:22px;border-radius:9px}
+.pop-learn{display:flex;align-items:center;justify-content:center;gap:6px;margin-top:2px;color:#fff;font-weight:800;font-size:14px;opacity:.95;padding:6px}
+.pop-learn svg{width:18px;height:18px;fill:#fff}
 @media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
 </style>
 
@@ -1308,12 +1334,13 @@ function nodeTap(i,btn){
     const st=stageOf(f), full=isFull(f);
     body=`<b>${esc(f.n.name)}</b><p>${full?"השלמת את כל 3 השלבים. אפשר לתרגל שוב.":`שלב ${st+1} מתוך 3 · ${STAGE_NAME[st]}${st===2?" (עם שעון)":""}`}</p>
       <div class="stage-dots">${[0,1,2].map(k=>`<i class="${k<st?"on":""}"></i>`).join("")}</div>
-      <button class="pop-btn" id="popGo">${full?"תרגול":"התחל"} +${nodeXP(f)} XP</button>`;
+      <button class="pop-btn" id="popGo">${full?"תרגול":"התחל"} +${nodeXP(f)} XP</button>${st>0?`<button class="pop-learn" id="popLearn">${ico("i-book")}חזרה על החומר</button>`:""}`;
   } else body=`<b>${esc(f.n.name)}</b><p>${f.n.t==="review"?"6 שאלות מכל היחידה":"כל השאלות ביחידה. תצליח, ותקבל גביע."}</p><button class="pop-btn" id="popGo">${isFull(f)?"תרגול":"התחל"} +${nodeXP(f)} XP</button>`;
   const pop=document.createElement("div");
   pop.className="pop"+(open?"":" off"); pop.style.cssText=`--shift:${-shift}px;--arrow:${shift}px`;
   pop.innerHTML=body; pop.onclick=e=>e.stopPropagation(); wrap.appendChild(pop); wrap.classList.add("popped");
   const go=pop.querySelector("#popGo"); if(go) go.onclick=()=>{closePop();startLesson(f);};
+  const lr=pop.querySelector("#popLearn"); if(lr) lr.onclick=()=>{ closePop(); startLesson(f); const wait=setInterval(()=>{ if(!L){clearInterval(wait);return;} if(L.state==="answer"&&$(".l-inner")){ clearInterval(wait); if(L.teach&&L.teach.length) startTeach(); } },60); };
   const r=pop.getBoundingClientRect(); if(r.bottom>innerHeight-90) scrollBy({top:r.bottom-innerHeight+110,behavior:"smooth"});
 }
 
@@ -1465,7 +1492,9 @@ function startLesson(f,custom){
   L={practice:f.n.t==="practice",f,qs,i:0,first:0,firstTotal:qs.length,mistakes:[],state:"answer",sel:null,combo:0,t0:Date.now(),timed,stage:full?-1:st,pct:0,xpRun:0};
   $("#lesson").hidden=false; document.body.style.overflow="hidden";
   if(S.hearts<=0&&!(L&&L.practice)) return noHearts();
-  $("#lesson").innerHTML=""; splash(()=>{ if(L&&L.state==="answer") renderQ(); });
+  const teach=!custom&&f.n.t==="lesson"?teachCards(u.lessons[f.n.li].qs):[];
+  L.teach=teach;
+  $("#lesson").innerHTML=""; splash(()=>{ if(!L||L.state!=="answer") return; if(teach.length&&!full&&st===0) startTeach(); else renderQ(); });
 }
 function splash(cb){
   if(RM()) return cb();
@@ -1558,7 +1587,7 @@ function renderPairs(q,kick,tm){
     else { sfx.no(); m.miss=true; [a,b].forEach(x=>{x.classList.remove("sel");x.classList.add("wrong");setTimeout(()=>x.classList.remove("wrong"),450);}); }
   });
 }
-function onGo(){ if(L&&L.state==="moving") return; if(L&&L.state==="answer"&&L.qs[L.i].t==="story"&&!L.storyDone) return storyNext(); if(L.state==="answer"){ const t=L.qs[L.i].t; return t==="build"?checkBuild():t==="part"?checkPart():t==="order"?checkOrder():t==="type"?checkType():check(); } if(L.state==="checked")return advance(); if(L.state==="screens")return nextScreen(); closeLesson(); }
+function onGo(){ if(L&&L.state==="moving") return; if(L&&L.state==="teach") return teachNext(); if(L&&L.state==="answer"&&L.qs[L.i].t==="story"&&!L.storyDone) return storyNext(); if(L.state==="answer"){ const t=L.qs[L.i].t; return t==="build"?checkBuild():t==="part"?checkPart():t==="order"?checkOrder():t==="type"?checkType():check(); } if(L.state==="checked")return advance(); if(L.state==="screens")return nextScreen(); closeLesson(); }
 function stopTimer(){ const t=$("#tbar"); if(t) t.style.animationPlayState="paused"; }
 function timeUp(){
   const q0=L.qs[L.i];
@@ -2049,6 +2078,42 @@ function storyNext(){
   const go=$("#go"); go.textContent="בדיקה"; go.disabled=true;
   qb.scrollIntoView({block:"start",behavior:RM()?"auto":"smooth"});
 }
+
+/* ---- teach first: cards built from the lesson's own content, shown before the questions */
+function teachCards(qs){
+  const cards=[], seenW=new Set();
+  for(const q of qs){
+    if(q.t==="story") continue;
+    if(q.w&&WMAP[q.w]){ if(!seenW.has(q.w)){ seenW.add(q.w); cards.push({k:"w",w:WMAP[q.w]}); } continue; }
+    if(q.t==="mc"||q.t==="gap") cards.push({k:"fact",q:q.t==="gap"?q.s.replace("___","…"):q.q,a:q.a[q.c],e:q.e});
+    else if(q.t==="tf") cards.push({k:"tf",q:q.q,v:q.c,e:q.e});
+    else if(q.t==="match") cards.push({k:"match",q:q.q,p:q.p});
+    else if(q.t==="order") cards.push({k:"order",q:q.q,items:q.items,e:q.e});
+  }
+  return cards.slice(0,7);
+}
+function startTeach(){ L.state="teach"; L.tIdx=0; renderTeach(); }
+function renderTeach(){
+  const c=L.teach[L.tIdx], n=L.teach.length, last=L.tIdx===n-1;
+  let body="";
+  if(c.k==="w"){ const w=c.w; body=`<div class="id-card tc-art">${silSvg(w,"sil")}</div><h2 class="tc-big">${esc(w.n)}</h2>
+      <div class="tc-chips"><span>${esc(w.type)}</span><span>${esc(w.country)}</span><span>${esc(w.year)}</span><span>${esc(w.cal)}</span></div><p class="tc-e">${esc(w.fact)}</p>`; }
+  else if(c.k==="fact") body=`<p class="tc-q">${esc(c.q)}</p><h2 class="tc-big">${esc(c.a)}</h2>${c.e?`<p class="tc-e">${esc(c.e)}</p>`:""}`;
+  else if(c.k==="tf") body=`<p class="tc-q">${esc(c.q)}</p><h2 class="tc-big ${c.v?"tc-yes":"tc-no"}">${ico(c.v?"i-check":"i-x")}${c.v?"נכון":"לא נכון"}</h2>${c.e?`<p class="tc-e">${esc(c.e)}</p>`:""}`;
+  else if(c.k==="match") body=`<p class="tc-q">${esc(c.q)}</p><div class="tc-pairs">${c.p.map(([a,b])=>`<div><b>${esc(a)}</b><span>${esc(b)}</span></div>`).join("")}</div>`;
+  else if(c.k==="order") body=`<p class="tc-q">${esc(c.q)}</p><ol class="tc-list">${c.items.map(x=>`<li>${esc(x)}</li>`).join("")}</ol>${c.e?`<p class="tc-e">${esc(c.e)}</p>`:""}`;
+  const say=c.k==="w"?`${c.w.n}. ${c.w.fact}`:c.k==="fact"?`${c.q} ${c.a}. ${c.e||""}`:c.k==="tf"?`${c.q} ${c.v?"נכון":"לא נכון"}. ${c.e||""}`:c.q;
+  frame(`<div class="tc-top"><div class="l-kicker legend">${ico("i-book")}לומדים לפני שמתרגלים · ${L.tIdx+1} מתוך ${n}</div><button class="tc-skip" id="tcSkip">דלג לתרגול</button></div>
+    ${L.tIdx===0?`<div class="speak tc-intro">${mascot("happy","who in-hop")}<div class="bubble b-in">בוא נלמד את החומר של השיעור, ואחר כך נתרגל.</div></div>`:""}
+    <div class="tc-card" key="${L.tIdx}">${spk(say)}${body}</div>
+    <div class="tc-dots">${L.teach.map((_,i)=>`<i class="${i<L.tIdx?"done":i===L.tIdx?"on":""}"></i>`).join("")}</div>`,last?"בוא נתרגל!":"הבא",false);
+  $("#tcSkip").onclick=()=>teachDone();
+}
+function teachNext(){
+  if(L.tIdx<L.teach.length-1){ L.tIdx++; sfx.tap(); const card=$(".tc-card"); if(card&&!RM()){ card.classList.add("q-out"); L.state="moving"; setTimeout(()=>{ if(L&&L.state==="moving"){ L.state="teach"; renderTeach(); } },170); } else renderTeach(); return; }
+  teachDone();
+}
+function teachDone(){ L.state="answer"; sfx.pop(); renderQ(); }
 
 /* ---- boot */
 regenHearts(); leagueTick(); qState(); save();
