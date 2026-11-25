@@ -718,6 +718,22 @@ body{font-size:16px}
 .dg-rif .engr{animation:engr .6s linear infinite}
 @keyframes engr{to{transform:translateX(12px)}}
 .dg-rif .spinb{clip-path:inset(0 0 0 0)}
+.dg-mag .top{animation:magTop 2.6s ease-in-out infinite}
+.dg-mag .stack{animation:magStack 2.6s ease-in-out infinite}
+.dg-mag .fol{animation:magStack 2.6s ease-in-out infinite}
+.dg-mag .msp{transform-box:fill-box;transform-origin:bottom center;animation:magSpr 2.6s ease-in-out infinite}
+@keyframes magTop{0%,20%{transform:none;opacity:1}45%{transform:translate(40px,-14px);opacity:0}46%,100%{opacity:0;transform:none}}
+@keyframes magStack{0%,45%{transform:translateY(16px)}65%,100%{transform:translateY(0)}}
+@keyframes magSpr{0%,45%{transform:scaleY(.7)}65%,100%{transform:scaleY(1)}}
+.dg-bolt .hdl{transform-box:fill-box;transform-origin:top center;animation:hdl 4s ease-in-out infinite}
+.dg-bolt .blt{animation:blt 4s ease-in-out infinite}
+.dg-bolt .cas{transform-box:fill-box;opacity:0;animation:boltCas 4s ease-out infinite}
+.dg-bolt .s1{animation:st1 4s infinite}.dg-bolt .s2{animation:st2 4s infinite}.dg-bolt .s3{animation:st3 4s infinite}.dg-bolt .s4{animation:st4 4s infinite}
+@keyframes hdl{0%,5%{transform:none}15%,72%{transform:rotate(-80deg)}85%,100%{transform:none}}
+@keyframes blt{0%,15%{transform:none}30%,40%{transform:translateX(-50px)}55%,100%{transform:none}}
+@keyframes boltCas{0%,27%{opacity:0;transform:none}30%{opacity:1;transform:translateX(-50px)}45%{opacity:0;transform:translate(-20px,-50px) rotate(200deg)}100%{opacity:0}}
+.dg-bp .mz{stroke-dasharray:240;animation:mz 2.4s ease-out infinite}
+@keyframes mz{0%{stroke-dashoffset:240}50%,100%{stroke-dashoffset:0}}
 @media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
 </style>
 
@@ -2161,7 +2177,26 @@ const DIAGRAMS={
    <path d="M262 40a30 22 0 1 1-6 46" fill="none" stroke="var(--blue)" stroke-width="2.5"/><path d="M256 86l-8-2 6-6" fill="none" stroke="var(--blue)" stroke-width="2.5"/>
    <g class="dg-lbl"><text x="70" y="124" text-anchor="middle">חתך של קנה</text><text x="200" y="104" text-anchor="middle">הקליע מסתובב</text></g></svg>`},
 };
-const LESSON_DIAG={"parts:1":["cartridge","firing"],"works:1":["gas"],"technique:1":["trajectory","rifling"]};
+Object.assign(DIAGRAMS,{
+ magazine:{title:"איך מחסנית מזינה כדורים",text:"בתחתית המחסנית יש קפיץ ומזין. אחרי כל ירייה, המכלול לוקח את הכדור העליון, והקפיץ דוחף את כל השאר כלפי מעלה.",
+  svg:`<svg viewBox="0 0 320 150" class="dg dg-mag"><rect x="128" y="20" width="64" height="118" rx="6" fill="none" stroke="#6B7580" stroke-width="4"/>
+   <g class="stack">${[0,1,2,3].map(i=>`<g transform="translate(0 ${i*16})"><rect x="138" y="30" width="44" height="12" rx="6" fill="#D4A84B"/><path d="M182 30h8q6 6 0 12h-8z" fill="#B87333"/></g>`).join("")}</g>
+   <g class="top"><rect x="138" y="30" width="44" height="12" rx="6" fill="#D4A84B"/><path d="M182 30h8q6 6 0 12h-8z" fill="#B87333"/></g>
+   <rect class="fol" x="134" y="96" width="52" height="6" rx="2" fill="#8C96A0"/>
+   <polyline class="msp" points="160,102 140,108 180,114 140,120 180,126 160,134" fill="none" stroke="#8C96A0" stroke-width="3"/>
+   <g class="dg-lbl"><text x="278" y="40" text-anchor="middle">הכדור הבא</text><text x="278" y="103" text-anchor="middle">מזין</text><text x="278" y="125" text-anchor="middle">קפיץ</text><path d="M204 36h40M192 99h56M186 120h62" stroke="currentColor" stroke-width="1.5"/></g></svg>`},
+ bolt:{title:"איך עובד רובה בריח",text:"בכל ירייה היורה עושה ביד את מה שבנשק חצי-אוטומטי קורה לבד: פותח, מוציא את התרמיל, מכניס כדור חדש ונועל.",
+  svg:`<svg viewBox="0 0 320 140" class="dg dg-bolt"><rect x="150" y="54" width="166" height="14" fill="#4A525B"/><rect x="60" y="46" width="94" height="30" rx="3" fill="#3E454D" opacity=".25"/>
+   <g class="blt"><rect x="92" y="52" width="58" height="18" rx="3" fill="#8C96A0"/><g class="hdl"><rect x="100" y="70" width="6" height="22" rx="2" fill="#6B7580"/><circle cx="103" cy="95" r="7" fill="#AEB6BE"/></g></g>
+   <rect class="cas" x="150" y="56" width="16" height="10" rx="1" fill="#D4A84B"/>
+   <g class="dg-steps"><text class="s1" x="285" y="128" text-anchor="middle">1. מרימים</text><text class="s2" x="205" y="128" text-anchor="middle">2. אחורה</text><text class="s3" x="125" y="128" text-anchor="middle">3. קדימה</text><text class="s4" x="45" y="128" text-anchor="middle">4. נועלים</text></g></svg>`},
+ bullpup:{title:"בולפאפ מול רובה רגיל",text:"בבולפאפ המנגנון והמחסנית נמצאים מאחורי ההדק, בתוך הקת. הקנה כמעט באותו אורך, אבל הרובה כולו קצר בהרבה.",
+  svg:`<svg viewBox="0 0 320 190" class="dg dg-bp gun"><g transform="translate(40 0) scale(1)">${SIL.m16}</g>
+   <line class="mz" x1="44" y1="80" x2="278" y2="80" stroke="var(--blue)" stroke-width="2"/><text x="161" y="94" text-anchor="middle">M16: כ-100 ס"מ</text>
+   <g transform="translate(40 96) scale(1)">${SIL.tavor}</g>
+   <line class="mz" x1="74" y1="172" x2="272" y2="172" stroke="#DA7C00" stroke-width="2"/><text x="173" y="186" text-anchor="middle">תבור: כ-72 ס"מ</text></svg>`},
+});
+const LESSON_DIAG={"parts:0":["magazine"],"parts:1":["cartridge","firing"],"works:0":["bolt"],"works:1":["gas"],"rifles:1":["bullpup"],"technique:1":["trajectory","rifling"]};
 
 /* ---- teach first: cards built from the lesson's own content, shown before the questions */
 function teachCards(qs,key){
