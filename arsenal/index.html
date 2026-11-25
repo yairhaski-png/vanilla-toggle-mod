@@ -830,6 +830,7 @@ const COURSE = [
    {t:"mc", q:"איפה נמצאת המחסנית בעוזי?", a:["בתוך ידית האחיזה","מעל הקנה","מאחורי הקת","בצד שמאל"], c:0, e:"יד מוצאת יד: אפשר להחליף מחסנית גם בחושך."},
    {t:"id", w:"mp5", q:"איזה נשק זה?"},
    {t:"id", w:"p90"},
+   {t:"vs", k:"mag"},
    {t:"part", w:"uzi"},
    {t:"gap", s:"ה-FN P90 יורה תחמושת מיוחדת: ___", a:["5.7×28 מ\"מ","9×19 מ\"מ","7.62×39 מ\"מ"], c:0, e:"המחסנית שלו מחזיקה 50 כדורים ומונחת לרוחב מעל הנשק."},
    {t:"mc", q:"איזו חברה גרמנית מייצרת את ה-MP5?", a:["הקלר אנד קוך","וולטר","מאוזר","גלוק"], c:0, e:"ה-MP5 יורה מבריח סגור, ולכן הוא מדויק מאוד לתת-מקלע."},
@@ -842,6 +843,7 @@ const COURSE = [
  { id:"heavy", c:["#FF5A5A","#DB3E3E"], title:"צלפים ומקלעים", sub:"בארט, דרגונוב, נגב ומאג", lessons:[
   { name:"רובי צלפים", qs:[
    {t:"id", w:"barrett", q:"איזה נשק זה?"},
+   {t:"vs", k:"rng"},
    {t:"mc", q:"באיזו תחמושת יורה ה-Barrett M82?", a:["‎.50 BMG (12.7×99 מ\"מ)","9×19 מ\"מ","5.56×45 מ\"מ","7.62×39 מ\"מ"], c:0, e:"זו תחמושת של מקלע כבד, ולכן הטווח שלו מגיע לכ-1,800 מטר."},
    {t:"id", w:"svd", q:"איזה נשק זה?"},
    {t:"mc", q:"מהו הדרגונוב (SVD)?", a:["רובה צלפים סובייטי","טנק רוסי","אקדח","טיל"], c:0, e:"נועד לקלע המחלקתי, שנותן ירי מדויק לטווח בינוני."},
@@ -852,6 +854,7 @@ const COURSE = [
    {t:"id", w:"negev", q:"איזה נשק זה?"},
    {t:"mc", q:"איך מוזן מקלע כמו הנגב או המאג בירי ממושך?", a:["בחגור, שרשרת של כדורים","במחסנית של 5","ביד, כדור כדור","בתוף של אקדח"], c:0, e:"חגור מאפשר לירות הרבה בלי להחליף מחסנית."},
    {t:"pic", w:"negev"},
+   {t:"vs", k:"kg"},
    {t:"id", w:"mag"},
    {t:"type", w:"negev"},
    {t:"tf", q:"במקלעים מחליפים לפעמים קנה כדי שלא יתחמם יותר מדי.", c:true, e:"קנה חם מדי נשחק מהר ומאבד דיוק."},
@@ -880,7 +883,7 @@ const COURSE = [
    {t:"mc", q:"באיזו ארץ הומצא אבק השריפה?", a:["סין","יוון","מצרים","אנגליה"], c:0, e:"אלכימאים סינים גילו אותו בערך במאה ה-9, ככל הנראה בזמן חיפוש אחרי סם חיים."},
    {t:"mc", q:"מה מאפיין מוסקט קלאסי?", a:["קנה חלק וטעינה מלוע הקנה","מחסנית של 30 כדורים","ירי אוטומטי","כוונת אופטית"], c:0, e:"מוסקטים נטענו מהלוע, עם אבק שריפה וכדור עופרת, ודיוקם היה נמוך."},
    {t:"tf", q:"החריקה (Rifling) היא חריצים ספירליים בתוך הקנה שגורמים לקליע להסתובב.", c:true, e:"הסיבוב מייצב את הקליע במעופו ומשפר מאוד את הדיוק."},
-   {t:"vs"},
+   {t:"vs", k:"year"},
    {t:"order", q:"סדר מהמוקדם למאוחר", items:["אבק השריפה","המוסקט","מקלע גטלינג","הטנק הראשון"], e:"אבק השריפה בסין (המאה ה-9), מוסקטים (המאה ה-16), גטלינג (1862), הטנק הראשון (1916)."},
    {t:"mc", q:"מי המציא את מכונת הירייה הידנית בעלת הקנים המסתובבים ב-1862?", a:["ריצ'רד גטלינג","סמואל קולט","הירם מקסים","ג'ון בראונינג"], c:0, e:"מקלע גטלינג הופעל בסיבוב ידית ושימש במלחמת האזרחים האמריקנית."},
    {t:"mc", q:"מה היה חדשני במקלע של הירם מקסים (1884)?", a:["הוא היה אוטומטי לגמרי והשתמש בכוח הרתע","הוא ירה חיצים","הוא הופעל בקיטור","הוא היה עשוי עץ"], c:0, e:"זה היה המקלע האוטומטי המעשי הראשון, והוא שינה את פני מלחמות סוף המאה ה-19."}
@@ -1737,13 +1740,22 @@ function checkOrder(timeout){
 }
 
 /* ---- versus: which came first */
+const VS_KINDS={
+  year:{q:"איזה נשק הופיע קודם?",get:w=>/^\d{4}$/.test(w.year)?+w.year:null,show:w=>w.year,low:1,gap:3},
+  kg:{q:"איזה נשק כבד יותר?",get:w=>vsNum(w.kg),show:w=>`${vsNum(w.kg)} ק"ג`,low:0,ratio:1.3},
+  rng:{q:"לאיזה נשק טווח אפקטיבי ארוך יותר?",get:w=>vsNum(w.rng),show:w=>`${vsNum(w.rng)} מ'`,low:0,ratio:1.4},
+  mag:{q:"באיזה נשק יש יותר כדורים במחסנית?",get:w=>/חגור/.test(w.mag)?null:vsNum(w.mag),show:w=>`${vsNum(w.mag)} כדורים`,low:0,ratio:1.4},
+};
+function vsNum(x){const m=String(x).replace(/,/g,"").match(/\d+(\.\d+)?/);return m?+m[0]:null;}
 function renderVs(q,kick,tm){
-  const pool=WEAPONS.filter(w=>!w.gen&&/^\d{4}$/.test(w.year));
-  let a,b; for(let t=0;t<50;t++){ [a,b]=shuffle(pool); if(Math.abs(+a.year-+b.year)>=3) break; }
-  const first=+a.year<+b.year?0:1;
-  L.cur={t:"mc",a:[a.n,b.n],c:first,e:`${a.n}: ${a.year}. ${b.n}: ${b.year}.`};
-  frame(`${kick}<h1 class="l-title">${esc(q.q||"איזה נשק הופיע קודם?")}</h1>
-    <div class="opts vs-grid">${[a,b].map((w,k)=>`<button class="opt vs-card ${k?"from-l":"from-r"}" data-a="${k}">${silSvg(w)}<b>${esc(w.n)}</b><small>${esc(w.country)}</small><span class="vs-yr" hidden>${w.year}</span></button>`).join("")}<span class="vs-badge">VS</span></div>`,"בדיקה",true,"",tm);
+  const kind=q.k||shuffle(Object.keys(VS_KINDS))[0], K=VS_KINDS[kind];
+  const pool=WEAPONS.filter(w=>!w.gen&&K.get(w)!==null);
+  let a,b,ok=false;
+  for(let t=0;t<80&&!ok;t++){ [a,b]=shuffle(pool); const x=K.get(a),y=K.get(b); ok=K.gap?Math.abs(x-y)>=K.gap:Math.max(x,y)/Math.min(x,y)>=K.ratio; }
+  const x=K.get(a), y=K.get(b), win=K.low?(x<y?0:1):(x>y?0:1);
+  L.cur={t:"mc",a:[a.n,b.n],c:win,e:`${a.n}: ${K.show(a)}. ${b.n}: ${K.show(b)}.`};
+  frame(`${kick}<h1 class="l-title">${esc(q.q||K.q)}</h1>
+    <div class="opts vs-grid">${[a,b].map((w,k)=>`<button class="opt vs-card ${k?"from-l":"from-r"}" data-a="${k}">${silSvg(w)}<b>${esc(w.n)}</b><small>${esc(w.type)}</small><span class="vs-yr" hidden>${esc(K.show(w))}</span></button>`).join("")}<span class="vs-badge">VS</span></div>`,"בדיקה",true,"",tm);
   bindChoice();
 }
 
