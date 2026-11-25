@@ -789,6 +789,7 @@ body{font-size:16px}
 @keyframes zl2{0%,28%{opacity:0}33%,57%{opacity:1}61%,100%{opacity:0}}
 @keyframes zl3{0%,61%{opacity:0}66%,92%{opacity:1}96%,100%{opacity:0}}
 @media (prefers-reduced-motion:reduce){.dg-scope .z3{opacity:1}}
+.dg-cal .cc{transform-box:fill-box;transform-origin:center;animation:popIn2 .5s cubic-bezier(.3,1.6,.5,1) backwards;animation-delay:calc(.2s + var(--d)*.18s)}
 @media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
 </style>
 
@@ -2335,7 +2336,13 @@ Object.assign(DIAGRAMS,{
    <path d="M102 72h116M160 14v116" stroke="#1F2619" stroke-width="1.4"/></g>
    <text class="zl z1" x="270" y="76" text-anchor="middle" font-size="16" font-weight="900">פי 1</text><text class="zl z2" x="270" y="76" text-anchor="middle" font-size="16" font-weight="900">פי 4</text><text class="zl z3" x="270" y="76" text-anchor="middle" font-size="16" font-weight="900">פי 10</text></svg>`},
 });
-const LESSON_DIAG={"rifles:0":["akvsm16"],"heavy:0":["scope"],"history:0":["tl_world"],"israel:0":["tl_israel"],"gear:0":["armor"],"technique:0":["positions"],"pistols:1":["blowback"],"heavy:1":["belt"],"pistols:0":["revolver"],"shoot:0":["sights"],"gear:1":["reddot"],"parts:0":["magazine"],"parts:1":["cartridge","firing"],"works:0":["bolt"],"works:1":["gas"],"rifles:1":["bullpup"],"technique:1":["trajectory","rifling"]};
+Object.assign(DIAGRAMS,{
+ caliber:{title:"מה זה קליבר",text:"קליבר הוא קוטר הקליע (והקדח של הקנה), בדרך כלל במילימטרים. העיגולים כאן בקנה מידה אחד: רואים כמה קליע ‎.50 של בארט גדול לעומת קליע של M16.",
+  svg:`<svg viewBox="0 0 320 136" class="dg dg-cal"><g class="cc" style="--d:0"><circle cx="268" cy="60" r="11.1" fill="#B87333"/><text x="268" y="104" text-anchor="middle" direction="ltr" font-weight="900">5.56</text><text x="268" y="120" text-anchor="middle">M16, תבור</text></g><g class="cc" style="--d:1"><circle cx="198" cy="60" r="15.2" fill="#B87333"/><text x="198" y="104" text-anchor="middle" direction="ltr" font-weight="900">7.62</text><text x="198" y="120" text-anchor="middle">AK, מאג</text></g><g class="cc" style="--d:2"><circle cx="124" cy="60" r="18.0" fill="#B87333"/><text x="124" y="104" text-anchor="middle" direction="ltr" font-weight="900">9</text><text x="124" y="120" text-anchor="middle">גלוק, עוזי</text></g><g class="cc" style="--d:3"><circle cx="46" cy="60" r="25.4" fill="#B87333"/><text x="46" y="104" text-anchor="middle" direction="ltr" font-weight="900">12.7</text><text x="46" y="120" text-anchor="middle">בארט</text></g><text x="160" y="134" text-anchor="middle" font-size="9" opacity=".7">קוטר במילימטרים, בקנה מידה אחד</text></svg>`},
+ tl_ww:{title:"נשק במלחמות העולם",text:"בתוך 30 שנה עבר שדה הקרב מרובי בריח וטנקים ראשונים לרובים חצי-אוטומטיים, טנקים כבדים ומשגרי רקטות שחייל אחד נושא.",
+  svg:timelineSvg([["1916","טנק Mark I"],["1936","M1 גאראנד"],["1940","T-34"],["1942","טייגר ובזוקה"]])},
+});
+const LESSON_DIAG={"terms:0":["caliber"],"history:1":["tl_ww"],"rifles:0":["akvsm16"],"heavy:0":["scope"],"history:0":["tl_world"],"israel:0":["tl_israel"],"gear:0":["armor"],"technique:0":["positions"],"pistols:1":["blowback"],"heavy:1":["belt"],"pistols:0":["revolver"],"shoot:0":["sights"],"gear:1":["reddot"],"parts:0":["magazine"],"parts:1":["cartridge","firing"],"works:0":["bolt"],"works:1":["gas"],"rifles:1":["bullpup"],"technique:1":["trajectory","rifling"]};
 
 /* ---- teach first: cards built from the lesson's own content, shown before the questions */
 function teachCards(qs,key){
