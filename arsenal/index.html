@@ -679,6 +679,10 @@ const WEAPONS=[
  {id:"python",n:"קולט פייתון",sil:"python",type:"אקדח תופי",country:"ארה\"ב",year:"1955",by:"קולט",cal:".357 מגנום",act:"תופי, פעולה כפולה",mag:"6 (בתוף)",rng:"כ-50 מ'",kg:"כ-1.2 ק\"ג",fact:"מפורסם בזכות הדק חלק במיוחד ובזכות הפס המחורר שמעל הקנה. קולט החזירה אותו לייצור ב-2020."},
  {id:"p90",n:"FN P90",sil:"p90",type:"נשק הגנה אישי",country:"בלגיה",year:"1990",by:"FN Herstal",cal:"5.7×28 מ\"מ",act:"הדף, בריח סגור",mag:"50 (מעל הנשק)",rng:"כ-200 מ'",kg:"כ-2.6 ק\"ג (ריק)",fact:"המחסנית השקופה מונחת לרוחב מעל הנשק, והתרמילים נפלטים כלפי מטה, כך שהוא נוח גם לשמאליים."},
  {id:"m4",n:"M4A1",sil:"m4",type:"קרבין",country:"ארה\"ב",year:"1994",by:"קולט",cal:"5.56×45 מ\"מ נאט\"ו",act:"גזים ישירים, בריח מסתובב",mag:"30",rng:"כ-500 מ'",kg:"כ-3 ק\"ג (ריק)",fact:"גרסה קצרה של ה-M16: קנה של 368 מ\"מ, קת נשלפת ומסילות להרכבת כוונות ואביזרים."},
+
+ {id:"pkm",n:"PKM",sil:"pkm",type:"מקלע כללי",country:"ברית המועצות",year:"1969",by:"מיכאיל קלשניקוב",cal:"7.62×54R מ\"מ",act:"גזים, בוכנה ארוכה",mag:"חגור (100-250)",rng:"כ-1,000 מ'",kg:"כ-7.5 ק\"ג",fact:"גרסה משופרת של מקלע ה-PK מ-1961. הקת החלולה מקטינה את המשקל, והוא נפוץ בעשרות צבאות."},
+ {id:"mosin",n:"מוסין-נגאן",sil:"mosin",type:"רובה בריח",country:"רוסיה",year:"1891",by:"סרגיי מוסין ולאון נגאן",cal:"7.62×54R מ\"מ",act:"בריח ידני",mag:"5 (פנימית)",rng:"כ-500 מ'",kg:"כ-4 ק\"ג",fact:"מרובי הצבא שיוצרו בכמויות הגדולות ביותר בהיסטוריה. צלפים סובייטים השתמשו בו במלחמת העולם השנייה."},
+ {id:"x95",n:"מיקרו תבור X95",sil:"x95",type:"רובה סער",country:"ישראל",year:"2003",by:"התעשייה הצבאית (IWI)",cal:"5.56×45 מ\"מ נאט\"ו",act:"גזים, בוכנה ארוכה",mag:"30",rng:"כ-400 מ'",kg:"כ-3.2 ק\"ג (ריק)",fact:"גרסה קצרה של התבור. ב-2009 בחר בו צה\"ל כרובה הרגלים הסטנדרטי."},
 ];
 const WMAP=Object.fromEntries(WEAPONS.map(w=>[w.id,w]));
 
@@ -709,6 +713,9 @@ const SIL={
  fal:`<path class="ms" d="M152 46q-4 10 6 12"/><path class="p" d="M238 34l-58-4v16l52 12 6-4z"/><path class="m" d="M140 44h-14l-2 24h14z"/><rect class="m" x="112" y="30" width="70" height="15" rx="2"/><rect class="m" x="118" y="18" width="34" height="5" rx="2"/><rect class="m" x="120" y="18" width="4" height="12"/><rect class="m" x="146" y="18" width="4" height="12"/><path class="p" d="M164 45h-10l5 20h10z"/><rect class="p" x="66" y="31" width="46" height="13" rx="4"/><rect class="m" x="70" y="27" width="42" height="4" rx="1"/><rect class="m" x="14" y="34" width="54" height="4"/><rect class="m" x="40" y="24" width="4" height="10"/><rect class="m" x="4" y="32" width="12" height="8" rx="1"/><path d="M6 32v8M10 32v8" stroke="#000" stroke-width="1.2" opacity=".4"/><rect class="hl" x="114" y="31" width="66" height="2" rx="1"/>`,
  jericho:`<path class="ms" d="M152 54q-20 0-20 14h22"/><path class="p" d="M186 46h-36l6 44h38z"/><rect class="m" x="56" y="46" width="128" height="8" rx="3"/><rect class="m" x="52" y="28" width="134" height="18" rx="5"/><path class="m" d="M184 26l9-7 4 4-7 7z"/><rect class="m" x="56" y="23" width="5" height="5"/><rect class="m" x="174" y="23" width="6" height="5"/><path d="M150 32v10M155 32v10M160 32v10" stroke="#000" stroke-width="1.4" opacity=".35"/><path d="M56 44h128" stroke="#000" stroke-width="1" opacity=".3"/><rect class="hl" x="54" y="29" width="130" height="2" rx="1"/>`,
  enfield:`<path class="ms" d="M158 50q-6 8 2 12h10"/><path class="w" d="M238 34l-52-4-10 4v12l14 4 38 10 6-4z"/><path class="w" d="M180 34H60l-24 3v6l24 3h120z"/><rect class="w" x="70" y="30" width="96" height="5" rx="2"/><rect class="m" x="166" y="28" width="16" height="8" rx="2"/><path class="m" d="M178 30l8-8h4l-6 10z"/><circle class="s" cx="189" cy="21" r="3"/><path class="m" d="M150 46h-16v12h16z"/><rect class="m" x="22" y="36" width="16" height="5" rx="1"/><rect class="m" x="10" y="37" width="14" height="3"/><rect class="m" x="28" y="28" width="5" height="8"/><rect class="hl" x="62" y="35" width="116" height="2" rx="1"/>`,
+ pkm:`<path class="ms" d="M162 46q-2 10 6 12"/><path class="w" fill-rule="evenodd" d="M238 30h-54v18l50 12 4-4zM226 36h-30v8l26 8z"/><rect class="m" x="96" y="28" width="90" height="18" rx="2"/><path class="p" d="M184 46h-10l3 20h10z"/><rect class="m" x="118" y="46" width="26" height="20" rx="2"/><rect class="m" x="18" y="32" width="80" height="5"/><rect class="m" x="60" y="22" width="20" height="4" rx="2"/><rect class="m" x="68" y="22" width="4" height="10"/><rect class="m" x="6" y="30" width="14" height="9" rx="1"/><rect class="m" x="26" y="24" width="4" height="8"/><path class="ms" d="M36 37l-10 32M36 37l10 32" style="stroke-width:4"/><rect class="hl" x="98" y="29" width="86" height="2" rx="1"/>`,
+ mosin:`<path class="ms" d="M160 48q-6 8 2 12h10"/><path class="w" d="M238 34l-56-4-8 4v12l14 4 44 10 6-4z"/><path class="w" d="M176 34H54l-20 3v6l20 3h122z"/><rect class="m" x="160" y="28" width="22" height="8" rx="2"/><path class="m" d="M174 36l4 10h4l-2-10z"/><circle class="s" cx="180" cy="48" r="3"/><rect class="m" x="6" y="37" width="30" height="3"/><rect class="m" x="22" y="36" width="12" height="5" rx="1"/><path class="m" d="M8 37v-7h4v7z"/><rect class="hl" x="56" y="35" width="118" height="2" rx="1"/>`,
+ x95:`<path class="ms" d="M118 46v18q0 6 6 6h16q6 0 6-6V46" style="stroke:#454A26;stroke-width:4"/><path class="od" d="M180 48h-14l-4 28h14z"/><path class="od" d="M228 30 106 28l-8 8v10l92 4 32 8 8-4z"/><path class="od" d="M138 46h-10l3 22h10z"/><rect class="p" x="110" y="22" width="90" height="6" rx="1"/><rect class="p" x="132" y="11" width="24" height="11" rx="3"/><rect class="o" x="133" y="13" width="5" height="7" rx="1"/><rect class="m" x="56" y="35" width="44" height="5"/><rect class="m" x="48" y="33" width="10" height="9" rx="1"/><rect class="hl" x="108" y="31" width="110" height="2" rx="1"/>`,
  bolt:`<path class="ms" d="M150 44q-4 10 6 12"/><path class="w" d="M236 36l-60-6-10 6v8l24 4 40 10 6-4z"/><rect class="w" x="40" y="34" width="130" height="10" rx="4"/><rect class="m" x="110" y="28" width="50" height="8" rx="2"/><path class="m" d="M148 34l6-10h6l-4 10z"/><circle class="s" cx="158" cy="24" r="3"/><rect class="m" x="6" y="36" width="36" height="4"/><rect class="m" x="12" y="30" width="4" height="6"/><rect class="hl" x="112" y="29" width="46" height="2" rx="1"/>`,
 };
 const PARTS={
@@ -855,6 +862,7 @@ const COURSE = [
    {t:"mc", q:"איך מוזן מקלע כמו הנגב או המאג בירי ממושך?", a:["בחגור, שרשרת של כדורים","במחסנית של 5","ביד, כדור כדור","בתוף של אקדח"], c:0, e:"חגור מאפשר לירות הרבה בלי להחליף מחסנית."},
    {t:"pic", w:"negev"},
    {t:"vs", k:"kg"},
+   {t:"pic", w:"pkm"},
    {t:"id", w:"mag"},
    {t:"type", w:"negev"},
    {t:"tf", q:"במקלעים מחליפים לפעמים קנה כדי שלא יתחמם יותר מדי.", c:true, e:"קנה חם מדי נשחק מהר ומאבד דיוק."},
@@ -896,6 +904,7 @@ const COURSE = [
    {t:"mc", q:"איזה רובה כינה הגנרל פטון 'כלי הקרב הגדול ביותר שנוצר'?", a:["M1 גאראנד","מאוזר 98","לי-אנפילד","AK-47"], c:0, e:"ה-M1 גאראנד היה רובה חצי-אוטומטי, יתרון גדול על רובי בריח במלחמת העולם השנייה."},
    {t:"match", q:"התאם טנק למדינה", p:[["T-34","ברית המועצות"],["טייגר","גרמניה"],["שרמן","ארה\"ב"],["Mark I","בריטניה"]]},
    {t:"id", w:"enfield"},
+   {t:"id", w:"mosin"},
    {t:"gap", s:"רובה הלי-אנפילד הבריטי התפרסם בירי מהיר שנקרא ___", a:["הדקה המטורפת","הצרור הארוך","הירייה השקטה"], c:0, e:"חיילים מאומנים ירו בו יותר מ-15 יריות מכוונות בדקה, עם רובה בריח."},
    {t:"mc", q:"מה היה הבזוקה?", a:["משגר רקטות נגד טנקים אמריקני","מטוס קרב","סוג של רימון יד","צוללת"], c:0, e:"הבזוקה שימשה חיילים אמריקנים במלחמת העולם השנייה וקיבלה את שמה מכלי נגינה מאולתר."}
   ]}
@@ -923,6 +932,8 @@ const COURSE = [
    {t:"id", w:"galil"},
    {t:"type", w:"uzi"},
    {t:"id", w:"jericho"},
+   {t:"pic", w:"x95"},
+   {t:"tf", q:"ב-2009 בחר צה\"ל במיקרו תבור (X95) כרובה הרגלים הסטנדרטי.", c:true, e:"זו גרסה קצרה וקלה יותר של התבור, נוחה ללחימה בשטח בנוי."},
    {t:"tf", q:"רובה הגליל קרוי על שם ממציאו, ישראל גלילי.", c:true, e:"ישראל גלילי ויעקב ליאור פיתחו אותו, וצה\"ל אימץ אותו בתחילת שנות ה-70."},
    {t:"mc", q:"מהו הנגב?", a:["מקלע קל של התעשייה הצבאית","טיל נגד מטוסים","טנק","אקדח"], c:0, e:"הנגב נכנס לשירות בצה\"ל בסוף שנות ה-90."},
    {t:"match", q:"התאם נשק לסוג שלו", p:[["עוזי","תת-מקלע"],["תבור","רובה סער"],["נגב","מקלע קל"],["יריחו","אקדח"]]}
