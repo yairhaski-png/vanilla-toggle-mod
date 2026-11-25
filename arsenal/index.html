@@ -845,6 +845,13 @@ body{font-size:16px}
 .big-sil .dg-pt{width:100%;max-width:440px;height:auto}
 .parts-card>svg{fill:#14B8A6;background:color-mix(in srgb,#14B8A6 18%,transparent)}
 .btn.teal{background:#14B8A6;box-shadow:0 4px 0 #0E8F81}
+.arm-search{display:flex;align-items:center;gap:8px;border:2px solid var(--line);border-radius:14px;padding:0 12px;margin:4px 0 12px;background:var(--surface)}
+.arm-search svg{width:18px;height:18px;fill:var(--muted);flex:none}
+.arm-search input{flex:1;min-width:0;border:0;outline:0;background:transparent;color:var(--ink);font:600 16px var(--font);padding:12px 0}
+.arm-search:focus-within{border-color:var(--blue)}
+.chip-n{display:inline-block;min-width:20px;padding:0 6px;margin-inline-start:4px;border-radius:10px;background:var(--soft);font-size:12px}
+.chip[aria-pressed=true] .chip-n{background:var(--surface)}
+.arm-empty{text-align:center;color:var(--muted);font-weight:700;margin:24px 0}
 @media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
 </style>
 
@@ -872,6 +879,7 @@ body{font-size:16px}
   <symbol id="i-heart" viewBox="0 0 24 24"><path fill="currentColor" d="M12 21.5S2.5 15.6 2.5 9A5 5 0 0 1 12 6.2 5 5 0 0 1 21.5 9c0 6.6-9.5 12.5-9.5 12.5z"/><ellipse cx="7.5" cy="9" rx="2" ry="1.4" fill="#fff" opacity=".5" transform="rotate(-30 7.5 9)"/></symbol>
   <symbol id="i-bolt" viewBox="0 0 24 24"><path fill="currentColor" d="M13.5 1.5 4 14h7l-1.5 8.5L20 10h-7z"/></symbol>
   <symbol id="i-star" viewBox="0 0 24 24"><path d="m12 1.8 3.1 6.5 7.1.9-5.2 4.9 1.3 7L12 17.7l-6.3 3.4 1.3-7-5.2-4.9 7.1-.9z"/></symbol>
+  <symbol id="i-search" viewBox="0 0 24 24"><path d="M10 3a7 7 0 0 1 5.6 11.2l5 5-1.4 1.4-5-5A7 7 0 1 1 10 3zm0 2a5 5 0 1 0 0 10 5 5 0 0 0 0-10z"/></symbol>
   <symbol id="i-check" viewBox="0 0 24 24"><path d="M9.2 17.6 3.8 12.2l1.9-1.9 3.5 3.5 9.1-9.1 1.9 1.9z"/></symbol>
   <symbol id="i-x" viewBox="0 0 24 24"><path d="M19 6.4 17.6 5 12 10.6 6.4 5 5 6.4 10.6 12 5 17.6 6.4 19l5.6-5.6 5.6 5.6 1.4-1.4-5.6-5.6z"/></symbol>
   <symbol id="i-lock" viewBox="0 0 24 24"><path d="M7 10V7a5 5 0 0 1 10 0v3h1a1.5 1.5 0 0 1 1.5 1.5v9A1.5 1.5 0 0 1 18 22H6a1.5 1.5 0 0 1-1.5-1.5v-9A1.5 1.5 0 0 1 6 10zm2.2 0h5.6V7a2.8 2.8 0 0 0-5.6 0z"/></symbol>
@@ -956,7 +964,7 @@ const WEAPONS=[
  {id:"p90",n:"FN P90",sil:"p90",type:"נשק הגנה אישי",country:"בלגיה",year:"1990",by:"FN Herstal",cal:"5.7×28 מ\"מ",act:"הדף, בריח סגור",mag:"50 (מעל הנשק)",rng:"כ-200 מ'",kg:"כ-2.6 ק\"ג (ריק)",fact:"המחסנית השקופה מונחת לרוחב מעל הנשק, והתרמילים נפלטים כלפי מטה, כך שהוא נוח גם לשמאליים."},
  {id:"hk416",n:"HK416",sil:"hk416",type:"רובה סער",country:"גרמניה",year:"2004",by:"הקלר ושוך",cal:"5.56×45 מ\"מ נאט\"ו",act:"בוכנת גזים קצרה, בריח מסתובב",mag:"30",rng:"כ-500 מ'",kg:"כ-3.5 ק\"ג (ריק)",fact:"נראה כמו M4, אבל הגזים לא נכנסים לתוך בית המכלול. הם דוחפים בוכנה קטנה, ולכן הנשק נשאר נקי יותר. חיל הנחתים האמריקני משתמש בגרסה שלו בשם M27."},
  {id:"scar",n:"FN SCAR-L",sil:"scar",type:"רובה סער",country:"בלגיה",year:"2009",by:"FN הרסטל",cal:"5.56×45 מ\"מ נאט\"ו",act:"בוכנת גזים קצרה, בריח מסתובב",mag:"30",rng:"כ-500 מ'",kg:"כ-3.3 ק\"ג (ריק)",fact:"פותח בשביל כוחות המבצעים המיוחדים של ארה\"ב. הקת מתקפלת הצידה, ויש גם גרסה כבדה, SCAR-H, שיורה כדור 7.62 מ\"מ."},
- {id:"mp7",n:"HK MP7",sil:"mp7",type:"נשק הגנה אישית",country:"גרמניה",year:"2001",by:"הקלר ושוך",cal:"4.6×30 מ\"מ",act:"בוכנת גזים קצרה",mag:"20, 30 או 40",rng:"כ-200 מ'",kg:"כ-1.9 ק\"ג (ריק)",fact:"קטן כמעט כמו אקדח גדול, ויורה כדור קטן ומהיר שתוכנן במיוחד בשבילו. המחסנית נכנסת לתוך ידית האחיזה, כמו באקדח."},
+ {id:"mp7",n:"HK MP7",sil:"mp7",type:"נשק הגנה אישי",country:"גרמניה",year:"2001",by:"הקלר ושוך",cal:"4.6×30 מ\"מ",act:"בוכנת גזים קצרה",mag:"20, 30 או 40",rng:"כ-200 מ'",kg:"כ-1.9 ק\"ג (ריק)",fact:"קטן כמעט כמו אקדח גדול, ויורה כדור קטן ומהיר שתוכנן במיוחד בשבילו. המחסנית נכנסת לתוך ידית האחיזה, כמו באקדח."},
  {id:"p320",n:"SIG P320",sil:"p320",type:"אקדח",country:"ארה\"ב",year:"2014",by:"SIG Sauer",cal:"9×19 מ\"מ",act:"רתע קצר",mag:"17",rng:"כ-50 מ'",kg:"כ-0.8 ק\"ג (ריק)",fact:"בתוכו יש יחידת מתכת אחת עם המספר הסידורי, וכל השאר מתחלף: אפשר להעביר אותה למסגרת ולמגלשה בגודל אחר. צבא ארה\"ב אימץ אותו ב-2017 בשם M17."},
  {id:"m4",n:"M4A1",sil:"m4",type:"קרבין",country:"ארה\"ב",year:"1994",by:"קולט",cal:"5.56×45 מ\"מ נאט\"ו",act:"גזים ישירים, בריח מסתובב",mag:"30",rng:"כ-500 מ'",kg:"כ-3 ק\"ג (ריק)",fact:"גרסה קצרה של ה-M16: קנה של 368 מ\"מ, קת נשלפת ומסילות להרכבת כוונות ואביזרים."},
 
@@ -1660,15 +1668,26 @@ function openChest(f){
 
 /* ------------------------------------------------------------------ badges / shop / me */
 let armFilter="הכל";
+/* armory groups: each weapon type falls in one family */
+const ARM_GROUPS=[["הכל",()=>true],["רובים",w=>/^רובה|קרבין/.test(w.type)],["אקדחים",w=>/^אקדח/.test(w.type)],["תת-מקלעים",w=>/תת-מקלע|הגנה אישי/.test(w.type)],["מקלעים",w=>/^מקלע/.test(w.type)]];
+let armQuery="";
 function renderArmory(){
-  const types=["הכל",...new Set(WEAPONS.map(w=>w.type))];
-  const list=WEAPONS.filter(w=>armFilter==="הכל"||w.type===armFilter);
-  $("#main").innerHTML=`<h1 class="page-title">נשקייה</h1><p class="page-sub">${WEAPONS.length} כלי נשק: נתונים, היסטוריה ועובדות. לחץ על כרטיס לפרטים.</p>
-   <div class="chips">${types.map(t=>`<button class="chip" aria-pressed="${t===armFilter}" data-f="${esc(t)}">${esc(t)}</button>`).join("")}</div>
-   <div class="arm-grid">${list.map(w=>`<button class="arm-card" data-w="${w.id}"><div class="sil-box">${silSvg(w)}${w.gen?`<span class="gen">איור כללי</span>`:""}</div>
+  if(!ARM_GROUPS.some(g=>g[0]===armFilter)) armFilter="הכל";
+  const inGroup=ARM_GROUPS.find(g=>g[0]===armFilter)[1];
+  const list=WEAPONS.filter(inGroup);
+  $("#main").innerHTML=`<h1 class="page-title">נשקייה</h1><p class="page-sub">${WEAPONS.length} כלי נשק: נתונים, חלקים ועובדות. לחץ על כרטיס לפרטים.</p>
+   <div class="arm-search">${ico("i-search")}<input id="armQ" type="search" placeholder="חפש נשק, מדינה או קליבר" value="${esc(armQuery)}" autocomplete="off"></div>
+   <div class="chips">${ARM_GROUPS.map(([t,f])=>`<button class="chip" aria-pressed="${t===armFilter}" data-f="${esc(t)}">${esc(t)} <span class="chip-n">${WEAPONS.filter(f).length}</span></button>`).join("")}</div>
+   <p class="arm-empty" id="armEmpty" hidden>לא נמצא נשק כזה. נסה מילה אחרת.</p>
+   <div class="arm-grid">${list.map(w=>`<button class="arm-card" data-w="${w.id}" data-q="${esc((w.n+" "+w.id+" "+w.country+" "+w.cal+" "+w.type).toLowerCase())}"><div class="sil-box">${silSvg(w)}${w.gen?`<span class="gen">איור כללי</span>`:""}</div>
      <div class="arm-meta"><b>${esc(w.n)}</b><small>${esc(w.type)} · ${esc(w.country)} · ${esc(w.year)}</small><span class="cal">${esc(w.cal)}</span></div></button>`).join("")}</div>`;
-  $$(".chip").forEach(b=>b.onclick=()=>{armFilter=b.dataset.f;renderArmory();});
+  $$(".chip").forEach(b=>b.onclick=()=>{armFilter=b.dataset.f;sfx.tap();renderArmory();});
   $$(".arm-card").forEach(b=>b.onclick=()=>weaponSheet(WMAP[b.dataset.w]));
+  const applyQ=()=>{ const q=armQuery.trim().toLowerCase(); let n=0;
+    $$(".arm-card").forEach(c=>{ const hit=!q||c.dataset.q.includes(q); c.hidden=!hit; if(hit) n++; });
+    $("#armEmpty").hidden=n>0; };
+  $("#armQ").oninput=e=>{ armQuery=e.target.value; applyQ(); };
+  applyQ();
 }
 function weaponSheet(w){
   S.seen=S.seen||[]; if(!S.seen.includes(w.id)){S.seen.push(w.id);save();}
