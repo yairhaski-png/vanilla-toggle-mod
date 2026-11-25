@@ -843,6 +843,8 @@ body{font-size:16px}
 #pins .pin.ok circle{fill:var(--green)}#pins .pin.no circle{fill:#FF4B4B}
 @keyframes pinPulse{50%{transform:scale(1.25)}}
 .big-sil .dg-pt{width:100%;max-width:440px;height:auto}
+.parts-card>svg{fill:#14B8A6;background:color-mix(in srgb,#14B8A6 18%,transparent)}
+.btn.teal{background:#14B8A6;box-shadow:0 4px 0 #0E8F81}
 @media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
 </style>
 
@@ -1562,8 +1564,9 @@ function renderLearn(){
     h+=`${mascot("happy","buddy")}</div></section>`.replace('class="kd happy buddy"',`class="kd happy buddy" style="${side>0?"left":"right"}:0"`);
   });
   h+=`<p class="path-end">${lessonsDone()===LESSON_COUNT?"סיימת את כל הקורס. אפשר לחזור לכל שלב ולצבור עוד XP.":"יחידות נוספות בדרך"}</p>`;
-  $("#main").innerHTML=mistakesCard()+blitzCard()+h;
+  $("#main").innerHTML=mistakesCard()+blitzCard()+partsCard()+h;
   const mg=$("#missGo"); if(mg) mg.onclick=startMistakes;
+  $("#partsGo").onclick=startPartsDrill;
   $("#blitzGo").onclick=startBlitz;
   $$(".node").forEach(b=>b.onclick=e=>{e.stopPropagation(); nodeTap(+b.dataset.i,b);});
   $$("[data-guide]").forEach(b=>b.onclick=()=>guide(COURSE[+b.dataset.guide]));
@@ -1897,6 +1900,7 @@ function advance(){
 }
 /* ---- end-of-lesson screens: result → streak → rank-up → unit trophy */
 function finish(){
+  if(L.practice&&L.f.drill){ S.partsBest=Math.max(S.partsBest||0,L.first); }
   if(L.practice){ const xp=5+L.first; S.xp+=xp;S.daily.xp+=xp;S.days[today()]=(S.days[today()]||0)+xp; if(!L.f.mist){ S.hearts=Math.min(5,S.hearts+1); if(S.hearts>=5)S.hRef=null; } save();
     L.screens=[()=>screenResult({perfect:L.first===L.firstTotal,xp,acc:Math.round(L.first/L.firstTotal*100),secs:Math.round((Date.now()-L.t0)/1000),gems:0,nb:0,sub:L.f.mist?`תרגול טעויות · נשארו ${(S.miss||[]).length} שאלות לתרגל`:"תרגול הושלם · קיבלת לב אחד"})];
     L.state="screens"; L.i=L.qs.length; return nextScreen(); }
@@ -2322,6 +2326,15 @@ function finishBlitz(){
     <div class="r pop-in" style="--c:var(--orange);--d:4"><small>השיא שלך</small><b>${S.blitzBest}</b></div></div></div>`,"המשך",false);
   let v=0; const t=setInterval(()=>{ const e=$("#bs"); if(!e)return clearInterval(t); v=Math.min(score,v+1); e.textContent=v; if(v>=score)clearInterval(t); },70);
   sfx.win(); if(rec&&score>0) confetti();
+}
+/* ---- parts drill: 10 quick part / label questions from every weapon */
+function partsCard(){
+  return `<div class="miss-card parts-card"><svg viewBox="0 0 24 24"><use href="#i-star"/></svg><div class="t"><b>זיהוי חלקים</b><p>10 שאלות מהירות על חלקים של ${WEAPONS.length} נשקים${S.partsBest?` · השיא שלך: ${S.partsBest}/10`:""}</p></div><button class="btn teal" id="partsGo">תרגל</button></div>`;
+}
+function startPartsDrill(){
+  const ws=shuffle(WEAPONS.filter(w=>PARTS[w.sil])).slice(0,10);
+  const qs=ws.map((w,i)=>i%3===2?{t:"label",w:w.id,n:Object.keys(PARTS[w.sil]).length>4?4:3}:{t:"part",w:w.id});
+  startLesson({u:COURSE[0],ui:0,n:{t:"practice",name:"זיהוי חלקים"},key:"practice",drill:1},qs);
 }
 function blitzCard(){
   return `<div class="miss-card blitz-card"><svg viewBox="0 0 24 24"><use href="#i-bolt"/></svg><div class="t"><b>אתגר בזק</b><p>${BLITZ_SEC} שניות, כמה שיותר תשובות נכונות${S.blitzBest?` · השיא שלך: ${S.blitzBest}`:""}</p></div><button class="btn orange" id="blitzGo">שחק</button></div>`;
