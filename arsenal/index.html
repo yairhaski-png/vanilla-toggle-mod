@@ -580,6 +580,10 @@ button.stat:hover{background:var(--soft)}
 .flag-opt.sel .flag-svg{transform:rotate(-4deg) scale(1.08)}
 .flag-opt.right .flag-svg{animation:flagWave .9s ease-in-out}
 @keyframes flagWave{25%{transform:skewY(-6deg) scale(1.1)}50%{transform:skewY(5deg) scale(1.1)}75%{transform:skewY(-3deg) scale(1.05)}}
+.blitz-card>svg{fill:var(--orange);background:color-mix(in srgb,var(--orange) 18%,transparent)}
+.timer.blitz{height:8px}
+.timer.blitz>i{background:linear-gradient(90deg,var(--red),var(--orange),#FFC800)}
+.blitz-score{font-size:96px;font-weight:900;line-height:1;color:var(--orange);font-variant-numeric:tabular-nums}
 @media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
 </style>
 
@@ -1144,8 +1148,9 @@ function renderLearn(){
     h+=`${mascot("happy","buddy")}</div></section>`.replace('class="kd happy buddy"',`class="kd happy buddy" style="${side>0?"left":"right"}:0"`);
   });
   h+=`<p class="path-end">${lessonsDone()===LESSON_COUNT?"סיימת את כל הקורס. אפשר לחזור לכל שלב ולצבור עוד XP.":"יחידות נוספות בדרך"}</p>`;
-  $("#main").innerHTML=mistakesCard()+h;
+  $("#main").innerHTML=mistakesCard()+blitzCard()+h;
   const mg=$("#missGo"); if(mg) mg.onclick=startMistakes;
+  $("#blitzGo").onclick=startBlitz;
   $$(".node").forEach(b=>b.onclick=e=>{e.stopPropagation(); nodeTap(+b.dataset.i,b);});
   $$("[data-guide]").forEach(b=>b.onclick=()=>guide(COURSE[+b.dataset.guide]));
   const jo=$(".node.just-open")||$(".node.just-done");
@@ -1312,7 +1317,7 @@ function startLesson(f,custom){
     else qs=shuffle(own);
     timed=stage===2;
   } else qs=f.n.t==="review"?shuffle(all).slice(0,6):shuffle(all);
-  qs=toBuild(qs);
+  if(!f.blitz) qs=toBuild(qs);
   L={practice:f.n.t==="practice",f,qs,i:0,first:0,firstTotal:qs.length,mistakes:[],state:"answer",sel:null,combo:0,t0:Date.now(),timed,stage:full?-1:st,pct:0,xpRun:0};
   $("#lesson").hidden=false; document.body.style.overflow="hidden";
   if(S.hearts<=0&&!(L&&L.practice)) return noHearts();
@@ -1332,17 +1337,18 @@ function frame(body,btnLabel,btnDisabled,btnClass="",opts={}){
   const pct=L.qs.length?Math.min(100,L.i/L.qs.length*100):100, from=L.pct; L.pct=pct;
   $("#lesson").innerHTML=`<div class="l-top"><button class="x" id="quit" aria-label="יציאה מהשיעור"><svg viewBox="0 0 24 24"><use href="#i-x"/></svg></button>
      <div class="l-prog">${L.combo>=2?`<span class="combo" key="${L.combo}">${ico("i-fire")}${L.combo} ברצף!</span>`:""}<div class="pbar big"><i id="pfill" class="${L.combo>=3?"hot":""}" style="width:${from}%"></i></div>
-       ${opts.timer?`<div class="timer"><i id="tbar" style="animation-duration:${opts.timer}s"></i></div>`:""}</div>
+       ${L.f&&L.f.blitz?`<div class="timer blitz"><i id="tbar" style="animation-duration:${BLITZ_SEC}s;animation-delay:${blitzDelay()}"></i></div>`:opts.timer?`<div class="timer"><i id="tbar" style="animation-duration:${opts.timer}s"></i></div>`:""}</div>
      <div class="stat hearts" id="lhBox">${ico("i-heart")}<span id="lh">${S.hearts}</span></div></div>
    <div class="l-body"><div class="l-inner q-anim">${body}</div></div>
    <div class="l-foot" id="foot"><div class="in"><div class="fb" id="fb"></div><button class="btn wide ${btnClass}" id="go" ${btnDisabled?"disabled":""}>${btnLabel}</button></div></div>`;
   requestAnimationFrame(()=>requestAnimationFrame(()=>{const p=$("#pfill"); if(p)p.style.width=pct+"%";}));
   $("#quit").onclick=closeLesson; $("#go").onclick=onGo;
-  const tb=$("#tbar"); if(tb) tb.addEventListener("animationend",()=>{ if(L&&L.state==="answer") timeUp(); });
+  const tb=$("#tbar"); if(tb) tb.addEventListener("animationend",()=>{ if(!L) return; if(L.f&&L.f.blitz){ if(L.state!=="screens"&&L.state!=="done") finishBlitz(); return; } if(L.state==="answer") timeUp(); });
 }
 const KIND={lesson:"",review:"תרגול חוזר",test:"מבחן יחידה"};
 const T_SEC=20;
 function kicker(){
+  if(L.f&&L.f.blitz) return `<div class="l-kicker legend">${ico("i-bolt")}אתגר בזק · ניקוד ${L.first}</div>`;
   if(L.i>=L.firstTotal) return `<div class="l-kicker" style="color:var(--red-ink)">טעות קודמת, ננסה שוב</div>`;
   if(L.timed) return `<div class="l-kicker legend">${ico("i-bolt")}שלב אגדי · ${T_SEC} שניות לשאלה</div>`;
   if(L.stage===1) return `<div class="l-kicker">שלב מתקדם</div>`;
@@ -1441,8 +1447,10 @@ function feedback(ok,expl,qv){
   if(ok){ sfx.ok(); if(first) floatText($("#pfill"),`+2 XP`,"var(--gold-d)"); if(L.combo>=3){ const p=$("#pfill"); if(p)p.classList.add("hot"); } }
   else { sfx.no(); if(!L.practice){ setTimeout(sfx.heart,150); const h=$("#lhBox"); h.classList.remove("hit"); void h.offsetWidth; h.classList.add("hit"); $("#lh").textContent=S.hearts; floatText(h,`<svg viewBox="0 0 24 24" width="26" height="26"><use href="#i-heart"/></svg> -1`,"var(--heart)");} }
   const p=$("#pfill"); if(p) p.style.width=Math.min(100,(L.i+1)/L.qs.length*100)+"%"; L.pct=Math.min(100,(L.i+1)/L.qs.length*100);
+  if(L.f&&L.f.blitz){ const myI=L.i; setTimeout(()=>{ if(L&&L.f.blitz&&L.state==="checked"&&L.i===myI) advance(); }, ok?600:1400); }
 }
 function advance(){
+  if(L.f&&L.f.blitz&&Date.now()-L.f.start>=BLITZ_SEC*1000) return finishBlitz();
   if(S.hearts<=0&&!(L&&L.practice)) return noHearts();
   L.i++;
   if(L.i===L.qs.length&&L.mistakes.length){L.qs=L.qs.concat(L.mistakes);L.mistakes=[];L.pct=L.i/L.qs.length*100;}
@@ -1828,6 +1836,29 @@ function renderFlag(q,kick,tm){
   frame(`${kick}<h1 class="l-title">מאיזו מדינה מגיע ${esc(w.n)}?</h1><div class="id-card">${silSvg(w,"sil")}</div>
     <div class="opts flag-grid">${L.order.map((ai,k)=>`<button class="opt flag-opt" style="--d:${k}" data-a="${ai}"><span class="k">${k+1}</span>${flagSvg(L.cur.a[ai])}<b>${esc(L.cur.a[ai])}</b></button>`).join("")}</div>`,"בדיקה",true,"",tm);
   bindChoice();
+}
+
+/* ---- lightning round: 60 seconds, as many quick questions as possible */
+const BLITZ_SEC=60;
+function blitzDelay(){ const d=(Date.now()-L.f.start)/1000; return d<0?`${-d}s`:`-${Math.min(BLITZ_SEC,d)}s`; }
+function startBlitz(){
+  const quick=COURSE.flatMap(u=>u.lessons.flatMap(l=>l.qs)).filter(q=>["tf","mc","id","pic"].includes(q.t));
+  const gen=[...Array(8)].map((_,i)=>i%2?{t:"flag"}:{t:"vs"});
+  startLesson({u:COURSE[0],ui:0,n:{t:"practice",name:"אתגר בזק"},key:"practice",blitz:1,start:Date.now()+1300},shuffle([...quick,...gen])); /* clock starts after the splash */
+}
+function finishBlitz(){
+  const score=L.first, xp=score*2, best=S.blitzBest||0, rec=score>best;
+  S.blitzBest=Math.max(best,score); S.xp+=xp; S.daily.xp+=xp; S.days[today()]=(S.days[today()]||0)+xp; save();
+  L.state="done"; L.i=L.qs.length;
+  frame(`<div class="done-screen">${mascot("happy","who jump big-kd")}<h2 class="pop-in">${rec?"שיא חדש!":"הזמן נגמר!"}</h2>
+    <div class="blitz-score pop-in" style="--d:1" id="bs">0</div><p class="pop-in" style="--d:2">תשובות נכונות ב-${BLITZ_SEC} שניות</p>
+    <div class="res" style="grid-template-columns:1fr 1fr"><div class="r pop-in" style="--c:var(--gold);--d:3"><small>XP</small><b>${ico("i-bolt")}${xp}</b></div>
+    <div class="r pop-in" style="--c:var(--orange);--d:4"><small>השיא שלך</small><b>${S.blitzBest}</b></div></div></div>`,"המשך",false);
+  let v=0; const t=setInterval(()=>{ const e=$("#bs"); if(!e)return clearInterval(t); v=Math.min(score,v+1); e.textContent=v; if(v>=score)clearInterval(t); },70);
+  sfx.win(); if(rec&&score>0) confetti();
+}
+function blitzCard(){
+  return `<div class="miss-card blitz-card"><svg viewBox="0 0 24 24"><use href="#i-bolt"/></svg><div class="t"><b>אתגר בזק</b><p>${BLITZ_SEC} שניות, כמה שיותר תשובות נכונות${S.blitzBest?` · השיא שלך: ${S.blitzBest}`:""}</p></div><button class="btn orange" id="blitzGo">שחק</button></div>`;
 }
 
 /* ---- boot */
