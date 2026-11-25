@@ -747,6 +747,20 @@ body{font-size:16px}
 @keyframes good{0%,40%{opacity:0}48%,88%{opacity:1}95%,100%{opacity:0}}
 .dg-rd .win{animation:win 3s ease-in-out infinite}
 @keyframes win{25%{transform:translate(-14px,6px)}50%{transform:translate(10px,-6px)}75%{transform:translate(6px,8px)}}
+.dg-bb .bbl{animation:bbB 4s linear infinite}
+.dg-bb .bk{animation:bbK 4s ease-in-out infinite}
+.dg-bb .bc{transform-box:fill-box;animation:bbC 4s ease-out infinite}
+.dg-bb .bs{transform-box:fill-box;transform-origin:left center;animation:bbS 4s ease-in-out infinite}
+.dg-bb .s1{animation:st1 4s infinite}.dg-bb .s2{animation:st2 4s infinite}.dg-bb .s3{animation:st3 4s infinite}.dg-bb .s4{animation:st4 4s infinite}
+@keyframes bbB{0%,4%{transform:none;opacity:1}22%{transform:translateX(150px);opacity:1}23%,100%{transform:translateX(150px);opacity:0}}
+@keyframes bbK{0%,12%{transform:none}35%,52%{transform:translateX(-52px)}78%,100%{transform:none}}
+@keyframes bbS{0%,12%{transform:none}35%,52%{transform:scaleX(.3)}78%,100%{transform:none}}
+@keyframes bbC{0%,12%{transform:none;opacity:1}35%{transform:translateX(-52px);opacity:1}52%{transform:translate(-20px,-56px) rotate(210deg);opacity:0}53%,92%{opacity:0;transform:none}100%{opacity:1;transform:none}}
+.dg-belt .bl{animation:belt 3s steps(1,end) infinite}
+.dg-belt .bl{animation:belt 3s cubic-bezier(.6,0,.4,1) infinite}
+@keyframes belt{0%,20%{transform:none}33%,53%{transform:translateX(18px)}66%,86%{transform:translateX(36px)}100%{transform:translateX(54px)}}
+.dg-belt .lk{animation:lk 1s ease-in infinite}
+@keyframes lk{0%{transform:translateY(-10px);opacity:0}30%{opacity:1}100%{transform:translateY(20px);opacity:0}}
 @media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
 </style>
 
@@ -2228,7 +2242,23 @@ Object.assign(DIAGRAMS,{
    <circle cx="160" cy="70" r="3.5" fill="#FF2A2A"><animate attributeName="r" values="3.5;4.5;3.5" dur="1s" repeatCount="indefinite"/></circle>
    <g class="dg-lbl"><text x="268" y="74" text-anchor="middle">חלון הכוונת</text><text x="160" y="140" text-anchor="middle">הנקודה נשארת על המטרה</text></g></svg>`},
 });
-const LESSON_DIAG={"pistols:0":["revolver"],"shoot:0":["sights"],"gear:1":["reddot"],"parts:0":["magazine"],"parts:1":["cartridge","firing"],"works:0":["bolt"],"works:1":["gas"],"rifles:1":["bullpup"],"technique:1":["trajectory","rifling"]};
+Object.assign(DIAGRAMS,{
+ blowback:{title:"איך עובד מנגנון הדף",text:"בתת-מקלעים כמו העוזי אין נעילה ואין בוכנה. הלחץ של הירייה דוחף את התרמיל ואת המכלול הכבד אחורה, והקפיץ מחזיר אותו. מנגנון פשוט וזול.",
+  svg:`<svg viewBox="0 0 320 140" class="dg dg-bb"><rect x="170" y="58" width="145" height="20" fill="#4A525B"/><rect x="170" y="64" width="145" height="8" fill="#2A2F35"/>
+   <polyline class="bs" points="8,68 15,58 22,78 29,58 36,78 43,58 50,78 57,58 64,78 70,68" fill="none" stroke="#8C96A0" stroke-width="2.5"/>
+   <g class="bk"><rect x="70" y="50" width="86" height="36" rx="4" fill="#6B7580"/><text x="113" y="72" text-anchor="middle" fill="#fff">מכלול כבד</text></g>
+   <rect class="bc" x="152" y="62" width="20" height="12" rx="1" fill="#D4A84B"/>
+   <rect class="bbl" x="172" y="64" width="14" height="8" rx="2" fill="#B87333"/>
+   <g class="dg-lbl"><text x="242" y="96" text-anchor="middle">קנה</text><text x="38" y="96" text-anchor="middle">קפיץ</text></g>
+   <g class="dg-steps"><text class="s1" x="285" y="126" text-anchor="middle">1. ירייה</text><text class="s2" x="205" y="126" text-anchor="middle">2. נדחף אחורה</text><text class="s3" x="125" y="126" text-anchor="middle">3. התרמיל עף</text><text class="s4" x="45" y="126" text-anchor="middle">4. חוזר קדימה</text></g></svg>`},
+ belt:{title:"איך עובד חגור כדורים",text:"במקלעים כמו הנגב והמאג הכדורים מחוברים בחוליות לשרשרת ארוכה. המקלע מושך את החגור פנימה כדור אחרי כדור, ולכן אפשר לירות הרבה בלי להחליף מחסנית.",
+  svg:`<svg viewBox="0 0 320 140" class="dg dg-belt"><defs><clipPath id="beltClip"><rect x="0" y="0" width="170" height="140"/></clipPath></defs>
+   <g clip-path="url(#beltClip)"><g class="bl">${[...Array(14)].map((_,i)=>`<g transform="translate(${-60+i*18} 0)"><rect x="0" y="56" width="10" height="34" rx="4" fill="#D4A84B"/><path d="M0 56h10l-2-10h-6z" fill="#B87333"/><rect x="-3" y="70" width="16" height="5" fill="#6B7580"/></g>`).join("")}</g></g>
+   <rect x="168" y="40" width="110" height="60" rx="6" fill="#4A525B"/><rect x="278" y="62" width="40" height="14" fill="#4A525B"/>
+   <g class="lk"><rect x="214" y="104" width="16" height="5" fill="#6B7580"/></g>
+   <g class="dg-lbl"><text x="223" y="74" text-anchor="middle" fill="#fff">המקלע</text><text x="80" y="112" text-anchor="middle">חגור (כדורים בחוליות)</text><text x="222" y="132" text-anchor="middle">החוליה נפלטת</text></g></svg>`},
+});
+const LESSON_DIAG={"pistols:1":["blowback"],"heavy:1":["belt"],"pistols:0":["revolver"],"shoot:0":["sights"],"gear:1":["reddot"],"parts:0":["magazine"],"parts:1":["cartridge","firing"],"works:0":["bolt"],"works:1":["gas"],"rifles:1":["bullpup"],"technique:1":["trajectory","rifling"]};
 
 /* ---- teach first: cards built from the lesson's own content, shown before the questions */
 function teachCards(qs,key){
