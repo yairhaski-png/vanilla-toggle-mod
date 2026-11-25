@@ -790,6 +790,20 @@ body{font-size:16px}
 @keyframes zl3{0%,61%{opacity:0}66%,92%{opacity:1}96%,100%{opacity:0}}
 @media (prefers-reduced-motion:reduce){.dg-scope .z3{opacity:1}}
 .dg-cal .cc{transform-box:fill-box;transform-origin:center;animation:popIn2 .5s cubic-bezier(.3,1.6,.5,1) backwards;animation-delay:calc(.2s + var(--d)*.18s)}
+.dg-zero .grp{animation:grp 4s ease-in-out infinite}
+.dg-zero .s1{animation:zs1 4s infinite}.dg-zero .s2{animation:zs2 4s infinite}.dg-zero .s3{animation:zs3 4s infinite}
+@keyframes grp{0%,30%{transform:none}60%,92%{transform:translate(-24px,22px)}100%{transform:none}}
+@keyframes zs1{0%,28%{opacity:1;fill:var(--orange)}34%,100%{opacity:.3}}
+@keyframes zs2{0%,30%{opacity:.3}34%,58%{opacity:1;fill:var(--orange)}62%,100%{opacity:.3}}
+@keyframes zs3{0%,60%{opacity:.3}64%,92%{opacity:1;fill:var(--green)}96%,100%{opacity:.3}}
+.dg-id .rk{animation:rkVis 4s infinite}
+.dg-id .in{animation:inVis 4s infinite}
+.dg-id .boom{transform-box:fill-box;transform-origin:center;opacity:0;animation:boom 4s ease-out infinite}
+.dg-id .radar{animation:radar 4s infinite}
+@keyframes rkVis{0%,59%{opacity:1}60%,100%{opacity:0}}
+@keyframes inVis{0%,34%{opacity:0}35%,59%{opacity:1}60%,100%{opacity:0}}
+@keyframes boom{0%,59%{opacity:0;transform:scale(.2)}62%{opacity:1;transform:scale(1)}78%,100%{opacity:0;transform:scale(1.6)}}
+@keyframes radar{0%,10%{opacity:.2}15%,20%,25%,30%{opacity:1}17%,22%,27%{opacity:.3}35%,100%{opacity:.2}}
 @media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
 </style>
 
@@ -2342,7 +2356,23 @@ Object.assign(DIAGRAMS,{
  tl_ww:{title:"נשק במלחמות העולם",text:"בתוך 30 שנה עבר שדה הקרב מרובי בריח וטנקים ראשונים לרובים חצי-אוטומטיים, טנקים כבדים ומשגרי רקטות שחייל אחד נושא.",
   svg:timelineSvg([["1916","טנק Mark I"],["1936","M1 גאראנד"],["1940","T-34"],["1942","טייגר ובזוקה"]])},
 });
-const LESSON_DIAG={"terms:0":["caliber"],"history:1":["tl_ww"],"rifles:0":["akvsm16"],"heavy:0":["scope"],"history:0":["tl_world"],"israel:0":["tl_israel"],"gear:0":["armor"],"technique:0":["positions"],"pistols:1":["blowback"],"heavy:1":["belt"],"pistols:0":["revolver"],"shoot:0":["sights"],"gear:1":["reddot"],"parts:0":["magazine"],"parts:1":["cartridge","firing"],"works:0":["bolt"],"works:1":["gas"],"rifles:1":["bullpup"],"technique:1":["trajectory","rifling"]};
+Object.assign(DIAGRAMS,{
+ zero:{title:"איך מאפסים נשק",text:"יורים כמה כדורים, רואים לאן הם נוטים, ומזיזים את הכוונות לפי זה. אחרי האיפוס, הפגיעות נמצאות בנקודה שמכוונים אליה.",
+  svg:`<svg viewBox="0 0 320 150" class="dg dg-zero">${[56,42,28,14].map((r,i)=>`<circle cx="160" cy="68" r="${r}" fill="${i%2?"#fff":"#F1F3F5"}" stroke="#4A525B" stroke-width="1.5"/>`).join("")}<circle cx="160" cy="68" r="5" fill="#E0483B"/>
+   <g class="grp">${[[0,0],[7,4],[-5,6],[4,-6],[-3,-2]].map(([dx,dy])=>`<circle cx="${184+dx}" cy="${46+dy}" r="3.6" fill="#1F2619"/>`).join("")}</g>
+   <g class="dg-steps"><text class="s1" x="270" y="140" text-anchor="middle">1. יורים קבוצה</text><text class="s2" x="160" y="140" text-anchor="middle">2. מזיזים כוונות</text><text class="s3" x="50" y="140" text-anchor="middle">3. פגיעה במרכז</text></g></svg>`},
+ irondome:{title:"איך עובד יירוט של כיפת ברזל",text:"המכ\"ם מזהה את הרקטה ומחשב לאן היא תיפול. רק אם היא עומדת לפגוע באזור מיושב, הסוללה משגרת טיל מיירט שפוגש אותה באוויר.",
+  svg:`<svg viewBox="0 0 320 150" class="dg dg-id"><line x1="0" y1="128" x2="320" y2="128" stroke="currentColor" stroke-width="1.5" opacity=".3"/>
+   ${[[236,104,10,24],[250,96,12,32],[266,108,10,20],[280,100,12,28]].map(([x,y,w,h])=>`<rect x="${x}" y="${y}" width="${w}" height="${h}" fill="#8C96A0"/>`).join("")}
+   <rect x="206" y="116" width="18" height="12" rx="2" fill="#4A525B"/><path class="radar" d="M226 108a14 14 0 0 0-14-14M232 108a20 20 0 0 0-20-20" fill="none" stroke="#1EA5F0" stroke-width="2"/>
+   <path id="rkP" d="M10 124 Q140 -20 270 120" fill="none" stroke="#E0483B" stroke-width="1.2" stroke-dasharray="3 4" opacity=".5"/>
+   <path id="inP" d="M215 116 Q200 60 140 52" fill="none"/>
+   <g class="rk"><circle r="4" fill="#E0483B"><animateMotion dur="4s" repeatCount="indefinite" keyPoints="0;0.5;0.5" keyTimes="0;0.6;1" calcMode="linear"><mpath href="#rkP"/></animateMotion></circle></g>
+   <g class="in"><circle r="3.5" fill="#1EA5F0"><animateMotion dur="4s" repeatCount="indefinite" keyPoints="0;0;1;1" keyTimes="0;0.35;0.6;1" calcMode="linear"><mpath href="#inP"/></animateMotion></circle></g>
+   <circle class="boom" cx="140" cy="50" r="14" fill="#FFC800"/>
+   <g class="dg-lbl"><text x="30" y="110" text-anchor="middle">רקטה</text><text x="215" y="144" text-anchor="middle">סוללה</text><text x="266" y="90" text-anchor="middle">עיר</text><text x="182" y="40" text-anchor="middle" fill="#1EA5F0">מיירט</text></g></svg>`},
+});
+const LESSON_DIAG={"shoot:1":["zero"],"israel:1":["irondome"],"terms:0":["caliber"],"history:1":["tl_ww"],"rifles:0":["akvsm16"],"heavy:0":["scope"],"history:0":["tl_world"],"israel:0":["tl_israel"],"gear:0":["armor"],"technique:0":["positions"],"pistols:1":["blowback"],"heavy:1":["belt"],"pistols:0":["revolver"],"shoot:0":["sights"],"gear:1":["reddot"],"parts:0":["magazine"],"parts:1":["cartridge","firing"],"works:0":["bolt"],"works:1":["gas"],"rifles:1":["bullpup"],"technique:1":["trajectory","rifling"]};
 
 /* ---- teach first: cards built from the lesson's own content, shown before the questions */
 function teachCards(qs,key){
