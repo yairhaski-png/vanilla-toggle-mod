@@ -761,6 +761,12 @@ body{font-size:16px}
 @keyframes belt{0%,20%{transform:none}33%,53%{transform:translateX(18px)}66%,86%{transform:translateX(36px)}100%{transform:translateX(54px)}}
 .dg-belt .lk{animation:lk 1s ease-in infinite}
 @keyframes lk{0%{transform:translateY(-10px);opacity:0}30%{opacity:1}100%{transform:translateY(20px);opacity:0}}
+.dg-pos .sw3{transform-box:view-box;transform-origin:45px 104px;animation:sway 1.6s ease-in-out infinite}
+.dg-pos .sw2{transform-box:view-box;transform-origin:150px 104px;animation:sway2 1.6s ease-in-out infinite}
+@keyframes sway{25%{transform:rotate(3.5deg)}75%{transform:rotate(-3.5deg)}}
+@keyframes sway2{25%{transform:rotate(1.4deg)}75%{transform:rotate(-1.4deg)}}
+.dg-pos .pb{transform-box:fill-box;transform-origin:right center;animation:pb 2.6s ease-out infinite}
+@keyframes pb{0%{transform:scaleX(0)}45%,100%{transform:scaleX(var(--v))}}
 @media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
 </style>
 
@@ -2258,7 +2264,16 @@ Object.assign(DIAGRAMS,{
    <g class="lk"><rect x="214" y="104" width="16" height="5" fill="#6B7580"/></g>
    <g class="dg-lbl"><text x="223" y="74" text-anchor="middle" fill="#fff">המקלע</text><text x="80" y="112" text-anchor="middle">חגור (כדורים בחוליות)</text><text x="222" y="132" text-anchor="middle">החוליה נפלטת</text></g></svg>`},
 });
-const LESSON_DIAG={"pistols:1":["blowback"],"heavy:1":["belt"],"pistols:0":["revolver"],"shoot:0":["sights"],"gear:1":["reddot"],"parts:0":["magazine"],"parts:1":["cartridge","firing"],"works:0":["bolt"],"works:1":["gas"],"rifles:1":["bullpup"],"technique:1":["trajectory","rifling"]};
+Object.assign(DIAGRAMS,{
+ positions:{title:"למה שכיבה יציבה יותר",text:"ככל שיותר מהגוף נשען על הקרקע, הנשק זז פחות. לכן בשכיבה הכי קל לפגוע במטרה רחוקה, ובעמידה הכי קשה.",
+  svg:`<svg viewBox="0 0 320 160" class="dg dg-pos"><line x1="0" y1="104" x2="320" y2="104" stroke="currentColor" stroke-width="1.5" opacity=".3"/>
+   <g class="sw3"><circle cx="45" cy="30" r="7" fill="currentColor"/><path d="M45 37v38M45 75l-8 29M45 75l8 29M45 48l-20-1" stroke="currentColor" stroke-width="4" stroke-linecap="round" fill="none"/><path d="M8 46h48" stroke="#4A525B" stroke-width="5" stroke-linecap="round"/></g>
+   <g class="sw2"><circle cx="150" cy="52" r="7" fill="currentColor"/><path d="M150 59v26M150 85l15 5v14M150 85l-10 19h-15M150 66l-22-3" stroke="currentColor" stroke-width="4" stroke-linecap="round" fill="none"/><path d="M108 62h50" stroke="#4A525B" stroke-width="5" stroke-linecap="round"/></g>
+   <g><circle cx="228" cy="88" r="7" fill="currentColor"/><path d="M236 92l64 5M300 97l16 6M240 94l-14 -1" stroke="currentColor" stroke-width="4" stroke-linecap="round" fill="none"/><path d="M186 88h50" stroke="#4A525B" stroke-width="5" stroke-linecap="round"/><path d="M196 90l-4 14M196 90l4 14" stroke="#4A525B" stroke-width="2.5"/></g>
+   ${[[45,35],[150,65],[262,100]].map(([x,v],i)=>`<rect x="${x-35}" y="116" width="70" height="10" rx="5" fill="var(--line)"/><rect class="pb" style="--v:${v/100}" x="${x-35}" y="116" width="70" height="10" rx="5" fill="${["#E0483B","#FFC800","#58C21B"][i]}"/>`).join("")}
+   <g class="dg-lbl"><text x="45" y="145" text-anchor="middle">עמידה</text><text x="150" y="145" text-anchor="middle">כריעה</text><text x="262" y="145" text-anchor="middle">שכיבה</text></g></svg>`},
+});
+const LESSON_DIAG={"technique:0":["positions"],"pistols:1":["blowback"],"heavy:1":["belt"],"pistols:0":["revolver"],"shoot:0":["sights"],"gear:1":["reddot"],"parts:0":["magazine"],"parts:1":["cartridge","firing"],"works:0":["bolt"],"works:1":["gas"],"rifles:1":["bullpup"],"technique:1":["trajectory","rifling"]};
 
 /* ---- teach first: cards built from the lesson's own content, shown before the questions */
 function teachCards(qs,key){
