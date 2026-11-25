@@ -572,6 +572,14 @@ button.stat:hover{background:var(--soft)}
 .wb .pbar{height:14px}
 .wb .pbar>i{transition:width .9s cubic-bezier(.3,1.2,.5,1)}
 .spec tr{animation:qIn .3s backwards;animation-delay:calc(.3s + var(--d)*.04s)}
+.flag-grid{grid-template-columns:1fr 1fr}
+.flag-opt{flex-direction:column;justify-content:center;gap:8px;padding:16px 10px 12px;position:relative}
+.flag-opt .k{position:absolute;top:8px;inset-inline-start:8px}
+.flag-svg{width:72px;height:48px;border-radius:6px;box-shadow:0 0 0 2px var(--line),0 3px 0 var(--line);transition:transform .2s}
+.flag-opt b{font-weight:700;font-size:16px}
+.flag-opt.sel .flag-svg{transform:rotate(-4deg) scale(1.08)}
+.flag-opt.right .flag-svg{animation:flagWave .9s ease-in-out}
+@keyframes flagWave{25%{transform:skewY(-6deg) scale(1.1)}50%{transform:skewY(5deg) scale(1.1)}75%{transform:skewY(-3deg) scale(1.05)}}
 @media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
 </style>
 
@@ -811,6 +819,7 @@ const COURSE = [
    {t:"part", w:"tavor", p:"mag"},
    {t:"type", w:"tavor"},
    {t:"pic", w:"fal"},
+   {t:"flag", w:"fal"},
    {t:"id", w:"m4"},
    {t:"vs"},
    {t:"gap", s:"התבור הוא רובה מסוג ___, שבו המחסנית נמצאת מאחורי ההדק", a:["בולפאפ","בריח","תופי"], c:0, e:"גם ה-Steyr AUG האוסטרי בנוי כך."},
@@ -825,6 +834,7 @@ const COURSE = [
    {t:"id", w:"glock17", q:"איזה נשק זה?"},
    {t:"pic", w:"glock17"},
    {t:"type", w:"glock17"},
+   {t:"flag", w:"glock17"},
    {t:"id", w:"m1911"},
    {t:"pic", w:"python"},
    {t:"tf", q:"באקדח תופי כמו הקולט פייתון, הכדורים נמצאים בתוף מסתובב ולא במחסנית.", c:true, e:"בתוף של הפייתון יש 6 כדורים בקליבר ‎.357 מגנום."},
@@ -854,6 +864,7 @@ const COURSE = [
   { name:"רובי צלפים", qs:[
    {t:"id", w:"barrett", q:"איזה נשק זה?"},
    {t:"vs", k:"rng"},
+   {t:"flag", w:"svd"},
    {t:"mc", q:"באיזו תחמושת יורה ה-Barrett M82?", a:["‎.50 BMG (12.7×99 מ\"מ)","9×19 מ\"מ","5.56×45 מ\"מ","7.62×39 מ\"מ"], c:0, e:"זו תחמושת של מקלע כבד, ולכן הטווח שלו מגיע לכ-1,800 מטר."},
    {t:"id", w:"svd", q:"איזה נשק זה?"},
    {t:"mc", q:"מהו הדרגונוב (SVD)?", a:["רובה צלפים סובייטי","טנק רוסי","אקדח","טיל"], c:0, e:"נועד לקלע המחלקתי, שנותן ירי מדויק לטווח בינוני."},
@@ -908,6 +919,7 @@ const COURSE = [
    {t:"match", q:"התאם טנק למדינה", p:[["T-34","ברית המועצות"],["טייגר","גרמניה"],["שרמן","ארה\"ב"],["Mark I","בריטניה"]]},
    {t:"id", w:"enfield"},
    {t:"id", w:"mosin"},
+   {t:"flag"},
    {t:"gap", s:"רובה הלי-אנפילד הבריטי התפרסם בירי מהיר שנקרא ___", a:["הדקה המטורפת","הצרור הארוך","הירייה השקטה"], c:0, e:"חיילים מאומנים ירו בו יותר מ-15 יריות מכוונות בדקה, עם רובה בריח."},
    {t:"mc", q:"מה היה הבזוקה?", a:["משגר רקטות נגד טנקים אמריקני","מטוס קרב","סוג של רימון יד","צוללת"], c:0, e:"הבזוקה שימשה חיילים אמריקנים במלחמת העולם השנייה וקיבלה את שמה מכלי נגינה מאולתר."}
   ]}
@@ -960,6 +972,7 @@ const COURSE = [
   ]},
   { name:"כינויים וסיפורים", qs:[
    {t:"pic", w:"thompson"},
+   {t:"flag"},
    {t:"vs"},
    {t:"order", q:"סדר לפי שנת ההופעה, מהמוקדם למאוחר", items:["מאוזר 98","M1 גאראנד","AK-47","גלוק 17"], e:"מאוזר 98 (1898), M1 גאראנד (1936), AK-47 (1947), גלוק 17 (1982)."},
    {t:"mc", q:"איזה נשק קיבל את הכינוי 'טומי גאן'?", a:["תת-מקלע תומפסון","קולט 45","וינצ'סטר","מאוזר"], c:0, e:"הוא נקרא על שם ג'ון ט. תומפסון והתפרסם בתקופת היובש בארה\"ב."},
@@ -1348,6 +1361,7 @@ function renderQ(){
   if(q.t==="order") return renderOrder(q,kick,tm);
   if(q.t==="vs") return renderVs(q,kick,tm);
   if(q.t==="type") return renderType(q,kick,tm);
+  if(q.t==="flag") return renderFlag(q,kick,tm);
   if(q.t==="id"){
     const w=WMAP[q.w], pool=shuffle(WEAPONS.filter(x=>!x.gen&&x.id!==w.id&&!sameLook(x,w))).slice(0,3);
     L.cur={t:"mc",a:[w.n,...pool.map(x=>x.n)],c:0,e:`${w.type} · ${w.country} · ${w.cal}. ${w.fact}`};
@@ -1401,7 +1415,7 @@ function timeUp(){
 }
 function check(timeout){
   const q0=L.qs[L.i]; if(L.sel===null)return;
-  const q=(q0.t==="id"||q0.t==="pic"||q0.t==="vs")?L.cur:q0.t==="gap"?{...q0,t:"mc"}:q0;
+  const q=(q0.t==="id"||q0.t==="pic"||q0.t==="vs"||q0.t==="flag")?L.cur:q0.t==="gap"?{...q0,t:"mc"}:q0;
   const ok=!timeout&&(q.t==="mc"?L.sel===q.c:(L.sel===1)===q.c), right=q.t==="mc"?q.c:(q.c?1:0);
   if(q0.t==="id"&&ok) S.ids=(S.ids||0)+1;
   $$(".opts .opt").forEach(b=>{b.disabled=true;b.classList.remove("sel"); if(+b.dataset.a===right)b.classList.add("right"); else if(+b.dataset.a===L.sel)b.classList.add("wrong");});
@@ -1790,6 +1804,30 @@ function checkType(timeout){
   L.state="checked";
   feedback(ok,(timeout?"נגמר הזמן. ":"")+(ok?"":`השם: ${w.n}. `)+`${w.type} · ${w.country} · ${w.cal}.`);
   if(ok) burst(inp,["#58C21B","#A8E66F","#FFC800"],16);
+}
+
+/* ---- which country? (flags) */
+const FLAGS={
+ "ישראל":`<rect width="30" height="20" fill="#fff"/><rect y="2" width="30" height="2.4" fill="#1B5FC1"/><rect y="15.6" width="30" height="2.4" fill="#1B5FC1"/><path d="M15 6.3l3.1 5.3h-6.2zM15 13.7l-3.1-5.3h6.2z" fill="none" stroke="#1B5FC1" stroke-width=".9"/>`,
+ "ארה\"ב":`<rect width="30" height="20" fill="#fff"/>${[0,2,4,6,8,10,12].map(i=>`<rect y="${i*20/13}" width="30" height="${20/13}" fill="#B22234"/>`).join("")}<rect width="13" height="10.8" fill="#3C3B6E"/><g fill="#fff">${[[2,2],[5,2],[8,2],[11,2],[3.5,4.5],[6.5,4.5],[9.5,4.5],[2,7],[5,7],[8,7],[11,7]].map(([x,y])=>`<circle cx="${x}" cy="${y}" r=".6"/>`).join("")}</g>`,
+ "ברית המועצות":`<rect width="30" height="20" fill="#CC0000"/><path d="M5 3.2l.6 1.6h1.7l-1.4 1 .5 1.7L5 6.5l-1.4 1 .5-1.7-1.4-1h1.7z" fill="#FFD700"/><path d="M3.6 9.5q1.6 2.6 4.2.4M4.2 11.6l3.2-3.4" stroke="#FFD700" stroke-width=".9" fill="none"/>`,
+ "רוסיה":`<rect width="30" height="6.67" fill="#fff"/><rect y="6.67" width="30" height="6.67" fill="#0039A6"/><rect y="13.33" width="30" height="6.67" fill="#D52B1E"/>`,
+ "גרמניה":`<rect width="30" height="6.67" fill="#000"/><rect y="6.67" width="30" height="6.67" fill="#DD0000"/><rect y="13.33" width="30" height="6.67" fill="#FFCE00"/>`,
+ "אוסטריה":`<rect width="30" height="20" fill="#ED2939"/><rect y="6.67" width="30" height="6.67" fill="#fff"/>`,
+ "בלגיה":`<rect width="10" height="20" fill="#000"/><rect x="10" width="10" height="20" fill="#FDDA24"/><rect x="20" width="10" height="20" fill="#EF3340"/>`,
+ "בריטניה":`<rect width="30" height="20" fill="#012169"/><path d="M0 0l30 20M30 0L0 20" stroke="#fff" stroke-width="4"/><path d="M0 0l30 20M30 0L0 20" stroke="#C8102E" stroke-width="1.4"/><path d="M15 0v20M0 10h30" stroke="#fff" stroke-width="6"/><path d="M15 0v20M0 10h30" stroke="#C8102E" stroke-width="3.4"/>`,
+ "איטליה":`<rect width="10" height="20" fill="#009246"/><rect x="10" width="10" height="20" fill="#fff"/><rect x="20" width="10" height="20" fill="#CE2B37"/>`,
+};
+const flagSvg=c=>`<svg class="flag-svg" viewBox="0 0 30 20" aria-hidden="true">${FLAGS[c]||""}</svg>`;
+function renderFlag(q,kick,tm){
+  const pool=WEAPONS.filter(w=>!w.gen&&FLAGS[w.country]);
+  const w=q.w&&FLAGS[(WMAP[q.w]||{}).country]?WMAP[q.w]:shuffle(pool)[0];
+  const others=shuffle(Object.keys(FLAGS).filter(c=>c!==w.country)).slice(0,3);
+  L.cur={t:"mc",a:[w.country,...others],c:0,e:`${w.n} · ${w.country} · ${w.year}. ${w.fact}`};
+  L.order=shuffle([0,1,2,3]);
+  frame(`${kick}<h1 class="l-title">מאיזו מדינה מגיע ${esc(w.n)}?</h1><div class="id-card">${silSvg(w,"sil")}</div>
+    <div class="opts flag-grid">${L.order.map((ai,k)=>`<button class="opt flag-opt" style="--d:${k}" data-a="${ai}"><span class="k">${k+1}</span>${flagSvg(L.cur.a[ai])}<b>${esc(L.cur.a[ai])}</b></button>`).join("")}</div>`,"בדיקה",true,"",tm);
+  bindChoice();
 }
 
 /* ---- boot */
