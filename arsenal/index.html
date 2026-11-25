@@ -557,6 +557,12 @@ button.stat:hover{background:var(--soft)}
 @keyframes justDone{0%{transform:scale(.7);filter:saturate(0) brightness(1.2)}60%{transform:scale(1.18)}100%{transform:none}}
 .node.just-open{animation:justOpen 1.2s ease-out .15s backwards}
 @keyframes justOpen{0%{filter:grayscale(1) brightness(1.1);transform:none}12%{transform:rotate(-12deg)}24%{transform:rotate(12deg)}36%{transform:rotate(-8deg)}48%{transform:rotate(6deg);filter:grayscale(1)}62%{transform:scale(1.28);filter:none}80%{transform:scale(.94)}100%{transform:none}}
+.type-wrap{display:flex;flex-direction:column;gap:8px}
+.type-wrap span{color:var(--muted);font-weight:600;font-size:15px}
+.type-in{width:100%;font:600 22px var(--font);color:var(--ink-strong);background:var(--soft);border:2px solid var(--line);border-bottom-width:4px;border-radius:14px;padding:14px 16px;outline:none;transition:border-color .15s,background .15s;animation:optIn .4s cubic-bezier(.3,1.4,.5,1) .2s backwards}
+.type-in:focus{border-color:var(--blue-line);background:var(--surface)}
+.type-in.ok{border-color:var(--green);background:var(--green-bg);color:var(--green-ink);animation:okPop .45s cubic-bezier(.3,1.8,.5,1)}
+.type-in.no{border-color:var(--red);background:var(--red-bg);color:var(--red-ink);animation:shake .4s}
 @media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
 </style>
 
@@ -773,6 +779,7 @@ const COURSE = [
    {t:"gap", s:"ה-AK-47 יורה תחמושת ___", a:["7.62×39 מ\"מ","5.56×45 מ\"מ","9×19 מ\"מ"], c:0, e:"היורש שלו, ה-AK-74, עבר לתחמושת קטנה יותר: 5.45×39 מ\"מ."},
    {t:"pic", w:"m16"},
    {t:"pic", w:"ak74"},
+   {t:"type", w:"ak47"},
    {t:"tf", q:"ה-AK-47 ידוע באמינות שלו גם בבוץ, בחול ובקור.", c:true, e:"החלקים הנעים שלו מרווחים, ולכן לכלוך פחות תוקע אותו."},
    {t:"mc", q:"מה ההבדל העיקרי בין M4 ל-M16?", a:["ה-M4 קצר יותר, עם קנה קצר וקת נשלפת","ה-M4 יורה כדורים אחרים","ה-M4 הוא אקדח","אין הבדל"], c:0, e:"ה-M4 הוא 'קרבין': גרסה קצרה ונוחה יותר."}
   ]},
@@ -780,6 +787,7 @@ const COURSE = [
    {t:"id", w:"tavor", q:"איזה נשק זה?"},
    {t:"pic", w:"aug"},
    {t:"part", w:"tavor", p:"mag"},
+   {t:"type", w:"tavor"},
    {t:"id", w:"m4"},
    {t:"vs"},
    {t:"gap", s:"התבור הוא רובה מסוג ___, שבו המחסנית נמצאת מאחורי ההדק", a:["בולפאפ","בריח","תופי"], c:0, e:"גם ה-Steyr AUG האוסטרי בנוי כך."},
@@ -793,6 +801,7 @@ const COURSE = [
   { name:"אקדחים", qs:[
    {t:"id", w:"glock17", q:"איזה נשק זה?"},
    {t:"pic", w:"glock17"},
+   {t:"type", w:"glock17"},
    {t:"id", w:"m1911"},
    {t:"pic", w:"python"},
    {t:"tf", q:"באקדח תופי כמו הקולט פייתון, הכדורים נמצאים בתוף מסתובב ולא במחסנית.", c:true, e:"בתוף של הפייתון יש 6 כדורים בקליבר ‎.357 מגנום."},
@@ -831,6 +840,7 @@ const COURSE = [
    {t:"mc", q:"איך מוזן מקלע כמו הנגב או המאג בירי ממושך?", a:["בחגור, שרשרת של כדורים","במחסנית של 5","ביד, כדור כדור","בתוף של אקדח"], c:0, e:"חגור מאפשר לירות הרבה בלי להחליף מחסנית."},
    {t:"pic", w:"negev"},
    {t:"id", w:"mag"},
+   {t:"type", w:"negev"},
    {t:"tf", q:"במקלעים מחליפים לפעמים קנה כדי שלא יתחמם יותר מדי.", c:true, e:"קנה חם מדי נשחק מהר ומאבד דיוק."},
    {t:"mc", q:"מה פירוש 'מקלע קל'?", a:["מקלע שחייל אחד יכול לשאת ולהפעיל","מקלע מפלסטיק","מקלע לילדים","מקלע בלי כדורים"], c:0, e:"הנגב הוא מקלע קל. המאג כבד יותר ונקרא מקלע בינוני."},
    {t:"match", q:"התאם נשק לתפקיד", p:[["בארט","צלף אנטי-חומר"],["דרגונוב","קלע מחלקתי"],["נגב","מקלע קל"],["מאג","מקלע בינוני"]]}
@@ -894,6 +904,7 @@ const COURSE = [
    {t:"mc", q:"על שם מי נקרא תת-המקלע עוזי?", a:["עוזיאל גל","עוזי נרקיס","עוזי דיין","עוזי חיטמן"], c:0, e:"עוזיאל גל תכנן אותו בסוף שנות ה-40, וצה\"ל אימץ אותו ב-1954."},
    {t:"mc", q:"מה מיוחד בתבנית 'בולפאפ' של רובה התבור?", a:["מנגנון הנשק נמצא מאחורי ההדק, ולכן הרובה קצר","יש לו שני קנים","הוא יורה רק בודדת","הוא עשוי כולו מעץ"], c:0, e:"כך מתקבל רובה קצר ונוח עם קנה ארוך יחסית."},
    {t:"id", w:"galil"},
+   {t:"type", w:"uzi"},
    {t:"tf", q:"רובה הגליל קרוי על שם ממציאו, ישראל גלילי.", c:true, e:"ישראל גלילי ויעקב ליאור פיתחו אותו, וצה\"ל אימץ אותו בתחילת שנות ה-70."},
    {t:"mc", q:"מהו הנגב?", a:["מקלע קל של התעשייה הצבאית","טיל נגד מטוסים","טנק","אקדח"], c:0, e:"הנגב נכנס לשירות בצה\"ל בסוף שנות ה-90."},
    {t:"match", q:"התאם נשק לסוג שלו", p:[["עוזי","תת-מקלע"],["תבור","רובה סער"],["נגב","מקלע קל"],["יריחו","אקדח"]]}
@@ -1299,6 +1310,7 @@ function renderQ(){
   if(q.t==="gap") return renderGap(q,kick,tm);
   if(q.t==="order") return renderOrder(q,kick,tm);
   if(q.t==="vs") return renderVs(q,kick,tm);
+  if(q.t==="type") return renderType(q,kick,tm);
   if(q.t==="id"){
     const w=WMAP[q.w], pool=shuffle(WEAPONS.filter(x=>!x.gen&&x.id!==w.id)).slice(0,3);
     L.cur={t:"mc",a:[w.n,...pool.map(x=>x.n)],c:0,e:`${w.type} · ${w.country} · ${w.cal}. ${w.fact}`};
@@ -1339,13 +1351,14 @@ function renderPairs(q,kick,tm){
     else { sfx.no(); m.miss=true; [a,b].forEach(x=>{x.classList.remove("sel");x.classList.add("wrong");setTimeout(()=>x.classList.remove("wrong"),450);}); }
   });
 }
-function onGo(){ if(L.state==="answer"){ const t=L.qs[L.i].t; return t==="build"?checkBuild():t==="part"?checkPart():t==="order"?checkOrder():check(); } if(L.state==="checked")return advance(); if(L.state==="screens")return nextScreen(); closeLesson(); }
+function onGo(){ if(L.state==="answer"){ const t=L.qs[L.i].t; return t==="build"?checkBuild():t==="part"?checkPart():t==="order"?checkOrder():t==="type"?checkType():check(); } if(L.state==="checked")return advance(); if(L.state==="screens")return nextScreen(); closeLesson(); }
 function stopTimer(){ const t=$("#tbar"); if(t) t.style.animationPlayState="paused"; }
 function timeUp(){
   const q0=L.qs[L.i];
   if(q0.t==="build") return checkBuild(true);
   if(q0.t==="part") return checkPart(true);
   if(q0.t==="order") return checkOrder(true);
+  if(q0.t==="type") return checkType(true);
   if(q0.t==="match"){ L.state="checked"; return feedback(false,"נגמר הזמן."); }
   L.sel=-1; check(true);
 }
@@ -1712,6 +1725,25 @@ function renderVs(q,kick,tm){
   frame(`${kick}<h1 class="l-title">${esc(q.q||"איזה נשק הופיע קודם?")}</h1>
     <div class="opts vs-grid">${[a,b].map((w,k)=>`<button class="opt vs-card ${k?"from-l":"from-r"}" data-a="${k}">${silSvg(w)}<b>${esc(w.n)}</b><small>${esc(w.country)}</small><span class="vs-yr" hidden>${w.year}</span></button>`).join("")}<span class="vs-badge">VS</span></div>`,"בדיקה",true,"",tm);
   bindChoice();
+}
+
+/* ---- type the weapon's name */
+const normName=x=>String(x).toLowerCase().replace(/[\s\-\u2013"'\u05F3\u05F4.]/g,"");
+const TYPE_ALIASES={ak47:["ak47","ak","קלשניקוב","קלצ'ניקוב","קלאצ'","קלאץ"],m16:["m16","אם16","אמ16"],uzi:["uzi","עוזי"],glock17:["glock","glock17","גלוק","גלוק17"],tavor:["tavor","תבור","tar21","תבורtar21"],negev:["negev","נגב"],barrett:["barrett","בארט","ברט","m82","barrettm82","בארטm82"]};
+function renderType(q,kick,tm){
+  const w=WMAP[q.w];
+  frame(`${kick}<h1 class="l-title">${esc(q.q||"איך קוראים לנשק הזה?")}</h1><div class="id-card">${silSvg(w,"sil")}</div>
+    <label class="type-wrap"><span>הקלד את השם, בעברית או באנגלית</span><input id="typeIn" class="type-in" autocomplete="off" autocapitalize="off" spellcheck="false" dir="auto" placeholder="שם הנשק..."></label>`,"בדיקה",true,"",tm);
+  const inp=$("#typeIn"); inp.addEventListener("input",()=>{ $("#go").disabled=!inp.value.trim(); });
+  setTimeout(()=>{ try{inp.focus({preventScroll:true});}catch(e){} },450);
+}
+function checkType(timeout){
+  const q=L.qs[L.i], w=WMAP[q.w], inp=$("#typeIn"), v=normName(inp.value);
+  const ok=!timeout&&!!v&&[w.n,w.id,...(TYPE_ALIASES[w.id]||[])].map(normName).includes(v);
+  inp.disabled=true; inp.classList.add(ok?"ok":"no");
+  L.state="checked";
+  feedback(ok,(timeout?"נגמר הזמן. ":"")+(ok?"":`השם: ${w.n}. `)+`${w.type} · ${w.country} · ${w.cal}.`);
+  if(ok) burst(inp,["#58C21B","#A8E66F","#FFC800"],16);
 }
 
 /* ---- boot */
