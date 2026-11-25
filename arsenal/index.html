@@ -684,6 +684,9 @@ const WEAPONS=[
  {id:"mosin",n:"מוסין-נגאן",sil:"mosin",type:"רובה בריח",country:"רוסיה",year:"1891",by:"סרגיי מוסין ולאון נגאן",cal:"7.62×54R מ\"מ",act:"בריח ידני",mag:"5 (פנימית)",rng:"כ-500 מ'",kg:"כ-4 ק\"ג",fact:"מרובי הצבא שיוצרו בכמויות הגדולות ביותר בהיסטוריה. צלפים סובייטים השתמשו בו במלחמת העולם השנייה."},
  {id:"x95",n:"מיקרו תבור X95",sil:"x95",type:"רובה סער",country:"ישראל",year:"2003",by:"התעשייה הצבאית (IWI)",cal:"5.56×45 מ\"מ נאט\"ו",act:"גזים, בוכנה ארוכה",mag:"30",rng:"כ-400 מ'",kg:"כ-3.2 ק\"ג (ריק)",fact:"גרסה קצרה של התבור. ב-2009 בחר בו צה\"ל כרובה הרגלים הסטנדרטי."},
 ];
+/* look-alike groups: never offered together as answer options */
+const LOOKALIKE=[["mosin","enfield","mauser","garand"],["tavor","x95","aug"],["glock17","jericho","beretta92","m1911","deagle"],["m16","m4"],["ak47","ak74","galil"],["negev","mag","pkm"],["uzi","mp5","thompson"]];
+const sameLook=(a,b)=>LOOKALIKE.some(g=>g.includes(a.id)&&g.includes(b.id));
 const WMAP=Object.fromEntries(WEAPONS.map(w=>[w.id,w]));
 
 /* Side-profile silhouettes, muzzle pointing left (reads naturally in RTL). viewBox 0 0 240 90 */
@@ -714,7 +717,7 @@ const SIL={
  jericho:`<path class="ms" d="M152 54q-20 0-20 14h22"/><path class="p" d="M186 46h-36l6 44h38z"/><rect class="m" x="56" y="46" width="128" height="8" rx="3"/><rect class="m" x="52" y="28" width="134" height="18" rx="5"/><path class="m" d="M184 26l9-7 4 4-7 7z"/><rect class="m" x="56" y="23" width="5" height="5"/><rect class="m" x="174" y="23" width="6" height="5"/><path d="M150 32v10M155 32v10M160 32v10" stroke="#000" stroke-width="1.4" opacity=".35"/><path d="M56 44h128" stroke="#000" stroke-width="1" opacity=".3"/><rect class="hl" x="54" y="29" width="130" height="2" rx="1"/>`,
  enfield:`<path class="ms" d="M158 50q-6 8 2 12h10"/><path class="w" d="M238 34l-52-4-10 4v12l14 4 38 10 6-4z"/><path class="w" d="M180 34H60l-24 3v6l24 3h120z"/><rect class="w" x="70" y="30" width="96" height="5" rx="2"/><rect class="m" x="166" y="28" width="16" height="8" rx="2"/><path class="m" d="M178 30l8-8h4l-6 10z"/><circle class="s" cx="189" cy="21" r="3"/><path class="m" d="M150 46h-16v12h16z"/><rect class="m" x="22" y="36" width="16" height="5" rx="1"/><rect class="m" x="10" y="37" width="14" height="3"/><rect class="m" x="28" y="28" width="5" height="8"/><rect class="hl" x="62" y="35" width="116" height="2" rx="1"/>`,
  pkm:`<path class="ms" d="M162 46q-2 10 6 12"/><path class="w" fill-rule="evenodd" d="M238 30h-54v18l50 12 4-4zM226 36h-30v8l26 8z"/><rect class="m" x="96" y="28" width="90" height="18" rx="2"/><path class="p" d="M184 46h-10l3 20h10z"/><rect class="m" x="118" y="46" width="26" height="20" rx="2"/><rect class="m" x="18" y="32" width="80" height="5"/><rect class="m" x="60" y="22" width="20" height="4" rx="2"/><rect class="m" x="68" y="22" width="4" height="10"/><rect class="m" x="6" y="30" width="14" height="9" rx="1"/><rect class="m" x="26" y="24" width="4" height="8"/><path class="ms" d="M36 37l-10 32M36 37l10 32" style="stroke-width:4"/><rect class="hl" x="98" y="29" width="86" height="2" rx="1"/>`,
- mosin:`<path class="ms" d="M160 48q-6 8 2 12h10"/><path class="w" d="M238 34l-56-4-8 4v12l14 4 44 10 6-4z"/><path class="w" d="M176 34H54l-20 3v6l20 3h122z"/><rect class="m" x="160" y="28" width="22" height="8" rx="2"/><path class="m" d="M174 36l4 10h4l-2-10z"/><circle class="s" cx="180" cy="48" r="3"/><rect class="m" x="6" y="37" width="30" height="3"/><rect class="m" x="22" y="36" width="12" height="5" rx="1"/><path class="m" d="M8 37v-7h4v7z"/><rect class="hl" x="56" y="35" width="118" height="2" rx="1"/>`,
+ mosin:`<path class="ms" d="M160 48q-6 8 2 12h10"/><path class="w" d="M238 34l-56-4-8 4v12l14 4 44 10 6-4z"/><path class="w" d="M176 34H54l-20 3v6l20 3h122z"/><rect class="m" x="160" y="28" width="22" height="8" rx="2"/><rect class="m" x="176" y="31" width="13" height="4" rx="1"/><circle class="s" cx="191" cy="33" r="3.6"/><rect class="m" x="6" y="37" width="30" height="3"/><rect class="m" x="22" y="36" width="12" height="5" rx="1"/><path class="m" d="M8 37v-7h4v7z"/><rect class="hl" x="56" y="35" width="118" height="2" rx="1"/>`,
  x95:`<path class="ms" d="M118 46v18q0 6 6 6h16q6 0 6-6V46" style="stroke:#454A26;stroke-width:4"/><path class="od" d="M180 48h-14l-4 28h14z"/><path class="od" d="M228 30 106 28l-8 8v10l92 4 32 8 8-4z"/><path class="od" d="M138 46h-10l3 22h10z"/><rect class="p" x="110" y="22" width="90" height="6" rx="1"/><rect class="p" x="132" y="11" width="24" height="11" rx="3"/><rect class="o" x="133" y="13" width="5" height="7" rx="1"/><rect class="m" x="56" y="35" width="44" height="5"/><rect class="m" x="48" y="33" width="10" height="9" rx="1"/><rect class="hl" x="108" y="31" width="110" height="2" rx="1"/>`,
  bolt:`<path class="ms" d="M150 44q-4 10 6 12"/><path class="w" d="M236 36l-60-6-10 6v8l24 4 40 10 6-4z"/><rect class="w" x="40" y="34" width="130" height="10" rx="4"/><rect class="m" x="110" y="28" width="50" height="8" rx="2"/><path class="m" d="M148 34l6-10h6l-4 10z"/><circle class="s" cx="158" cy="24" r="3"/><rect class="m" x="6" y="36" width="36" height="4"/><rect class="m" x="12" y="30" width="4" height="6"/><rect class="hl" x="112" y="29" width="46" height="2" rx="1"/>`,
 };
@@ -1346,7 +1349,7 @@ function renderQ(){
   if(q.t==="vs") return renderVs(q,kick,tm);
   if(q.t==="type") return renderType(q,kick,tm);
   if(q.t==="id"){
-    const w=WMAP[q.w], pool=shuffle(WEAPONS.filter(x=>!x.gen&&x.id!==w.id)).slice(0,3);
+    const w=WMAP[q.w], pool=shuffle(WEAPONS.filter(x=>!x.gen&&x.id!==w.id&&!sameLook(x,w))).slice(0,3);
     L.cur={t:"mc",a:[w.n,...pool.map(x=>x.n)],c:0,e:`${w.type} · ${w.country} · ${w.cal}. ${w.fact}`};
     L.order=shuffle([0,1,2,3]);
     frame(`${kick}<h1 class="l-title">${esc(q.q||"איזה נשק זה?")}</h1><div class="id-card">${silSvg(w,"sil")}</div>
@@ -1699,7 +1702,7 @@ function checkPart(timeout){
 
 /* ---- picture choice */
 function renderPic(q,kick,tm){
-  const w=WMAP[q.w], pool=shuffle(WEAPONS.filter(x=>!x.gen&&x.sil!==w.sil)).slice(0,3), all=[w,...pool];
+  const w=WMAP[q.w], pool=shuffle(WEAPONS.filter(x=>!x.gen&&x.sil!==w.sil&&!sameLook(x,w))).slice(0,3), all=[w,...pool];
   L.cur={t:"mc",a:all.map(x=>x.n),c:0,e:`${w.type} · ${w.country} · ${w.cal}. ${w.fact}`};
   L.order=shuffle([0,1,2,3]);
   frame(`${kick}<h1 class="l-title">איזו תמונה היא ${esc(w.n)}?</h1><div class="opts pic-grid">${L.order.map((ai,k)=>`<button class="opt pic" style="--d:${k}" data-a="${ai}"><span class="k">${k+1}</span>${silSvg(all[ai])}</button>`).join("")}</div>`,"בדיקה",true,"",tm);
