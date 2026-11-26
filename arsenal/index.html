@@ -934,6 +934,13 @@ body{font-size:16px}
 .hear-btn.on .hear-wave i{animation:wave .5s ease-in-out 4 alternate}.hear-btn.on .hear-wave i:nth-child(2){animation-delay:.12s}.hear-btn.on .hear-wave i:nth-child(3){animation-delay:.24s}
 @keyframes wave{to{height:26px}}
 .hear-name{text-align:center;font-weight:900;font-size:18px;margin:0 0 10px}
+.u-ban{position:fixed;z-index:70;inset-inline:0;top:70px;display:flex;justify-content:center;padding:0 16px;pointer-events:auto;animation:uBanIn .55s cubic-bezier(.3,1.5,.5,1)}
+.u-ban.bye{animation:uBanOut .4s ease-in forwards}
+.u-ban-in{display:flex;align-items:center;gap:12px;width:100%;max-width:440px;padding:14px 18px;border-radius:20px;background:var(--uc);box-shadow:0 6px 0 var(--ud),0 14px 30px rgb(0 0 0 / .25);color:#fff}
+.u-ban-in small{display:block;font-weight:900;opacity:.9;font-size:13px}.u-ban-in b{font-size:22px;display:block}.u-ban-in p{margin:2px 0 0;opacity:.92;font-size:13px}
+.u-ban-kd{width:64px;height:64px;flex:none}
+@keyframes uBanIn{from{transform:translateY(-140%) scale(.9);opacity:0}}
+@keyframes uBanOut{to{transform:translateY(-140%);opacity:0}}
 @media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
 </style>
 
@@ -1894,6 +1901,7 @@ function renderLearn(){
   if(jo){ renderLearn.scrolled=1; jo.scrollIntoView({block:"center",behavior:RM()?"auto":"smooth"});
     const isOpenAnim=jo.classList.contains("just-open");
     setTimeout(()=>{ burst(jo,isOpenAnim?["#FFC800","#58C21B","#1EA5F0","#FF9B1A"]:["#FFC800","#FFE27A"],isOpenAnim?24:14); isOpenAnim?sfx.streak():sfx.pop(); }, isOpenAnim?900:450); }
+  if(renderLearn.justOpen&&/:l0$/.test(renderLearn.justOpen)){ const f=FLAT.find(x=>x.key===renderLearn.justOpen); if(f) setTimeout(()=>unitBanner(f.u),1300); }
   renderLearn.justDone=renderLearn.justOpen=null;
   if(!renderLearn.scrolled){renderLearn.scrolled=1;const s=$(".start");if(s&&s.getBoundingClientRect().top>innerHeight*.7)s.scrollIntoView({block:"center"});}
 }
@@ -2761,6 +2769,17 @@ function buildRank(q){
   for(const w of shuffle(WEAPONS.filter(w=>!w.gen&&K.get(w)))){ const v=K.get(w); if(pick.every(x=>far(K.get(x),v))) pick.push(w); if(pick.length===n) break; }
   pick.sort((a,b)=>K.get(a)-K.get(b));
   q.items=pick.map(w=>w.n); q.q=K.q; q.e=pick.map(w=>`${w.n}: ${K.show(K.get(w))}`).join(" · ")+".";
+}
+
+/* ---- banner that slides in when a new unit opens on the path */
+function unitBanner(u){
+  const old=document.getElementById("uBan"); if(old&&old.parentNode) old.parentNode.removeChild(old);
+  const b=document.createElement("div"); b.id="uBan"; b.className="u-ban"; b.style.setProperty("--uc",u.c[0]); b.style.setProperty("--ud",u.c[1]);
+  b.setAttribute("role","status");
+  b.innerHTML=`<div class="u-ban-in">${mascot("happy","u-ban-kd")}<div><small>יחידה חדשה נפתחה!</small><b>${esc(u.title)}</b><p>${esc(u.sub||"")}</p></div></div>`;
+  document.body.appendChild(b); sfx.win(); confetti();
+  const close=()=>{ b.classList.add("bye"); setTimeout(()=>b.parentNode&&b.parentNode.removeChild(b),400); };
+  b.onclick=close; setTimeout(close,3200);
 }
 
 /* ---- spec questions built from the armory data: calibre, magazine, designer, mechanism */
