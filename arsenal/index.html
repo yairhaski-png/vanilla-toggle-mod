@@ -926,6 +926,14 @@ body{font-size:16px}
 .st-w svg{width:100%;height:auto}.st-w b{font-size:12px;line-height:1.2}.st-w small{font-weight:800;color:var(--muted)}
 .onb-show{width:100%;max-width:440px;margin:18px auto 0;border:2px solid var(--line);border-radius:18px;background:var(--soft);padding:10px;animation:popIn2 .5s cubic-bezier(.3,1.4,.5,1) .2s backwards}
 .onb-show svg{width:100%;height:auto;display:block}
+.hear-row{display:flex;flex-direction:column;align-items:center;gap:6px;margin:6px 0 12px}
+.hear-btn{display:flex;align-items:center;gap:10px;padding:10px 18px;border-radius:20px;border:2px solid var(--line);border-bottom-width:4px;background:var(--surface);cursor:pointer}
+.hear-btn:active{transform:translateY(2px);border-bottom-width:2px}
+.hear-kd{width:56px;height:56px}
+.hear-wave{display:flex;gap:4px;align-items:center;height:28px}.hear-wave i{width:6px;height:10px;border-radius:3px;background:var(--blue)}
+.hear-btn.on .hear-wave i{animation:wave .5s ease-in-out 4 alternate}.hear-btn.on .hear-wave i:nth-child(2){animation-delay:.12s}.hear-btn.on .hear-wave i:nth-child(3){animation-delay:.24s}
+@keyframes wave{to{height:26px}}
+.hear-name{text-align:center;font-weight:900;font-size:18px;margin:0 0 10px}
 @media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
 </style>
 
@@ -1309,6 +1317,7 @@ const COURSE = [
    {t:"mc", q:"מה אומר המספר ב'12 גאוג''?", a:["כמה כדורי עופרת בקוטר הקנה שוקלים יחד ליברה אחת","אורך הקנה באינצ'ים","כמה כדורים נכנסים במחסנית","משקל הרובה בקילו"], c:0, e:"שיטה ישנה מאוד: 12 כדורי עופרת בקוטר הקנה שוקלים ליברה (כ-450 גרם)."},
    {t:"tf", q:"בגאוג', מספר קטן יותר אומר קנה רחב יותר: 12 גאוג' רחב יותר מ-20 גאוג'.", c:true, e:"כי צריך פחות כדורים גדולים כדי להגיע לאותו משקל."},
    {t:"id", w:"benelli"},
+   {t:"hear", w:"moss500"},
    {t:"part", w:"moss500", p:"pump"},
    {t:"spec", w:"benelli", k:"act"},
    {t:"match", q:"התאם רובה ציד למנגנון", p:[["מוסברג 500","פאמפ"],["בנלי M4","חצי-אוטומטי"],["קנה כפול","שני קנים זה לצד זה"],["12 גאוג'","הקוטר הנפוץ ביותר"]]}
@@ -1389,6 +1398,7 @@ const COURSE = [
    {t:"id", w:"hk416"},
    {t:"spec", w:"ak47", k:"cal"},
    {t:"id", w:"ak12"},
+   {t:"hear", w:"ak12"},
    {t:"tf", q:"ה-AK-12 הוא היורש המודרני של ה-AK-74 בצבא רוסיה, והוא יורה את אותו כדור, 5.45×39 מ\"מ.", c:true, e:"הוא נכנס לשירות ב-2018, עם מסילות לאביזרים וקת מתקפלת."},
    {t:"rank", k:"rng"},
    {t:"spec", w:"m16", k:"act"},
@@ -1553,6 +1563,7 @@ const COURSE = [
    {t:"id", w:"garand", q:"איזה נשק זה?"},
    {t:"part", w:"garand", p:"recv"},
    {t:"id", w:"m14"},
+   {t:"hear", w:"garand"},
    {t:"mc", q:"מה ההבדל הבולט בין ה-M14 ל-M1 גאראנד?", a:["ל-M14 יש מחסנית נשלפת של 20 כדורים","ה-M14 הוא רובה בריח","ה-M14 יורה כדור 9 מ\"מ","לגאראנד יש כוונת טלסקופית"], c:0, e:"הגאראנד נטען במסרק של 8 כדורים מלמעלה. ה-M14 שמר על אותו מנגנון בסיסי, אבל עם מחסנית."},
    {t:"vs"},
    {t:"mc", q:"איזה רובה כינה הגנרל פטון 'כלי הקרב הגדול ביותר שנוצר'?", a:["M1 גאראנד","מאוזר 98","לי-אנפילד","AK-47"], c:0, e:"ה-M1 גאראנד היה רובה חצי-אוטומטי, יתרון גדול על רובי בריח במלחמת העולם השנייה."},
@@ -2149,6 +2160,7 @@ function renderQ(){
   if(q.t==="build") return renderBuild(q,kick,tm,bubble);
   if(q.t==="part") return renderPart(q,kick,tm);
   if(q.t==="pic") return renderPic(q,kick,tm);
+  if(q.t==="hear") return renderHear(q,kick,tm);
   if(q.t==="gap") return renderGap(q,kick,tm);
   if(q.t==="order") return renderOrder(q,kick,tm);
   if(q.t==="rank"){ buildRank(q); return renderOrder(q,kick,tm); }
@@ -2214,7 +2226,7 @@ function timeUp(){
 }
 function check(timeout){
   const q0=L.qs[L.i]; if(L.sel===null)return;
-  const q=(q0.t==="id"||q0.t==="pic"||q0.t==="vs"||q0.t==="flag"||q0.t==="odd"||q0.t==="spec"||q0.t==="peek")?L.cur:(q0.t==="gap"||q0.t==="story")?{...q0,t:"mc"}:q0;
+  const q=(q0.t==="id"||q0.t==="pic"||q0.t==="vs"||q0.t==="flag"||q0.t==="odd"||q0.t==="spec"||q0.t==="peek"||q0.t==="hear")?L.cur:(q0.t==="gap"||q0.t==="story")?{...q0,t:"mc"}:q0;
   const ok=!timeout&&(q.t==="mc"?L.sel===q.c:(L.sel===1)===q.c), right=q.t==="mc"?q.c:(q.c?1:0);
   if(q0.t==="id"&&ok) S.ids=(S.ids||0)+1;
   $$(".opts .opt").forEach(b=>{b.disabled=true;b.classList.remove("sel"); if(+b.dataset.a===right)b.classList.add("right"); else if(+b.dataset.a===L.sel)b.classList.add("wrong");});
@@ -2568,6 +2580,20 @@ function renderPic(q,kick,tm){
   frame(`${kick}<h1 class="l-title">איזו תמונה היא ${esc(w.n)}?</h1><div class="opts pic-grid">${L.order.map((ai,k)=>`<button class="opt pic" style="--d:${k}" data-a="${ai}"><span class="k">${k+1}</span>${silSvg(all[ai])}</button>`).join("")}</div>`,"בדיקה",true,"",tm);
   bindChoice();
 }
+/* ---- listen: Kasdi says a weapon's name out loud, pick its drawing (falls back to showing the name) */
+function renderHear(q,kick,tm){
+  const pool0=WEAPONS.filter(x=>!x.gen), w=q.w&&WMAP[q.w]?WMAP[q.w]:shuffle(pool0)[0];
+  const pool=shuffle(pool0.filter(x=>x.sil!==w.sil&&!sameLook(x,w))).slice(0,3), all=[w,...pool];
+  L.cur={t:"mc",a:all.map(x=>x.n),c:0,e:`${w.n} · ${w.type} · ${w.country}. ${w.fact}`}; L.curW=w.id;
+  L.order=shuffle([0,1,2,3]);
+  const spoken=w.n.replace(/\(.*?\)/g,"").trim();
+  frame(`${kick}<h1 class="l-title">${canSpeak?"הקשב ובחר את הנשק":`איזו תמונה היא ${esc(w.n)}?`}</h1>
+    ${canSpeak?`<div class="hear-row"><button class="hear-btn" id="hearGo" aria-label="השמע שוב">${mascot("happy","hear-kd")}<span class="hear-wave"><i></i><i></i><i></i></span></button><button class="linkish" id="hearShow">לא יכול להקשיב עכשיו</button></div><p class="hear-name" id="hearName" hidden>${esc(w.n)}</p>`:""}
+    <div class="opts pic-grid">${L.order.map((ai,k)=>`<button class="opt pic" style="--d:${k}" data-a="${ai}"><span class="k">${k+1}</span>${silSvg(all[ai])}</button>`).join("")}</div>`,"בדיקה",true,"",tm);
+  bindChoice();
+  if(canSpeak){ const play=()=>{ say(spoken); const b=$("#hearGo"); if(b){ b.classList.remove("on"); void b.offsetWidth; b.classList.add("on"); } };
+    $("#hearGo").onclick=play; $("#hearShow").onclick=()=>{ $("#hearName").hidden=false; $("#hearShow").hidden=true; }; setTimeout(play,350); }
+}
 /* ---- fill the gap: the chosen word flies into the sentence */
 function renderGap(q,kick,tm){
   const [a,b]=q.s.split("___"); L.order=shuffle(q.a.map((_,i)=>i));
@@ -2784,7 +2810,7 @@ const BLITZ_SEC=60;
 function blitzDelay(){ const d=(Date.now()-L.f.start)/1000; return d<0?`${-d}s`:`-${Math.min(BLITZ_SEC,d)}s`; }
 function startBlitz(){
   const quick=COURSE.flatMap(u=>u.lessons.flatMap(l=>l.qs)).filter(q=>["tf","mc","id","pic"].includes(q.t));
-  const gen=[...Array(20)].map((_,i)=>[{t:"flag"},{t:"vs"},{t:"odd"},{t:"spec",w:shuffle(WEAPONS)[0].id},{t:"peek"}][i%5]);
+  const gen=[...Array(20)].map((_,i)=>[{t:"flag"},{t:"vs"},{t:"odd"},{t:"spec",w:shuffle(WEAPONS)[0].id},{t:"peek"},{t:"hear"}][i%6]);
   startLesson({u:COURSE[0],ui:0,n:{t:"practice",name:"אתגר בזק"},key:"practice",blitz:1,start:Date.now()+1000},shuffle([...quick,...gen])); /* clock starts after the splash */
 }
 function finishBlitz(){
