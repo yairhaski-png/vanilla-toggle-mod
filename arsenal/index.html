@@ -888,6 +888,13 @@ body{font-size:16px}
 .arm-new{background:var(--blue);color:#fff;font-size:11px;font-weight:900;padding:2px 8px;border-radius:10px;animation:pulseNew 2s ease-in-out infinite}
 @keyframes pulseNew{50%{transform:scale(1.08)}}
 .dg-mags .mg{transform-box:fill-box;transform-origin:center bottom;animation:popIn2 .5s cubic-bezier(.3,1.6,.5,1) backwards;animation-delay:calc(.25s + var(--d)*.35s)}
+.dg-mz .fl1{transform-box:fill-box;transform-origin:right center;animation:mzFl 1.6s ease-out infinite}
+@keyframes mzFl{0%,10%{transform:scale(.2);opacity:0}20%{transform:scale(1);opacity:1}45%,100%{transform:scale(.6);opacity:0}}
+.dg-mz .gas circle{animation:mzGas 1.6s ease-out infinite}
+.dg-mz .gas circle:nth-child(1),.dg-mz .gas circle:nth-child(2){--dy:-14px}.dg-mz .gas circle:nth-child(3),.dg-mz .gas circle:nth-child(4){--dy:14px}
+@keyframes mzGas{0%,10%{transform:none;opacity:0}20%{opacity:.9}60%,100%{transform:translate(10px,var(--dy));opacity:0}}
+.dg-mz .rc{animation:mzRc 1.6s ease-out infinite}
+@keyframes mzRc{0%,10%{transform:none}22%{transform:translateX(5px)}40%,100%{transform:none}}
 @media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
 </style>
 
@@ -1191,6 +1198,15 @@ const COURSE = [
    {t:"rank", k:"kg"},
    {t:"match", q:"התאם סוג הזנה לנשק", p:[["מחסנית מעוקלת","AK-47"],["תוף","תומפסון"],["חגור","מאג"],["צינורית","רמינגטון 870"]]},
    {t:"spec", w:"fiveseven", k:"mag"}
+  ]},
+  { name:"הקנה ומה שבקצהו", qs:[
+   {t:"mc", q:"מה זה 'חריקה' (Rifling) בקנה?", a:["חריצים ספירליים בתוך הקנה שגורמים לקליע להסתובב","חור בצד הקנה שדרכו יוצאים גזים","הכוונת הקדמית שבקצה הקנה","קפיץ שמחזיר את הבריח"], c:0, e:"קליע שמסתובב טס יציב, כמו כדור פוטבול שנזרק בסיבוב."},
+   {t:"tf", q:"לרובה ציד (שוטגאן) רגיל יש קנה חלק, בלי חריקה.", c:true, e:"הוא יורה בדרך כלל הרבה כדוריות קטנות יחד, ולכן אין צורך לסובב אותן."},
+   {t:"mc", q:"למה לרובי צלפים יש בדרך כלל קנה ארוך?", a:["הגזים דוחפים את הקליע זמן רב יותר, ולכן הוא יוצא מהר יותר","כדי שייכנסו יותר כדורים","כדי שיהיה קל יותר לסחוב","כדי שיהיה אפשר לירות בלי כוונת"], c:0, e:"קליע מהיר יותר נופל פחות בדרך, ולכן מגיע רחוק ומדויק יותר."},
+   {t:"mc", q:"מה ההבדל בין מעצור לוע למדכא הבזק?", a:["מעצור לוע מקטין את הרתע, ומדכא הבזק מפזר את הלהבה","הם שני שמות לאותו חלק","מעצור לוע מגדיל את הטווח פי שניים","מדכא הבזק עוצר את הקליע"], c:0, e:"לבארט ול-AK-74 יש מעצורי לוע בולטים. ל-M16 ול-M4 יש מדכאי הבזק."},
+   {t:"part", w:"ak74", p:"brake"},
+   {t:"match", q:"התאם חלק לתפקיד", p:[["חריקה","מסובבת את הקליע"],["מעצור לוע","מקטין רתע"],["מדכא הבזק","מפזר להבה"],["קנה חלק","רובה ציד"]]},
+   {t:"part", w:"barrett", p:"brake"}
   ]}
  ]},
  { id:"works", c:["#FF9B1A","#DA7C00"], title:"איך נשק עובד", sub:"בריח, חצי-אוטומטי, גזים והדף", lessons:[
@@ -2810,7 +2826,17 @@ Object.assign(DIAGRAMS,{
  magtypes:{title:"חמש דרכים להזין כדורים",text:"מחסנית ישרה או מעוקלת נשלפת מהנשק. תוף מחזיק הרבה כדורים בספירלה. חגור הוא שרשרת כדורים בלי סוף. ומחסנית צינורית יושבת מתחת לקנה של רובה ציד.",
   svg:`<svg viewBox="0 0 320 130" class="dg dg-mags"><g class="mg" style="--d:0"><g transform="translate(276 52)"><rect x="-8" y="-24" width="16" height="44" rx="3" fill="#4A525B"/></g><text x="276" y="100" text-anchor="middle" font-weight="900">ישרה</text><text x="276" y="116" text-anchor="middle" font-size="9.5" opacity=".75">גלוק 17</text></g><g class="mg" style="--d:1"><g transform="translate(214 52)"><path d="M-8 -24h16l6 40q-8 6-18 2z" fill="#4A525B"/></g><text x="214" y="100" text-anchor="middle" font-weight="900">מעוקלת</text><text x="214" y="116" text-anchor="middle" font-size="9.5" opacity=".75">AK-47</text></g><g class="mg" style="--d:2"><g transform="translate(152 52)"><circle r="22" fill="#4A525B"/><circle r="15" fill="none" stroke="#D4A84B" stroke-width="5" stroke-dasharray="4 3"/><circle r="5" fill="#8C96A0"/></g><text x="152" y="100" text-anchor="middle" font-weight="900">תוף</text><text x="152" y="116" text-anchor="middle" font-size="9.5" opacity=".75">תומפסון</text></g><g class="mg" style="--d:3"><g transform="translate(90 52)"><g fill="#D4A84B"><rect x="-26" y="-6" width="6" height="18" rx="1.5" transform="rotate(-8 -23 3)"/><rect x="-17" y="-6" width="6" height="18" rx="1.5" transform="rotate(-5 -14 3)"/><rect x="-8" y="-6" width="6" height="18" rx="1.5" transform="rotate(-2 -5 3)"/><rect x="1" y="-6" width="6" height="18" rx="1.5" transform="rotate(1 4 3)"/><rect x="10" y="-6" width="6" height="18" rx="1.5" transform="rotate(4 13 3)"/><rect x="19" y="-6" width="6" height="18" rx="1.5" transform="rotate(7 22 3)"/></g></g><text x="90" y="100" text-anchor="middle" font-weight="900">חגור</text><text x="90" y="116" text-anchor="middle" font-size="9.5" opacity=".75">מאג, נגב</text></g><g class="mg" style="--d:4"><g transform="translate(30 52)"><rect x="-24" y="-4" width="48" height="9" rx="4" fill="#4A525B"/><rect x="-22" y="-2" width="44" height="5" rx="2.5" fill="#D4A84B" opacity=".7"/></g><text x="30" y="100" text-anchor="middle" font-weight="900">צינורית</text><text x="30" y="116" text-anchor="middle" font-size="9.5" opacity=".75">רמינגטון</text></g></svg>`},
 });
-const LESSON_DIAG={"parts:7":["magtypes","magazine"],"parts:6":["sights","reddot","scope"],"parts:2":["pt_tavor"],"parts:3":["pt_fal"],"parts:4":["pt_barrett"],"parts:5":["bolt"],"stories:3":["madmin"],"famous:0":["tl_classic"],"famous:1":["drum"],"terms:1":["indirect"],"shoot:1":["zero"],"israel:1":["irondome"],"terms:0":["caliber"],"history:1":["tl_ww"],"rifles:0":["akvsm16"],"heavy:0":["scope"],"history:0":["tl_world"],"israel:0":["tl_israel"],"gear:0":["armor"],"technique:0":["positions"],"pistols:1":["blowback"],"heavy:1":["belt"],"pistols:0":["revolver"],"shoot:0":["sights"],"gear:1":["reddot"],"parts:0":["magazine"],"parts:1":["cartridge","firing"],"works:0":["bolt"],"works:1":["gas"],"rifles:1":["bullpup"],"technique:1":["trajectory","rifling"]};
+Object.assign(DIAGRAMS,{
+ muzzle:{title:"מה יש בקצה הקנה",text:"מדכא הבזק (למעלה) מפזר את הלהבה שיוצאת מהלוע, כדי שלא תסנוור. מעצור לוע (למטה) מפנה חלק מהגזים לצדדים ואחורה, וכך הנשק נדחף פחות לאחור.",
+  svg:`<svg viewBox="0 0 320 150" class="dg dg-mz">
+   <rect x="120" y="30" width="170" height="12" rx="3" fill="#4A525B"/><g fill="#2A2F35"><rect x="96" y="27" width="26" height="18" rx="2"/><rect x="100" y="27" width="3" height="18" fill="#8C96A0"/><rect x="106" y="27" width="3" height="18" fill="#8C96A0"/><rect x="112" y="27" width="3" height="18" fill="#8C96A0"/></g>
+   <g class="fl1"><path d="M96 36l-22-12 6 12-6 12z" fill="#FFC800"/><path d="M96 36l-12-6 3 6-3 6z" fill="#FF9B1A"/></g>
+   <rect x="120" y="96" width="170" height="12" rx="3" fill="#4A525B"/><rect x="92" y="91" width="30" height="22" rx="3" fill="#2A2F35"/><rect x="100" y="91" width="5" height="22" fill="#8C96A0"/><rect x="110" y="91" width="5" height="22" fill="#8C96A0"/>
+   <g class="gas" fill="#B9C2CA"><circle cx="102" cy="86" r="5"/><circle cx="112" cy="84" r="4"/><circle cx="102" cy="118" r="5"/><circle cx="112" cy="120" r="4"/></g>
+   <g class="rc"><path d="M300 102h-0" /><path d="M294 102l14-7v14z" fill="#E0483B"/></g>
+   <g class="dg-lbl"><text x="205" y="22" text-anchor="middle">מדכא הבזק</text><text x="205" y="140" text-anchor="middle">מעצור לוע</text></g></svg>`},
+});
+const LESSON_DIAG={"parts:8":["rifling","muzzle"],"parts:7":["magtypes","magazine"],"parts:6":["sights","reddot","scope"],"parts:2":["pt_tavor"],"parts:3":["pt_fal"],"parts:4":["pt_barrett"],"parts:5":["bolt"],"stories:3":["madmin"],"famous:0":["tl_classic"],"famous:1":["drum"],"terms:1":["indirect"],"shoot:1":["zero"],"israel:1":["irondome"],"terms:0":["caliber"],"history:1":["tl_ww"],"rifles:0":["akvsm16"],"heavy:0":["scope"],"history:0":["tl_world"],"israel:0":["tl_israel"],"gear:0":["armor"],"technique:0":["positions"],"pistols:1":["blowback"],"heavy:1":["belt"],"pistols:0":["revolver"],"shoot:0":["sights"],"gear:1":["reddot"],"parts:0":["magazine"],"parts:1":["cartridge","firing"],"works:0":["bolt"],"works:1":["gas"],"rifles:1":["bullpup"],"technique:1":["trajectory","rifling"]};
 
 /* ---- teach first: cards built from the lesson's own content, shown before the questions */
 function teachCards(qs,key){
