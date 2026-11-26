@@ -1787,6 +1787,8 @@ const BADGES=[
   {n:"מזהה נשק",d:"זהה נכון 10 כלי נשק לפי הצללית",ic:"i-star",c:"#14B8A6",v:()=>S.ids||0,max:10},
   {n:"חוקר",d:"פתח 10 כרטיסים בנשקייה",ic:"i-book",c:"#8B5CF6",v:()=>(S.seen||[]).length,max:10},
   {n:"אספן",d:"פתח את הכרטיס של כל נשק בנשקייה",ic:"i-book",c:"#FFC800",v:()=>WEAPONS.filter(w=>(S.seen||[]).includes(w.id)).length,max:WEAPONS.length},
+  {n:"זיכרון של פיל",d:"5 שאלות שסיימו את כל שלבי החזרה המרווחת",ic:"i-check",c:"#14B8A6",v:()=>S.srsDone||0,max:5},
+  {n:"לוחם השבוע",d:"אסוף 3 פרסים של אתגר שבועי",ic:"i-trophy",c:"#8B5CF6",v:()=>S.wkClaims||0,max:3},
   {n:"מומחה חלקים",d:"10 מתוך 10 בתרגול זיהוי חלקים",ic:"i-star",c:"#14B8A6",v:()=>S.partsBest||0,max:10},
   ...COURSE.map(u=>({n:"בוגר: "+u.title,d:"סיים את כל היחידה",ic:"i-trophy",c:u.c[0],v:()=>+unitDone(u.id),max:1})),
   {n:"מפקד",d:"סיים את כל הקורס",ic:"i-trophy",c:"#FFC800",v:()=>lessonsDone(),max:LESSON_COUNT},
@@ -2397,7 +2399,7 @@ function questsCard(){ return `<div class="card"><h3>משימות יומיות <
 function bindClaims(){
   $$("[data-claim]").forEach(b=>b.onclick=()=>{ const q=qState(); if(q.claimed[b.dataset.claim])return; q.claimed[b.dataset.claim]=1; S.gems+=10; save();
     burst(b,["#1EA5F0","#84D8FF","#FFC800"],18); floatText(b,`+10 ${'<svg viewBox="0 0 24 24" width="20" height="20" style="fill:var(--gem)"><use href="#i-gem"/></svg>'}`,"var(--gem)"); sfx.win(); setTimeout(render,650); });
-  $$("[data-wclaim]").forEach(b=>b.onclick=()=>{ const w=wkState(), x=WEEKLY().find(x=>x.id===b.dataset.wclaim); if(!x||w.claimed[x.id]||x.v<x.max)return; w.claimed[x.id]=1; S.gems+=x.gems; save();
+  $$("[data-wclaim]").forEach(b=>b.onclick=()=>{ const w=wkState(), x=WEEKLY().find(x=>x.id===b.dataset.wclaim); if(!x||w.claimed[x.id]||x.v<x.max)return; w.claimed[x.id]=1; S.gems+=x.gems; S.wkClaims=(S.wkClaims||0)+1; save();
     burst(b,["#8B5CF6","#1EA5F0","#FFC800"],26); floatText(b,`+${x.gems} ${'<svg viewBox="0 0 24 24" width="20" height="20" style="fill:var(--gem)"><use href="#i-gem"/></svg>'}`,"var(--gem)"); sfx.streak(); setTimeout(render,650); });
 }
 function renderQuests(){
@@ -2519,7 +2521,7 @@ function noteAnswer(q0,ok,clear){
   const drop=()=>{ S.miss=S.miss.filter(x=>x!==r); delete S.srs[r]; };
   if(!ok){ if(!S.miss.includes(r)){ S.miss.push(r); if(S.miss.length>40){ delete S.srs[S.miss.shift()]; } } S.srs[r]={b:0,d:today()}; return; }
   if(!clear||!S.miss.includes(r)) return;
-  if(L&&L.f&&L.f.mist){ const e=S.srs[r]||{b:0}; e.b++; if(e.b>SRS_DAYS.length) drop(); else { e.d=addDays(today(),SRS_DAYS[e.b-1]); S.srs[r]=e; } }
+  if(L&&L.f&&L.f.mist){ const e=S.srs[r]||{b:0}; e.b++; if(e.b>SRS_DAYS.length){ drop(); S.srsDone=(S.srsDone||0)+1; } else { e.d=addDays(today(),SRS_DAYS[e.b-1]); S.srs[r]=e; } }
   else drop();
 }
 function startMistakes(){
