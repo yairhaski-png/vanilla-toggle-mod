@@ -865,6 +865,16 @@ body{font-size:16px}
 .cmp-tab th:first-child{width:22%}.cmp-tab td{width:39%;vertical-align:top}
 .cmp-tab td.win{color:var(--green);font-weight:900}.cmp-tab td.win::after{content:" ✓"}
 .cmp-note{font-size:12px;color:var(--muted);margin:8px 0 12px}
+.wotd-card{display:flex;align-items:center;gap:12px;width:100%;margin-top:14px;padding:12px 14px;border:2px solid var(--line);border-bottom-width:4px;border-radius:16px;background:linear-gradient(135deg,color-mix(in srgb,var(--gold) 18%,var(--surface)),var(--surface) 60%);color:var(--ink);font:inherit;text-align:start;cursor:pointer;animation:qIn .4s backwards}
+.wotd-card:active{transform:translateY(2px);border-bottom-width:2px}
+.wotd-sil{width:96px;flex:none}.wotd-sil svg{width:100%;height:auto;display:block}
+.wotd-card .t{flex:1;min-width:0;display:flex;flex-direction:column}
+.wotd-card small{color:#DA9A00;font-weight:900;font-size:12px;letter-spacing:.3px}
+.wotd-card b{font-size:17px}.wotd-card p{margin:0;color:var(--muted);font-size:13px}
+.wotd-gem{display:flex;align-items:center;gap:3px;padding:6px 10px;border-radius:12px;background:color-mix(in srgb,var(--gem, #1CB0F6) 14%,transparent);color:var(--gem, #1CB0F6);font-weight:900;animation:wiggle 2.4s ease-in-out infinite}
+.wotd-gem svg{width:18px;height:18px;fill:currentColor}
+.wotd-gem.got{background:color-mix(in srgb,var(--green) 16%,transparent);color:var(--green);animation:none}
+@keyframes wiggle{0%,80%,100%{transform:rotate(0)}85%{transform:rotate(-10deg)}90%{transform:rotate(10deg)}95%{transform:rotate(-5deg)}}
 @media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
 </style>
 
@@ -1640,7 +1650,8 @@ function renderLearn(){
     h+=`${mascot("happy","buddy")}</div></section>`.replace('class="kd happy buddy"',`class="kd happy buddy" style="${side>0?"left":"right"}:0"`);
   });
   h+=`<p class="path-end">${lessonsDone()===LESSON_COUNT?"סיימת את כל הקורס. אפשר לחזור לכל שלב ולצבור עוד XP.":"יחידות נוספות בדרך"}</p>`;
-  $("#main").innerHTML=mistakesCard()+blitzCard()+partsCard()+h;
+  $("#main").innerHTML=wotdCard()+mistakesCard()+blitzCard()+partsCard()+h;
+  $("#wotdGo").onclick=openWotd;
   const mg=$("#missGo"); if(mg) mg.onclick=startMistakes;
   $("#partsGo").onclick=startPartsDrill;
   $("#blitzGo").onclick=startBlitz;
@@ -2477,6 +2488,19 @@ function finishBlitz(){
   let v=0; const t=setInterval(()=>{ const e=$("#bs"); if(!e)return clearInterval(t); v=Math.min(score,v+1); e.textContent=v; if(v>=score)clearInterval(t); },70);
   sfx.win(); if(rec&&score>0) confetti();
 }
+/* ---- weapon of the day: same weapon for everyone on a given date, 5 gems the first time it is opened */
+function wotd(){ const d=Math.floor(new Date(today()).getTime()/864e5); const list=WEAPONS.filter(w=>!w.gen); return list[(d*7)%list.length]; }
+function wotdCard(){
+  const w=wotd(), got=S.wotd===today();
+  return `<button class="wotd-card" id="wotdGo"><div class="wotd-sil">${silSvg(w)}</div><div class="t"><small>נשק היום</small><b>${esc(w.n)}</b><p>${esc(w.type)} · ${esc(w.country)} · ${esc(w.year)}</p></div>
+    <span class="wotd-gem ${got?"got":""}">${got?ico("i-check"):ico("i-gem")+"<b>5</b>"}</span></button>`;
+}
+function openWotd(){
+  const w=wotd();
+  if(S.wotd!==today()){ S.wotd=today(); S.gems+=5; save(); sfx.win(); setTimeout(()=>toast("+5 יהלומים על נשק היום"),400); }
+  weaponSheet(w);
+}
+
 /* ---- parts drill: 10 quick part / label questions from every weapon */
 function partsCard(){
   return `<div class="miss-card parts-card"><svg viewBox="0 0 24 24"><use href="#i-star"/></svg><div class="t"><b>זיהוי חלקים</b><p>10 שאלות מהירות על חלקים של ${WEAPONS.length} נשקים${S.partsBest?` · השיא שלך: ${S.partsBest}/10`:""}</p></div><button class="btn teal" id="partsGo">תרגל</button></div>`;
