@@ -18,7 +18,7 @@ async function answer(){
   if(t==='match'){const ids=await p.$$eval('.pairs .c:first-child .opt',e=>e.map(x=>x.dataset.i));for(const i of ids){await p.click(`.pairs .opt[data-s=A][data-i="${i}"]`);await p.click(`.pairs .opt[data-s=B][data-i="${i}"]`);await p.waitForTimeout(340);}}
   else if(t==='build'){const ws=await p.evaluate(()=>{const q=L.qs[L.i].base;return q.a[q.c].split(/\s+/).filter(Boolean)});for(const w of ws){const idx=await p.evaluate(w=>L.tiles.findIndex((x,i)=>x===w&&!L.build.includes(i)),w);await p.click(`#bank .tile[data-t="${idx}"]`);}await p.click('#go');}
   else if(t==='part'){const k=await p.evaluate(()=>L.part);await p.click(`.hot[data-p="${k}"]`,{force:true});await p.click('#go');}
-  else if(t==='order'||t==='label'){const n=await p.evaluate(()=>L.qs[L.i].t==='label'?L.lab.length:L.qs[L.i].items.length);for(let i=0;i<n;i++)await p.click(`#obank .tile[data-o="${i}"]`);await p.click('#go');}
+  else if(t==='order'||t==='label'||t==='rank'){const n=await p.evaluate(()=>L.qs[L.i].t==='label'?L.lab.length:L.qs[L.i].items.length);for(let i=0;i<n;i++)await p.click(`#obank .tile[data-o="${i}"]`);await p.click('#go');}
   else if(t==='story'){let g=0;while(await p.evaluate(()=>!L.storyDone)&&g++<12){await p.click('#go');await p.waitForTimeout(40);}const c=await p.evaluate(()=>L.qs[L.i].c);await p.click(`.opts .opt[data-a="${c}"]`);await p.click('#go');}
   else if(t==='type'){const nm=await p.evaluate(()=>WMAP[L.qs[L.i].w].n);await p.fill('#typeIn',nm);await p.click('#go');}
   else{const v=await p.evaluate(()=>{const q=L.qs[L.i];return L.cur?L.cur.c:q.t==='gap'?q.c:q.t==='mc'?q.c:(q.c?1:0)});await p.click(`.opts .opt[data-a="${v}"]`);await p.click('#go');}

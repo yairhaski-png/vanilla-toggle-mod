@@ -1127,6 +1127,7 @@ const COURSE = [
    {t:"part", w:"barrett"},
    {t:"part", w:"mauser", p:"bhandle"},
    {t:"spec", w:"mauser", k:"act"},
+   {t:"rank", k:"year"},
    {t:"mc", q:"מה התפקיד של מעצור הלוע הגדול בקצה הקנה של הבארט?", a:["מפנה גזים לצדדים ומקטין את הרתע","מגדיל את הטווח","מסתיר את הרעש לגמרי","מחזיק את הדו-חצובה"], c:0, e:"בלי מעצור הלוע, הרתע של כדור 12.7 מ\"מ היה חזק מאוד ליורה."},
    {t:"part", w:"svd"},
    {t:"part", w:"rem700", p:"bhandle"},
@@ -1239,6 +1240,7 @@ const COURSE = [
    {t:"label", w:"m4"},
    {t:"id", w:"hk416"},
    {t:"spec", w:"ak47", k:"cal"},
+   {t:"rank", k:"rng"},
    {t:"spec", w:"m16", k:"act"},
    {t:"mc", q:"מה ההבדל העיקרי בין HK416 ל-M4?", a:["ב-HK416 הגזים דוחפים בוכנה, וב-M4 הם נכנסים ישר לבית המכלול","ל-HK416 יש קליבר גדול יותר","ה-HK416 הוא רובה בריח","ל-M4 אין מחסנית נשלפת"], c:0, e:"כך פחות פיח נכנס לתוך המכלול, והנשק צריך פחות ניקוי."},
    {t:"part", w:"scar", p:"stock"},
@@ -1305,6 +1307,7 @@ const COURSE = [
    {t:"id", w:"rem700"},
    {t:"id", w:"m249"},
    {t:"spec", w:"barrett", k:"cal"},
+   {t:"rank", k:"kg"},
    {t:"spec", w:"svd", k:"mag"},
    {t:"mc", q:"מהו הדרגונוב (SVD)?", a:["רובה צלפים סובייטי","מקלע כבד סובייטי","תת-מקלע רוסי","רובה סער פולני"], c:0, e:"נועד לקלע המחלקתי, שנותן ירי מדויק לטווח בינוני."},
    {t:"tf", q:"בירי לטווח ארוך, הצלף מתחשב ברוח ובמרחק.", c:true, e:"הקליע נופל בדרך ונסחף ברוח, ולכן מתקנים את הכיוון."},
@@ -1911,6 +1914,7 @@ function renderQ(){
   if(q.t==="pic") return renderPic(q,kick,tm);
   if(q.t==="gap") return renderGap(q,kick,tm);
   if(q.t==="order") return renderOrder(q,kick,tm);
+  if(q.t==="rank"){ buildRank(q); return renderOrder(q,kick,tm); }
   if(q.t==="label") return renderLabel(q,kick,tm);
   if(q.t==="vs") return renderVs(q,kick,tm);
   if(q.t==="type") return renderType(q,kick,tm);
@@ -1958,13 +1962,13 @@ function renderPairs(q,kick,tm){
     else { sfx.no(); m.miss=true; [a,b].forEach(x=>{x.classList.remove("sel");x.classList.add("wrong");setTimeout(()=>x.classList.remove("wrong"),450);}); }
   });
 }
-function onGo(){ if(L&&L.state==="moving") return; if(L&&L.state==="teach") return teachNext(); if(L&&L.state==="answer"&&L.qs[L.i].t==="story"&&!L.storyDone) return storyNext(); if(L.state==="answer"){ const t=L.qs[L.i].t; return t==="build"?checkBuild():t==="part"?checkPart():t==="order"?checkOrder():t==="label"?checkLabel():t==="type"?checkType():check(); } if(L.state==="checked")return advance(); if(L.state==="screens")return nextScreen(); closeLesson(); }
+function onGo(){ if(L&&L.state==="moving") return; if(L&&L.state==="teach") return teachNext(); if(L&&L.state==="answer"&&L.qs[L.i].t==="story"&&!L.storyDone) return storyNext(); if(L.state==="answer"){ const t=L.qs[L.i].t; return t==="build"?checkBuild():t==="part"?checkPart():t==="order"||t==="rank"?checkOrder():t==="label"?checkLabel():t==="type"?checkType():check(); } if(L.state==="checked")return advance(); if(L.state==="screens")return nextScreen(); closeLesson(); }
 function stopTimer(){ const t=$("#tbar"); if(t) t.style.animationPlayState="paused"; }
 function timeUp(){
   const q0=L.qs[L.i];
   if(q0.t==="build") return checkBuild(true);
   if(q0.t==="part") return checkPart(true);
-  if(q0.t==="order") return checkOrder(true);
+  if(q0.t==="order"||q0.t==="rank") return checkOrder(true);
   if(q0.t==="label") return checkLabel(true);
   if(q0.t==="type") return checkType(true);
   if(q0.t==="match"){ L.state="checked"; return feedback(false,"נגמר הזמן."); }
@@ -2418,6 +2422,21 @@ function renderFlag(q,kick,tm){
   frame(`${kick}<h1 class="l-title">מאיזו מדינה מגיע ${esc(w.n)}?</h1><div class="id-card">${silSvg(w,"sil")}</div>
     <div class="opts flag-grid">${L.order.map((ai,k)=>`<button class="opt flag-opt" style="--d:${k}" data-a="${ai}"><span class="k">${k+1}</span>${flagSvg(L.cur.a[ai])}<b>${esc(L.cur.a[ai])}</b></button>`).join("")}</div>`,"בדיקה",true,"",tm);
   bindChoice();
+}
+
+/* ---- rank: order weapons by weight or range, built fresh from the armory data each time */
+const RANK_KINDS={
+  kg:{q:"סדר מהקל לכבד",get:w=>vsNum(w.kg),show:v=>`${v} ק"ג`},
+  rng:{q:"סדר מהטווח הקצר לארוך",get:w=>vsNum(w.rng),show:v=>`${v} מ'`},
+  year:{q:"סדר מהישן לחדש",get:w=>/^\d{4}$/.test(w.year)?+w.year:null,show:v=>v},
+};
+function buildRank(q){
+  const k=RANK_KINDS[q.k]?q.k:shuffle(Object.keys(RANK_KINDS))[0], K=RANK_KINDS[k], n=q.n||4;
+  const far=(a,b)=>k==="year"?Math.abs(a-b)>=8:Math.max(a,b)/Math.min(a,b)>=1.25;
+  const pick=[];
+  for(const w of shuffle(WEAPONS.filter(w=>!w.gen&&K.get(w)))){ const v=K.get(w); if(pick.every(x=>far(K.get(x),v))) pick.push(w); if(pick.length===n) break; }
+  pick.sort((a,b)=>K.get(a)-K.get(b));
+  q.items=pick.map(w=>w.n); q.q=K.q; q.e=pick.map(w=>`${w.n}: ${K.show(K.get(w))}`).join(" · ")+".";
 }
 
 /* ---- spec questions built from the armory data: calibre, magazine, designer, mechanism */
