@@ -875,6 +875,15 @@ body{font-size:16px}
 .wotd-gem svg{width:18px;height:18px;fill:currentColor}
 .wotd-gem.got{background:color-mix(in srgb,var(--green) 16%,transparent);color:var(--green);animation:none}
 @keyframes wiggle{0%,80%,100%{transform:rotate(0)}85%{transform:rotate(-10deg)}90%{transform:rotate(10deg)}95%{transform:rotate(-5deg)}}
+.arm-col{border:2px solid var(--line);border-radius:16px;padding:12px 14px;margin:4px 0 12px}
+.arm-col-t{display:flex;justify-content:space-between;align-items:center;margin-bottom:8px}.arm-col-t span{font-weight:900;color:var(--gold, #FFC800)}
+.arm-col .pbar{height:14px}.arm-col .pbar i{background:linear-gradient(90deg,#FFC800,#FF9B1A)}
+.arm-col small{display:block;margin-top:6px;color:var(--muted);font-weight:700;font-size:12px}
+.arm-card{position:relative}
+.arm-got,.arm-new{position:absolute;top:8px;inset-inline-start:8px;z-index:1}
+.arm-got{width:22px;height:22px;border-radius:50%;background:var(--green);display:grid;place-items:center}.arm-got svg{width:14px;height:14px;fill:#fff}
+.arm-new{background:var(--blue);color:#fff;font-size:11px;font-weight:900;padding:2px 8px;border-radius:10px;animation:pulseNew 2s ease-in-out infinite}
+@keyframes pulseNew{50%{transform:scale(1.08)}}
 @media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
 </style>
 
@@ -1721,11 +1730,13 @@ function renderArmory(){
   const inGroup=ARM_GROUPS.find(g=>g[0]===armFilter)[1];
   const list=WEAPONS.filter(inGroup);
   $("#main").innerHTML=`<h1 class="page-title">נשקייה</h1><p class="page-sub">${WEAPONS.length} כלי נשק: נתונים, חלקים ועובדות. לחץ על כרטיס לפרטים.</p>
+   ${(()=>{const seen=WEAPONS.filter(w=>(S.seen||[]).includes(w.id)).length, pc=Math.round(seen/WEAPONS.length*100);
+     return `<div class="arm-col"><div class="arm-col-t"><b>האוסף שלך</b><span dir="ltr">${seen} / ${WEAPONS.length}</span></div><div class="pbar"><i style="width:${pc}%"></i></div>${seen<WEAPONS.length?`<small>פתח כרטיס של נשק כדי להוסיף אותו לאוסף</small>`:`<small>אספת את כל הנשקים!</small>`}</div>`;})()}
    <div class="arm-search">${ico("i-search")}<input id="armQ" type="search" placeholder="חפש נשק, מדינה או קליבר" value="${esc(armQuery)}" autocomplete="off"></div>
    <div class="chips">${ARM_GROUPS.map(([t,f])=>`<button class="chip" aria-pressed="${t===armFilter}" data-f="${esc(t)}">${esc(t)} <span class="chip-n">${WEAPONS.filter(f).length}</span></button>`).join("")}</div>
    <p class="arm-empty" id="armEmpty" hidden>לא נמצא נשק כזה. נסה מילה אחרת.</p>
    <div class="arm-grid">${list.map(w=>`<button class="arm-card" data-w="${w.id}" data-q="${esc((w.n+" "+w.id+" "+w.country+" "+w.cal+" "+w.type).toLowerCase())}"><div class="sil-box">${silSvg(w)}${w.gen?`<span class="gen">איור כללי</span>`:""}</div>
-     <div class="arm-meta"><b>${esc(w.n)}</b><small>${esc(w.type)} · ${esc(w.country)} · ${esc(w.year)}</small><span class="cal">${esc(w.cal)}</span></div></button>`).join("")}</div>`;
+     ${(S.seen||[]).includes(w.id)?`<span class="arm-got">${ico("i-check")}</span>`:`<span class="arm-new">חדש</span>`}<div class="arm-meta"><b>${esc(w.n)}</b><small>${esc(w.type)} · ${esc(w.country)} · ${esc(w.year)}</small><span class="cal">${esc(w.cal)}</span></div></button>`).join("")}</div>`;
   $$(".chip").forEach(b=>b.onclick=()=>{armFilter=b.dataset.f;sfx.tap();renderArmory();});
   $$(".arm-card").forEach(b=>b.onclick=()=>weaponSheet(WMAP[b.dataset.w]));
   const applyQ=()=>{ const q=armQuery.trim().toLowerCase(); let n=0;
