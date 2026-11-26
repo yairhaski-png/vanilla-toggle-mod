@@ -1236,6 +1236,8 @@ const COURSE = [
    {t:"id", w:"m4"},
    {t:"label", w:"m4"},
    {t:"id", w:"hk416"},
+   {t:"spec", w:"ak47", k:"cal"},
+   {t:"spec", w:"m16", k:"act"},
    {t:"mc", q:"מה ההבדל העיקרי בין HK416 ל-M4?", a:["ב-HK416 הגזים דוחפים בוכנה, וב-M4 הם נכנסים ישר לבית המכלול","ל-HK416 יש קליבר גדול יותר","ה-HK416 הוא רובה בריח","ל-M4 אין מחסנית נשלפת"], c:0, e:"כך פחות פיח נכנס לתוך המכלול, והנשק צריך פחות ניקוי."},
    {t:"part", w:"scar", p:"stock"},
    {t:"vs"},
@@ -1273,6 +1275,8 @@ const COURSE = [
    {t:"part", w:"mp7", p:"grip"},
    {t:"tf", q:"ה-MP7 יורה כדור מיוחד בקוטר 4.6 מ\"מ, שתוכנן במיוחד בשבילו.", c:true, e:"הכדור קטן ומהיר, וכך הנשק קל וקצר אבל עם טווח של כ-200 מטר."},
    {t:"id", w:"p320"},
+   {t:"spec", w:"glock17", k:"mag"},
+   {t:"spec", w:"uzi", k:"by"},
    {t:"id", w:"ppk"},
    {t:"mc", q:"איזו דמות קולנוע מפורסמת בזכות אקדח וולטר PPK?", a:["ג'יימס בונד","רמבו","האיש הדגול","אינדיאנה ג'ונס"], c:0, e:"בספרים ובסרטים, בונד קיבל את ה-PPK כאקדח קטן שקל להסתיר מתחת לחליפה."},
    {t:"part", w:"scorpion", p:"mag"},
@@ -1297,6 +1301,8 @@ const COURSE = [
    {t:"id", w:"svd", q:"איזה נשק זה?"},
    {t:"id", w:"rem700"},
    {t:"id", w:"m249"},
+   {t:"spec", w:"barrett", k:"cal"},
+   {t:"spec", w:"svd", k:"mag"},
    {t:"mc", q:"מהו הדרגונוב (SVD)?", a:["רובה צלפים סובייטי","מקלע כבד סובייטי","תת-מקלע רוסי","רובה סער פולני"], c:0, e:"נועד לקלע המחלקתי, שנותן ירי מדויק לטווח בינוני."},
    {t:"tf", q:"בירי לטווח ארוך, הצלף מתחשב ברוח ובמרחק.", c:true, e:"הקליע נופל בדרך ונסחף ברוח, ולכן מתקנים את הכיוון."},
    {t:"mc", q:"מה התפקיד של הדו-רגלי (Bipod)?", a:["לייצב את הנשק בירי משכיבה","להקטין את הרתע בכתף","לאפשר ירי מהמותן בזמן תנועה","לשמש כידית נשיאה"], c:0, e:"יציבות היא חצי מהדיוק."}
@@ -1906,6 +1912,7 @@ function renderQ(){
   if(q.t==="vs") return renderVs(q,kick,tm);
   if(q.t==="type") return renderType(q,kick,tm);
   if(q.t==="flag") return renderFlag(q,kick,tm);
+  if(q.t==="spec") return renderSpec(q,kick,tm);
   if(q.t==="odd") return renderOdd(q,kick,tm);
   if(q.t==="story") return renderStory(q,kick);
   if(q.t==="id"){
@@ -1962,7 +1969,7 @@ function timeUp(){
 }
 function check(timeout){
   const q0=L.qs[L.i]; if(L.sel===null)return;
-  const q=(q0.t==="id"||q0.t==="pic"||q0.t==="vs"||q0.t==="flag"||q0.t==="odd")?L.cur:(q0.t==="gap"||q0.t==="story")?{...q0,t:"mc"}:q0;
+  const q=(q0.t==="id"||q0.t==="pic"||q0.t==="vs"||q0.t==="flag"||q0.t==="odd"||q0.t==="spec")?L.cur:(q0.t==="gap"||q0.t==="story")?{...q0,t:"mc"}:q0;
   const ok=!timeout&&(q.t==="mc"?L.sel===q.c:(L.sel===1)===q.c), right=q.t==="mc"?q.c:(q.c?1:0);
   if(q0.t==="id"&&ok) S.ids=(S.ids||0)+1;
   $$(".opts .opt").forEach(b=>{b.disabled=true;b.classList.remove("sel"); if(+b.dataset.a===right)b.classList.add("right"); else if(+b.dataset.a===L.sel)b.classList.add("wrong");});
@@ -2407,6 +2414,25 @@ function renderFlag(q,kick,tm){
   L.order=shuffle([0,1,2,3]);
   frame(`${kick}<h1 class="l-title">מאיזו מדינה מגיע ${esc(w.n)}?</h1><div class="id-card">${silSvg(w,"sil")}</div>
     <div class="opts flag-grid">${L.order.map((ai,k)=>`<button class="opt flag-opt" style="--d:${k}" data-a="${ai}"><span class="k">${k+1}</span>${flagSvg(L.cur.a[ai])}<b>${esc(L.cur.a[ai])}</b></button>`).join("")}</div>`,"בדיקה",true,"",tm);
+  bindChoice();
+}
+
+/* ---- spec questions built from the armory data: calibre, magazine, designer, mechanism */
+const SPEC_KINDS={
+  cal:{q:w=>`איזו תחמושת יורה ${w.n}?`,ok:w=>true,key:v=>String(v).replace(/[^\d.×]/g,"").slice(0,7)},
+  mag:{q:w=>`כמה כדורים יש במחסנית הרגילה של ${w.n}?`,ok:w=>/^\d+$/.test(w.mag),key:v=>String(v)},
+  by:{q:w=>`מי תכנן את ${w.n}?`,ok:w=>true,key:v=>String(v).split(/[ (]/)[0],skip:(x,w)=>x.country===w.country},
+  act:{q:w=>`איך עובד המנגנון של ${w.n}?`,ok:w=>true,key:v=>String(v).split(/[ ,]/)[0]},
+};
+function renderSpec(q,kick,tm){
+  const w=WMAP[q.w], kinds=Object.keys(SPEC_KINDS).filter(k=>SPEC_KINDS[k].ok(w)), k=kinds.includes(q.k)?q.k:shuffle(kinds)[0], K=SPEC_KINDS[k];
+  let wrong;
+  if(k==="mag"){ const n=+w.mag; wrong=shuffle([5,6,7,8,10,13,15,17,20,25,30,40,50,100].filter(x=>x!==n).sort((a,b)=>Math.abs(a-n)-Math.abs(b-n)).slice(0,5)).slice(0,3).map(String); }
+  else { const seen=new Set([K.key(w[k])]); wrong=[]; for(const x of shuffle(WEAPONS)){ const kk=K.key(x[k]); if(!x[k]||seen.has(kk)||(K.skip&&K.skip(x,w))) continue; seen.add(kk); wrong.push(x[k]); if(wrong.length===3) break; } }
+  L.cur={t:"mc",a:[w[k],...wrong],c:0,e:`${w.n}: ${w.cal} · מחסנית ${w.mag} · ${w.act} · ${w.by}.`};
+  L.order=shuffle([0,1,2,3]);
+  frame(`${kick}<h1 class="l-title">${esc(K.q(w))}</h1><div class="id-card">${silSvg(w,"sil")}</div>
+    <div class="opts">${L.order.map((ai,i)=>optBtn(ai,i,L.cur.a[ai])).join("")}</div>`,"בדיקה",true,"",tm);
   bindChoice();
 }
 
