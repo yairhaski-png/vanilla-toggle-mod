@@ -1579,6 +1579,8 @@ const BADGES=[
   {n:"מלא אנרגיה",d:"צבור 300 XP",ic:"i-bolt",c:"#FFC800",v:()=>S.xp,max:300},
   {n:"מזהה נשק",d:"זהה נכון 10 כלי נשק לפי הצללית",ic:"i-star",c:"#14B8A6",v:()=>S.ids||0,max:10},
   {n:"חוקר",d:"פתח 10 כרטיסים בנשקייה",ic:"i-book",c:"#8B5CF6",v:()=>(S.seen||[]).length,max:10},
+  {n:"אספן",d:"פתח את הכרטיס של כל נשק בנשקייה",ic:"i-book",c:"#FFC800",v:()=>WEAPONS.filter(w=>(S.seen||[]).includes(w.id)).length,max:WEAPONS.length},
+  {n:"מומחה חלקים",d:"10 מתוך 10 בתרגול זיהוי חלקים",ic:"i-star",c:"#14B8A6",v:()=>S.partsBest||0,max:10},
   ...COURSE.map(u=>({n:"בוגר: "+u.title,d:"סיים את כל היחידה",ic:"i-trophy",c:u.c[0],v:()=>+unitDone(u.id),max:1})),
   {n:"מפקד",d:"סיים את כל הקורס",ic:"i-trophy",c:"#FFC800",v:()=>lessonsDone(),max:LESSON_COUNT},
 ];
