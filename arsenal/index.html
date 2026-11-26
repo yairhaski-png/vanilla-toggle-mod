@@ -899,6 +899,8 @@ body{font-size:16px}
 @keyframes stkFold{0%,20%{transform:none}45%,70%{transform:rotate(180deg)}95%,100%{transform:none}}
 .dg-stk .slide{animation:stkSlide 4s ease-in-out infinite}
 @keyframes stkSlide{0%,20%{transform:none}45%,70%{transform:translateX(-22px)}95%,100%{transform:none}}
+.dg-pdw .pc{animation:pcIn .5s cubic-bezier(.3,1.4,.5,1) backwards;animation-delay:calc(.2s + var(--d)*.3s)}
+@keyframes pcIn{from{opacity:0;transform:translateX(30px)}}
 @media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
 </style>
 
@@ -1009,15 +1011,15 @@ const WEAPONS=[
 
  {id:"python",n:"קולט פייתון",sil:"python",type:"אקדח תופי",country:"ארה\"ב",year:"1955",by:"קולט",cal:".357 מגנום",act:"תופי, פעולה כפולה",mag:"6 (בתוף)",rng:"כ-50 מ'",kg:"כ-1.2 ק\"ג",fact:"מפורסם בזכות הדק חלק במיוחד ובזכות הפס המחורר שמעל הקנה. קולט החזירה אותו לייצור ב-2020."},
  {id:"p90",n:"FN P90",sil:"p90",type:"נשק הגנה אישי",country:"בלגיה",year:"1990",by:"FN Herstal",cal:"5.7×28 מ\"מ",act:"הדף, בריח סגור",mag:"50 (מעל הנשק)",rng:"כ-200 מ'",kg:"כ-2.6 ק\"ג (ריק)",fact:"המחסנית השקופה מונחת לרוחב מעל הנשק, והתרמילים נפלטים כלפי מטה, כך שהוא נוח גם לשמאליים."},
- {id:"hk416",n:"HK416",sil:"hk416",type:"רובה סער",country:"גרמניה",year:"2004",by:"הקלר ושוך",cal:"5.56×45 מ\"מ נאט\"ו",act:"בוכנת גזים קצרה, בריח מסתובב",mag:"30",rng:"כ-500 מ'",kg:"כ-3.5 ק\"ג (ריק)",fact:"נראה כמו M4, אבל הגזים לא נכנסים לתוך בית המכלול. הם דוחפים בוכנה קטנה, ולכן הנשק נשאר נקי יותר. חיל הנחתים האמריקני משתמש בגרסה שלו בשם M27."},
+ {id:"hk416",n:"HK416",sil:"hk416",type:"רובה סער",country:"גרמניה",year:"2004",by:"הקלר אנד קוך",cal:"5.56×45 מ\"מ נאט\"ו",act:"בוכנת גזים קצרה, בריח מסתובב",mag:"30",rng:"כ-500 מ'",kg:"כ-3.5 ק\"ג (ריק)",fact:"נראה כמו M4, אבל הגזים לא נכנסים לתוך בית המכלול. הם דוחפים בוכנה קטנה, ולכן הנשק נשאר נקי יותר. חיל הנחתים האמריקני משתמש בגרסה שלו בשם M27."},
  {id:"scar",n:"FN SCAR-L",sil:"scar",type:"רובה סער",country:"בלגיה",year:"2009",by:"FN הרסטל",cal:"5.56×45 מ\"מ נאט\"ו",act:"בוכנת גזים קצרה, בריח מסתובב",mag:"30",rng:"כ-500 מ'",kg:"כ-3.3 ק\"ג (ריק)",fact:"פותח בשביל כוחות המבצעים המיוחדים של ארה\"ב. הקת מתקפלת הצידה, ויש גם גרסה כבדה, SCAR-H, שיורה כדור 7.62 מ\"מ."},
- {id:"mp7",n:"HK MP7",sil:"mp7",type:"נשק הגנה אישי",country:"גרמניה",year:"2001",by:"הקלר ושוך",cal:"4.6×30 מ\"מ",act:"בוכנת גזים קצרה",mag:"20, 30 או 40",rng:"כ-200 מ'",kg:"כ-1.9 ק\"ג (ריק)",fact:"קטן כמעט כמו אקדח גדול, ויורה כדור קטן ומהיר שתוכנן במיוחד בשבילו. המחסנית נכנסת לתוך ידית האחיזה, כמו באקדח."},
+ {id:"mp7",n:"HK MP7",sil:"mp7",type:"נשק הגנה אישי",country:"גרמניה",year:"2001",by:"הקלר אנד קוך",cal:"4.6×30 מ\"מ",act:"בוכנת גזים קצרה",mag:"20, 30 או 40",rng:"כ-200 מ'",kg:"כ-1.9 ק\"ג (ריק)",fact:"קטן כמעט כמו אקדח גדול, ויורה כדור קטן ומהיר שתוכנן במיוחד בשבילו. המחסנית נכנסת לתוך ידית האחיזה, כמו באקדח."},
  {id:"p320",n:"SIG P320",sil:"p320",type:"אקדח",country:"ארה\"ב",year:"2014",by:"SIG Sauer",cal:"9×19 מ\"מ",act:"רתע קצר",mag:"17",rng:"כ-50 מ'",kg:"כ-0.8 ק\"ג (ריק)",fact:"בתוכו יש יחידת מתכת אחת עם המספר הסידורי, וכל השאר מתחלף: אפשר להעביר אותה למסגרת ולמגלשה בגודל אחר. צבא ארה\"ב אימץ אותו ב-2017 בשם M17."},
  {id:"ppk",n:"וולטר PPK",sil:"ppk",type:"אקדח",country:"גרמניה",year:"1931",by:"קרל וולטר",cal:"‎.380 ACP (9×17 מ\"מ) או 7.65 מ\"מ",act:"הדף פשוט",mag:"6-7",rng:"כ-25 מ'",kg:"כ-0.6 ק\"ג",fact:"אקדח קטן שתוכנן להסתרה, והתפרסם בתור האקדח של ג'יימס בונד. הקנה שלו קבוע, והמגלשה נעה סביבו."},
  {id:"scorpion",n:"CZ סקורפיון EVO 3",sil:"scorpion",type:"תת-מקלע",country:"צ'כיה",year:"2009",by:"צ'סקה זברויובקה (CZ)",cal:"9×19 מ\"מ",act:"הדף",mag:"30",rng:"כ-150 מ'",kg:"כ-2.8 ק\"ג (ריק)",fact:"היורש של הסקורפיון הצ'כי הישן מ-1961. עשוי ברובו מפולימר, וידית הדריכה והנצרה נגישות משני הצדדים."},
  {id:"vector",n:"KRISS Vector",sil:"vector",type:"תת-מקלע",country:"ארה\"ב",year:"2009",by:"KRISS",cal:"‎.45 ACP",act:"הדף מושהה (מערכת Super V)",mag:"13 או 25",rng:"כ-100 מ'",kg:"כ-2.7 ק\"ג (ריק)",fact:"המראה המוזר שלו נובע מהמנגנון: חלק כבד בתוכו נע כלפי מטה ולא רק אחורה, וכך הקנה קופץ פחות למעלה בכל ירייה."},
  {id:"fiveseven",n:"FN Five-seveN",sil:"fiveseven",type:"אקדח",country:"בלגיה",year:"1998",by:"FN הרסטל",cal:"5.7×28 מ\"מ",act:"הדף מושהה",mag:"20",rng:"כ-50 מ'",kg:"כ-0.6 ק\"ג (ריק)",fact:"יורה את אותו כדור קטן ומהיר של ה-P90. בגלל שהכדור דק, נכנסים 20 כדורים למחסנית, יותר מברוב האקדחים."},
- {id:"g36",n:"HK G36",sil:"g36",type:"רובה סער",country:"גרמניה",year:"1997",by:"הקלר ושוך",cal:"5.56×45 מ\"מ נאט\"ו",act:"בוכנת גזים קצרה, בריח מסתובב",mag:"30",rng:"כ-500 מ'",kg:"כ-3.6 ק\"ג (ריק)",fact:"עשוי ברובו מפולימר. המחסניות שקופות, כך שרואים כמה כדורים נשארו, ויש בהן תפסים שמחברים שתי מחסניות זו לזו."},
+ {id:"g36",n:"HK G36",sil:"g36",type:"רובה סער",country:"גרמניה",year:"1997",by:"הקלר אנד קוך",cal:"5.56×45 מ\"מ נאט\"ו",act:"בוכנת גזים קצרה, בריח מסתובב",mag:"30",rng:"כ-500 מ'",kg:"כ-3.6 ק\"ג (ריק)",fact:"עשוי ברובו מפולימר. המחסניות שקופות, כך שרואים כמה כדורים נשארו, ויש בהן תפסים שמחברים שתי מחסניות זו לזו."},
  {id:"famas",n:"FAMAS",sil:"famas",type:"רובה סער",country:"צרפת",year:"1978",by:"MAS (סנט אטיין)",cal:"5.56×45 מ\"מ נאט\"ו",act:"הדף מושהה במנוף",mag:"25",rng:"כ-300 מ'",kg:"כ-3.6 ק\"ג",fact:"רובה בולפאפ שהחיילים הצרפתים כינו 'החצוצרה' (Le Clairon) בגלל צורתו. מ-2017 צבא צרפת מחליף אותו ב-HK416."},
  {id:"m4",n:"M4A1",sil:"m4",type:"קרבין",country:"ארה\"ב",year:"1994",by:"קולט",cal:"5.56×45 מ\"מ נאט\"ו",act:"גזים ישירים, בריח מסתובב",mag:"30",rng:"כ-500 מ'",kg:"כ-3 ק\"ג (ריק)",fact:"גרסה קצרה של ה-M16: קנה של 368 מ\"מ, קת נשלפת ומסילות להרכבת כוונות ואביזרים."},
 
@@ -1401,6 +1403,15 @@ const COURSE = [
    {t:"id", w:"beretta92"},
    {t:"tf", q:"תת-מקלע יורה בדרך כלל תחמושת של אקדח.", c:true, e:"זה מה שמבדיל אותו מרובה סער, שיורה תחמושת רובה."},
    {t:"match", q:"התאם נשק למדינה", p:[["עוזי","ישראל"],["MP5","גרמניה"],["גלוק","אוסטריה"],["יריחו","ישראל (מבוסס על CZ 75)"]]}
+  ]},
+  { name:"תת-מקלעים ו-PDW", qs:[
+   {t:"mc", q:"מה ההבדל העיקרי בין תת-מקלע רגיל לנשק הגנה אישית (PDW) כמו ה-P90?", a:["ה-PDW יורה כדור קטן ומהיר במיוחד שתוכנן בשבילו","ה-PDW יורה רק ירייה אחת בכל פעם","תת-מקלע יורה כדורי רובה","אין שום הבדל"], c:0, e:"תת-מקלעים רגילים, כמו ה-MP5 והעוזי, יורים כדורי אקדח."},
+   {t:"tf", q:"ה-MP5 יורה את אותו כדור כמו אקדח גלוק 17: ‏9×19 מ\"מ.", c:true, e:"זה הכדור הנפוץ בעולם לאקדחים ולתת-מקלעים."},
+   {t:"spec", w:"mp5", k:"by"},
+   {t:"mc", q:"איזה תת-מקלע ישראלי מפורסם בכך שהמחסנית נכנסת דרך ידית האחיזה?", a:["עוזי","גליל","נגב","יריחו"], c:0, e:"כך הנשק קצר יותר, וקל למצוא את המחסנית גם בחושך."},
+   {t:"match", q:"התאם נשק לכדור שלו", p:[["P90","5.7×28 מ\"מ"],["MP7","4.6×30 מ\"מ"],["MP5","9×19 מ\"מ"],["KRISS Vector","‎.45 ACP"]]},
+   {t:"part", w:"vector", p:"mag"},
+   {t:"rank", k:"kg"}
   ]}
  ]},
  { id:"heavy", c:["#FF5A5A","#DB3E3E"], title:"צלפים ומקלעים", sub:"בארט, דרגונוב, נגב ומאג", lessons:[
@@ -2918,7 +2929,11 @@ Object.assign(DIAGRAMS,{
  tl_musket:{title:"איך התפתחה ההצתה",text:"כל המצאה פתרה בעיה של הקודמת: פתיל שכבה בגשם, צור שהחטיא, ועד תרמיל מתכת שבו הכדור, אבק השריפה והפיקה נמצאים יחד.",
   svg:timelineSvg([["1450","פתיל"],["1610","צור"],["1820","פיקה"],["1849","כדור מיניה"],["1866","תרמיל מתכת"],["1886","ללא עשן"]])},
 });
-const LESSON_DIAG={"history:2":["tl_musket","cartridge"],"israel:2":["tl_idf"],"works:2":["revolver","blowback"],"parts2:3":["stocks","bullpup"],"parts2:2":["rifling","muzzle"],"parts2:1":["magtypes","magazine"],"parts2:0":["sights","reddot","scope"],"parts:2":["pt_tavor"],"parts:3":["pt_fal"],"parts:4":["pt_barrett"],"parts:5":["bolt"],"stories:3":["madmin"],"famous:0":["tl_classic"],"famous:1":["drum"],"terms:1":["indirect"],"shoot:1":["zero"],"israel:1":["irondome"],"terms:0":["caliber"],"history:1":["tl_ww"],"rifles:0":["akvsm16"],"heavy:0":["scope"],"history:0":["tl_world"],"israel:0":["tl_israel"],"gear:0":["armor"],"technique:0":["positions"],"pistols:1":["blowback"],"heavy:1":["belt"],"pistols:0":["revolver"],"shoot:0":["sights"],"gear:1":["reddot"],"parts:0":["magazine"],"parts:1":["cartridge","firing"],"works:0":["bolt"],"works:1":["gas"],"rifles:1":["bullpup"],"technique:1":["trajectory","rifling"]};
+Object.assign(DIAGRAMS,{
+ pdwcal:{title:"שלושה כדורים, אותו קנה מידה",text:"כדור 9 מ\"מ של אקדח קצר ועבה. הכדורים של ה-MP7 וה-P90 דקים, ארוכים ומהירים יותר. הם נועדו לנשקים קטנים שיורים חזק יותר מאקדח.",
+  svg:`<svg viewBox="0 0 320 130" class="dg dg-pdw"><g class="pc" style="--d:0"><rect x="243.0" y="9.1" width="57.0" height="29.7" rx="2" fill="#D4A84B"/><path d="M243.0 10.5h-14.4q-17.7 13.5 0 27.0h14.4z" fill="#B87333"/><text x="70" y="25" text-anchor="middle" direction="ltr" font-weight="900">9×19</text><text x="70" y="39" text-anchor="middle" font-size="10" opacity=".75">עוזי, גלוק</text></g><g class="pc" style="--d:1"><rect x="210.0" y="54.0" width="90.0" height="24.0" rx="2" fill="#D4A84B"/><path d="M210.0 59.1h-10.8q-13.2 6.9 0 13.8h10.8z" fill="#B87333"/><text x="70" y="67" text-anchor="middle" direction="ltr" font-weight="900">4.6×30</text><text x="70" y="81" text-anchor="middle" font-size="10" opacity=".75">MP7</text></g><g class="pc" style="--d:2"><rect x="213.3" y="96.2" width="86.7" height="23.7" rx="2" fill="#D4A84B"/><path d="M213.3 99.5h-15.7q-19.1 8.6 0 17.1h15.7z" fill="#B87333"/><text x="70" y="109" text-anchor="middle" direction="ltr" font-weight="900">5.7×28</text><text x="70" y="123" text-anchor="middle" font-size="10" opacity=".75">P90</text></g></svg>`},
+});
+const LESSON_DIAG={"pistols:2":["pdwcal"],"history:2":["tl_musket","cartridge"],"israel:2":["tl_idf"],"works:2":["revolver","blowback"],"parts2:3":["stocks","bullpup"],"parts2:2":["rifling","muzzle"],"parts2:1":["magtypes","magazine"],"parts2:0":["sights","reddot","scope"],"parts:2":["pt_tavor"],"parts:3":["pt_fal"],"parts:4":["pt_barrett"],"parts:5":["bolt"],"stories:3":["madmin"],"famous:0":["tl_classic"],"famous:1":["drum"],"terms:1":["indirect"],"shoot:1":["zero"],"israel:1":["irondome"],"terms:0":["caliber"],"history:1":["tl_ww"],"rifles:0":["akvsm16"],"heavy:0":["scope"],"history:0":["tl_world"],"israel:0":["tl_israel"],"gear:0":["armor"],"technique:0":["positions"],"pistols:1":["blowback"],"heavy:1":["belt"],"pistols:0":["revolver"],"shoot:0":["sights"],"gear:1":["reddot"],"parts:0":["magazine"],"parts:1":["cartridge","firing"],"works:0":["bolt"],"works:1":["gas"],"rifles:1":["bullpup"],"technique:1":["trajectory","rifling"]};
 
 /* ---- teach first: cards built from the lesson's own content, shown before the questions */
 function teachCards(qs,key){
