@@ -852,6 +852,19 @@ body{font-size:16px}
 .chip-n{display:inline-block;min-width:20px;padding:0 6px;margin-inline-start:4px;border-radius:10px;background:var(--soft);font-size:12px}
 .chip[aria-pressed=true] .chip-n{background:var(--surface)}
 .arm-empty{text-align:center;color:var(--muted);font-weight:700;margin:24px 0}
+.cmp-h{margin:14px 0 6px;font-weight:800;color:var(--muted);font-size:14px}
+.cmp-list{display:grid;grid-template-columns:repeat(auto-fill,minmax(130px,1fr));gap:8px}
+.cmp-pick{display:flex;flex-direction:column;align-items:center;gap:2px;padding:8px;border:2px solid var(--line);border-bottom-width:4px;border-radius:14px;background:var(--surface);color:var(--ink);font:inherit;cursor:pointer;text-align:center}
+.cmp-pick:active{transform:translateY(2px);border-bottom-width:2px}
+.cmp-pick b{font-size:14px}.cmp-pick small{font-size:12px;color:var(--muted)}
+.cmp-mini{width:100%;display:block}.cmp-mini svg{width:100%;height:auto;display:block}
+.cmp-title{text-align:center}.cmp-title span{color:var(--orange);font-size:.8em;margin:0 4px}
+.cmp-sils{display:grid;grid-template-columns:1fr auto 1fr;align-items:center;gap:6px;margin:8px 0 12px}
+.cmp-sils .sil-box{border-radius:14px;padding:8px 4px}.cmp-sils svg{width:100%;height:auto}
+.cmp-vs{font-weight:900;color:var(--orange);font-size:18px;animation:popIn2 .5s cubic-bezier(.3,1.6,.5,1) .2s backwards}
+.cmp-tab th:first-child{width:22%}.cmp-tab td{width:39%;vertical-align:top}
+.cmp-tab td.win{color:var(--green);font-weight:900}.cmp-tab td.win::after{content:" ✓"}
+.cmp-note{font-size:12px;color:var(--muted);margin:8px 0 12px}
 @media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
 </style>
 
@@ -1698,9 +1711,36 @@ function weaponSheet(w){
     <p class="w-sub">${esc(w.type)} · ${esc(w.country)} · ${esc(w.year)}</p>
     <div class="wbars">${bars.map((b,k)=>`<div class="wb" style="--d:${k}"><span>${b[0]}</span><div class="pbar"><i style="width:0;background:${b[4]}" data-w="${Math.max(6,Math.sqrt(b[1]/b[2])*100)}"></i></div><b>${b[1]} ${b[3]}</b></div>`).join("")}</div>
     <table class="spec">${rows.map((r,k)=>`<tr style="--d:${k}"><th>${r[0]}</th><td>${esc(r[1])}</td></tr>`).join("")}</table>
-    <div class="fact"><b>הידעת?</b><p>${esc(w.fact)}</p></div><button class="btn wide" id="sx">סגור</button>`);
+    <div class="fact"><b>הידעת?</b><p>${esc(w.fact)}</p></div><button class="btn wide blue" id="cmpGo">השווה לנשק אחר</button><button class="btn wide ghost" id="sx">סגור</button>`);
   setTimeout(()=>$$(".wbars i").forEach(i=>i.style.width=i.dataset.w+"%"),250);
   $("#sx").onclick=()=>{closeSheet();render();};
+  $("#cmpGo").onclick=()=>{sfx.tap();comparePick(w);};
+}
+/* ---- compare two weapons side by side */
+const specNum=x=>{const m=String(x).replace(/,/g,"").match(/\d+(\.\d+)?/);return m?+m[0]:null;};
+function comparePick(a){
+  const grp=ARM_GROUPS.slice(1).find(g=>g[1](a)), same=WEAPONS.filter(x=>x.id!==a.id&&grp&&grp[1](x)), rest=WEAPONS.filter(x=>x.id!==a.id&&!same.includes(x));
+  const item=x=>`<button class="cmp-pick" data-c="${x.id}"><span class="cmp-mini">${silSvg(x)}</span><b>${esc(x.n)}</b><small>${esc(x.type)}</small></button>`;
+  sheet(`<h2>להשוות את ${esc(a.n)} עם...</h2>${same.length?`<p class="cmp-h">${esc(grp[0])} דומים</p><div class="cmp-list">${same.map(item).join("")}</div>`:""}
+    <p class="cmp-h">כל השאר</p><div class="cmp-list">${rest.map(item).join("")}</div><button class="btn wide ghost" id="sx">חזרה</button>`);
+  $$(".cmp-pick").forEach(b=>b.onclick=()=>{sfx.pop();compareSheet(a,WMAP[b.dataset.c]);});
+  $("#sx").onclick=()=>weaponSheet(a);
+}
+function compareSheet(a,b){
+  const rows=[["סוג","type"],["מדינה","country"],["שנה","year"],["תחמושת","cal"],["מנגנון","act"],["מחסנית","mag"],["טווח","rng"],["משקל","kg"]];
+  /* numeric rows get a winner mark: longer range, bigger magazine, lighter weight, older year */
+  const win={rng:"hi",mag:"hi",kg:"lo",year:"lo"};
+  const mark=(k,side)=>{ if(!win[k]) return ""; const va=k==="mag"&&/חגור/.test(a.mag)?null:specNum(a[k]), vb=k==="mag"&&/חגור/.test(b.mag)?null:specNum(b[k]);
+    if(va===null||vb===null||va===vb) return ""; const aw=win[k]==="hi"?va>vb:va<vb; return (side==="a")===aw?" win":""; };
+  const label={rng:"טווח ארוך יותר",mag:"יותר כדורים",kg:"קל יותר",year:"ותיק יותר"};
+  sheet(`<h2 class="cmp-title">${esc(a.n)} <span>מול</span> ${esc(b.n)}</h2>
+    <div class="cmp-sils"><div class="sil-box">${silSvg(a)}</div><div class="cmp-vs">VS</div><div class="sil-box">${silSvg(b)}</div></div>
+    <table class="spec cmp-tab"><tr><th></th><th>${esc(a.n)}</th><th>${esc(b.n)}</th></tr>
+    ${rows.map(([t,k],i)=>`<tr style="--d:${i}"><th>${t}</th><td class="${mark(k,"a").trim()}">${esc(a[k])}</td><td class="${mark(k,"b").trim()}">${esc(b[k])}</td></tr>`).join("")}</table>
+    <p class="cmp-note">הסימון הירוק: ${Object.values(label).join(" · ")}</p>
+    <button class="btn wide blue" id="cmpAgain">השווה לנשק אחר</button><button class="btn wide ghost" id="sx">חזרה</button>`);
+  $("#cmpAgain").onclick=()=>comparePick(a);
+  $("#sx").onclick=()=>weaponSheet(a);
 }
 function renderBadges(){
   const n=BADGES.filter(earned).length;
