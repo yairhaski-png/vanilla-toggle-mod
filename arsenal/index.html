@@ -1563,6 +1563,9 @@ function nodesOf(u){
   return n;
 }
 /* course focus: only the weapons themselves and their parts */
+/* split the parts unit: lessons 6+ form a second unit right after "how weapons work" */
+(()=>{ const pu=COURSE.find(u=>u.id==="parts"), moved=pu.lessons.splice(6);
+  COURSE.splice(COURSE.findIndex(u=>u.id==="works")+1,0,{id:"parts2",c:["#F43F5E","#BE123C"],title:"חלקים מתקדמים",sub:"כוונות, מחסניות, קנים וקתות",lessons:moved}); })();
 const OFF_TOPIC=new Set(["stories","technique","shoot","gear","terms","safety"]);
 for(let i=COURSE.length-1;i>=0;i--) if(OFF_TOPIC.has(COURSE[i].id)) COURSE.splice(i,1);
 const FLAT=[]; COURSE.forEach((u,ui)=>nodesOf(u).forEach((n,ni)=>FLAT.push({u,ui,n,ni,key:u.id+":"+n.k})));
@@ -1574,6 +1577,9 @@ const today=()=>new Date().toISOString().slice(0,10);
 const fresh=()=>({xp:0,gems:50,hearts:5,streak:0,best:0,last:null,done:{},daily:{d:today(),xp:0},heartsDay:today(),perfect:0,answered:0,correct:0,goal:50,days:{},freeze:0,ids:0,seen:[]});
 let S=fresh();
 try{const raw=localStorage.getItem(KEY); if(raw) S={...S,...JSON.parse(raw)};}catch(e){}
+// lessons that moved from parts:l6.. to the new parts2 unit
+function migrateParts2(st){ for(const k of Object.keys(st.done||{})){ const m=k.match(/^parts:l(\d+)$/); if(m&&+m[1]>=6){ st.done["parts2:l"+(m[1]-6)]=st.done[k]; delete st.done[k]; } } }
+migrateParts2(S);
 // migrate old "unit:0" keys to "unit:l0"
 for(const k of Object.keys(S.done)){ const m=k.match(/^(\w+):(\d+)$/); if(m){ S.done[m[1]+":l"+m[2]]=S.done[k]; delete S.done[k]; } }
 if(!S.daily||S.daily.d!==today()) S.daily={d:today(),xp:0};
@@ -2858,7 +2864,7 @@ Object.assign(DIAGRAMS,{
    <rect x="188" y="102" width="60" height="7" fill="#8C96A0"/><g class="slide"><path d="M214 96h30v28l-30-6z" fill="#2A2F35"/></g>
    <g class="dg-lbl"><text x="160" y="16" text-anchor="middle">קת מתקפלת</text><text x="160" y="88" text-anchor="middle">קת נשלפת</text></g></svg>`},
 });
-const LESSON_DIAG={"parts:9":["stocks","bullpup"],"parts:8":["rifling","muzzle"],"parts:7":["magtypes","magazine"],"parts:6":["sights","reddot","scope"],"parts:2":["pt_tavor"],"parts:3":["pt_fal"],"parts:4":["pt_barrett"],"parts:5":["bolt"],"stories:3":["madmin"],"famous:0":["tl_classic"],"famous:1":["drum"],"terms:1":["indirect"],"shoot:1":["zero"],"israel:1":["irondome"],"terms:0":["caliber"],"history:1":["tl_ww"],"rifles:0":["akvsm16"],"heavy:0":["scope"],"history:0":["tl_world"],"israel:0":["tl_israel"],"gear:0":["armor"],"technique:0":["positions"],"pistols:1":["blowback"],"heavy:1":["belt"],"pistols:0":["revolver"],"shoot:0":["sights"],"gear:1":["reddot"],"parts:0":["magazine"],"parts:1":["cartridge","firing"],"works:0":["bolt"],"works:1":["gas"],"rifles:1":["bullpup"],"technique:1":["trajectory","rifling"]};
+const LESSON_DIAG={"parts2:3":["stocks","bullpup"],"parts2:2":["rifling","muzzle"],"parts2:1":["magtypes","magazine"],"parts2:0":["sights","reddot","scope"],"parts:2":["pt_tavor"],"parts:3":["pt_fal"],"parts:4":["pt_barrett"],"parts:5":["bolt"],"stories:3":["madmin"],"famous:0":["tl_classic"],"famous:1":["drum"],"terms:1":["indirect"],"shoot:1":["zero"],"israel:1":["irondome"],"terms:0":["caliber"],"history:1":["tl_ww"],"rifles:0":["akvsm16"],"heavy:0":["scope"],"history:0":["tl_world"],"israel:0":["tl_israel"],"gear:0":["armor"],"technique:0":["positions"],"pistols:1":["blowback"],"heavy:1":["belt"],"pistols:0":["revolver"],"shoot:0":["sights"],"gear:1":["reddot"],"parts:0":["magazine"],"parts:1":["cartridge","firing"],"works:0":["bolt"],"works:1":["gas"],"rifles:1":["bullpup"],"technique:1":["trajectory","rifling"]};
 
 /* ---- teach first: cards built from the lesson's own content, shown before the questions */
 function teachCards(qs,key){
@@ -2920,7 +2926,7 @@ function cloudPush(){
 function syncDot(){ const e=$("#syncTxt"); if(e) e.textContent=({ok:"ההתקדמות שמורה בחשבון",pending:"שומר...",err:"לא הצלחתי לשמור, אנסה שוב"})[ACC.sync]||"מחובר"; }
 function adopt(cloud){
   const keep={mute:S.mute};
-  S={...fresh(),...cloud,...keep};
+  S={...fresh(),...cloud,...keep}; migrateParts2(S);
   if(!S.daily||S.daily.d!==today()) S.daily={d:today(),xp:0};
   try{localStorage.setItem(KEY,JSON.stringify(S));}catch(e){}
 }
