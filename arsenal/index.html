@@ -1444,6 +1444,15 @@ const COURSE = [
    {t:"tf", q:"במקלעים מחליפים לפעמים קנה כדי שלא יתחמם יותר מדי.", c:true, e:"קנה חם מדי נשחק מהר ומאבד דיוק."},
    {t:"mc", q:"מה פירוש 'מקלע קל'?", a:["מקלע שחייל אחד יכול לשאת ולהפעיל","מקלע שיורה תחמושת של אקדח","מקלע שמורכב רק על רכב","מקלע שקנה שלו עשוי פלסטיק"], c:0, e:"הנגב הוא מקלע קל. המאג כבד יותר ונקרא מקלע בינוני."},
    {t:"match", q:"התאם נשק לתפקיד", p:[["בארט","צלף אנטי-חומר"],["דרגונוב","קלע מחלקתי"],["נגב","מקלע קל"],["מאג","מקלע בינוני"]]}
+  ]},
+  { name:"רובי צלפים", qs:[
+   {t:"mc", q:"מה ההבדל בין הדרגונוב לרמינגטון 700?", a:["הדרגונוב חצי-אוטומטי, והרמינגטון 700 רובה בריח","הדרגונוב רובה בריח, והרמינגטון 700 חצי-אוטומטי","שניהם תת-מקלעים","הדרגונוב יורה כדור 9 מ\"מ"], c:0, e:"בדרגונוב כדור חדש נכנס לבד אחרי כל ירייה. ברמינגטון 700 מזיזים את הבריח ביד."},
+   {t:"mc", q:"למה רובי צלפים רבים הם רובי בריח?", a:["המנגנון פשוט ונעול היטב, וזה עוזר לדיוק","הם יורים מהר יותר","הם תמיד קלים יותר","אין להם צורך בכוונת"], c:0, e:"בחצי-אוטומטי יש יותר חלקים שזזים בזמן הירייה, ולכן קשה יותר להגיע לאותו דיוק."},
+   {t:"tf", q:"הבארט M82 שייך לקבוצה שנקראת 'רובי נגד חומר', בגלל הקליבר הגדול שלו, 12.7 מ\"מ.", c:true, e:"הכדור שלו זהה לכדור של מקלע כבד, ‎.50 BMG."},
+   {t:"spec", w:"svd", k:"cal"},
+   {t:"part", w:"svd", p:"scope"},
+   {t:"match", q:"התאם רובה למאפיין", p:[["רמינגטון 700","בריח ידני"],["דרגונוב","חצי-אוטומטי"],["בארט M82","קליבר 12.7 מ\"מ"],["M14","מחסנית של 20"]]},
+   {t:"rank", k:"rng"}
   ]}
  ]},
  { id:"shoot", c:["#F2A900","#C98A00"], title:"עקרונות הירי", sub:"כוונון, נשימה, לחיצה ומטווח", lessons:[
@@ -2933,7 +2942,7 @@ Object.assign(DIAGRAMS,{
  pdwcal:{title:"שלושה כדורים, אותו קנה מידה",text:"כדור 9 מ\"מ של אקדח קצר ועבה. הכדורים של ה-MP7 וה-P90 דקים, ארוכים ומהירים יותר. הם נועדו לנשקים קטנים שיורים חזק יותר מאקדח.",
   svg:`<svg viewBox="0 0 320 130" class="dg dg-pdw"><g class="pc" style="--d:0"><rect x="243.0" y="9.1" width="57.0" height="29.7" rx="2" fill="#D4A84B"/><path d="M243.0 10.5h-14.4q-17.7 13.5 0 27.0h14.4z" fill="#B87333"/><text x="70" y="25" text-anchor="middle" direction="ltr" font-weight="900">9×19</text><text x="70" y="39" text-anchor="middle" font-size="10" opacity=".75">עוזי, גלוק</text></g><g class="pc" style="--d:1"><rect x="210.0" y="54.0" width="90.0" height="24.0" rx="2" fill="#D4A84B"/><path d="M210.0 59.1h-10.8q-13.2 6.9 0 13.8h10.8z" fill="#B87333"/><text x="70" y="67" text-anchor="middle" direction="ltr" font-weight="900">4.6×30</text><text x="70" y="81" text-anchor="middle" font-size="10" opacity=".75">MP7</text></g><g class="pc" style="--d:2"><rect x="213.3" y="96.2" width="86.7" height="23.7" rx="2" fill="#D4A84B"/><path d="M213.3 99.5h-15.7q-19.1 8.6 0 17.1h15.7z" fill="#B87333"/><text x="70" y="109" text-anchor="middle" direction="ltr" font-weight="900">5.7×28</text><text x="70" y="123" text-anchor="middle" font-size="10" opacity=".75">P90</text></g></svg>`},
 });
-const LESSON_DIAG={"pistols:2":["pdwcal"],"history:2":["tl_musket","cartridge"],"israel:2":["tl_idf"],"works:2":["revolver","blowback"],"parts2:3":["stocks","bullpup"],"parts2:2":["rifling","muzzle"],"parts2:1":["magtypes","magazine"],"parts2:0":["sights","reddot","scope"],"parts:2":["pt_tavor"],"parts:3":["pt_fal"],"parts:4":["pt_barrett"],"parts:5":["bolt"],"stories:3":["madmin"],"famous:0":["tl_classic"],"famous:1":["drum"],"terms:1":["indirect"],"shoot:1":["zero"],"israel:1":["irondome"],"terms:0":["caliber"],"history:1":["tl_ww"],"rifles:0":["akvsm16"],"heavy:0":["scope"],"history:0":["tl_world"],"israel:0":["tl_israel"],"gear:0":["armor"],"technique:0":["positions"],"pistols:1":["blowback"],"heavy:1":["belt"],"pistols:0":["revolver"],"shoot:0":["sights"],"gear:1":["reddot"],"parts:0":["magazine"],"parts:1":["cartridge","firing"],"works:0":["bolt"],"works:1":["gas"],"rifles:1":["bullpup"],"technique:1":["trajectory","rifling"]};
+const LESSON_DIAG={"heavy:2":["scope","caliber"],"pistols:2":["pdwcal"],"history:2":["tl_musket","cartridge"],"israel:2":["tl_idf"],"works:2":["revolver","blowback"],"parts2:3":["stocks","bullpup"],"parts2:2":["rifling","muzzle"],"parts2:1":["magtypes","magazine"],"parts2:0":["sights","reddot","scope"],"parts:2":["pt_tavor"],"parts:3":["pt_fal"],"parts:4":["pt_barrett"],"parts:5":["bolt"],"stories:3":["madmin"],"famous:0":["tl_classic"],"famous:1":["drum"],"terms:1":["indirect"],"shoot:1":["zero"],"israel:1":["irondome"],"terms:0":["caliber"],"history:1":["tl_ww"],"rifles:0":["akvsm16"],"heavy:0":["scope"],"history:0":["tl_world"],"israel:0":["tl_israel"],"gear:0":["armor"],"technique:0":["positions"],"pistols:1":["blowback"],"heavy:1":["belt"],"pistols:0":["revolver"],"shoot:0":["sights"],"gear:1":["reddot"],"parts:0":["magazine"],"parts:1":["cartridge","firing"],"works:0":["bolt"],"works:1":["gas"],"rifles:1":["bullpup"],"technique:1":["trajectory","rifling"]};
 
 /* ---- teach first: cards built from the lesson's own content, shown before the questions */
 function teachCards(qs,key){
