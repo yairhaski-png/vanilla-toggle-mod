@@ -1126,6 +1126,7 @@ const COURSE = [
   { name:"חלקים בצלפים ובאקדחים", qs:[
    {t:"part", w:"barrett"},
    {t:"part", w:"mauser", p:"bhandle"},
+   {t:"spec", w:"mauser", k:"act"},
    {t:"mc", q:"מה התפקיד של מעצור הלוע הגדול בקצה הקנה של הבארט?", a:["מפנה גזים לצדדים ומקטין את הרתע","מגדיל את הטווח","מסתיר את הרעש לגמרי","מחזיק את הדו-חצובה"], c:0, e:"בלי מעצור הלוע, הרתע של כדור 12.7 מ\"מ היה חזק מאוד ליורה."},
    {t:"part", w:"svd"},
    {t:"part", w:"rem700", p:"bhandle"},
@@ -1229,6 +1230,7 @@ const COURSE = [
    {t:"pic", w:"aug"},
    {t:"part", w:"aug"},
    {t:"part", w:"tavor", p:"mag"},
+   {t:"spec", w:"tavor", k:"cal"},
    {t:"type", w:"tavor"},
    {t:"pic", w:"fal"},
    {t:"odd"},
@@ -1255,6 +1257,7 @@ const COURSE = [
    {t:"type", w:"glock17"},
    {t:"flag", w:"glock17"},
    {t:"id", w:"m1911"},
+   {t:"spec", w:"m1911", k:"cal"},
    {t:"pic", w:"python"},
    {t:"part", w:"python", p:"cyl"},
    {t:"tf", q:"באקדח תופי כמו הקולט פייתון, הכדורים נמצאים בתוף מסתובב ולא במחסנית.", c:true, e:"בתוף של הפייתון יש 6 כדורים בקליבר ‎.357 מגנום."},
@@ -2441,7 +2444,7 @@ const BLITZ_SEC=60;
 function blitzDelay(){ const d=(Date.now()-L.f.start)/1000; return d<0?`${-d}s`:`-${Math.min(BLITZ_SEC,d)}s`; }
 function startBlitz(){
   const quick=COURSE.flatMap(u=>u.lessons.flatMap(l=>l.qs)).filter(q=>["tf","mc","id","pic"].includes(q.t));
-  const gen=[...Array(12)].map((_,i)=>[{t:"flag"},{t:"vs"},{t:"odd"}][i%3]);
+  const gen=[...Array(16)].map((_,i)=>[{t:"flag"},{t:"vs"},{t:"odd"},{t:"spec",w:shuffle(WEAPONS)[0].id}][i%4]);
   startLesson({u:COURSE[0],ui:0,n:{t:"practice",name:"אתגר בזק"},key:"practice",blitz:1,start:Date.now()+1000},shuffle([...quick,...gen])); /* clock starts after the splash */
 }
 function finishBlitz(){
