@@ -7,7 +7,7 @@
 /* Layout: language-app shell. Phone: sticky stat bar, zig-zag path of round 3D nodes, fixed bottom tabs.
    Laptop (>=1000px): three columns — nav sidebar | path | stats & cards. Lessons open full-screen. */
 :root{
-  --bg:#FFFFFF; --surface:#FFFFFF; --soft:#F7F7F7; --ink:#3C3C3C; --ink-strong:#4B4B4B; --muted:#8A8A8A;
+  --bg:#FFFFFF; --surface:#FFFFFF; --soft:#F7F7F7; --ink:#3C3C3C; --ink-strong:#4B4B4B; --muted:#6F6F6F;
   --line:#E5E5E5; --line-2:#D6D6D6;
   --green:#58C21B; --green-d:#45A00A; --green-bg:#D7FFB8; --green-ink:#4A9E12;
   --blue:#1EA5F0;  --blue-d:#1683C0;  --blue-bg:#DDF4FF; --blue-line:#84D8FF;
@@ -497,6 +497,7 @@ button.stat:hover{background:var(--soft)}
 .part-svg{max-width:520px!important;overflow:visible}
 .hot{transform-box:fill-box;transform-origin:center;fill:transparent;stroke:transparent;stroke-width:2.2;cursor:pointer;transition:fill .15s}
 .hot:hover{fill:rgb(30 165 240 / .12)}
+.hot:focus-visible{outline:none;stroke:var(--orange);stroke-dasharray:3 3}
 .hot.sel{fill:rgb(30 165 240 / .22);stroke:var(--blue);stroke-dasharray:6 4;animation:dash 1s linear infinite}
 .hot.good{fill:rgb(88 194 27 / .28);stroke:var(--green);animation:okPop .45s}
 .hot.bad{fill:rgb(255 79 79 / .25);stroke:var(--red)}
@@ -2512,10 +2513,11 @@ function mistakesCard(){
 function renderPart(q,kick,tm){
   const w=WMAP[q.w], parts=PARTS[w.sil], keys=Object.keys(parts);
   L.part=q.p||keys[Math.random()*keys.length|0]; L.psel=null;
-  const hs=keys.map(k=>{const [,x,y,ww,hh]=parts[k];return `<rect class="hot" data-p="${k}" x="${x}" y="${y}" width="${ww}" height="${hh}" rx="6"/>`;}).join("");
+  const hs=keys.map((k,i)=>{const [,x,y,ww,hh]=parts[k];return `<rect class="hot" data-p="${k}" x="${x}" y="${y}" width="${ww}" height="${hh}" rx="6" tabindex="0" role="button" aria-label="אזור ${i+1} בציור"/>`;}).join("");
   frame(`${kick}<h1 class="l-title">גע ב${esc(parts[L.part][0].replace(/^ה/,""))}</h1><p class="part-sub">${esc(w.n)} · לחץ על החלק הנכון בציור</p>
     <div class="id-card part-card"><svg class="sil gun part-svg" viewBox="0 0 240 96"><ellipse class="gsh" cx="120" cy="90" rx="100" ry="4"/>${SIL[w.sil]}<g id="hots">${hs}</g><g id="plabel"></g></svg></div>`,"בדיקה",true,"",tm);
-  $$(".hot").forEach(r=>r.addEventListener("click",()=>{ if(L.state!=="answer")return; $$(".hot").forEach(x=>x.classList.remove("sel")); r.classList.add("sel"); L.psel=r.dataset.p; $("#go").disabled=false; sfx.tap(); }));
+  $$(".hot").forEach(r=>{ r.addEventListener("click",()=>{ if(L.state!=="answer")return; $$(".hot").forEach(x=>x.classList.remove("sel")); r.classList.add("sel"); L.psel=r.dataset.p; $("#go").disabled=false; sfx.tap(); });
+    r.addEventListener("keydown",e=>{ if(e.key==="Enter"||e.key===" "){ e.preventDefault(); e.stopPropagation(); r.dispatchEvent(new MouseEvent("click",{bubbles:true})); } }); });
 }
 function checkPart(timeout){
   const w=WMAP[L.qs[L.i].w], parts=PARTS[w.sil], ok=!timeout&&L.psel===L.part;
