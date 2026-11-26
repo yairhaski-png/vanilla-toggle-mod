@@ -1461,6 +1461,15 @@ const COURSE = [
    {t:"flag"},
    {t:"gap", s:"רובה הלי-אנפילד הבריטי התפרסם בירי מהיר שנקרא ___", a:["הדקה המטורפת","הצרור הארוך","הירייה השקטה"], c:0, e:"חיילים מאומנים ירו בו יותר מ-15 יריות מכוונות בדקה, עם רובה בריח."},
    {t:"mc", q:"מה היה הבזוקה?", a:["משגר רקטות נגד טנקים אמריקני","תותח נגד מטוסים בריטי","רימון רובה גרמני","מרגמה קלה סובייטית"], c:0, e:"הבזוקה שימשה חיילים אמריקנים במלחמת העולם השנייה וקיבלה את שמה מכלי נגינה מאולתר."}
+  ]},
+  { name:"מהמוסקט לרובה", qs:[
+   {t:"mc", q:"איך טענו מוסקט?", a:["מהלוע: אבק שריפה, ואחריו כדור שנדחס פנימה עם מוט","דרך מחסנית מלמטה","בתוף מסתובב","בחגור של כדורים"], c:0, e:"חייל מאומן הספיק בערך 3 יריות בדקה."},
+   {t:"mc", q:"איך הצית מנגנון הצור (פלינטלוק) את אבק השריפה?", a:["אבן צור פגעה בפלדה ויצרה ניצוצות","פתיל בוער ירד על האבק","זרם חשמלי מסוללה","היורה הדליק אותו בגפרור"], c:0, e:"מנגנון הצור החליף את מנגנון הפתיל, שהיה צריך להחזיק בוער כל הזמן."},
+   {t:"tf", q:"כדור מיניה (1849) התרחב בתחתיתו בזמן הירי ונצמד לחריקה, וכך אפשר היה לטעון רובה עם חריקה כמעט באותה מהירות כמו מוסקט.", c:true, e:"זה הפך את הרובים המחורקים, המדויקים בהרבה, לנשק הרגיל של החיילים."},
+   {t:"mc", q:"מה היה היתרון הגדול של טעינה מאחור, דרך בית הבליעה?", a:["טעינה מהירה יותר, וגם בשכיבה","הכדור טס רחוק פי עשרה","לא היה צריך יותר כדורים","הנשק לא התחמם לעולם"], c:0, e:"את המוסקט היה צריך לטעון בעמידה, כדי להכניס את המוט לתוך הקנה."},
+   {t:"order", q:"סדר את המצאות ההצתה מהמוקדמת למאוחרת", items:["מנגנון פתיל","מנגנון צור","פיקה","תרמיל מתכת שלם"], e:"פתיל (המאה ה-15), צור (המאה ה-17), פיקה (שנות ה-20 של המאה ה-19), תרמיל מתכת (שנות ה-60 של המאה ה-19)."},
+   {t:"tf", q:"אבק שריפה 'ללא עשן', שהומצא בסוף המאה ה-19, חזק יותר מאבק השריפה השחור הישן.", c:true, e:"הוא אפשר כדורים קטנים ומהירים יותר, כמו של רובה הלבל הצרפתי מ-1886."},
+   {t:"rank", k:"year"}
   ]}
  ]},
  { id:"gear", c:["#6366F1","#4F46E5"], title:"ציוד הלוחם", sub:"מיגון, אופטיקה וראיית לילה", lessons:[
@@ -2886,7 +2895,11 @@ Object.assign(DIAGRAMS,{
  tl_idf:{title:"הרובים של צה\"ל לאורך השנים",text:"מרובי בריח שהגיעו מאירופה ועד רובים קצרים שתוכננו ויוצרו בישראל.",
   svg:timelineSvg([["1948","מאוזר"],["1955","FN FAL"],["1972","גליל"],["2001","תבור"],["2009","X95"]])},
 });
-const LESSON_DIAG={"israel:2":["tl_idf"],"works:2":["revolver","blowback"],"parts2:3":["stocks","bullpup"],"parts2:2":["rifling","muzzle"],"parts2:1":["magtypes","magazine"],"parts2:0":["sights","reddot","scope"],"parts:2":["pt_tavor"],"parts:3":["pt_fal"],"parts:4":["pt_barrett"],"parts:5":["bolt"],"stories:3":["madmin"],"famous:0":["tl_classic"],"famous:1":["drum"],"terms:1":["indirect"],"shoot:1":["zero"],"israel:1":["irondome"],"terms:0":["caliber"],"history:1":["tl_ww"],"rifles:0":["akvsm16"],"heavy:0":["scope"],"history:0":["tl_world"],"israel:0":["tl_israel"],"gear:0":["armor"],"technique:0":["positions"],"pistols:1":["blowback"],"heavy:1":["belt"],"pistols:0":["revolver"],"shoot:0":["sights"],"gear:1":["reddot"],"parts:0":["magazine"],"parts:1":["cartridge","firing"],"works:0":["bolt"],"works:1":["gas"],"rifles:1":["bullpup"],"technique:1":["trajectory","rifling"]};
+Object.assign(DIAGRAMS,{
+ tl_musket:{title:"איך התפתחה ההצתה",text:"כל המצאה פתרה בעיה של הקודמת: פתיל שכבה בגשם, צור שהחטיא, ועד תרמיל מתכת שבו הכדור, אבק השריפה והפיקה נמצאים יחד.",
+  svg:timelineSvg([["1450","פתיל"],["1610","צור"],["1820","פיקה"],["1849","כדור מיניה"],["1866","תרמיל מתכת"],["1886","ללא עשן"]])},
+});
+const LESSON_DIAG={"history:2":["tl_musket","cartridge"],"israel:2":["tl_idf"],"works:2":["revolver","blowback"],"parts2:3":["stocks","bullpup"],"parts2:2":["rifling","muzzle"],"parts2:1":["magtypes","magazine"],"parts2:0":["sights","reddot","scope"],"parts:2":["pt_tavor"],"parts:3":["pt_fal"],"parts:4":["pt_barrett"],"parts:5":["bolt"],"stories:3":["madmin"],"famous:0":["tl_classic"],"famous:1":["drum"],"terms:1":["indirect"],"shoot:1":["zero"],"israel:1":["irondome"],"terms:0":["caliber"],"history:1":["tl_ww"],"rifles:0":["akvsm16"],"heavy:0":["scope"],"history:0":["tl_world"],"israel:0":["tl_israel"],"gear:0":["armor"],"technique:0":["positions"],"pistols:1":["blowback"],"heavy:1":["belt"],"pistols:0":["revolver"],"shoot:0":["sights"],"gear:1":["reddot"],"parts:0":["magazine"],"parts:1":["cartridge","firing"],"works:0":["bolt"],"works:1":["gas"],"rifles:1":["bullpup"],"technique:1":["trajectory","rifling"]};
 
 /* ---- teach first: cards built from the lesson's own content, shown before the questions */
 function teachCards(qs,key){
