@@ -901,6 +901,12 @@ body{font-size:16px}
 @keyframes stkSlide{0%,20%{transform:none}45%,70%{transform:translateX(-22px)}95%,100%{transform:none}}
 .dg-pdw .pc{animation:pcIn .5s cubic-bezier(.3,1.4,.5,1) backwards;animation-delay:calc(.2s + var(--d)*.3s)}
 @keyframes pcIn{from{opacity:0;transform:translateX(30px)}}
+.peek-svg .peek-cover{fill:var(--soft);transition:opacity .6s ease}
+.peek-svg .peek-ring{fill:none;stroke:var(--blue);stroke-width:2;stroke-dasharray:4 3;animation:peekSpin 6s linear infinite;transform-box:fill-box;transform-origin:center;transition:opacity .4s}
+@keyframes peekSpin{to{transform:rotate(360deg)}}
+.peek-svg.revealed .peek-cover,.peek-svg.revealed .peek-ring{opacity:0}
+.peek-svg.revealed{animation:peekPop .5s cubic-bezier(.3,1.6,.5,1)}
+@keyframes peekPop{50%{transform:scale(1.06)}}
 @media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
 </style>
 
@@ -1346,6 +1352,7 @@ const COURSE = [
   ]},
   { name:"רובי סער מודרניים", qs:[
    {t:"id", w:"g36"},
+   {t:"peek", w:"famas"},
    {t:"part", w:"g36", p:"mag"},
    {t:"id", w:"famas"},
    {t:"mc", q:"איזה כינוי נתנו החיילים הצרפתים ל-FAMAS?", a:["החצוצרה (Le Clairon)","הנשר","הקוברה","הפטיש"], c:0, e:"ידית הנשיאה הארוכה שלו גרמה לו להיראות כמו כלי נגינה."},
@@ -1408,6 +1415,7 @@ const COURSE = [
    {t:"mc", q:"מה ההבדל העיקרי בין תת-מקלע רגיל לנשק הגנה אישית (PDW) כמו ה-P90?", a:["ה-PDW יורה כדור קטן ומהיר במיוחד שתוכנן בשבילו","ה-PDW יורה רק ירייה אחת בכל פעם","תת-מקלע יורה כדורי רובה","אין שום הבדל"], c:0, e:"תת-מקלעים רגילים, כמו ה-MP5 והעוזי, יורים כדורי אקדח."},
    {t:"tf", q:"ה-MP5 יורה את אותו כדור כמו אקדח גלוק 17: ‏9×19 מ\"מ.", c:true, e:"זה הכדור הנפוץ בעולם לאקדחים ולתת-מקלעים."},
    {t:"spec", w:"mp5", k:"by"},
+   {t:"peek", w:"mp7"},
    {t:"mc", q:"איזה תת-מקלע ישראלי מפורסם בכך שהמחסנית נכנסת דרך ידית האחיזה?", a:["עוזי","גליל","נגב","יריחו"], c:0, e:"כך הנשק קצר יותר, וקל למצוא את המחסנית גם בחושך."},
    {t:"match", q:"התאם נשק לכדור שלו", p:[["P90","5.7×28 מ\"מ"],["MP7","4.6×30 מ\"מ"],["MP5","9×19 מ\"מ"],["KRISS Vector","‎.45 ACP"]]},
    {t:"part", w:"vector", p:"mag"},
@@ -1450,6 +1458,7 @@ const COURSE = [
    {t:"mc", q:"למה רובי צלפים רבים הם רובי בריח?", a:["המנגנון פשוט ונעול היטב, וזה עוזר לדיוק","הם יורים מהר יותר","הם תמיד קלים יותר","אין להם צורך בכוונת"], c:0, e:"בחצי-אוטומטי יש יותר חלקים שזזים בזמן הירייה, ולכן קשה יותר להגיע לאותו דיוק."},
    {t:"tf", q:"הבארט M82 שייך לקבוצה שנקראת 'רובי נגד חומר', בגלל הקליבר הגדול שלו, 12.7 מ\"מ.", c:true, e:"הכדור שלו זהה לכדור של מקלע כבד, ‎.50 BMG."},
    {t:"spec", w:"svd", k:"cal"},
+   {t:"peek", w:"barrett"},
    {t:"part", w:"svd", p:"scope"},
    {t:"match", q:"התאם רובה למאפיין", p:[["רמינגטון 700","בריח ידני"],["דרגונוב","חצי-אוטומטי"],["בארט M82","קליבר 12.7 מ\"מ"],["M14","מחסנית של 20"]]},
    {t:"rank", k:"rng"}
@@ -1587,6 +1596,7 @@ const COURSE = [
    {t:"mc", q:"למה הגלוק 17 נקרא כך?", a:["זה היה הפטנט ה-17 של החברה, ובמקרה גם יש 17 כדורים במחסנית","הוא תוכנן ב-1917","הוא שוקל 17 אונקיות","זה היה הדגם ה-17 שנוסה בצבא"], c:0, e:"לפי החברה המספר מציין את מספר הפטנט, והצירוף עם 17 הכדורים הפך אותו לשם זכיר."},
    {t:"spec", w:"deagle", k:"cal"},
    {t:"part", w:"python", p:"hammer"},
+   {t:"peek", w:"deagle"},
    {t:"match", q:"התאם אקדח לעובדה", p:[["M1911","יותר מ-70 שנה בצבא ארה\"ב"],["PPK","האקדח של ג'יימס בונד"],["פייתון","אקדח תופי"],["דזרט איגל","מנגנון גזים כמו ברובה"]]}
   ]}
  ]},
@@ -2084,6 +2094,7 @@ function renderQ(){
   if(q.t==="type") return renderType(q,kick,tm);
   if(q.t==="flag") return renderFlag(q,kick,tm);
   if(q.t==="spec") return renderSpec(q,kick,tm);
+  if(q.t==="peek") return renderPeek(q,kick,tm);
   if(q.t==="odd") return renderOdd(q,kick,tm);
   if(q.t==="story") return renderStory(q,kick);
   if(q.t==="id"){
@@ -2140,12 +2151,13 @@ function timeUp(){
 }
 function check(timeout){
   const q0=L.qs[L.i]; if(L.sel===null)return;
-  const q=(q0.t==="id"||q0.t==="pic"||q0.t==="vs"||q0.t==="flag"||q0.t==="odd"||q0.t==="spec")?L.cur:(q0.t==="gap"||q0.t==="story")?{...q0,t:"mc"}:q0;
+  const q=(q0.t==="id"||q0.t==="pic"||q0.t==="vs"||q0.t==="flag"||q0.t==="odd"||q0.t==="spec"||q0.t==="peek")?L.cur:(q0.t==="gap"||q0.t==="story")?{...q0,t:"mc"}:q0;
   const ok=!timeout&&(q.t==="mc"?L.sel===q.c:(L.sel===1)===q.c), right=q.t==="mc"?q.c:(q.c?1:0);
   if(q0.t==="id"&&ok) S.ids=(S.ids||0)+1;
   $$(".opts .opt").forEach(b=>{b.disabled=true;b.classList.remove("sel"); if(+b.dataset.a===right)b.classList.add("right"); else if(+b.dataset.a===L.sel)b.classList.add("wrong");});
   L.state="checked"; feedback(ok,(timeout?"נגמר הזמן. ":"")+(q.e||""),q);
   if(q0.t==="vs") $$(".vs-yr").forEach((e,k)=>setTimeout(()=>{e.hidden=false;},k*180));
+  if(q0.t==="peek"){ const pv=$(".peek-svg"); if(pv) pv.classList.add("revealed"); }
   if(q0.t==="gap"){ const g=$("#gap"); g.classList.add(ok?"ok":"no"); if(!ok){ g.textContent=q.a[q.c]; g.classList.add("filled"); } }
   if(ok) burst(q0.t==="gap"?$("#gap"):$(".opt.right"),["#58C21B","#A8E66F","#FFC800"],16);
 }
@@ -2590,6 +2602,22 @@ function renderFlag(q,kick,tm){
   bindChoice();
 }
 
+/* ---- peek: only a small window of the drawing is visible; name the weapon, then the whole drawing is revealed */
+function renderPeek(q,kick,tm){
+  const pool=WEAPONS.filter(x=>!x.gen&&PARTS[x.sil]);
+  const w=q.w&&WMAP[q.w]?WMAP[q.w]:shuffle(pool)[0];
+  const others=shuffle(pool.filter(x=>x.id!==w.id&&!sameLook(x,w)&&x.sil!==w.sil)).slice(0,3);
+  L.cur={t:"mc",a:[w.n,...others.map(x=>x.n)],c:0,e:`${w.n} · ${w.type} · ${w.country}. ${w.fact}`};
+  L.order=shuffle([0,1,2,3]);
+  const parts=Object.values(PARTS[w.sil]), pick=parts[Math.random()*parts.length|0];
+  const cx=pick[1]+pick[3]/2, cy=pick[2]+pick[4]/2, mid=`pk${Date.now()%1e6}`;
+  frame(`${kick}<h1 class="l-title">איזה נשק מסתתר כאן?</h1><p class="part-sub">רואים רק חלק קטן. זהה לפי החלק.</p>
+    <div class="id-card"><svg class="sil gun peek-svg" viewBox="0 0 240 96"><defs><mask id="${mid}"><rect width="240" height="96" fill="#fff"/><circle class="peek-hole" cx="${cx}" cy="${cy}" r="24" fill="#000"/></mask></defs>
+      <ellipse class="gsh" cx="120" cy="90" rx="100" ry="4"/>${SIL[w.sil]}<rect class="peek-cover" width="240" height="96" mask="url(#${mid})"/><circle class="peek-ring" cx="${cx}" cy="${cy}" r="24"/></svg></div>
+    <div class="opts id-opts">${L.order.map((ai,k)=>optBtn(ai,k,L.cur.a[ai])).join("")}</div>`,"בדיקה",true,"",tm);
+  bindChoice();
+}
+
 /* ---- rank: order weapons by weight or range, built fresh from the armory data each time */
 const RANK_KINDS={
   kg:{q:"סדר מהקל לכבד",get:w=>vsNum(w.kg),show:v=>`${v} ק"ג`},
@@ -2629,7 +2657,7 @@ const BLITZ_SEC=60;
 function blitzDelay(){ const d=(Date.now()-L.f.start)/1000; return d<0?`${-d}s`:`-${Math.min(BLITZ_SEC,d)}s`; }
 function startBlitz(){
   const quick=COURSE.flatMap(u=>u.lessons.flatMap(l=>l.qs)).filter(q=>["tf","mc","id","pic"].includes(q.t));
-  const gen=[...Array(16)].map((_,i)=>[{t:"flag"},{t:"vs"},{t:"odd"},{t:"spec",w:shuffle(WEAPONS)[0].id}][i%4]);
+  const gen=[...Array(20)].map((_,i)=>[{t:"flag"},{t:"vs"},{t:"odd"},{t:"spec",w:shuffle(WEAPONS)[0].id},{t:"peek"}][i%5]);
   startLesson({u:COURSE[0],ui:0,n:{t:"practice",name:"אתגר בזק"},key:"practice",blitz:1,start:Date.now()+1000},shuffle([...quick,...gen])); /* clock starts after the splash */
 }
 function finishBlitz(){
