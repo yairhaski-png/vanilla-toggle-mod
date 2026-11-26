@@ -1240,6 +1240,15 @@ const COURSE = [
    {t:"mc", q:"מה תפקיד קפיץ ההחזר?", a:["להחזיר את המכלול קדימה אחרי שנדחף לאחור","לדחוף את הכדורים במחסנית כלפי מעלה","להחזיר את ההדק אחרי הלחיצה","לבלום את הקליע בתוך הקנה"], c:0, e:"בדרך חזרה קדימה, המכלול גם דוחף כדור חדש לבית הבליעה."},
    {t:"mc", q:"מה ההבדל בין ירי מ'בריח סגור' לירי מ'בריח פתוח'?", a:["בבריח סגור הכדור כבר בבית הבליעה לפני הלחיצה. בבריח פתוח המכלול מאחור ונע קדימה בלחיצה","אין הבדל","בריח פתוח רק ברובי ציד","בבריח סגור אי אפשר לירות"], c:0, e:"העוזי יורה מבריח פתוח. רוב הרובים המודרניים יורים מבריח סגור, שמדויק יותר."},
    {t:"tf", q:"ב-M16 הגזים פועלים ישירות על נושא הבריח, בלי בוכנה.", c:true, e:"זה נקרא Direct impingement. הנשק קל יותר, אבל מתלכלך מהר יותר."}
+  ]},
+  { name:"מנגנוני אקדחים", qs:[
+   {t:"mc", q:"איך עובד מנגנון 'רתע קצר', כמו בגלוק ובברטה?", a:["הקנה והמגלשה נעים יחד אחורה מעט, ואז נפרדים והמגלשה ממשיכה לבד","גזים מהקנה דוחפים בוכנה","מושכים את המגלשה ביד לפני כל ירייה","התוף מסתובב בכל לחיצה"], c:0, e:"את הרעיון פיתח ג'ון בראונינג לפני יותר ממאה שנה, והוא נמצא ברוב האקדחים היום."},
+   {t:"mc", q:"איזה מנגנון מתאים במיוחד לכדורים חלשים, כמו באקדח PPK?", a:["הדף פשוט: רק המשקל והקפיץ של המגלשה מחזיקים אותה","רתע קצר עם קנה נע","גזים עם בוכנה ארוכה","בריח ידני"], c:0, e:"בכדור חזק המגלשה הייתה צריכה להיות כבדה מאוד. לכן אקדחים גדולים משתמשים ברתע קצר."},
+   {t:"tf", q:"הדזרט איגל עובד בגזים ובבריח מסתובב, כמו רובה, ולא כמו רוב האקדחים.", c:true, e:"זה מה שמאפשר לו לירות כדורים חזקים כמו ‎.50 AE."},
+   {t:"mc", q:"מה ההבדל בין אקדח תופי 'פעולה כפולה' ל'פעולה יחידה'?", a:["בפעולה כפולה הלחיצה על ההדק גם דורכת את הפטיש וגם מסובבת את התוף","בפעולה כפולה יורים שני כדורים בכל לחיצה","בפעולה יחידה אין תוף","אין הבדל, אלה שני שמות לאותו דבר"], c:0, e:"בקולט פיסמייקר (פעולה יחידה) דורכים את הפטיש ביד לפני כל ירייה. בפייתון אפשר פשוט ללחוץ."},
+   {t:"spec", w:"glock17", k:"act"},
+   {t:"match", q:"התאם אקדח למנגנון", p:[["גלוק 17","רתע קצר"],["וולטר PPK","הדף פשוט"],["דזרט איגל","גזים"],["קולט פייתון","תוף"]]},
+   {t:"part", w:"python", p:"cyl"}
   ]}
  ]},
  { id:"stories", c:["#D946EF","#A21CAF"], title:"סיפורים מאחורי הנשק", sub:"איך נולדו הנשקים המפורסמים", lessons:[
@@ -2864,7 +2873,7 @@ Object.assign(DIAGRAMS,{
    <rect x="188" y="102" width="60" height="7" fill="#8C96A0"/><g class="slide"><path d="M214 96h30v28l-30-6z" fill="#2A2F35"/></g>
    <g class="dg-lbl"><text x="160" y="16" text-anchor="middle">קת מתקפלת</text><text x="160" y="88" text-anchor="middle">קת נשלפת</text></g></svg>`},
 });
-const LESSON_DIAG={"parts2:3":["stocks","bullpup"],"parts2:2":["rifling","muzzle"],"parts2:1":["magtypes","magazine"],"parts2:0":["sights","reddot","scope"],"parts:2":["pt_tavor"],"parts:3":["pt_fal"],"parts:4":["pt_barrett"],"parts:5":["bolt"],"stories:3":["madmin"],"famous:0":["tl_classic"],"famous:1":["drum"],"terms:1":["indirect"],"shoot:1":["zero"],"israel:1":["irondome"],"terms:0":["caliber"],"history:1":["tl_ww"],"rifles:0":["akvsm16"],"heavy:0":["scope"],"history:0":["tl_world"],"israel:0":["tl_israel"],"gear:0":["armor"],"technique:0":["positions"],"pistols:1":["blowback"],"heavy:1":["belt"],"pistols:0":["revolver"],"shoot:0":["sights"],"gear:1":["reddot"],"parts:0":["magazine"],"parts:1":["cartridge","firing"],"works:0":["bolt"],"works:1":["gas"],"rifles:1":["bullpup"],"technique:1":["trajectory","rifling"]};
+const LESSON_DIAG={"works:2":["revolver","blowback"],"parts2:3":["stocks","bullpup"],"parts2:2":["rifling","muzzle"],"parts2:1":["magtypes","magazine"],"parts2:0":["sights","reddot","scope"],"parts:2":["pt_tavor"],"parts:3":["pt_fal"],"parts:4":["pt_barrett"],"parts:5":["bolt"],"stories:3":["madmin"],"famous:0":["tl_classic"],"famous:1":["drum"],"terms:1":["indirect"],"shoot:1":["zero"],"israel:1":["irondome"],"terms:0":["caliber"],"history:1":["tl_ww"],"rifles:0":["akvsm16"],"heavy:0":["scope"],"history:0":["tl_world"],"israel:0":["tl_israel"],"gear:0":["armor"],"technique:0":["positions"],"pistols:1":["blowback"],"heavy:1":["belt"],"pistols:0":["revolver"],"shoot:0":["sights"],"gear:1":["reddot"],"parts:0":["magazine"],"parts:1":["cartridge","firing"],"works:0":["bolt"],"works:1":["gas"],"rifles:1":["bullpup"],"technique:1":["trajectory","rifling"]};
 
 /* ---- teach first: cards built from the lesson's own content, shown before the questions */
 function teachCards(qs,key){
