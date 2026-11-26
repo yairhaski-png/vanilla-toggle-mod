@@ -1579,6 +1579,15 @@ const COURSE = [
    {t:"tf", q:"הדזרט איגל יוצר בתחילת דרכו בישראל.", c:true, e:"הוא תוכנן בידי Magnum Research האמריקנית, והייצור נעשה בתעשייה הצבאית."},
    {t:"mc", q:"מהו קוולר, שממנו עשויים רבים מהשכפ\"צים?", a:["סיב סינתטי חזק במיוחד","סוג של פלדה קלה","קרמיקה גמישה","סגסוגת אלומיניום"], c:0, e:"סטפני קוולק המציאה אותו בחברת דופונט ב-1965."},
    {t:"tf", q:"מיכאיל קלשניקוב נפטר ב-2013.", c:true, e:"הוא נפטר בגיל 94 ברוסיה."}
+  ]},
+  { name:"אקדחים מפורסמים", qs:[
+   {t:"order", q:"סדר את האקדחים לפי שנת ההופעה", items:["קולט M1911","וולטר PPK","קולט פייתון","ברטה 92","גלוק 17"], e:"M1911 (1911), PPK (1931), פייתון (1955), ברטה 92 (1975), גלוק 17 (1982)."},
+   {t:"tf", q:"ה-M1911 היה האקדח הרשמי של צבא ארה\"ב במשך יותר מ-70 שנה, עד שהוחלף בברטה 92.", c:true, e:"הברטה קיבלה בצבא האמריקני את השם M9, ונכנסה לשירות ב-1985."},
+   {t:"id", w:"m1911"},
+   {t:"mc", q:"למה הגלוק 17 נקרא כך?", a:["זה היה הפטנט ה-17 של החברה, ובמקרה גם יש 17 כדורים במחסנית","הוא תוכנן ב-1917","הוא שוקל 17 אונקיות","זה היה הדגם ה-17 שנוסה בצבא"], c:0, e:"לפי החברה המספר מציין את מספר הפטנט, והצירוף עם 17 הכדורים הפך אותו לשם זכיר."},
+   {t:"spec", w:"deagle", k:"cal"},
+   {t:"part", w:"python", p:"hammer"},
+   {t:"match", q:"התאם אקדח לעובדה", p:[["M1911","יותר מ-70 שנה בצבא ארה\"ב"],["PPK","האקדח של ג'יימס בונד"],["פייתון","אקדח תופי"],["דזרט איגל","מנגנון גזים כמו ברובה"]]}
   ]}
  ]},
  { id:"terms", c:["#EC4899","#C02A78"], title:"מילון מונחים", sub:"לדבר את השפה", lessons:[
@@ -2942,7 +2951,11 @@ Object.assign(DIAGRAMS,{
  pdwcal:{title:"שלושה כדורים, אותו קנה מידה",text:"כדור 9 מ\"מ של אקדח קצר ועבה. הכדורים של ה-MP7 וה-P90 דקים, ארוכים ומהירים יותר. הם נועדו לנשקים קטנים שיורים חזק יותר מאקדח.",
   svg:`<svg viewBox="0 0 320 130" class="dg dg-pdw"><g class="pc" style="--d:0"><rect x="243.0" y="9.1" width="57.0" height="29.7" rx="2" fill="#D4A84B"/><path d="M243.0 10.5h-14.4q-17.7 13.5 0 27.0h14.4z" fill="#B87333"/><text x="70" y="25" text-anchor="middle" direction="ltr" font-weight="900">9×19</text><text x="70" y="39" text-anchor="middle" font-size="10" opacity=".75">עוזי, גלוק</text></g><g class="pc" style="--d:1"><rect x="210.0" y="54.0" width="90.0" height="24.0" rx="2" fill="#D4A84B"/><path d="M210.0 59.1h-10.8q-13.2 6.9 0 13.8h10.8z" fill="#B87333"/><text x="70" y="67" text-anchor="middle" direction="ltr" font-weight="900">4.6×30</text><text x="70" y="81" text-anchor="middle" font-size="10" opacity=".75">MP7</text></g><g class="pc" style="--d:2"><rect x="213.3" y="96.2" width="86.7" height="23.7" rx="2" fill="#D4A84B"/><path d="M213.3 99.5h-15.7q-19.1 8.6 0 17.1h15.7z" fill="#B87333"/><text x="70" y="109" text-anchor="middle" direction="ltr" font-weight="900">5.7×28</text><text x="70" y="123" text-anchor="middle" font-size="10" opacity=".75">P90</text></g></svg>`},
 });
-const LESSON_DIAG={"heavy:2":["scope","caliber"],"pistols:2":["pdwcal"],"history:2":["tl_musket","cartridge"],"israel:2":["tl_idf"],"works:2":["revolver","blowback"],"parts2:3":["stocks","bullpup"],"parts2:2":["rifling","muzzle"],"parts2:1":["magtypes","magazine"],"parts2:0":["sights","reddot","scope"],"parts:2":["pt_tavor"],"parts:3":["pt_fal"],"parts:4":["pt_barrett"],"parts:5":["bolt"],"stories:3":["madmin"],"famous:0":["tl_classic"],"famous:1":["drum"],"terms:1":["indirect"],"shoot:1":["zero"],"israel:1":["irondome"],"terms:0":["caliber"],"history:1":["tl_ww"],"rifles:0":["akvsm16"],"heavy:0":["scope"],"history:0":["tl_world"],"israel:0":["tl_israel"],"gear:0":["armor"],"technique:0":["positions"],"pistols:1":["blowback"],"heavy:1":["belt"],"pistols:0":["revolver"],"shoot:0":["sights"],"gear:1":["reddot"],"parts:0":["magazine"],"parts:1":["cartridge","firing"],"works:0":["bolt"],"works:1":["gas"],"rifles:1":["bullpup"],"technique:1":["trajectory","rifling"]};
+Object.assign(DIAGRAMS,{
+ tl_pistols:{title:"מאה שנים של אקדחים",text:"מאקדח עם פטיש חיצוני ומסגרת פלדה, ועד אקדח עם מסגרת פולימר ומחסנית של 17 כדורים.",
+  svg:timelineSvg([["1911","M1911"],["1931","PPK"],["1955","פייתון"],["1975","ברטה 92"],["1982","גלוק 17"],["1983","איגל"]])},
+});
+const LESSON_DIAG={"famous:2":["tl_pistols"],"heavy:2":["scope","caliber"],"pistols:2":["pdwcal"],"history:2":["tl_musket","cartridge"],"israel:2":["tl_idf"],"works:2":["revolver","blowback"],"parts2:3":["stocks","bullpup"],"parts2:2":["rifling","muzzle"],"parts2:1":["magtypes","magazine"],"parts2:0":["sights","reddot","scope"],"parts:2":["pt_tavor"],"parts:3":["pt_fal"],"parts:4":["pt_barrett"],"parts:5":["bolt"],"stories:3":["madmin"],"famous:0":["tl_classic"],"famous:1":["drum"],"terms:1":["indirect"],"shoot:1":["zero"],"israel:1":["irondome"],"terms:0":["caliber"],"history:1":["tl_ww"],"rifles:0":["akvsm16"],"heavy:0":["scope"],"history:0":["tl_world"],"israel:0":["tl_israel"],"gear:0":["armor"],"technique:0":["positions"],"pistols:1":["blowback"],"heavy:1":["belt"],"pistols:0":["revolver"],"shoot:0":["sights"],"gear:1":["reddot"],"parts:0":["magazine"],"parts:1":["cartridge","firing"],"works:0":["bolt"],"works:1":["gas"],"rifles:1":["bullpup"],"technique:1":["trajectory","rifling"]};
 
 /* ---- teach first: cards built from the lesson's own content, shown before the questions */
 function teachCards(qs,key){
