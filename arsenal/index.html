@@ -1172,6 +1172,15 @@ const COURSE = [
    {t:"tf", q:"בתוך המחסנית יש קפיץ ומזין שדוחפים את הכדורים כלפי מעלה.", c:true, e:"המזין הוא הלוח שהכדור התחתון נשען עליו. כשהמחסנית ריקה, הוא בראש המחסנית."},
    {t:"order", q:"סדר את מה שקורה בתוך הנשק אחרי ירייה, מההתחלה", items:["הבריח נהדף לאחור","השולף מושך את התרמיל","הפולט זורק את התרמיל החוצה","קפיץ ההחזרה דוחף את הבריח קדימה","כדור חדש נכנס לבית הבליעה"], e:"זה המחזור של כל נשק חצי-אוטומטי, ובחלק מהנשקים הוא קורה יותר מ-10 פעמים בשנייה."},
    {t:"match", q:"התאם חלק פנימי לתפקיד", p:[["נוקר","פוגע בפיקה"],["שולף","מושך את התרמיל"],["פולט","זורק את התרמיל"],["קפיץ החזרה","מחזיר את הבריח"]]}
+  ]},
+  { name:"כוונות", qs:[
+   {t:"mc", q:"מה צריך ליישר כשמשתמשים בכוונות פתוחות (כוונות ברזל)?", a:["את הכוונת האחורית, הכוונת הקדמית והמטרה בקו אחד","רק את הכוונת הקדמית עם המטרה","את הקנה עם הקת","את הנקודה האדומה עם המטרה"], c:0, e:"שלושה דברים בקו אחד: חריץ או חור מאחור, הזיז מקדימה, והמטרה."},
+   {t:"mc", q:"איך עובדת כוונת אדומה (רד-דוט)?", a:["נורה קטנה מאירה נקודה על זכוכית, והיורה רואה אותה מעל המטרה","היא מקרינה לייזר על המטרה","היא מגדילה את המטרה פי 10","היא מראה את המטרה בחושך לפי חום"], c:0, e:"הנקודה נראית רק לעין של היורה, לא על המטרה עצמה. אפשר לכוון איתה מהר ועם שתי עיניים פתוחות."},
+   {t:"tf", q:"כוונת אדומה רגילה לא מגדילה את התמונה.", c:true, e:"היא נועדה לכיוון מהיר. להגדלה משתמשים בכוונת טלסקופית, ויש גם מגדילים שמרכיבים מאחורי כוונת אדומה."},
+   {t:"part", w:"rem700", p:"scope"},
+   {t:"mc", q:"איזו כוונת מורכבת על התבור בצה\"ל?", a:["מפרו 21, כוונת אדומה ישראלית","כוונת טלסקופית פי 10","כוונת לילה תרמית בלבד","אין עליו כוונת, רק כוונות ברזל"], c:0, e:"המפרו 21 של מפרולייט מאירה בעזרת טריטיום וסיבים אופטיים, ולכן לא צריכה סוללה."},
+   {t:"match", q:"התאם כוונת לתיאור", p:[["כוונות ברזל","זיז מקדימה וחריץ מאחור"],["כוונת אדומה","נקודה מוארת על זכוכית"],["כוונת טלסקופית","מגדילה את המטרה"],["כוונת לילה","מראה בחושך"]]},
+   {t:"part", w:"m4", p:"optic"}
   ]}
  ]},
  { id:"works", c:["#FF9B1A","#DA7C00"], title:"איך נשק עובד", sub:"בריח, חצי-אוטומטי, גזים והדף", lessons:[
@@ -2787,7 +2796,7 @@ Object.assign(DIAGRAMS,{
  pt_fal:{title:"החלקים של ה-FAL",text:"רובה קרב בלגי עם ידית נשיאה מעל בית המכלול. עקוב אחרי החלקים שנדלקים אחד אחרי השני.",svg:partsTour("fal")},
  pt_barrett:{title:"החלקים של הבארט",text:"רובה צלפים כבד: מעצור לוע גדול בקצה, כוונת טלסקופית למעלה ומחסנית של כדורים גדולים.",svg:partsTour("barrett")},
 });
-const LESSON_DIAG={"parts:2":["pt_tavor"],"parts:3":["pt_fal"],"parts:4":["pt_barrett"],"parts:5":["bolt"],"stories:3":["madmin"],"famous:0":["tl_classic"],"famous:1":["drum"],"terms:1":["indirect"],"shoot:1":["zero"],"israel:1":["irondome"],"terms:0":["caliber"],"history:1":["tl_ww"],"rifles:0":["akvsm16"],"heavy:0":["scope"],"history:0":["tl_world"],"israel:0":["tl_israel"],"gear:0":["armor"],"technique:0":["positions"],"pistols:1":["blowback"],"heavy:1":["belt"],"pistols:0":["revolver"],"shoot:0":["sights"],"gear:1":["reddot"],"parts:0":["magazine"],"parts:1":["cartridge","firing"],"works:0":["bolt"],"works:1":["gas"],"rifles:1":["bullpup"],"technique:1":["trajectory","rifling"]};
+const LESSON_DIAG={"parts:6":["sights","reddot","scope"],"parts:2":["pt_tavor"],"parts:3":["pt_fal"],"parts:4":["pt_barrett"],"parts:5":["bolt"],"stories:3":["madmin"],"famous:0":["tl_classic"],"famous:1":["drum"],"terms:1":["indirect"],"shoot:1":["zero"],"israel:1":["irondome"],"terms:0":["caliber"],"history:1":["tl_ww"],"rifles:0":["akvsm16"],"heavy:0":["scope"],"history:0":["tl_world"],"israel:0":["tl_israel"],"gear:0":["armor"],"technique:0":["positions"],"pistols:1":["blowback"],"heavy:1":["belt"],"pistols:0":["revolver"],"shoot:0":["sights"],"gear:1":["reddot"],"parts:0":["magazine"],"parts:1":["cartridge","firing"],"works:0":["bolt"],"works:1":["gas"],"rifles:1":["bullpup"],"technique:1":["trajectory","rifling"]};
 
 /* ---- teach first: cards built from the lesson's own content, shown before the questions */
 function teachCards(qs,key){
