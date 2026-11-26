@@ -914,6 +914,8 @@ body{font-size:16px}
 .met-c svg{width:100%;height:auto}.met-c b{font-size:11px;text-align:center;line-height:1.2}
 @keyframes metIn{from{opacity:0;transform:translateY(14px) rotate(-6deg) scale(.7)}}
 .miss-card.done>svg{fill:var(--green);background:color-mix(in srgb,var(--green) 16%,transparent)}
+.wk-card{border-color:color-mix(in srgb,#8B5CF6 45%,var(--line));background:linear-gradient(135deg,color-mix(in srgb,#8B5CF6 10%,var(--surface)),var(--surface) 70%)}
+.wk-gem{display:inline-flex;align-items:center;gap:2px;font-size:12px;color:var(--gem);margin-inline-start:6px}.wk-gem svg{width:14px;height:14px;fill:var(--gem)}
 @media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
 </style>
 
@@ -2221,7 +2223,7 @@ function finish(){
   const dBefore=S.daily.xp;
   S.xp+=xp; S.gems+=gems; S.daily.xp+=xp; S.days[today()]=(S.days[today()]||0)+xp; S.done[f.key]=(S.done[f.key]||0)+1; if(perfect)S.perfect++;
   const t=today(); if(S.last!==t){const g=S.last?(new Date(t)-new Date(S.last))/864e5:99; S.streak=g===1?S.streak+1:1; S.last=t;}
-  S.best=Math.max(S.best||0,S.streak); qState().lessons++; save();
+  S.best=Math.max(S.best||0,S.streak); qState().lessons++; { const w=wkState(); w.lessons++; if(perfect) w.perfect++; } save();
   renderLearn.justDone=f.key; renderLearn.justOpen=(fi>=0&&fi+1<FLAT.length&&!nextWasOpen&&isOpen(fi+1))?FLAT[fi+1].key:null;
   const nb=BADGES.filter(earned).length-before, secs=Math.round((Date.now()-L.t0)/1000), acc=Math.round(L.first/L.firstTotal*100);
   const sub=f.n.t==="lesson"&&!wasFull?`שלב ${Math.min(3,S.done[f.key])} מתוך 3 · ${esc(f.n.name)}`:esc(f.n.name);
@@ -2324,22 +2326,38 @@ function QUESTS(){ const q=qState(); return [
   {id:"les",n:"השלם 2 שיעורים",ic:"i-star",col:"var(--blue)",v:q.lessons,max:2},
   {id:"combo",n:"ענה נכון 5 פעמים ברצף",ic:"i-fire",col:"var(--orange)",v:q.combo,max:5},
 ];}
-const claimable=()=>QUESTS().filter(x=>x.v>=x.max&&!qState().claimed[x.id]).length;
+/* weekly challenge: resets every Sunday, bigger rewards than the daily quests */
+function wkState(){ const k=wkKey(weekStart()); if(!S.wk||S.wk.k!==k) S.wk={k,lessons:0,perfect:0,claimed:{}}; return S.wk; }
+function WEEKLY(){ const w=wkState(); return [
+  {id:"wperf",n:"3 שיעורים מושלמים השבוע",ic:"i-check",col:"var(--green)",v:w.perfect,max:3,gems:40},
+  {id:"wles",n:"10 שיעורים השבוע",ic:"i-trophy",col:"#8B5CF6",v:w.lessons,max:10,gems:30},
+];}
+function weeklyRows(){
+  return WEEKLY().map(x=>{const done=x.v>=x.max, got=wkState().claimed[x.id];
+    return `<div class="quest-row"><svg viewBox="0 0 24 24" class="qi" style="color:${x.col};fill:${x.col}"><use href="#${x.ic}"/></svg>
+      <div class="q-txt"><b>${esc(x.n)} <span class="wk-gem">+${x.gems}${ico("i-gem")}</span></b><div class="pbar"><i style="width:${Math.min(100,x.v/x.max*100)}%"></i><span dir="ltr">${Math.min(x.v,x.max)} / ${x.max}</span></div></div>
+      <button class="q-chest ${done&&!got?"ready":""}" data-wclaim="${x.id}" ${done&&!got?"":"disabled"} aria-label="${got?"נאסף":done?"אסוף פרס":"פרס"}"><svg viewBox="0 0 86 78"><use href="#${got?"chest-open":"chest"}"/></svg></button></div>`;}).join("");
+}
+const claimable=()=>QUESTS().filter(x=>x.v>=x.max&&!qState().claimed[x.id]).length+WEEKLY().filter(x=>x.v>=x.max&&!wkState().claimed[x.id]).length;
 function questRows(){
   return QUESTS().map(x=>{const done=x.v>=x.max, got=qState().claimed[x.id];
     return `<div class="quest-row"><svg viewBox="0 0 24 24" class="qi" style="color:${x.col};fill:${x.col}"><use href="#${x.ic}"/></svg>
-      <div class="q-txt"><b>${esc(x.n)}</b><div class="pbar"><i style="width:${Math.min(100,x.v/x.max*100)}%"></i><span>${Math.min(x.v,x.max)} / ${x.max}</span></div></div>
+      <div class="q-txt"><b>${esc(x.n)}</b><div class="pbar"><i style="width:${Math.min(100,x.v/x.max*100)}%"></i><span dir="ltr">${Math.min(x.v,x.max)} / ${x.max}</span></div></div>
       <button class="q-chest ${done&&!got?"ready":""}" data-claim="${x.id}" ${done&&!got?"":"disabled"} aria-label="${got?"נאסף":done?"אסוף פרס":"פרס"}"><svg viewBox="0 0 86 78"><use href="#${got?"chest-open":"chest"}"/></svg></button></div>`;}).join("");
 }
 function questsCard(){ return `<div class="card"><h3>משימות יומיות <button data-go="quests">הצג הכל</button></h3><div class="quest-list">${questRows()}</div></div>`; }
 function bindClaims(){
   $$("[data-claim]").forEach(b=>b.onclick=()=>{ const q=qState(); if(q.claimed[b.dataset.claim])return; q.claimed[b.dataset.claim]=1; S.gems+=10; save();
     burst(b,["#1EA5F0","#84D8FF","#FFC800"],18); floatText(b,`+10 ${'<svg viewBox="0 0 24 24" width="20" height="20" style="fill:var(--gem)"><use href="#i-gem"/></svg>'}`,"var(--gem)"); sfx.win(); setTimeout(render,650); });
+  $$("[data-wclaim]").forEach(b=>b.onclick=()=>{ const w=wkState(), x=WEEKLY().find(x=>x.id===b.dataset.wclaim); if(!x||w.claimed[x.id]||x.v<x.max)return; w.claimed[x.id]=1; S.gems+=x.gems; save();
+    burst(b,["#8B5CF6","#1EA5F0","#FFC800"],26); floatText(b,`+${x.gems} ${'<svg viewBox="0 0 24 24" width="20" height="20" style="fill:var(--gem)"><use href="#i-gem"/></svg>'}`,"var(--gem)"); sfx.streak(); setTimeout(render,650); });
 }
 function renderQuests(){
   const mid=new Date(); mid.setHours(24,0,0,0);
   $("#main").innerHTML=`<div class="q-banner">${mascot("happy","qb-kd")}<div><h1>משימות יומיות</h1><p>השלם משימות וקבל יהלומים. מתחדש בעוד ${Math.ceil((mid-Date.now())/36e5)} שעות.</p></div></div>
     <div class="card" style="margin-top:16px"><div class="quest-list">${questRows()}</div></div>
+    <h2 class="page-title" style="font-size:21px">אתגר שבועי</h2><p class="page-sub">מתחדש ביום ראשון. בעוד ${Math.max(1,Math.ceil((weekStart().getTime()+7*864e5-Date.now())/864e5))} ימים.</p>
+    <div class="card wk-card"><div class="quest-list">${weeklyRows()}</div></div>
     <h2 class="page-title" style="font-size:21px">הישגים</h2><p class="page-sub">${BADGES.filter(earned).length} מתוך ${BADGES.length} עיטורים · <button class="linkish" data-go="badges">לכל ההישגים</button></p>`;
   bindClaims();
 }
