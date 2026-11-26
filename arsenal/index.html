@@ -919,6 +919,11 @@ body{font-size:16px}
 .wk-gem{display:inline-flex;align-items:center;gap:2px;font-size:12px;color:var(--gem);margin-inline-start:6px}.wk-gem svg{width:14px;height:14px;fill:var(--gem)}
 .dg-shot circle{animation:shotFly 2.4s cubic-bezier(.2,.6,.4,1) infinite;animation-delay:calc(var(--k)*20ms)}
 @keyframes shotFly{0%{transform:rotate(var(--a)) translateX(0);opacity:0}8%{opacity:1}85%{opacity:1}100%{transform:rotate(var(--a)) translateX(-210px);opacity:0}}
+.st-row{display:grid;grid-template-columns:110px 1fr 44px;align-items:center;gap:10px;margin:8px 0;animation:qIn .4s backwards;animation-delay:calc(var(--d)*60ms)}
+.st-row span{font-weight:700;font-size:14px}.st-row b{text-align:end;font-size:14px}.st-row .pbar{height:12px}
+.st-ws{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
+.st-w{border:2px solid var(--line);border-radius:12px;padding:6px;display:flex;flex-direction:column;align-items:center;gap:2px;text-align:center}
+.st-w svg{width:100%;height:auto}.st-w b{font-size:12px;line-height:1.2}.st-w small{font-weight:800;color:var(--muted)}
 @media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
 </style>
 
@@ -2019,6 +2024,7 @@ function renderMe(){
     <div class="tile"><svg viewBox="0 0 24 24" style="fill:var(--green)"><use href="#i-check"/></svg><div><b>${lessonsDone()}/${LESSON_COUNT}</b><small>שיעורים</small></div></div>
     <div class="tile"><svg viewBox="0 0 24 24" style="fill:var(--blue)"><use href="#i-star"/></svg><div><b>${acc}%</b><small>דיוק</small></div></div>
    </div>
+   <h2 class="page-title" style="font-size:21px">סטטיסטיקה</h2>${statsCard()}
    <h2 class="page-title" style="font-size:21px">XP בשבוע האחרון</h2>
    <div class="card"><div class="week">${days.map(d=>`<div class="d"><small style="color:var(--ink)">${d.v||""}</small><div class="b ${d.v?"on":""}" style="height:${Math.max(4,d.v/mx*80)}px"></div><small>${d.l}</small></div>`).join("")}</div></div>
    <div class="me-cards" style="display:grid;gap:16px;margin-top:20px">${leagueCard()}${questsCard()}${rankCard()}</div>
@@ -2130,7 +2136,7 @@ function kicker(){
 }
 const optBtn=(ai,k,label)=>`<button class="opt" style="--d:${k}" data-a="${ai}"><span class="k">${k+1}</span>${esc(label)}</button>`;
 function renderQ(){
-  const q=L.qs[L.i]; L.state="answer"; L.sel=null; L.cur=null; L.onSel=null;
+  const q=L.qs[L.i]; L.state="answer"; L.sel=null; L.cur=null; L.onSel=null; L.curW=null;
   milestone(); armThink();
   const kick=kicker(), tm=L.timed?{timer:T_SEC}:{};
   const ent=["in-hop","in-slide","in-spin","in-peek"][L.i%4];
@@ -2217,6 +2223,8 @@ function feedback(ok,expl,qv){
   stopTimer();
   const q0=L.qs[L.i], q=qv||q0, first=L.i<L.firstTotal;
   S.answered++; noteAnswer(q0,ok,first||!!L.f.mist);
+  { const tt=q0.t==="build"?"mc":q0.t; S.ts=S.ts||{}; const a=S.ts[tt]||(S.ts[tt]=[0,0]); a[1]++; if(ok)a[0]++;
+    const wid=q0.w||L.curW; if(wid&&WMAP[wid]){ S.wst=S.wst||{}; const b=S.wst[wid]||(S.wst[wid]=[0,0]); b[1]++; if(ok)b[0]++; } }
   try{ if(navigator.vibrate) navigator.vibrate(ok?18:[45,35,45]); }catch(e){}
   if(ok){ S.correct++; L.combo++; if(first)L.first++; const qs_=qState(); qs_.combo=Math.max(qs_.combo,L.combo); }
   else { L.combo=0; if(q0.t!=="match")L.mistakes.push(q0); if(!L.practice){ if(S.hearts>=5)S.hRef=Date.now(); S.hearts=Math.max(0,S.hearts-1);} }
@@ -2684,7 +2692,7 @@ function renderFlag(q,kick,tm){
   const pool=WEAPONS.filter(w=>!w.gen&&FLAGS[w.country]);
   const w=q.w&&FLAGS[(WMAP[q.w]||{}).country]?WMAP[q.w]:shuffle(pool)[0];
   const others=shuffle(Object.keys(FLAGS).filter(c=>c!==w.country)).slice(0,3);
-  L.cur={t:"mc",a:[w.country,...others],c:0,e:`${w.n} · ${w.country} · ${w.year}. ${w.fact}`};
+  L.cur={t:"mc",a:[w.country,...others],c:0,e:`${w.n} · ${w.country} · ${w.year}. ${w.fact}`}; L.curW=w.id;
   L.order=shuffle([0,1,2,3]);
   frame(`${kick}<h1 class="l-title">מאיזו מדינה מגיע ${esc(w.n)}?</h1><div class="id-card">${silSvg(w,"sil")}</div>
     <div class="opts flag-grid">${L.order.map((ai,k)=>`<button class="opt flag-opt" style="--d:${k}" data-a="${ai}"><span class="k">${k+1}</span>${flagSvg(L.cur.a[ai])}<b>${esc(L.cur.a[ai])}</b></button>`).join("")}</div>`,"בדיקה",true,"",tm);
@@ -2696,7 +2704,7 @@ function renderPeek(q,kick,tm){
   const pool=WEAPONS.filter(x=>!x.gen&&PARTS[x.sil]);
   const w=q.w&&WMAP[q.w]?WMAP[q.w]:shuffle(pool)[0];
   const others=shuffle(pool.filter(x=>x.id!==w.id&&!sameLook(x,w)&&x.sil!==w.sil)).slice(0,3);
-  L.cur={t:"mc",a:[w.n,...others.map(x=>x.n)],c:0,e:`${w.n} · ${w.type} · ${w.country}. ${w.fact}`};
+  L.cur={t:"mc",a:[w.n,...others.map(x=>x.n)],c:0,e:`${w.n} · ${w.type} · ${w.country}. ${w.fact}`}; L.curW=w.id;
   L.order=shuffle([0,1,2,3]);
   const parts=Object.values(PARTS[w.sil]), pick=parts[Math.random()*parts.length|0];
   const cx=pick[1]+pick[3]/2, cy=pick[2]+pick[4]/2, mid=`pk${Date.now()%1e6}`;
@@ -2723,6 +2731,22 @@ function buildRank(q){
 }
 
 /* ---- spec questions built from the armory data: calibre, magazine, designer, mechanism */
+/* profile statistics: accuracy by question type and by weapon */
+const TYPE_NAMES={mc:"בחירה",tf:"נכון / לא נכון",match:"התאמה",id:"זיהוי נשק",pic:"זיהוי לפי ציור",part:"גע בחלק",label:"שמות חלקים",spec:"מפרט",rank:"סידור",order:"סדר",peek:"מה מסתתר",gap:"השלמה",vs:"מי מנצח",flag:"דגלים",odd:"יוצא דופן",type:"הקלדה",story:"סיפור"};
+function statsCard(){
+  const ts=Object.entries(S.ts||{}).filter(([t,v])=>v[1]>=1&&TYPE_NAMES[t]).sort((a,b)=>b[1][1]-a[1][1]).slice(0,6);
+  if(!ts.length) return `<div class="card stats-card"><h3>סטטיסטיקה</h3><p class="page-sub" style="margin:0">ענה על כמה שאלות, וכאן יופיע הדיוק שלך לפי סוג שאלה ולפי נשק.</p></div>`;
+  const ws=Object.entries(S.wst||{}).filter(([w,v])=>WMAP[w]&&v[1]>=2);
+  const best=[...ws].sort((a,b)=>b[1][0]/b[1][1]-a[1][0]/a[1][1]||b[1][1]-a[1][1]).slice(0,3);
+  const hard=[...ws].filter(([,v])=>v[0]<v[1]).sort((a,b)=>a[1][0]/a[1][1]-b[1][0]/b[1][1]).slice(0,3);
+  const pc=v=>Math.round(v[0]/v[1]*100);
+  const chip=([w,v])=>`<div class="st-w">${silSvg(WMAP[w])}<b>${esc(WMAP[w].n)}</b><small dir="ltr">${pc(v)}%</small></div>`;
+  return `<div class="card stats-card"><h3>דיוק לפי סוג שאלה</h3>
+    ${ts.map(([t,v],i)=>`<div class="st-row" style="--d:${i}"><span>${TYPE_NAMES[t]}</span><div class="pbar"><i style="width:${pc(v)}%;background:${pc(v)>=80?"var(--green)":pc(v)>=50?"var(--gold)":"var(--red, #FF4B4B)"}"></i></div><b dir="ltr">${pc(v)}%</b></div>`).join("")}
+    ${best.length?`<h3 style="margin-top:14px">הנשקים שאתה מכיר הכי טוב</h3><div class="st-ws">${best.map(chip).join("")}</div>`:""}
+    ${hard.length?`<h3 style="margin-top:14px">כדאי לחזור עליהם</h3><div class="st-ws">${hard.map(chip).join("")}</div>`:""}</div>`;
+}
+
 const SPEC_KINDS={
   cal:{q:w=>`איזו תחמושת יורה ${w.n}?`,ok:w=>true,key:v=>String(v).replace(/[^\d.×]/g,"").slice(0,7)},
   mag:{q:w=>`כמה כדורים יש במחסנית הרגילה של ${w.n}?`,ok:w=>/^\d+$/.test(w.mag),key:v=>String(v)},
