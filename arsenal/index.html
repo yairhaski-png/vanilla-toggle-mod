@@ -2034,6 +2034,7 @@ function renderMe(){
    <div class="goal-opts"><button class="goal-opt" id="muteT" aria-pressed="${!S.mute}"><span>צלילים</span><span>${S.mute?"כבויים":"פועלים"}</span></button></div>
    <button class="danger" id="reset">איפוס התקדמות</button>`;
   bindAccount();
+  const hg=$("#hardGo"); if(hg) hg.onclick=startHard;
   $$(".goal-opt").forEach(b=>b.onclick=()=>{S.goal=+b.dataset.g;save();render();});
   $("#muteT").onclick=()=>{ S.mute=!S.mute; save(); if(!S.mute) sfx.ok(); render(); };
   $("#reset").onclick=()=>{ sheet(`<div class="center">${kasdi("big")}<h2>לאפס את כל ההתקדמות?</h2><p class="page-sub" style="margin:0">ה-XP, הרצף, היהלומים והשיעורים שסיימת יימחקו.</p>
@@ -2744,7 +2745,14 @@ function statsCard(){
   return `<div class="card stats-card"><h3>דיוק לפי סוג שאלה</h3>
     ${ts.map(([t,v],i)=>`<div class="st-row" style="--d:${i}"><span>${TYPE_NAMES[t]}</span><div class="pbar"><i style="width:${pc(v)}%;background:${pc(v)>=80?"var(--green)":pc(v)>=50?"var(--gold)":"var(--red, #FF4B4B)"}"></i></div><b dir="ltr">${pc(v)}%</b></div>`).join("")}
     ${best.length?`<h3 style="margin-top:14px">הנשקים שאתה מכיר הכי טוב</h3><div class="st-ws">${best.map(chip).join("")}</div>`:""}
-    ${hard.length?`<h3 style="margin-top:14px">כדאי לחזור עליהם</h3><div class="st-ws">${hard.map(chip).join("")}</div>`:""}</div>`;
+    ${hard.length?`<h3 style="margin-top:14px">כדאי לחזור עליהם</h3><div class="st-ws">${hard.map(chip).join("")}</div><button class="btn wide" id="hardGo" style="margin-top:12px">תרגל את הנשקים האלה</button>`:""}</div>`;
+}
+/* a short practice built from the weapons with the lowest accuracy: identify, find a part, peek */
+function hardWeapons(){ return Object.entries(S.wst||{}).filter(([w,v])=>WMAP[w]&&v[1]>=2&&v[0]<v[1]).sort((a,b)=>a[1][0]/a[1][1]-b[1][0]/b[1][1]).slice(0,4).map(([w])=>w); }
+function startHard(){
+  const ws=hardWeapons(); if(!ws.length) return;
+  const qs=[]; ws.forEach(w=>{ qs.push({t:"id",w}); if(PARTS[WMAP[w].sil]) qs.push({t:"part",w}); qs.push({t:"peek",w}); });
+  startLesson({u:COURSE[0],ui:0,n:{t:"practice",name:"נשקים קשים"},key:"practice"},shuffle(qs).slice(0,10));
 }
 
 const SPEC_KINDS={
