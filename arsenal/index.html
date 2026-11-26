@@ -895,6 +895,10 @@ body{font-size:16px}
 @keyframes mzGas{0%,10%{transform:none;opacity:0}20%{opacity:.9}60%,100%{transform:translate(10px,var(--dy));opacity:0}}
 .dg-mz .rc{animation:mzRc 1.6s ease-out infinite}
 @keyframes mzRc{0%,10%{transform:none}22%{transform:translateX(5px)}40%,100%{transform:none}}
+.dg-stk .fold{transform-box:view-box;transform-origin:201px 36px;animation:stkFold 4s ease-in-out infinite}
+@keyframes stkFold{0%,20%{transform:none}45%,70%{transform:rotate(180deg)}95%,100%{transform:none}}
+.dg-stk .slide{animation:stkSlide 4s ease-in-out infinite}
+@keyframes stkSlide{0%,20%{transform:none}45%,70%{transform:translateX(-22px)}95%,100%{transform:none}}
 @media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
 </style>
 
@@ -1207,6 +1211,15 @@ const COURSE = [
    {t:"part", w:"ak74", p:"brake"},
    {t:"match", q:"התאם חלק לתפקיד", p:[["חריקה","מסובבת את הקליע"],["מעצור לוע","מקטין רתע"],["מדכא הבזק","מפזר להבה"],["קנה חלק","רובה ציד"]]},
    {t:"part", w:"barrett", p:"brake"}
+  ]},
+  { name:"קתות ובולפאפ", qs:[
+   {t:"mc", q:"מה היתרון של קת מתקפלת?", a:["הנשק קצר יותר כשמקפלים אותה, למשל בתוך רכב","היא מקטינה את הרתע","היא מגדילה את הטווח","היא מחזיקה עוד מחסנית"], c:0, e:"לגליל, לסקורפיון ול-SCAR יש קתות שמתקפלות הצידה."},
+   {t:"mc", q:"מה מאפשרת קת נשלפת, כמו ב-M4?", a:["לשנות את אורך הקת לפי הגוף והציוד של החייל","לירות בלי ידית אחיזה","להחליף קנה","לקפל את הנשק לחצי"], c:0, e:"חייל עם אפוד עבה צריך קת קצרה יותר מאשר בלי אפוד."},
+   {t:"mc", q:"מה מיוחד ברובה בתצורת בולפאפ, כמו התבור?", a:["המחסנית ובית המכלול נמצאים מאחורי ידית האחיזה","אין לו קת בכלל","הוא יורה רק בירייה בודדת","הקנה שלו קצר מאוד"], c:0, e:"כך הרובה קצר יותר, אבל הקנה נשאר באורך מלא."},
+   {t:"part", w:"galil", p:"fstock"},
+   {t:"match", q:"התאם נשק לסוג הקת", p:[["תבור","בולפאפ"],["M4","קת נשלפת"],["גליל","קת מתקפלת"],["מאוזר 98","קת עץ קבועה"]]},
+   {t:"part", w:"aug", p:"mag"},
+   {t:"tf", q:"ל-AUG האוסטרי ול-FAMAS הצרפתי יש תצורת בולפאפ, כמו לתבור.", c:true, e:"ה-AUG מ-1977 היה מהרובים הראשונים שהפכו את הבולפאפ לנפוץ בצבאות."}
   ]}
  ]},
  { id:"works", c:["#FF9B1A","#DA7C00"], title:"איך נשק עובד", sub:"בריח, חצי-אוטומטי, גזים והדף", lessons:[
@@ -1738,7 +1751,7 @@ function nodeTap(i,btn){
     body=`<b>${esc(f.n.name)}</b><p>${full?"השלמת את כל 3 השלבים. אפשר לתרגל שוב.":`שלב ${st+1} מתוך 3 · ${STAGE_NAME[st]}${st===2?" (עם שעון)":""}`}</p>
       <div class="stage-dots">${[0,1,2].map(k=>`<i class="${k<st?"on":""}"></i>`).join("")}</div>
       <button class="pop-btn" id="popGo">${full?"תרגול":"התחל"} +${nodeXP(f)} XP</button>${st>0?`<button class="pop-learn" id="popLearn">${ico("i-book")}חזרה על החומר</button>`:""}`;
-  } else body=`<b>${esc(f.n.name)}</b><p>${f.n.t==="review"?"6 שאלות מכל היחידה":"כל השאלות ביחידה. תצליח, ותקבל גביע."}</p><button class="pop-btn" id="popGo">${isFull(f)?"תרגול":"התחל"} +${nodeXP(f)} XP</button>`;
+  } else body=`<b>${esc(f.n.name)}</b><p>${f.n.t==="review"?"6 שאלות מכל היחידה":"15 שאלות מכל היחידה. תצליח, ותקבל גביע."}</p><button class="pop-btn" id="popGo">${isFull(f)?"תרגול":"התחל"} +${nodeXP(f)} XP</button>`;
   const pop=document.createElement("div");
   pop.className="pop"+(open?"":" off"); pop.style.cssText=`--shift:${-shift}px;--arrow:${shift}px`;
   pop.innerHTML=body; pop.onclick=e=>e.stopPropagation(); wrap.appendChild(pop); wrap.classList.add("popped");
@@ -1931,7 +1944,7 @@ function startLesson(f,custom){
     if(stage===1){ const extra=shuffle(all.filter(q=>!own.includes(q)&&q.t!=="match")).slice(0,2); qs=shuffle([...own,...extra]); }
     else qs=shuffle(own);
     timed=stage===2;
-  } else qs=f.n.t==="review"?shuffle(all).slice(0,6):shuffle(all);
+  } else qs=f.n.t==="review"?shuffle(all).slice(0,6):shuffle(all).slice(0,15);
   if(!f.blitz) qs=toBuild(qs);
   L={practice:f.n.t==="practice",f,qs,i:0,first:0,firstTotal:qs.length,mistakes:[],state:"answer",sel:null,combo:0,t0:Date.now(),timed,stage:full?-1:st,pct:0,xpRun:0};
   $("#lesson").hidden=false; document.body.style.overflow="hidden";
@@ -2836,7 +2849,16 @@ Object.assign(DIAGRAMS,{
    <g class="rc"><path d="M300 102h-0" /><path d="M294 102l14-7v14z" fill="#E0483B"/></g>
    <g class="dg-lbl"><text x="205" y="22" text-anchor="middle">מדכא הבזק</text><text x="205" y="140" text-anchor="middle">מעצור לוע</text></g></svg>`},
 });
-const LESSON_DIAG={"parts:8":["rifling","muzzle"],"parts:7":["magtypes","magazine"],"parts:6":["sights","reddot","scope"],"parts:2":["pt_tavor"],"parts:3":["pt_fal"],"parts:4":["pt_barrett"],"parts:5":["bolt"],"stories:3":["madmin"],"famous:0":["tl_classic"],"famous:1":["drum"],"terms:1":["indirect"],"shoot:1":["zero"],"israel:1":["irondome"],"terms:0":["caliber"],"history:1":["tl_ww"],"rifles:0":["akvsm16"],"heavy:0":["scope"],"history:0":["tl_world"],"israel:0":["tl_israel"],"gear:0":["armor"],"technique:0":["positions"],"pistols:1":["blowback"],"heavy:1":["belt"],"pistols:0":["revolver"],"shoot:0":["sights"],"gear:1":["reddot"],"parts:0":["magazine"],"parts:1":["cartridge","firing"],"works:0":["bolt"],"works:1":["gas"],"rifles:1":["bullpup"],"technique:1":["trajectory","rifling"]};
+Object.assign(DIAGRAMS,{
+ stocks:{title:"קת מתקפלת וקת נשלפת",text:"קת מתקפלת (למעלה) מסתובבת על ציר לצד הנשק, וכך הוא קצר יותר בנסיעה. קת נשלפת (למטה) נעה על צינור, וכל חייל מתאים את האורך לגוף ולציוד שלו.",
+  svg:`<svg viewBox="0 0 320 150" class="dg dg-stk">
+   <rect x="20" y="34" width="70" height="6" rx="2" fill="#4A525B"/><rect x="90" y="26" width="110" height="20" rx="3" fill="#4A525B"/><path d="M150 46h-12l4 20h12z" fill="#2A2F35"/><path d="M128 46h-12l-2 22h12z" fill="#4A525B"/>
+   <g class="fold"><path d="M200 30h52v20l-6 4h-6l-4-10h-36z" fill="#2A2F35"/></g><circle cx="201" cy="36" r="3" fill="#FFC800"/>
+   <rect x="20" y="104" width="70" height="6" rx="2" fill="#4A525B"/><rect x="90" y="96" width="100" height="20" rx="3" fill="#4A525B"/><path d="M150 116h-12l4 20h12z" fill="#2A2F35"/><path d="M128 116h-12l-2 22h12z" fill="#4A525B"/>
+   <rect x="188" y="102" width="60" height="7" fill="#8C96A0"/><g class="slide"><path d="M214 96h30v28l-30-6z" fill="#2A2F35"/></g>
+   <g class="dg-lbl"><text x="160" y="16" text-anchor="middle">קת מתקפלת</text><text x="160" y="88" text-anchor="middle">קת נשלפת</text></g></svg>`},
+});
+const LESSON_DIAG={"parts:9":["stocks","bullpup"],"parts:8":["rifling","muzzle"],"parts:7":["magtypes","magazine"],"parts:6":["sights","reddot","scope"],"parts:2":["pt_tavor"],"parts:3":["pt_fal"],"parts:4":["pt_barrett"],"parts:5":["bolt"],"stories:3":["madmin"],"famous:0":["tl_classic"],"famous:1":["drum"],"terms:1":["indirect"],"shoot:1":["zero"],"israel:1":["irondome"],"terms:0":["caliber"],"history:1":["tl_ww"],"rifles:0":["akvsm16"],"heavy:0":["scope"],"history:0":["tl_world"],"israel:0":["tl_israel"],"gear:0":["armor"],"technique:0":["positions"],"pistols:1":["blowback"],"heavy:1":["belt"],"pistols:0":["revolver"],"shoot:0":["sights"],"gear:1":["reddot"],"parts:0":["magazine"],"parts:1":["cartridge","firing"],"works:0":["bolt"],"works:1":["gas"],"rifles:1":["bullpup"],"technique:1":["trajectory","rifling"]};
 
 /* ---- teach first: cards built from the lesson's own content, shown before the questions */
 function teachCards(qs,key){
