@@ -887,6 +887,7 @@ body{font-size:16px}
 .arm-got{width:22px;height:22px;border-radius:50%;background:var(--green);display:grid;place-items:center}.arm-got svg{width:14px;height:14px;fill:#fff}
 .arm-new{background:var(--blue);color:#fff;font-size:11px;font-weight:900;padding:2px 8px;border-radius:10px;animation:pulseNew 2s ease-in-out infinite}
 @keyframes pulseNew{50%{transform:scale(1.08)}}
+.dg-mags .mg{transform-box:fill-box;transform-origin:center bottom;animation:popIn2 .5s cubic-bezier(.3,1.6,.5,1) backwards;animation-delay:calc(.25s + var(--d)*.35s)}
 @media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
 </style>
 
@@ -1181,6 +1182,15 @@ const COURSE = [
    {t:"mc", q:"איזו כוונת מורכבת על התבור בצה\"ל?", a:["מפרו 21, כוונת אדומה ישראלית","כוונת טלסקופית פי 10","כוונת לילה תרמית בלבד","אין עליו כוונת, רק כוונות ברזל"], c:0, e:"המפרו 21 של מפרולייט מאירה בעזרת טריטיום וסיבים אופטיים, ולכן לא צריכה סוללה."},
    {t:"match", q:"התאם כוונת לתיאור", p:[["כוונות ברזל","זיז מקדימה וחריץ מאחור"],["כוונת אדומה","נקודה מוארת על זכוכית"],["כוונת טלסקופית","מגדילה את המטרה"],["כוונת לילה","מראה בחושך"]]},
    {t:"part", w:"m4", p:"optic"}
+  ]},
+  { name:"מחסניות וחגורים", qs:[
+   {t:"mc", q:"למה מחסנית של AK-47 מעוקלת?", a:["התרמיל שלו מתרחב לכיוון הבסיס, ולכן הכדורים נערמים בקשת","כדי שיהיה נוח להחזיק אותה","כדי שתיכנס לכיס","כדי שתהיה קלה יותר"], c:0, e:"כשמערימים כדורים עם תרמיל משופע, הם יוצרים קשת. במחסנית ישרה הם היו נתקעים."},
+   {t:"mc", q:"איפה נמצאת המחסנית ברובה ציד עם משאבה כמו רמינגטון 870?", a:["בצינור מתחת לקנה","בתוך הקת","בתוף מסתובב","בחגור בצד הנשק"], c:0, e:"הכדורים נכנסים אחד אחרי השני לתוך צינור, וקפיץ דוחף אותם לאחור."},
+   {t:"tf", q:"מקלעים כמו המאג והנגב יכולים לירות מחגור, שרשרת ארוכה של כדורים מחוברים.", c:true, e:"החוליות שמחברות את הכדורים נפרדות ונפלטות בזמן הירי."},
+   {t:"part", w:"thompson", p:"drum"},
+   {t:"rank", k:"kg"},
+   {t:"match", q:"התאם סוג הזנה לנשק", p:[["מחסנית מעוקלת","AK-47"],["תוף","תומפסון"],["חגור","מאג"],["צינורית","רמינגטון 870"]]},
+   {t:"spec", w:"fiveseven", k:"mag"}
   ]}
  ]},
  { id:"works", c:["#FF9B1A","#DA7C00"], title:"איך נשק עובד", sub:"בריח, חצי-אוטומטי, גזים והדף", lessons:[
@@ -2796,7 +2806,11 @@ Object.assign(DIAGRAMS,{
  pt_fal:{title:"החלקים של ה-FAL",text:"רובה קרב בלגי עם ידית נשיאה מעל בית המכלול. עקוב אחרי החלקים שנדלקים אחד אחרי השני.",svg:partsTour("fal")},
  pt_barrett:{title:"החלקים של הבארט",text:"רובה צלפים כבד: מעצור לוע גדול בקצה, כוונת טלסקופית למעלה ומחסנית של כדורים גדולים.",svg:partsTour("barrett")},
 });
-const LESSON_DIAG={"parts:6":["sights","reddot","scope"],"parts:2":["pt_tavor"],"parts:3":["pt_fal"],"parts:4":["pt_barrett"],"parts:5":["bolt"],"stories:3":["madmin"],"famous:0":["tl_classic"],"famous:1":["drum"],"terms:1":["indirect"],"shoot:1":["zero"],"israel:1":["irondome"],"terms:0":["caliber"],"history:1":["tl_ww"],"rifles:0":["akvsm16"],"heavy:0":["scope"],"history:0":["tl_world"],"israel:0":["tl_israel"],"gear:0":["armor"],"technique:0":["positions"],"pistols:1":["blowback"],"heavy:1":["belt"],"pistols:0":["revolver"],"shoot:0":["sights"],"gear:1":["reddot"],"parts:0":["magazine"],"parts:1":["cartridge","firing"],"works:0":["bolt"],"works:1":["gas"],"rifles:1":["bullpup"],"technique:1":["trajectory","rifling"]};
+Object.assign(DIAGRAMS,{
+ magtypes:{title:"חמש דרכים להזין כדורים",text:"מחסנית ישרה או מעוקלת נשלפת מהנשק. תוף מחזיק הרבה כדורים בספירלה. חגור הוא שרשרת כדורים בלי סוף. ומחסנית צינורית יושבת מתחת לקנה של רובה ציד.",
+  svg:`<svg viewBox="0 0 320 130" class="dg dg-mags"><g class="mg" style="--d:0"><g transform="translate(276 52)"><rect x="-8" y="-24" width="16" height="44" rx="3" fill="#4A525B"/></g><text x="276" y="100" text-anchor="middle" font-weight="900">ישרה</text><text x="276" y="116" text-anchor="middle" font-size="9.5" opacity=".75">גלוק 17</text></g><g class="mg" style="--d:1"><g transform="translate(214 52)"><path d="M-8 -24h16l6 40q-8 6-18 2z" fill="#4A525B"/></g><text x="214" y="100" text-anchor="middle" font-weight="900">מעוקלת</text><text x="214" y="116" text-anchor="middle" font-size="9.5" opacity=".75">AK-47</text></g><g class="mg" style="--d:2"><g transform="translate(152 52)"><circle r="22" fill="#4A525B"/><circle r="15" fill="none" stroke="#D4A84B" stroke-width="5" stroke-dasharray="4 3"/><circle r="5" fill="#8C96A0"/></g><text x="152" y="100" text-anchor="middle" font-weight="900">תוף</text><text x="152" y="116" text-anchor="middle" font-size="9.5" opacity=".75">תומפסון</text></g><g class="mg" style="--d:3"><g transform="translate(90 52)"><g fill="#D4A84B"><rect x="-26" y="-6" width="6" height="18" rx="1.5" transform="rotate(-8 -23 3)"/><rect x="-17" y="-6" width="6" height="18" rx="1.5" transform="rotate(-5 -14 3)"/><rect x="-8" y="-6" width="6" height="18" rx="1.5" transform="rotate(-2 -5 3)"/><rect x="1" y="-6" width="6" height="18" rx="1.5" transform="rotate(1 4 3)"/><rect x="10" y="-6" width="6" height="18" rx="1.5" transform="rotate(4 13 3)"/><rect x="19" y="-6" width="6" height="18" rx="1.5" transform="rotate(7 22 3)"/></g></g><text x="90" y="100" text-anchor="middle" font-weight="900">חגור</text><text x="90" y="116" text-anchor="middle" font-size="9.5" opacity=".75">מאג, נגב</text></g><g class="mg" style="--d:4"><g transform="translate(30 52)"><rect x="-24" y="-4" width="48" height="9" rx="4" fill="#4A525B"/><rect x="-22" y="-2" width="44" height="5" rx="2.5" fill="#D4A84B" opacity=".7"/></g><text x="30" y="100" text-anchor="middle" font-weight="900">צינורית</text><text x="30" y="116" text-anchor="middle" font-size="9.5" opacity=".75">רמינגטון</text></g></svg>`},
+});
+const LESSON_DIAG={"parts:7":["magtypes","magazine"],"parts:6":["sights","reddot","scope"],"parts:2":["pt_tavor"],"parts:3":["pt_fal"],"parts:4":["pt_barrett"],"parts:5":["bolt"],"stories:3":["madmin"],"famous:0":["tl_classic"],"famous:1":["drum"],"terms:1":["indirect"],"shoot:1":["zero"],"israel:1":["irondome"],"terms:0":["caliber"],"history:1":["tl_ww"],"rifles:0":["akvsm16"],"heavy:0":["scope"],"history:0":["tl_world"],"israel:0":["tl_israel"],"gear:0":["armor"],"technique:0":["positions"],"pistols:1":["blowback"],"heavy:1":["belt"],"pistols:0":["revolver"],"shoot:0":["sights"],"gear:1":["reddot"],"parts:0":["magazine"],"parts:1":["cartridge","firing"],"works:0":["bolt"],"works:1":["gas"],"rifles:1":["bullpup"],"technique:1":["trajectory","rifling"]};
 
 /* ---- teach first: cards built from the lesson's own content, shown before the questions */
 function teachCards(qs,key){
