@@ -2304,7 +2304,13 @@ document.addEventListener("keydown",e=>{
   if(!L||$("#lesson").hidden)return;
   if(e.key==="Escape")return closeLesson();
   if(e.key==="Enter"){const g=$("#go"); if(g&&!g.disabled){e.preventDefault();g.click();} return;}
-  const n=parseInt(e.key,10); if(n>=1&&n<=4&&L.state==="answer"){const b=$$(".opts .opt")[n-1]; if(b)b.click();}
+  if(L.state!=="answer") return;
+  /* Backspace takes back the last tile placed in order / label / word-tile questions */
+  if(e.key==="Backspace"){ const back=$$("[data-back]"); if(back.length){ e.preventDefault(); back[back.length-1].click(); } return; }
+  const n=parseInt(e.key,10); if(!(n>=1&&n<=9)) return;
+  const opt=$$(".opts .opt"); if(opt.length){ const b=opt[n-1]; if(b)b.click(); return; }
+  const tiles=$$("#obank .tile, #bank .tile"); if(tiles.length){ const t=tiles[n-1]; if(t&&!t.disabled&&!t.classList.contains("used")) t.click(); return; }
+  const hots=$$(".hot"); if(hots.length){ const h=hots[n-1]; if(h) h.dispatchEvent(new MouseEvent("click",{bubbles:true})); }
 });
 /* ================================================================== features: hearts timer, quests, league, practice, word tiles, voice, onboarding */
 
