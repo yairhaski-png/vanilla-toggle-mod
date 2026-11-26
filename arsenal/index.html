@@ -924,6 +924,8 @@ body{font-size:16px}
 .st-ws{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
 .st-w{border:2px solid var(--line);border-radius:12px;padding:6px;display:flex;flex-direction:column;align-items:center;gap:2px;text-align:center}
 .st-w svg{width:100%;height:auto}.st-w b{font-size:12px;line-height:1.2}.st-w small{font-weight:800;color:var(--muted)}
+.onb-show{width:100%;max-width:440px;margin:18px auto 0;border:2px solid var(--line);border-radius:18px;background:var(--soft);padding:10px;animation:popIn2 .5s cubic-bezier(.3,1.4,.5,1) .2s backwards}
+.onb-show svg{width:100%;height:auto;display:block}
 @media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
 </style>
 
@@ -2487,6 +2489,7 @@ function onboarding(){
   const A={why:null,level:null,goal:50}; let step=0;
   const STEPS=[
     {say:"היי! אני קסדי. אני אלמד אותך הכל על נשק: ממה הוא בנוי, איך כל חלק עובד, וכל הנשקים המפורסמים.",btn:"המשך"},
+    {say:`תלמד לזהות כל חלק, ב-${WEAPONS.length} נשקים מכל העולם. כל חלק נדלק בתורו.`,btn:"מגניב",show:()=>partsTour("ak")},
     {say:"למה אתה רוצה ללמוד על נשק?",key:"why",opts:[["curious","סתם מעניין אותי","i-star"],["army","מתכונן לצבא","i-trophy"],["sport","ירי ספורטיבי ומטווחים","i-dumbbell"],["history","היסטוריה צבאית","i-book"]]},
     {say:"כמה אתה כבר יודע?",key:"level",opts:[["0","אני מתחיל מאפס","i-star"],["1","אני מכיר כמה נשקים","i-bolt"],["2","אני יודע די הרבה","i-trophy"]]},
     {say:"מה היעד היומי שלך?",key:"goal",opts:[[20,"רגוע · 20 XP ביום","i-heart"],[50,"רציני · 50 XP ביום","i-bolt"],[100,"מטורף · 100 XP ביום","i-fire"]]},
@@ -2496,7 +2499,8 @@ function onboarding(){
     const st=STEPS[step], sel=st.key?A[st.key]:null;
     o.innerHTML=`<div class="onb-top"><button class="x" id="ob" aria-label="חזרה" ${step?"":"style=\"visibility:hidden\""}><svg viewBox="0 0 24 24"><path d="M8.6 5.4 15.2 12l-6.6 6.6 1.4 1.4 8-8-8-8z"/></svg></button>
       <div class="pbar big" style="flex:1"><i style="width:${step/(STEPS.length-1)*100}%"></i></div></div>
-      <div class="onb-body q-anim" key="${step}"><div class="speak ${st.key?"":"solo"}">${mascot(step===0||step===4?"happy":"neutral",step===0||step===4?"who jump big-kd":"who")}<div class="bubble">${esc(st.say)}</div></div>
+      <div class="onb-body q-anim" key="${step}"><div class="speak ${st.key?"":"solo"}">${mascot(step===0||step===STEPS.length-1?"happy":"neutral",step===0||step===STEPS.length-1?"who jump big-kd":"who")}<div class="bubble">${esc(st.say)}</div></div>
+      ${st.show?`<div class="onb-show">${st.show()}</div>`:""}
       ${st.opts?`<div class="opts">${st.opts.map(([v,l,ic],k)=>`<button class="opt ${String(sel)===String(v)?"sel":""}" style="--d:${k}" data-v="${v}"><svg viewBox="0 0 24 24" class="oi"><use href="#${ic}"/></svg>${esc(l)}</button>`).join("")}</div>`:""}</div>
       <div class="onb-foot"><button class="btn wide" id="on" ${st.key&&A[st.key]===null?"disabled":""}>${st.btn||"המשך"}</button></div>`;
     $$("#onb .opt").forEach(b=>b.onclick=()=>{A[st.key]=st.key==="goal"?+b.dataset.v:b.dataset.v;sfx.tap();draw();});
