@@ -1502,6 +1502,15 @@ const COURSE = [
    {t:"tf", q:"כיפת ברזל ביצעה את היירוט המבצעי הראשון שלה ב-2011.", c:true, e:"באפריל 2011 יירטה המערכת רקטה ששוגרה לעבר באר שבע."},
    {t:"mc", q:"איזו חברה פיתחה את כיפת ברזל?", a:["רפאל","אלביט","התעשייה הצבאית (IWI)","אלתא לבדה"], c:0, e:"רפאל מערכות לחימה מתקדמות פיתחה אותה, בשיתוף עם התעשייה האווירית (מכ\"ם)."},
    {t:"match", q:"התאם מערכת הגנה אווירית לטווח שלה", p:[["כיפת ברזל","טווח קצר"],["קלע דוד","טווח בינוני"],["חץ","טילים בליסטיים"],["אור איתן","לייזר"]]}
+  ]},
+  { name:"הרובים של צה\"ל", qs:[
+   {t:"order", q:"סדר את רובי צה\"ל לפי הזמן שבו הפכו לנפוצים", items:["מאוזר","FN FAL","גליל","תבור","מיקרו תבור X95"], e:"מאוזר (1948), FAL (שנות ה-50), גליל (1972), תבור (2001), X95 (נבחר ב-2009)."},
+   {t:"tf", q:"במלחמת העצמאות השתמשו לוחמי צה\"ל ברובי מאוזר, וחלק גדול מהם הגיע מצ'כוסלובקיה.", c:true, e:"עסקת הנשק הצ'כית של 1948 הביאה רובים, מקלעים ותחמושת."},
+   {t:"mc", q:"איזה רובה בלגי היה הרובה העיקרי של צה\"ל בשנות ה-50 וה-60?", a:["FN FAL","AK-47","M1 גאראנד","לי-אנפילד"], c:0, e:"ה-FAL היה ארוך וכבד, ורגיש לחול. זו אחת הסיבות לפיתוח הגליל."},
+   {t:"mc", q:"מה היה אחד הלקחים שהובילו לפיתוח הגליל?", a:["רובים קודמים נתקעו בחול ובאבק במדבר","צה\"ל רצה רובה בריח","הגליל נועד לשימוש מתחת למים","הוא נבנה רק לטקסים"], c:0, e:"הגליל תוכנן לעמוד בתנאי שטח קשים, ומבוסס על עקרונות המנגנון של ה-AK."},
+   {t:"spec", w:"galil", k:"cal"},
+   {t:"part", w:"x95", p:"mag"},
+   {t:"match", q:"התאם רובה לתקופה בצה\"ל", p:[["מאוזר","מלחמת העצמאות"],["FN FAL","שנות ה-50 וה-60"],["גליל","שנות ה-70 וה-80"],["תבור","שנות ה-2000"]]}
   ]}
  ]},
  { id:"famous", c:["#8B5CF6","#6D3FD6"], title:"הקלאסיקות", sub:"כלי נשק שכל העולם מכיר", lessons:[
@@ -2873,7 +2882,11 @@ Object.assign(DIAGRAMS,{
    <rect x="188" y="102" width="60" height="7" fill="#8C96A0"/><g class="slide"><path d="M214 96h30v28l-30-6z" fill="#2A2F35"/></g>
    <g class="dg-lbl"><text x="160" y="16" text-anchor="middle">קת מתקפלת</text><text x="160" y="88" text-anchor="middle">קת נשלפת</text></g></svg>`},
 });
-const LESSON_DIAG={"works:2":["revolver","blowback"],"parts2:3":["stocks","bullpup"],"parts2:2":["rifling","muzzle"],"parts2:1":["magtypes","magazine"],"parts2:0":["sights","reddot","scope"],"parts:2":["pt_tavor"],"parts:3":["pt_fal"],"parts:4":["pt_barrett"],"parts:5":["bolt"],"stories:3":["madmin"],"famous:0":["tl_classic"],"famous:1":["drum"],"terms:1":["indirect"],"shoot:1":["zero"],"israel:1":["irondome"],"terms:0":["caliber"],"history:1":["tl_ww"],"rifles:0":["akvsm16"],"heavy:0":["scope"],"history:0":["tl_world"],"israel:0":["tl_israel"],"gear:0":["armor"],"technique:0":["positions"],"pistols:1":["blowback"],"heavy:1":["belt"],"pistols:0":["revolver"],"shoot:0":["sights"],"gear:1":["reddot"],"parts:0":["magazine"],"parts:1":["cartridge","firing"],"works:0":["bolt"],"works:1":["gas"],"rifles:1":["bullpup"],"technique:1":["trajectory","rifling"]};
+Object.assign(DIAGRAMS,{
+ tl_idf:{title:"הרובים של צה\"ל לאורך השנים",text:"מרובי בריח שהגיעו מאירופה ועד רובים קצרים שתוכננו ויוצרו בישראל.",
+  svg:timelineSvg([["1948","מאוזר"],["1955","FN FAL"],["1972","גליל"],["2001","תבור"],["2009","X95"]])},
+});
+const LESSON_DIAG={"israel:2":["tl_idf"],"works:2":["revolver","blowback"],"parts2:3":["stocks","bullpup"],"parts2:2":["rifling","muzzle"],"parts2:1":["magtypes","magazine"],"parts2:0":["sights","reddot","scope"],"parts:2":["pt_tavor"],"parts:3":["pt_fal"],"parts:4":["pt_barrett"],"parts:5":["bolt"],"stories:3":["madmin"],"famous:0":["tl_classic"],"famous:1":["drum"],"terms:1":["indirect"],"shoot:1":["zero"],"israel:1":["irondome"],"terms:0":["caliber"],"history:1":["tl_ww"],"rifles:0":["akvsm16"],"heavy:0":["scope"],"history:0":["tl_world"],"israel:0":["tl_israel"],"gear:0":["armor"],"technique:0":["positions"],"pistols:1":["blowback"],"heavy:1":["belt"],"pistols:0":["revolver"],"shoot:0":["sights"],"gear:1":["reddot"],"parts:0":["magazine"],"parts:1":["cartridge","firing"],"works:0":["bolt"],"works:1":["gas"],"rifles:1":["bullpup"],"technique:1":["trajectory","rifling"]};
 
 /* ---- teach first: cards built from the lesson's own content, shown before the questions */
 function teachCards(qs,key){
