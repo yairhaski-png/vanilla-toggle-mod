@@ -2850,10 +2850,15 @@ function renderFlag(q,kick,tm){
 }
 
 /* ---- missing part: one part of the drawing is covered; name the hidden part */
+/* a part is "clean" when its box hides little of the other parts, so the cover does not give away or blur another answer */
+function missClean(P,k){
+  const r=P[k], ov=(a,b)=>Math.max(0,Math.min(a[1]+a[3],b[1]+b[3])-Math.max(a[1],b[1]))*Math.max(0,Math.min(a[2]+a[4],b[2]+b[4])-Math.max(a[2],b[2]));
+  return Object.keys(P).filter(k2=>k2!==k).reduce((t,k2)=>t+ov(r,P[k2]),0)/(r[3]*r[4])<.2;
+}
 function renderMiss(q,kick,tm){
   const pool=WEAPONS.filter(x=>!x.gen&&PARTS[x.sil]&&Object.keys(PARTS[x.sil]).length>=4);
   const w=q.w&&WMAP[q.w]&&PARTS[WMAP[q.w].sil]&&Object.keys(PARTS[WMAP[q.w].sil]).length>=4?WMAP[q.w]:shuffle(pool)[0];
-  const P=PARTS[w.sil], keys=Object.keys(P), key=q.p&&P[q.p]?q.p:shuffle(keys)[0], [name,x,y,pw,ph]=P[key];
+  const P=PARTS[w.sil], keys=Object.keys(P), clean=keys.filter(k=>missClean(P,k)), key=q.p&&P[q.p]?q.p:shuffle(clean.length?clean:keys)[0], [name,x,y,pw,ph]=P[key];
   const wrong=shuffle(keys.filter(k=>k!==key)).slice(0,3).map(k=>P[k][0]);
   L.cur={t:"mc",a:[name,...wrong],c:0,e:`חסר כאן: ${name}. `+(PART_INFO[w.sil+":"+key]||PART_INFO[key]||"")}; L.curW=w.id;
   L.order=shuffle([0,1,2,3]);
@@ -2955,7 +2960,7 @@ const BLITZ_SEC=60;
 function blitzDelay(){ const d=(Date.now()-L.f.start)/1000; return d<0?`${-d}s`:`-${Math.min(BLITZ_SEC,d)}s`; }
 function startBlitz(){
   const quick=COURSE.flatMap(u=>u.lessons.flatMap(l=>l.qs)).filter(q=>["tf","mc","id","pic"].includes(q.t));
-  const gen=[...Array(20)].map((_,i)=>[{t:"flag"},{t:"vs"},{t:"odd"},{t:"spec",w:shuffle(WEAPONS)[0].id},{t:"peek"},{t:"hear"}][i%6]);
+  const gen=[...Array(20)].map((_,i)=>[{t:"flag"},{t:"vs"},{t:"odd"},{t:"spec",w:shuffle(WEAPONS)[0].id},{t:"peek"},{t:"hear"},{t:"miss"}][i%7]);
   startLesson({u:COURSE[0],ui:0,n:{t:"practice",name:"אתגר בזק"},key:"practice",blitz:1,start:Date.now()+1000},shuffle([...quick,...gen])); /* clock starts after the splash */
 }
 function finishBlitz(){
@@ -2995,14 +3000,15 @@ function startPartsDrill(){
 const EXPERT_AT=6;
 function expertCard(){
   const open=lessonsDone()>=EXPERT_AT;
-  return `<div class="miss-card expert-card ${open?"":"locked"}"><svg viewBox="0 0 24 24"><use href="#i-${open?"trophy":"lock"}"/></svg><div class="t"><b>אתגר מומחה</b><p>${open?`10 שאלות קשות בלבד: תוויות, הצצה ונתונים${S.expertBest?` · השיא שלך: ${S.expertBest}/10`:""}`:`נפתח אחרי ${EXPERT_AT} שיעורים (<span dir="ltr">${lessonsDone()}/${EXPERT_AT}</span>)`}</p></div>${open?`<button class="btn" id="expertGo">אתגר</button>`:""}</div>`;
+  return `<div class="miss-card expert-card ${open?"":"locked"}"><svg viewBox="0 0 24 24"><use href="#i-${open?"trophy":"lock"}"/></svg><div class="t"><b>אתגר מומחה</b><p>${open?`10 שאלות קשות בלבד: תוויות, חלק חסר, הצצה ונתונים${S.expertBest?` · השיא שלך: ${S.expertBest}/10`:""}`:`נפתח אחרי ${EXPERT_AT} שיעורים (<span dir="ltr">${lessonsDone()}/${EXPERT_AT}</span>)`}</p></div>${open?`<button class="btn" id="expertGo">אתגר</button>`:""}</div>`;
 }
 function startExpert(){
-  const lab=shuffle(WEAPONS.filter(w=>PARTS[w.sil]&&Object.keys(PARTS[w.sil]).length>=4)).slice(0,3).map(w=>({t:"label",w:w.id,n:4}));
+  const big=shuffle(WEAPONS.filter(w=>PARTS[w.sil]&&Object.keys(PARTS[w.sil]).length>=4));
+  const lab=big.slice(0,2).map(w=>({t:"label",w:w.id,n:4})), miss=big.slice(2,4).map(w=>({t:"miss",w:w.id}));
   const ws=shuffle(WEAPONS.filter(w=>!w.gen));
-  const peek=ws.slice(0,3).map(w=>({t:"peek",w:w.id}));
+  const peek=ws.slice(0,2).map(w=>({t:"peek",w:w.id}));
   const spec=ws.slice(3,6).map((w,i)=>({t:"spec",w:w.id,k:["cal","by","act"][i]}));
-  startLesson({u:COURSE[0],ui:0,n:{t:"practice",name:"אתגר מומחה"},key:"practice",expert:1},shuffle([...lab,...peek,...spec,{t:"hear",w:ws[6].id}]));
+  startLesson({u:COURSE[0],ui:0,n:{t:"practice",name:"אתגר מומחה"},key:"practice",expert:1},shuffle([...lab,...miss,...peek,...spec,{t:"hear",w:ws[6].id}]));
 }
 function blitzCard(){
   return `<div class="miss-card blitz-card"><svg viewBox="0 0 24 24"><use href="#i-bolt"/></svg><div class="t"><b>אתגר בזק</b><p>${BLITZ_SEC} שניות, כמה שיותר תשובות נכונות${S.blitzBest?` · השיא שלך: ${S.blitzBest}`:""}</p></div><button class="btn orange" id="blitzGo">שחק</button></div>`;
