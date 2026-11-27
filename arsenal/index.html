@@ -966,6 +966,7 @@ body{font-size:16px}
 .uw-c svg{width:100%;height:auto;display:block}.uw-c small{display:block;font-size:11px;font-weight:800;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .uw-more{display:block;margin-top:6px;color:var(--muted);font-weight:800}
 #wdGo{margin-bottom:10px}
+.arm-star{position:absolute;top:8px;inset-inline-end:8px;width:24px;height:24px;border-radius:50%;background:#FFC800;display:grid;place-items:center;box-shadow:0 2px 0 #E0A800;z-index:1}.arm-star svg{width:15px;height:15px;fill:#fff}
 @media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
 </style>
 
@@ -2150,7 +2151,7 @@ function renderArmory(){
    <button class="btn wide teal fc-go" id="fcGo">${ico("i-book")}כרטיסיות: חזרה מהירה על ${Math.min(10,list.length)} נשקים</button>
    <p class="arm-empty" id="armEmpty" hidden>לא נמצא נשק כזה. נסה מילה אחרת.</p>
    <div class="arm-grid">${list.map((w,i)=>`<button class="arm-card" style="--d:${Math.min(i,12)}" data-w="${w.id}" data-q="${esc((w.n+" "+w.id+" "+w.country+" "+w.cal+" "+w.type+" "+Object.values(PARTS[w.sil]||{}).map(x=>x[0]).join(" ")).toLowerCase())}"><div class="sil-box">${silSvg(w)}${w.gen?`<span class="gen">איור כללי</span>`:""}</div>
-     ${(S.seen||[]).includes(w.id)?`<span class="arm-got">${ico("i-check")}</span>`:`<span class="arm-new">חדש</span>`}<div class="arm-meta"><b>${esc(w.n)}</b><small>${esc(w.type)} · ${esc(w.country)} · ${esc(w.year)}</small><span class="cal">${esc(w.cal)}</span></div></button>`).join("")}</div>`;
+     ${(S.seen||[]).includes(w.id)?`<span class="arm-got">${ico("i-check")}</span>`:`<span class="arm-new">חדש</span>`}${(S.wdPerfect||[]).includes(w.id)?`<span class="arm-star" title="תרגלת את כל החלקים בלי טעויות" aria-label="תרגלת את כל החלקים בלי טעויות">${ico("i-star")}</span>`:""}<div class="arm-meta"><b>${esc(w.n)}</b><small>${esc(w.type)} · ${esc(w.country)} · ${esc(w.year)}</small><span class="cal">${esc(w.cal)}</span></div></button>`).join("")}</div>`;
   $$(".chip").forEach(b=>b.onclick=()=>{armFilter=b.dataset.f;sfx.tap();renderArmory();});
   $$(".arm-card").forEach(b=>b.onclick=()=>weaponSheet(WMAP[b.dataset.w]));
   $("#fcGo").onclick=()=>{ sfx.tap(); flashcards(list); };
