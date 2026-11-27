@@ -2151,7 +2151,7 @@ function openChest(f){
 /* ------------------------------------------------------------------ badges / shop / me */
 let armFilter="הכל";
 /* armory groups: each weapon type falls in one family */
-const ARM_GROUPS=[["הכל",()=>true],["רובים",w=>/^רובה|קרבין/.test(w.type)],["אקדחים",w=>/^אקדח/.test(w.type)],["תת-מקלעים",w=>/תת-מקלע|הגנה אישי/.test(w.type)],["מקלעים",w=>/^מקלע/.test(w.type)]];
+const ARM_GROUPS=[["הכל",()=>true],["רובים",w=>/^רובה|קרבין/.test(w.type)],["אקדחים",w=>/^אקדח/.test(w.type)],["תת-מקלעים",w=>/תת-מקלע|הגנה אישי/.test(w.type)],["מקלעים",w=>/^מקלע/.test(w.type)],["שולט בחלקים",w=>(S.wdPerfect||[]).includes(w.id)]];
 let armQuery="";
 function renderArmory(){
   if(!ARM_GROUPS.some(g=>g[0]===armFilter)) armFilter="הכל";
@@ -2161,8 +2161,8 @@ function renderArmory(){
    ${(()=>{const seen=WEAPONS.filter(w=>(S.seen||[]).includes(w.id)).length, pc=Math.round(seen/WEAPONS.length*100);
      return `<div class="arm-col"><div class="arm-col-t"><b>האוסף שלך</b><span dir="ltr">${seen} / ${WEAPONS.length}</span></div><div class="pbar"><i style="width:${pc}%"></i></div>${seen<WEAPONS.length?`<small>פתח כרטיס של נשק כדי להוסיף אותו לאוסף</small>`:`<small>אספת את כל הנשקים!</small>`}${(S.wdPerfect||[]).length?`<small class="arm-mast">${ico("i-star")}שולט בחלקים של ${(S.wdPerfect||[]).length===1?"נשק אחד":`<b>${(S.wdPerfect||[]).length}</b> נשקים`}</small>`:""}</div>`;})()}
    <div class="arm-search">${ico("i-search")}<input id="armQ" type="search" placeholder="חפש נשק, מדינה, קליבר או חלק" value="${esc(armQuery)}" autocomplete="off"></div>
-   <div class="chips">${ARM_GROUPS.map(([t,f])=>`<button class="chip" aria-pressed="${t===armFilter}" data-f="${esc(t)}">${esc(t)} <span class="chip-n">${WEAPONS.filter(f).length}</span></button>`).join("")}</div>
-   <button class="btn wide teal fc-go" id="fcGo">${ico("i-book")}כרטיסיות: חזרה מהירה על ${Math.min(10,list.length)} נשקים</button>
+   <div class="chips">${ARM_GROUPS.filter(([t,f])=>t==="הכל"||t===armFilter||WEAPONS.some(f)).map(([t,f])=>`<button class="chip" aria-pressed="${t===armFilter}" data-f="${esc(t)}">${esc(t)} <span class="chip-n">${WEAPONS.filter(f).length}</span></button>`).join("")}</div>
+   <button class="btn wide teal fc-go" id="fcGo">${ico("i-book")}כרטיסיות: חזרה מהירה על ${heN(Math.min(10,list.length),"נשק אחד","נשקים")}</button>
    <p class="arm-empty" id="armEmpty" hidden>לא נמצא נשק כזה. נסה מילה אחרת.</p>
    <div class="arm-grid">${list.map((w,i)=>`<button class="arm-card" style="--d:${Math.min(i,12)}" data-w="${w.id}" data-q="${esc((w.n+" "+w.id+" "+w.country+" "+w.cal+" "+w.type+" "+Object.values(PARTS[w.sil]||{}).map(x=>x[0]).join(" ")).toLowerCase())}"><div class="sil-box">${silSvg(w)}${w.gen?`<span class="gen">איור כללי</span>`:""}</div>
      ${(S.seen||[]).includes(w.id)?`<span class="arm-got">${ico("i-check")}</span>`:`<span class="arm-new">חדש</span>`}${(S.wdPerfect||[]).includes(w.id)?`<span class="arm-star" title="תרגלת את כל החלקים בלי טעויות" aria-label="תרגלת את כל החלקים בלי טעויות">${ico("i-star")}</span>`:""}<div class="arm-meta"><b>${esc(w.n)}</b><small>${esc(w.type)} · ${esc(w.country)} · ${esc(w.year)}</small><span class="cal">${esc(w.cal)}</span></div></button>`).join("")}</div>`;
