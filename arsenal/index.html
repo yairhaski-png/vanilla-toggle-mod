@@ -2199,10 +2199,19 @@ function weaponSheet(w){
     <p class="w-sub">${esc(w.type)} · ${esc(w.country)} · ${esc(w.year)}</p>
     <div class="wbars">${bars.map((b,k)=>`<div class="wb" style="--d:${k}"><span>${b[0]}</span><div class="pbar"><i style="width:0;background:${b[4]}" data-w="${Math.max(6,Math.sqrt(b[1]/b[2])*100)}"></i></div><b>${b[1]} ${b[3]}</b></div>`).join("")}</div>
     <table class="spec">${rows.map((r,k)=>`<tr style="--d:${k}"><th>${r[0]}</th><td>${esc(r[1])}</td></tr>`).join("")}</table>
-    <div class="fact"><b>הידעת?</b><p>${esc(w.fact)}</p></div><button class="btn wide blue" id="cmpGo">השווה לנשק אחר</button><button class="btn wide ghost" id="sx">סגור</button>`);
+    <div class="fact"><b>הידעת?</b><p>${esc(w.fact)}</p></div>${PARTS[w.sil]?`<button class="btn wide teal" id="wdGo">תרגל את החלקים של הנשק הזה</button>`:""}<button class="btn wide blue" id="cmpGo">השווה לנשק אחר</button><button class="btn wide ghost" id="sx">סגור</button>`);
   setTimeout(()=>$$(".wbars i").forEach(i=>i.style.width=i.dataset.w+"%"),250);
   $("#sx").onclick=()=>{closeSheet();render();};
   $("#cmpGo").onclick=()=>{sfx.tap();comparePick(w);};
+  const wd=$("#wdGo"); if(wd) wd.onclick=()=>{ sfx.tap(); closeSheet(); startWeaponDrill(w); };
+}
+/* ---- one-weapon parts drill: every part once, a label round, and missing-part questions */
+function startWeaponDrill(w){
+  const P=PARTS[w.sil], keys=Object.keys(P), qs=[{t:"id",w:w.id}];
+  shuffle(keys).slice(0,5).forEach(k=>qs.push({t:"part",w:w.id,p:k}));
+  if(keys.length>=3) qs.push({t:"label",w:w.id,n:Math.min(4,keys.length)});
+  if(keys.length>=4) shuffle(keys.filter(k=>missClean(P,k))).slice(0,2).forEach(k=>qs.push({t:"miss",w:w.id,p:k}));
+  startLesson({u:COURSE[0],ui:0,n:{t:"practice",name:`החלקים של ${w.n}`},key:"practice"},qs);
 }
 /* ---- compare two weapons side by side */
 const specNum=x=>{const m=String(x).replace(/,/g,"").match(/\d+(\.\d+)?/);return m?+m[0]:null;};
