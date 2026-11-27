@@ -965,6 +965,7 @@ body{font-size:16px}
 .uw-c{background:var(--soft);border-radius:14px;padding:6px 4px;animation:pop .4s cubic-bezier(.3,1.6,.5,1) backwards;animation-delay:calc(.6s + var(--d)*.07s)}
 .uw-c svg{width:100%;height:auto;display:block}.uw-c small{display:block;font-size:11px;font-weight:800;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .uw-more{display:block;margin-top:6px;color:var(--muted);font-weight:800}
+#wdGo{margin-bottom:10px}
 @media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
 </style>
 
@@ -1985,6 +1986,7 @@ const BADGES=[
   {n:"זיכרון של פיל",d:"5 שאלות שסיימו את כל שלבי החזרה המרווחת",ic:"i-check",c:"#14B8A6",v:()=>S.srsDone||0,max:5},
   {n:"לוחם השבוע",d:"אסוף 3 פרסים של אתגר שבועי",ic:"i-trophy",c:"#8B5CF6",v:()=>S.wkClaims||0,max:3},
   {n:"500 תשובות נכונות",d:"ענה נכון על 500 שאלות",ic:"i-check",c:"#58C21B",v:()=>Object.values(S.ts||{}).reduce((t,a)=>t+a[0],0),max:500},
+  {n:"מכיר כל בורג",d:"סיים תרגול חלקים של נשק אחד מהנשקייה בלי טעויות",ic:"i-star",c:"#FF9B1A",v:()=>(S.wdPerfect||[]).length,max:1},
   {n:"שולט בכרטיסיות",d:"10 מתוך 10 בכרטיסיות בנשקייה",ic:"i-book",c:"#0E9F8E",v:()=>S.fcBest||0,max:10},
   {n:"מומחה אמיתי",d:"8 מתוך 10 באתגר מומחה",ic:"i-trophy",c:"#CE82FF",v:()=>S.expertBest||0,max:8},
   {n:"מומחה חלקים",d:"10 מתוך 10 בתרגול זיהוי חלקים",ic:"i-star",c:"#14B8A6",v:()=>S.partsBest||0,max:10},
@@ -2211,7 +2213,7 @@ function startWeaponDrill(w){
   shuffle(keys).slice(0,5).forEach(k=>qs.push({t:"part",w:w.id,p:k}));
   if(keys.length>=3) qs.push({t:"label",w:w.id,n:Math.min(4,keys.length)});
   if(keys.length>=4) shuffle(keys.filter(k=>missClean(P,k))).slice(0,2).forEach(k=>qs.push({t:"miss",w:w.id,p:k}));
-  startLesson({u:COURSE[0],ui:0,n:{t:"practice",name:`החלקים של ${w.n}`},key:"practice"},qs);
+  startLesson({u:COURSE[0],ui:0,n:{t:"practice",name:`החלקים של ${w.n}`},key:"practice",wd:w.id},qs);
 }
 /* ---- compare two weapons side by side */
 const specNum=x=>{const m=String(x).replace(/,/g,"").match(/\d+(\.\d+)?/);return m?+m[0]:null;};
@@ -2503,6 +2505,7 @@ function advance(){
 function finish(){
   if(L.practice&&L.f.drill){ S.partsBest=Math.max(S.partsBest||0,L.first); }
   if(L.practice&&L.f.expert){ S.expertBest=Math.max(S.expertBest||0,L.first); }
+  if(L.practice&&L.f.wd&&L.first===L.firstTotal){ S.wdPerfect=[...new Set([...(S.wdPerfect||[]),L.f.wd])]; }
   if(L.practice){ const xp=5+L.first; S.xp+=xp;S.daily.xp+=xp;S.days[today()]=(S.days[today()]||0)+xp; if(!L.f.mist){ S.hearts=Math.min(5,S.hearts+1); if(S.hearts>=5)S.hRef=null; } save();
     L.screens=[()=>screenResult({perfect:L.first===L.firstTotal,xp,acc:Math.round(L.first/L.firstTotal*100),secs:Math.round((Date.now()-L.t0)/1000),gems:0,nb:0,sub:L.f.mist?`חזרה מרווחת · נשארו להיום ${missDue().length} שאלות`:"תרגול הושלם · קיבלת לב אחד"})];
     L.state="screens"; L.i=L.qs.length; return nextScreen(); }
