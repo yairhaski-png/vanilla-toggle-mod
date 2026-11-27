@@ -2361,7 +2361,8 @@ function startLesson(f,custom){
   if(S.hearts<=0&&!(L&&L.practice)) return noHearts();
   const teach=!custom&&f.n.t==="lesson"?teachCards(u.lessons[f.n.li].qs,u.id+":"+f.n.li):[];
   L.teach=teach;
-  $("#lesson").innerHTML=""; splash(()=>{ if(!L||L.state!=="answer") return; if(teach.length&&!full&&st===0) startTeach(); else renderQ(); });
+  const myL=L; /* a splash from a lesson that was already left must not start the next one */
+  $("#lesson").innerHTML=""; splash(()=>{ if(!L||L!==myL||L.state!=="answer") return; if(teach.length&&!full&&st===0) startTeach(); else renderQ(); });
 }
 function splash(cb){
   if(RM()) return cb();
