@@ -1694,7 +1694,7 @@ const COURSE = [
    {t:"tf", q:"בכוונת אופטית עם הגדלה, כמו של צלף, המטרה נראית קרובה יותר.", c:true, e:"הגדלה של פי 4 גורמת למטרה במרחק 400 מטר להיראות כאילו היא במרחק 100 מטר."}
   ]}
  ]},
- { id:"israel", c:["#3F7FE0","#2C63B8"], title:"תוצרת ישראל", sub:"נשק ומערכות שפותחו כאן", lessons:[
+ { id:"israel", c:["#3F7FE0","#2C63B8"], title:"תוצרת ישראל", sub:"הנשקים שפותחו בישראל", lessons:[
   { name:"כלי נשק קלים", qs:[
    {t:"mc", q:"על שם מי נקרא תת-המקלע עוזי?", a:["עוזיאל גל","עוזי נרקיס","עוזי דיין","עוזי חיטמן"], c:0, e:"עוזיאל גל תכנן אותו בסוף שנות ה-40, וצה\"ל אימץ אותו ב-1954."},
    {t:"mc", q:"מה מיוחד בתבנית 'בולפאפ' של רובה התבור?", a:["מנגנון הנשק נמצא מאחורי ההדק, ולכן הרובה קצר","הקנה קצר יותר מברובים רגילים","אין לו קת","הוא יורה רק ירייה בודדת"], c:0, e:"כך מתקבל רובה קצר ונוח עם קנה ארוך יחסית."},
@@ -1713,13 +1713,15 @@ const COURSE = [
    {t:"mc", q:"מהו הנגב?", a:["מקלע קל של התעשייה הצבאית","רובה צלפים ישראלי","תת-מקלע ישראלי","טיל נגד טנקים"], c:0, e:"הנגב נכנס לשירות בצה\"ל בסוף שנות ה-90."},
    {t:"match", q:"התאם נשק לסוג שלו", p:[["עוזי","תת-מקלע"],["תבור","רובה סער"],["נגב","מקלע קל"],["יריחו","אקדח"]]}
   ]},
-  { name:"מערכות גדולות", qs:[
-   {t:"order", q:"סדר את מערכות הנשק הישראליות לפי שנת ההופעה", items:["עוזי","גליל","מרכבה","כיפת ברזל"], e:"עוזי (1954), גליל (1972), מרכבה (1979), כיפת ברזל (2011)."},
-   {t:"mc", q:"מי נחשב ל'אבי המרכבה'?", a:["ישראל טל","משה דיין","אריאל שרון","דוד בן-גוריון"], c:0, e:"האלוף ישראל טל הוביל את פיתוח הטנק, שנכנס לשירות ב-1979."},
-   {t:"mc", q:"למה המנוע במרכבה נמצא בחזית ולא מאחור?", a:["כדי להוסיף שכבת הגנה לצוות","כדי שהטנק יהיה מהיר יותר","כדי לפנות מקום לתותח גדול יותר","כדי לקרר את המנוע ברוח"], c:0, e:"המנוע משמש כמגן נוסף, ובחלק האחורי יש דלת לפינוי ולהעמסה."},
-   {t:"tf", q:"כיפת ברזל ביצעה את היירוט המבצעי הראשון שלה ב-2011.", c:true, e:"באפריל 2011 יירטה המערכת רקטה ששוגרה לעבר באר שבע."},
-   {t:"mc", q:"איזו חברה פיתחה את כיפת ברזל?", a:["רפאל","אלביט","התעשייה הצבאית (IWI)","אלתא לבדה"], c:0, e:"רפאל מערכות לחימה מתקדמות פיתחה אותה, בשיתוף עם התעשייה האווירית (מכ\"ם)."},
-   {t:"match", q:"התאם מערכת הגנה אווירית לטווח שלה", p:[["כיפת ברזל","טווח קצר"],["קלע דוד","טווח בינוני"],["חץ","טילים בליסטיים"],["אור איתן","לייזר"]]}
+  { name:"עוזי, נגב ויריחו", qs:[
+   {t:"order", q:"סדר את הנשקים הישראליים לפי שנת ההופעה", items:["עוזי","גליל","יריחו 941","נגב","ערד"], e:"עוזי (1954), גליל (1972), יריחו (1990), נגב (1997), ערד (2019)."},
+   {t:"mc", q:"מי תכנן את העוזי?", a:["עוזיאל גל","ישראל גלילי","ישראל טל","יעקב ליאור"], c:0, e:"קצין צה\"ל עוזיאל גל תכנן אותו בתחילת שנות ה-50, והנשק נקרא על שמו."},
+   {t:"part", w:"uzi", p:"umag"},
+   {t:"part", w:"negev", p:"box"},
+   {t:"tf", q:"מקלע הנגב יכול לירות גם מחגור וגם ממחסנית רגילה של רובה.", c:true, e:"זה נוח בשטח: אם נגמר החגור, אפשר להכניס מחסנית של M16 או של תבור."},
+   {t:"part", w:"jericho", p:"hammer"},
+   {t:"mc", q:"מה משותף לתבור, ל-X95, לנגב ולערד?", a:["כולם יורים 5.56×45 מ\"מ וכולם של התעשייה הצבאית","כולם בולפאפ","כולם יורים 9 מ\"מ","כולם תוכננו בשנות ה-50"], c:0, e:"כולם פותחו ב-IWI, ויורים את אותה תחמושת נאט\"ו."},
+   {t:"match", q:"התאם נשק ישראלי לסוג שלו", p:[["עוזי","תת-מקלע"],["נגב","מקלע קל"],["יריחו 941","אקדח"],["ערד","רובה סער"]]}
   ]},
   { name:"הרובים של צה\"ל", qs:[
    {t:"order", q:"סדר את רובי צה\"ל לפי הזמן שבו הפכו לנפוצים", items:["מאוזר","FN FAL","גליל","תבור","מיקרו תבור X95"], e:"מאוזר (1948), FAL (שנות ה-50), גליל (1972), תבור (2001), X95 (נבחר ב-2009)."},
@@ -3132,10 +3134,10 @@ function timelineSvg(items){
      <text x="${x(i)}" y="${up?28:118}" text-anchor="middle" class="tl-y" fill="#DA7C00">${y}</text><text x="${x(i)}" y="${up?44:134}" text-anchor="middle">${t}</text></g>`;}).join("")}</svg>`;
 }
 Object.assign(DIAGRAMS,{
- tl_world:{title:"ציר הזמן של הנשק",text:"מאבק שריפה בסין ועד מערכות יירוט: כל המצאה בנתה על הקודמת לה.",
-  svg:timelineSvg([["המאה ה-9","אבק שריפה"],["המאה ה-16","מוסקט"],["1862","גטלינג"],["1884","מקסים"],["1898","מאוזר 98"],["1947","AK-47"],["2011","כיפת ברזל"]])},
+ tl_world:{title:"ציר הזמן של הנשק",text:"מאבק שריפה בסין ועד רובי הסער של היום: כל המצאה בנתה על הקודמת לה.",
+  svg:timelineSvg([["המאה ה-9","אבק שריפה"],["המאה ה-16","מוסקט"],["1862","גטלינג"],["1884","מקסים"],["1898","מאוזר 98"],["1947","AK-47"],["2001","תבור"]])},
  tl_israel:{title:"נשק ישראלי לאורך השנים",text:"התעשיות הביטחוניות בישראל פיתחו נשק משלהן כבר מהשנים הראשונות של המדינה.",
-  svg:timelineSvg([["1954","עוזי"],["1972","גליל"],["1979","מרכבה"],["1997","נגב"],["2001","תבור"],["2011","כיפת ברזל"]])},
+  svg:timelineSvg([["1954","עוזי"],["1972","גליל"],["1990","יריחו"],["1997","נגב"],["2001","תבור"],["2019","ערד"]])},
 });
 Object.assign(DIAGRAMS,{
  akvsm16:{title:"שני כדורים, שתי גישות",text:"ה-AK יורה קליע עבה וכבד יותר. ה-M16 יורה קליע דק וקל, אבל מהיר יותר. לכן חייל עם M16 יכול לשאת יותר כדורים באותו משקל.",
@@ -3263,7 +3265,7 @@ Object.assign(DIAGRAMS,{
    <g transform="translate(250 63)"><circle class="pl0" cx="0" cy="-3.0" r="2.4" fill="#4A525B" style="--a:-8deg;--k:0"/><circle class="pl1" cx="0" cy="-1.5" r="2.4" fill="#4A525B" style="--a:-4deg;--k:1"/><circle class="pl2" cx="0" cy="0.0" r="2.4" fill="#4A525B" style="--a:0deg;--k:2"/><circle class="pl0" cx="0" cy="1.5" r="2.4" fill="#4A525B" style="--a:4deg;--k:3"/><circle class="pl1" cx="0" cy="3.0" r="2.4" fill="#4A525B" style="--a:8deg;--k:4"/><circle class="pl2" cx="0" cy="-3.0" r="2.4" fill="#4A525B" style="--a:-8deg;--k:5"/><circle class="pl0" cx="0" cy="-1.5" r="2.4" fill="#4A525B" style="--a:-4deg;--k:6"/><circle class="pl1" cx="0" cy="0.0" r="2.4" fill="#4A525B" style="--a:0deg;--k:7"/><circle class="pl2" cx="0" cy="1.5" r="2.4" fill="#4A525B" style="--a:4deg;--k:8"/><circle class="pl0" cx="0" cy="3.0" r="2.4" fill="#4A525B" style="--a:8deg;--k:9"/></g>
    <g class="dg-lbl"><text x="270" y="96" text-anchor="middle">תרמיל</text><text x="200" y="120" text-anchor="middle">קרוב: קבוצה צפופה</text><text x="70" y="120" text-anchor="middle">רחוק: פיזור רחב</text></g></svg>`},
 });
-const LESSON_DIAG={"heavy:3":["belt","caliber"],"works:3":["shot","magtypes"],"famous:2":["tl_pistols"],"heavy:2":["scope","caliber"],"pistols:2":["pdwcal"],"history:2":["tl_musket","cartridge"],"israel:2":["tl_idf"],"works:2":["revolver","blowback"],"parts2:3":["stocks","bullpup"],"parts2:2":["rifling","muzzle"],"parts2:1":["magtypes","magazine"],"parts2:0":["sights","reddot","scope"],"parts:2":["pt_tavor"],"parts:3":["pt_fal"],"parts:4":["pt_barrett"],"parts:5":["bolt"],"stories:3":["madmin"],"famous:0":["tl_classic"],"famous:1":["drum"],"terms:1":["indirect"],"shoot:1":["zero"],"israel:1":["irondome"],"terms:0":["caliber"],"history:1":["tl_ww"],"rifles:0":["akvsm16"],"heavy:0":["scope"],"history:0":["tl_world"],"israel:0":["tl_israel"],"gear:0":["armor"],"technique:0":["positions"],"pistols:1":["blowback"],"heavy:1":["belt"],"pistols:0":["revolver"],"shoot:0":["sights"],"gear:1":["reddot"],"parts:0":["magazine"],"parts:1":["cartridge","firing"],"works:0":["bolt"],"works:1":["gas"],"rifles:1":["bullpup"],"technique:1":["trajectory","rifling"]};
+const LESSON_DIAG={"heavy:3":["belt","caliber"],"works:3":["shot","magtypes"],"famous:2":["tl_pistols"],"heavy:2":["scope","caliber"],"pistols:2":["pdwcal"],"history:2":["tl_musket","cartridge"],"israel:2":["tl_idf"],"works:2":["revolver","blowback"],"parts2:3":["stocks","bullpup"],"parts2:2":["rifling","muzzle"],"parts2:1":["magtypes","magazine"],"parts2:0":["sights","reddot","scope"],"parts:2":["pt_tavor"],"parts:3":["pt_fal"],"parts:4":["pt_barrett"],"parts:5":["bolt"],"stories:3":["madmin"],"famous:0":["tl_classic"],"famous:1":["drum"],"terms:1":["indirect"],"shoot:1":["zero"],"israel:1":["belt"],"terms:0":["caliber"],"history:1":["tl_ww"],"rifles:0":["akvsm16"],"heavy:0":["scope"],"history:0":["tl_world"],"israel:0":["tl_israel"],"gear:0":["armor"],"technique:0":["positions"],"pistols:1":["blowback"],"heavy:1":["belt"],"pistols:0":["revolver"],"shoot:0":["sights"],"gear:1":["reddot"],"parts:0":["magazine"],"parts:1":["cartridge","firing"],"works:0":["bolt"],"works:1":["gas"],"rifles:1":["bullpup"],"technique:1":["trajectory","rifling"]};
 
 /* ---- teach first: cards built from the lesson's own content, shown before the questions */
 function teachCards(qs,key){
