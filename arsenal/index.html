@@ -1979,6 +1979,7 @@ const BADGES=[
   {n:"אספן",d:"פתח את הכרטיס של כל נשק בנשקייה",ic:"i-book",c:"#FFC800",v:()=>WEAPONS.filter(w=>(S.seen||[]).includes(w.id)).length,max:WEAPONS.length},
   {n:"זיכרון של פיל",d:"5 שאלות שסיימו את כל שלבי החזרה המרווחת",ic:"i-check",c:"#14B8A6",v:()=>S.srsDone||0,max:5},
   {n:"לוחם השבוע",d:"אסוף 3 פרסים של אתגר שבועי",ic:"i-trophy",c:"#8B5CF6",v:()=>S.wkClaims||0,max:3},
+  {n:"500 תשובות נכונות",d:"ענה נכון על 500 שאלות",ic:"i-check",c:"#58C21B",v:()=>Object.values(S.ts||{}).reduce((t,a)=>t+a[0],0),max:500},
   {n:"שולט בכרטיסיות",d:"10 מתוך 10 בכרטיסיות בנשקייה",ic:"i-book",c:"#0E9F8E",v:()=>S.fcBest||0,max:10},
   {n:"מומחה אמיתי",d:"8 מתוך 10 באתגר מומחה",ic:"i-trophy",c:"#CE82FF",v:()=>S.expertBest||0,max:8},
   {n:"מומחה חלקים",d:"10 מתוך 10 בתרגול זיהוי חלקים",ic:"i-star",c:"#14B8A6",v:()=>S.partsBest||0,max:10},
@@ -2167,14 +2168,15 @@ function flashcards(list){
       $("#sx").onclick=closeSheet; return;
     }
     const w=deck[i];
-    sheet(`<div class="fc-top"><span dir="ltr">${i+1} / ${deck.length}</span><div class="pbar"><i style="width:${i/deck.length*100}%"></i></div></div>
+    sheet(`<div class="fc-top" role="status"><span dir="ltr" aria-label="כרטיס ${i+1} מתוך ${deck.length}">${i+1} / ${deck.length}</span><div class="pbar"><i style="width:${i/deck.length*100}%"></i></div></div>
       <button class="fc" id="fcCard" aria-label="הפוך כרטיס"><div class="fc-in">
-        <div class="fc-face fc-front"><div class="sil-box">${silSvg(w)}</div><b>מה שם הנשק?</b><small>הקש כדי להפוך</small></div>
-        <div class="fc-face fc-back"><b class="fc-n">${esc(w.n)}</b><small>${esc(w.type)} · ${esc(w.country)} · ${esc(w.year)}</small>
+        <div class="fc-face fc-front" id="fcF"><div class="sil-box">${silSvg(w)}</div><b>מה שם הנשק?</b><small>הקש כדי להפוך</small></div>
+        <div class="fc-face fc-back" id="fcB" aria-hidden="true"><b class="fc-n">${esc(w.n)}</b><small>${esc(w.type)} · ${esc(w.country)} · ${esc(w.year)}</small>
           <div class="fc-rows"><span>תחמושת</span><b>${esc(w.cal)}</b><span>מחסנית</span><b>${esc(w.mag)}</b><span>מנגנון</span><b>${esc(w.act)}</b></div></div></div></button>
       <div class="fc-btns" id="fcBtns" hidden><button class="btn red" id="fcNo">עוד לא</button><button class="btn" id="fcYes">ידעתי</button></div>
       <button class="btn wide ghost" id="sx">יציאה</button>`);
     const flip=()=>{ const c=$("#fcCard"); if(!c||c.classList.contains("on")) return; c.classList.add("on"); sfx.tap(); $("#fcBtns").hidden=false;
+      $("#fcF").setAttribute("aria-hidden","true"); $("#fcB").removeAttribute("aria-hidden"); c.setAttribute("aria-label",`${w.n}. ${w.type}, ${w.country}, ${w.year}`);
       if(!(S.seen||[]).includes(w.id)){ S.seen=[...(S.seen||[]),w.id]; save(); } };
     const ans=ok=>{ if(ok){known++;sfx.ok&&sfx.ok();} else miss.push(w); i++; show(); };
     $("#fcCard").onclick=flip; $("#fcYes").onclick=()=>ans(true); $("#fcNo").onclick=()=>ans(false); $("#sx").onclick=closeSheet;
@@ -2544,7 +2546,7 @@ function unitWeapons(u){
   const ids=[...new Set(u.lessons.flatMap(l=>l.qs.map(q=>q.w).filter(w=>w&&WMAP[w])))];
   if(!ids.length) return "";
   const show=ids.slice(0,9);
-  return `<div class="uw pop-in" style="--d:2"><b>${ids.length} נשקים שלמדת ביחידה</b><div class="uw-grid">${show.map((id,i)=>`<div class="uw-c" style="--d:${i}">${silSvg(WMAP[id])}<small>${esc(WMAP[id].n)}</small></div>`).join("")}</div>${ids.length>show.length?`<small class="uw-more">ועוד ${ids.length-show.length}</small>`:""}</div>`;
+  return `<div class="uw pop-in" style="--d:2"><b>${ids.length} נשקים שלמדת ביחידה</b><div class="uw-grid">${show.map((id,i)=>`<div class="uw-c" style="--d:${i}" role="img" aria-label="${esc(WMAP[id].n)}">${silSvg(WMAP[id])}<small aria-hidden="true">${esc(WMAP[id].n)}</small></div>`).join("")}</div>${ids.length>show.length?`<small class="uw-more">ועוד ${ids.length-show.length}</small>`:""}</div>`;
 }
 function screenUnit(u){
   frame(`<div class="done-screen" style="${uv(u)}"><div class="rays-wrap"><div class="rays u"></div><svg class="medal-big" viewBox="0 0 24 24" style="fill:var(--u)"><use href="#i-trophy"/></svg></div>
