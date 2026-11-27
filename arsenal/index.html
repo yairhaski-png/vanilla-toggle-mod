@@ -847,7 +847,7 @@ body{font-size:16px}
 .parts-card>svg{fill:#14B8A6;background:color-mix(in srgb,#14B8A6 18%,transparent)}
 .expert-card>svg{fill:#CE82FF;background:color-mix(in srgb,#CE82FF 18%,transparent)}
 .expert-card .btn{background:#CE82FF;box-shadow:0 4px 0 #A568CC}
-.expert-card.locked{opacity:.7}.expert-card.locked>svg{fill:var(--mute)}
+.expert-card.locked{opacity:.7}.expert-card.locked>svg{fill:var(--muted)}
 .btn.teal{background:#14B8A6;box-shadow:0 4px 0 #0E8F81}
 .arm-search{display:flex;align-items:center;gap:8px;border:2px solid var(--line);border-radius:14px;padding:0 12px;margin:4px 0 12px;background:var(--surface)}
 .arm-search svg{width:18px;height:18px;fill:var(--muted);flex:none}
@@ -947,6 +947,18 @@ body{font-size:16px}
 .u-ban-kd{width:64px;height:64px;flex:none}
 @keyframes uBanIn{from{transform:translateY(-140%) scale(.9);opacity:0}}
 @keyframes uBanOut{to{transform:translateY(-140%);opacity:0}}
+.fc-go{margin:10px 0 4px;display:flex;align-items:center;justify-content:center;gap:8px}.fc-go svg{width:20px;height:20px;fill:currentColor}
+.fc-top{display:flex;align-items:center;gap:10px;font-weight:900;color:var(--muted);margin-bottom:12px}.fc-top .pbar{flex:1}
+.fc{display:block;width:100%;height:260px;perspective:900px;background:none;border:0;padding:0;cursor:pointer;font:inherit;color:inherit}
+.fc-in{position:relative;width:100%;height:100%;transition:transform .5s cubic-bezier(.3,1.3,.5,1);transform-style:preserve-3d}
+.fc.on .fc-in{transform:rotateY(180deg)}
+.fc-face{position:absolute;inset:0;backface-visibility:hidden;-webkit-backface-visibility:hidden;border:2px solid var(--line);border-bottom-width:5px;border-radius:20px;background:var(--surface);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:6px;padding:16px}
+.fc-front .sil-box{width:100%;max-width:300px}.fc-front b{font-size:19px}.fc-front small{color:var(--muted)}
+.fc-back{transform:rotateY(180deg)}.fc-n{font-size:24px;color:#0E9F8E}.fc-back small{color:var(--muted)}
+.fc-rows{display:grid;grid-template-columns:auto 1fr;gap:6px 12px;margin-top:10px;text-align:start;font-size:14px;width:100%}.fc-rows span{color:var(--muted);font-weight:700}
+.fc-btns{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin:14px 0 6px}
+.fc-miss{background:var(--soft);border-radius:12px;padding:4px 10px;font-weight:800;font-size:13px}
+.fc-kd{width:110px;height:110px}
 @media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
 </style>
 
@@ -1080,7 +1092,7 @@ const WEAPONS=[
  {id:"p320",n:"SIG P320",sil:"p320",type:"אקדח",country:"ארה\"ב",year:"2014",by:"SIG Sauer",cal:"9×19 מ\"מ",act:"רתע קצר",mag:"17",rng:"כ-50 מ'",kg:"כ-0.8 ק\"ג (ריק)",fact:"בתוכו יש יחידת מתכת אחת עם המספר הסידורי, וכל השאר מתחלף: אפשר להעביר אותה למסגרת ולמגלשה בגודל אחר. צבא ארה\"ב אימץ אותו ב-2017 בשם M17."},
  {id:"ppk",n:"וולטר PPK",sil:"ppk",type:"אקדח",country:"גרמניה",year:"1931",by:"קרל וולטר",cal:"‎.380 ACP (9×17 מ\"מ) או 7.65 מ\"מ",act:"הדף פשוט",mag:"6-7",rng:"כ-25 מ'",kg:"כ-0.6 ק\"ג",fact:"אקדח קטן שתוכנן להסתרה, והתפרסם בתור האקדח של ג'יימס בונד. הקנה שלו קבוע, והמגלשה נעה סביבו."},
  {id:"scorpion",n:"CZ סקורפיון EVO 3",sil:"scorpion",type:"תת-מקלע",country:"צ'כיה",year:"2009",by:"צ'סקה זברויובקה (CZ)",cal:"9×19 מ\"מ",act:"הדף",mag:"30",rng:"כ-150 מ'",kg:"כ-2.8 ק\"ג (ריק)",fact:"היורש של הסקורפיון הצ'כי הישן מ-1961. עשוי ברובו מפולימר, וידית הדריכה והנצרה נגישות משני הצדדים."},
- {id:"vector",n:"KRISS Vector",sil:"vector",type:"תת-מקלע",country:"ארה\"ב",year:"2009",by:"KRISS",cal:"‎.45 ACP",act:"הדף מושהה (מערכת Super V)",mag:"13 או 25",rng:"כ-100 מ'",kg:"כ-2.7 ק\"ג (ריק)",fact:"המראה המוזר שלו נובע מהמנגנון: חלק כבד בתוכו נע כלפי מטה ולא רק אחורה, וכך הקנה קופץ פחות למעלה בכל ירייה."},
+ {id:"vector",n:"KRISS Vector",sil:"vector",type:"תת-מקלע",country:"ארה\"ב",year:"2009",by:"KRISS",cal:"‎.45 ACP",act:"הדף מושהה, במערכת שנקראת Super V",mag:"13 או 25",rng:"כ-100 מ'",kg:"כ-2.7 ק\"ג (ריק)",fact:"המראה המוזר שלו נובע מהמנגנון: חלק כבד בתוכו נע כלפי מטה ולא רק אחורה, וכך הקנה קופץ פחות למעלה בכל ירייה."},
  {id:"fiveseven",n:"FN Five-seveN",sil:"fiveseven",type:"אקדח",country:"בלגיה",year:"1998",by:"FN הרסטל",cal:"5.7×28 מ\"מ",act:"הדף מושהה",mag:"20",rng:"כ-50 מ'",kg:"כ-0.6 ק\"ג (ריק)",fact:"יורה את אותו כדור קטן ומהיר של ה-P90. בגלל שהכדור דק, נכנסים 20 כדורים למחסנית, יותר מברוב האקדחים."},
  {id:"g36",n:"HK G36",sil:"g36",type:"רובה סער",country:"גרמניה",year:"1997",by:"הקלר אנד קוך",cal:"5.56×45 מ\"מ נאט\"ו",act:"בוכנת גזים קצרה, בריח מסתובב",mag:"30",rng:"כ-500 מ'",kg:"כ-3.6 ק\"ג (ריק)",fact:"עשוי ברובו מפולימר. המחסניות שקופות, כך שרואים כמה כדורים נשארו, ויש בהן תפסים שמחברים שתי מחסניות זו לזו."},
  {id:"famas",n:"FAMAS",sil:"famas",type:"רובה סער",country:"צרפת",year:"1978",by:"MAS (סנט אטיין)",cal:"5.56×45 מ\"מ נאט\"ו",act:"הדף מושהה במנוף",mag:"25",rng:"כ-300 מ'",kg:"כ-3.6 ק\"ג",fact:"רובה בולפאפ שהחיילים הצרפתים כינו 'החצוצרה' (Le Clairon) בגלל צורתו. מ-2017 צבא צרפת מחליף אותו ב-HK416."},
@@ -2073,16 +2085,48 @@ function renderArmory(){
      return `<div class="arm-col"><div class="arm-col-t"><b>האוסף שלך</b><span dir="ltr">${seen} / ${WEAPONS.length}</span></div><div class="pbar"><i style="width:${pc}%"></i></div>${seen<WEAPONS.length?`<small>פתח כרטיס של נשק כדי להוסיף אותו לאוסף</small>`:`<small>אספת את כל הנשקים!</small>`}</div>`;})()}
    <div class="arm-search">${ico("i-search")}<input id="armQ" type="search" placeholder="חפש נשק, מדינה או קליבר" value="${esc(armQuery)}" autocomplete="off"></div>
    <div class="chips">${ARM_GROUPS.map(([t,f])=>`<button class="chip" aria-pressed="${t===armFilter}" data-f="${esc(t)}">${esc(t)} <span class="chip-n">${WEAPONS.filter(f).length}</span></button>`).join("")}</div>
+   <button class="btn wide teal fc-go" id="fcGo">${ico("i-book")}כרטיסיות: חזרה מהירה על ${Math.min(10,list.length)} נשקים</button>
    <p class="arm-empty" id="armEmpty" hidden>לא נמצא נשק כזה. נסה מילה אחרת.</p>
    <div class="arm-grid">${list.map((w,i)=>`<button class="arm-card" style="--d:${Math.min(i,12)}" data-w="${w.id}" data-q="${esc((w.n+" "+w.id+" "+w.country+" "+w.cal+" "+w.type).toLowerCase())}"><div class="sil-box">${silSvg(w)}${w.gen?`<span class="gen">איור כללי</span>`:""}</div>
      ${(S.seen||[]).includes(w.id)?`<span class="arm-got">${ico("i-check")}</span>`:`<span class="arm-new">חדש</span>`}<div class="arm-meta"><b>${esc(w.n)}</b><small>${esc(w.type)} · ${esc(w.country)} · ${esc(w.year)}</small><span class="cal">${esc(w.cal)}</span></div></button>`).join("")}</div>`;
   $$(".chip").forEach(b=>b.onclick=()=>{armFilter=b.dataset.f;sfx.tap();renderArmory();});
   $$(".arm-card").forEach(b=>b.onclick=()=>weaponSheet(WMAP[b.dataset.w]));
+  $("#fcGo").onclick=()=>{ sfx.tap(); flashcards(list); };
   const applyQ=()=>{ const q=armQuery.trim().toLowerCase(); let n=0;
     $$(".arm-card").forEach(c=>{ const hit=!q||c.dataset.q.includes(q); c.hidden=!hit; if(hit) n++; });
     $("#armEmpty").hidden=n>0; };
   $("#armQ").oninput=e=>{ armQuery=e.target.value; applyQ(); };
   applyQ();
+}
+/* ---- flashcards: drawing on the front, the key facts on the back; "knew it" / "not yet" */
+function flashcards(list){
+  const deck=shuffle(list.filter(w=>!w.gen)).slice(0,10), miss=[]; let i=0, known=0;
+  const show=()=>{
+    if(i>=deck.length){
+      sheet(`<div class="center">${mascot(known===deck.length?"happy":"neutral","fc-kd")}<h2>${known===deck.length?"הכרת את כולם!":"סיימת את הכרטיסיות"}</h2>
+        <p class="page-sub" style="margin:0">הכרת <b>${known}</b> מתוך <b>${deck.length}</b> נשקים.</p>
+        ${miss.length?`<div class="st-ws" style="justify-content:center;margin-top:12px">${miss.map(w=>`<span class="fc-miss">${esc(w.n)}</span>`).join("")}</div>`:""}
+        ${miss.length?`<button class="btn wide teal" id="fcAgain">חזור על אלה שלא ידעת</button>`:""}<button class="btn wide ghost" id="sx">סגור</button></div>`);
+      if(known===deck.length){ sfx.win(); confetti(); }
+      const ag=$("#fcAgain"); if(ag) ag.onclick=()=>flashcards(miss);
+      $("#sx").onclick=closeSheet; return;
+    }
+    const w=deck[i];
+    sheet(`<div class="fc-top"><span dir="ltr">${i+1} / ${deck.length}</span><div class="pbar"><i style="width:${i/deck.length*100}%"></i></div></div>
+      <button class="fc" id="fcCard" aria-label="הפוך כרטיס"><div class="fc-in">
+        <div class="fc-face fc-front"><div class="sil-box">${silSvg(w)}</div><b>מה שם הנשק?</b><small>הקש כדי להפוך</small></div>
+        <div class="fc-face fc-back"><b class="fc-n">${esc(w.n)}</b><small>${esc(w.type)} · ${esc(w.country)} · ${esc(w.year)}</small>
+          <div class="fc-rows"><span>תחמושת</span><b>${esc(w.cal)}</b><span>מחסנית</span><b>${esc(w.mag)}</b><span>מנגנון</span><b>${esc(w.act)}</b></div></div></div></button>
+      <div class="fc-btns" id="fcBtns" hidden><button class="btn red" id="fcNo">עוד לא</button><button class="btn" id="fcYes">ידעתי</button></div>
+      <button class="btn wide ghost" id="sx">יציאה</button>`);
+    const flip=()=>{ const c=$("#fcCard"); if(!c||c.classList.contains("on")) return; c.classList.add("on"); sfx.tap(); $("#fcBtns").hidden=false;
+      if(!(S.seen||[]).includes(w.id)){ S.seen=[...(S.seen||[]),w.id]; save(); } };
+    const ans=ok=>{ if(ok){known++;sfx.ok&&sfx.ok();} else miss.push(w); i++; show(); };
+    $("#fcCard").onclick=flip; $("#fcYes").onclick=()=>ans(true); $("#fcNo").onclick=()=>ans(false); $("#sx").onclick=closeSheet;
+    $("#overlay").onkeydown=e=>{ if(e.key===" "||e.key==="Enter"){ if(!$("#fcCard").classList.contains("on")){e.preventDefault();flip();} } else if($("#fcCard").classList.contains("on")&&(e.key==="1"||e.key==="2")){ e.preventDefault(); ans(e.key==="2"); } };
+    $("#fcCard").focus();
+  };
+  show();
 }
 function weaponSheet(w){
   S.seen=S.seen||[]; if(!S.seen.includes(w.id)){S.seen.push(w.id);save();}
