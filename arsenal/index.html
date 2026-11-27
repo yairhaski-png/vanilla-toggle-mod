@@ -960,6 +960,11 @@ body{font-size:16px}
 .fc-miss{background:var(--soft);border-radius:12px;padding:4px 10px;font-weight:800;font-size:13px}
 .fc-kd{width:110px;height:110px}
 .splash .sp-n{display:block;margin-top:6px;font-weight:800;opacity:.85;font-size:14px}
+.uw{margin-top:14px;width:100%}.uw>b{display:block;margin-bottom:8px;color:var(--muted);font-size:14px}
+.uw-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
+.uw-c{background:var(--soft);border-radius:14px;padding:6px 4px;animation:pop .4s cubic-bezier(.3,1.6,.5,1) backwards;animation-delay:calc(.6s + var(--d)*.07s)}
+.uw-c svg{width:100%;height:auto;display:block}.uw-c small{display:block;font-size:11px;font-weight:800;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.uw-more{display:block;margin-top:6px;color:var(--muted);font-weight:800}
 @media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
 </style>
 
@@ -1449,7 +1454,7 @@ const COURSE = [
    {t:"order", q:"סדר את עקרונות הירי המדויק", items:["תנוחה יציבה","יישור כוונות","נשימה ועצירה טבעית","לחיצה הדרגתית","המשכיות"], e:"כך מלמדים אותם בכל מטווח: קודם יציבות, ובסוף המשכיות אחרי הירייה."}
   ]}
  ]},
- { id:"rifles", c:["#1EA5F0","#1683C0"], title:"רובי סער", sub:"AK, M16, תבור, גליל, FAL ורובים מודרניים", lessons:[
+ { id:"rifles", c:["#1EA5F0","#1683C0"], title:"רובי סער", sub:"AK, M16, תבור, גליל, FAL, רובים מודרניים והגוש המזרחי", lessons:[
   { name:"AK מול M16", qs:[
    {t:"id", w:"ak47", q:"איזה נשק זה?"},
    {t:"id", w:"m16", q:"איזה נשק זה?"},
@@ -2524,9 +2529,16 @@ function screenRank(name){
     <h2 class="pop-in">עלית בדרגה!</h2><p class="pop-in" style="--d:1">הדרגה החדשה שלך: <b style="color:var(--ink-strong)">${esc(name)}</b></p></div>`,"המשך",false,"blue");
   sfx.win(); confetti();
 }
+/* the weapons a unit taught, shown as a small gallery on the unit-complete screen */
+function unitWeapons(u){
+  const ids=[...new Set(u.lessons.flatMap(l=>l.qs.map(q=>q.w).filter(w=>w&&WMAP[w])))];
+  if(!ids.length) return "";
+  const show=ids.slice(0,9);
+  return `<div class="uw pop-in" style="--d:2"><b>${ids.length} נשקים שלמדת ביחידה</b><div class="uw-grid">${show.map((id,i)=>`<div class="uw-c" style="--d:${i}">${silSvg(WMAP[id])}<small>${esc(WMAP[id].n)}</small></div>`).join("")}</div>${ids.length>show.length?`<small class="uw-more">ועוד ${ids.length-show.length}</small>`:""}</div>`;
+}
 function screenUnit(u){
   frame(`<div class="done-screen" style="${uv(u)}"><div class="rays-wrap"><div class="rays u"></div><svg class="medal-big" viewBox="0 0 24 24" style="fill:var(--u)"><use href="#i-trophy"/></svg></div>
-    <h2 class="pop-in" style="color:var(--u)">סיימת את היחידה!</h2><p class="pop-in" style="--d:1">${esc(u.title)}. היחידה הבאה נפתחה.</p></div>`,"המשך",false);
+    <h2 class="pop-in" style="color:var(--u)">סיימת את היחידה!</h2><p class="pop-in" style="--d:1">${esc(u.title)}. היחידה הבאה נפתחה.</p>${unitWeapons(u)}</div>`,"המשך",false);
   sfx.win(); confetti();
 }
 function noHearts(){
@@ -3392,7 +3404,7 @@ Object.assign(DIAGRAMS,{
    <g transform="translate(250 63)"><circle class="pl0" cx="0" cy="-3.0" r="2.4" fill="#4A525B" style="--a:-8deg;--k:0"/><circle class="pl1" cx="0" cy="-1.5" r="2.4" fill="#4A525B" style="--a:-4deg;--k:1"/><circle class="pl2" cx="0" cy="0.0" r="2.4" fill="#4A525B" style="--a:0deg;--k:2"/><circle class="pl0" cx="0" cy="1.5" r="2.4" fill="#4A525B" style="--a:4deg;--k:3"/><circle class="pl1" cx="0" cy="3.0" r="2.4" fill="#4A525B" style="--a:8deg;--k:4"/><circle class="pl2" cx="0" cy="-3.0" r="2.4" fill="#4A525B" style="--a:-8deg;--k:5"/><circle class="pl0" cx="0" cy="-1.5" r="2.4" fill="#4A525B" style="--a:-4deg;--k:6"/><circle class="pl1" cx="0" cy="0.0" r="2.4" fill="#4A525B" style="--a:0deg;--k:7"/><circle class="pl2" cx="0" cy="1.5" r="2.4" fill="#4A525B" style="--a:4deg;--k:8"/><circle class="pl0" cx="0" cy="3.0" r="2.4" fill="#4A525B" style="--a:8deg;--k:9"/></g>
    <g class="dg-lbl"><text x="270" y="96" text-anchor="middle">תרמיל</text><text x="200" y="120" text-anchor="middle">קרוב: קבוצה צפופה</text><text x="70" y="120" text-anchor="middle">רחוק: פיזור רחב</text></g></svg>`},
 });
-const LESSON_DIAG={"heavy:3":["belt","caliber"],"works:3":["shot","magtypes"],"famous:2":["tl_pistols"],"heavy:2":["scope","caliber"],"pistols:2":["pdwcal"],"history:2":["tl_musket","cartridge"],"israel:2":["tl_idf"],"works:2":["revolver","blowback"],"parts2:3":["stocks","bullpup"],"parts2:2":["rifling","muzzle"],"parts2:1":["magtypes","magazine"],"parts2:0":["sights","reddot","scope"],"parts:2":["pt_tavor"],"parts:3":["pt_fal"],"parts:4":["pt_barrett"],"parts:5":["bolt"],"stories:3":["madmin"],"famous:0":["tl_classic"],"famous:1":["drum"],"terms:1":["indirect"],"shoot:1":["zero"],"israel:1":["belt"],"terms:0":["caliber"],"history:1":["tl_ww"],"rifles:0":["akvsm16"],"heavy:0":["scope"],"history:0":["tl_world"],"israel:0":["tl_israel"],"gear:0":["armor"],"technique:0":["positions"],"pistols:1":["blowback"],"heavy:1":["belt"],"pistols:0":["revolver"],"shoot:0":["sights"],"gear:1":["reddot"],"parts:0":["magazine"],"parts:1":["cartridge","firing"],"works:0":["bolt"],"works:1":["gas"],"rifles:1":["bullpup"],"technique:1":["trajectory","rifling"]};
+const LESSON_DIAG={"rifles:2":["reddot"],"rifles:3":["gas"],"rifles:4":["caliber"],"pistols:3":["tl_pistols"],"history:3":["drum"],"heavy:3":["belt","caliber"],"works:3":["shot","magtypes"],"famous:2":["tl_pistols"],"heavy:2":["scope","caliber"],"pistols:2":["pdwcal"],"history:2":["tl_musket","cartridge"],"israel:2":["tl_idf"],"works:2":["revolver","blowback"],"parts2:3":["stocks","bullpup"],"parts2:2":["rifling","muzzle"],"parts2:1":["magtypes","magazine"],"parts2:0":["sights","reddot","scope"],"parts:2":["pt_tavor"],"parts:3":["pt_fal"],"parts:4":["pt_barrett"],"parts:5":["bolt"],"stories:3":["madmin"],"famous:0":["tl_classic"],"famous:1":["drum"],"terms:1":["indirect"],"shoot:1":["zero"],"israel:1":["belt"],"terms:0":["caliber"],"history:1":["tl_ww"],"rifles:0":["akvsm16"],"heavy:0":["scope"],"history:0":["tl_world"],"israel:0":["tl_israel"],"gear:0":["armor"],"technique:0":["positions"],"pistols:1":["blowback"],"heavy:1":["belt"],"pistols:0":["revolver"],"shoot:0":["sights"],"gear:1":["reddot"],"parts:0":["magazine"],"parts:1":["cartridge","firing"],"works:0":["bolt"],"works:1":["gas"],"rifles:1":["bullpup"],"technique:1":["trajectory","rifling"]};
 
 /* ---- teach first: cards built from the lesson's own content, shown before the questions */
 function teachCards(qs,key){
