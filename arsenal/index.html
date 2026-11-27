@@ -1811,6 +1811,9 @@ const COURSE = [
    {t:"mc", q:"מי תכנן את רובה ה-AR-15, שממנו התפתח ה-M16?", a:["יוג'ין סטונר","מיכאיל קלשניקוב","גסטון גלוק","ריצ'רד גטלינג"], c:0, e:"סטונר תכנן אותו בחברת ארמלייט בשנות ה-50."},
    {t:"tf", q:"ה-M16 נכנס לשימוש נרחב בצבא ארה\"ב בזמן מלחמת וייטנאם.", c:true, e:"הוא החליף את ה-M14 בשנות ה-60."},
    {t:"mc", q:"ממה עשויה מסגרת אקדח הגלוק?", a:["פולימר (פלסטיק קשיח)","פלדה","אלומיניום","טיטניום"], c:0, e:"גסטון גלוק מאוסטריה הציג אותו ב-1982, והמסגרת הקלה הייתה חדשנית."},
+   {t:"miss", w:"ak47", p:"mag"},
+   {t:"label", w:"m16"},
+   {t:"peek", w:"glock17"},
    {t:"match", q:"התאם נשק למדינת המוצא", p:[["AK-47","ברית המועצות"],["M16","ארה\"ב"],["גלוק","אוסטריה"],["לי-אנפילד","בריטניה"]]}
   ]},
   { name:"כינויים וסיפורים", qs:[
@@ -1834,6 +1837,7 @@ const COURSE = [
    {t:"spec", w:"deagle", k:"cal"},
    {t:"part", w:"python", p:"hammer"},
    {t:"peek", w:"deagle"},
+   {t:"miss", w:"m1911", p:"hammer"},
    {t:"match", q:"התאם אקדח לעובדה", p:[["M1911","יותר מ-70 שנה בצבא ארה\"ב"],["PPK","האקדח של ג'יימס בונד"],["פייתון","אקדח תופי"],["דזרט איגל","מנגנון גזים כמו ברובה"]]}
   ]}
  ]},
@@ -2127,11 +2131,11 @@ function renderArmory(){
   $("#main").innerHTML=`<h1 class="page-title">נשקייה</h1><p class="page-sub">${WEAPONS.length} כלי נשק: נתונים, חלקים ועובדות. לחץ על כרטיס לפרטים.</p>
    ${(()=>{const seen=WEAPONS.filter(w=>(S.seen||[]).includes(w.id)).length, pc=Math.round(seen/WEAPONS.length*100);
      return `<div class="arm-col"><div class="arm-col-t"><b>האוסף שלך</b><span dir="ltr">${seen} / ${WEAPONS.length}</span></div><div class="pbar"><i style="width:${pc}%"></i></div>${seen<WEAPONS.length?`<small>פתח כרטיס של נשק כדי להוסיף אותו לאוסף</small>`:`<small>אספת את כל הנשקים!</small>`}</div>`;})()}
-   <div class="arm-search">${ico("i-search")}<input id="armQ" type="search" placeholder="חפש נשק, מדינה או קליבר" value="${esc(armQuery)}" autocomplete="off"></div>
+   <div class="arm-search">${ico("i-search")}<input id="armQ" type="search" placeholder="חפש נשק, מדינה, קליבר או חלק" value="${esc(armQuery)}" autocomplete="off"></div>
    <div class="chips">${ARM_GROUPS.map(([t,f])=>`<button class="chip" aria-pressed="${t===armFilter}" data-f="${esc(t)}">${esc(t)} <span class="chip-n">${WEAPONS.filter(f).length}</span></button>`).join("")}</div>
    <button class="btn wide teal fc-go" id="fcGo">${ico("i-book")}כרטיסיות: חזרה מהירה על ${Math.min(10,list.length)} נשקים</button>
    <p class="arm-empty" id="armEmpty" hidden>לא נמצא נשק כזה. נסה מילה אחרת.</p>
-   <div class="arm-grid">${list.map((w,i)=>`<button class="arm-card" style="--d:${Math.min(i,12)}" data-w="${w.id}" data-q="${esc((w.n+" "+w.id+" "+w.country+" "+w.cal+" "+w.type).toLowerCase())}"><div class="sil-box">${silSvg(w)}${w.gen?`<span class="gen">איור כללי</span>`:""}</div>
+   <div class="arm-grid">${list.map((w,i)=>`<button class="arm-card" style="--d:${Math.min(i,12)}" data-w="${w.id}" data-q="${esc((w.n+" "+w.id+" "+w.country+" "+w.cal+" "+w.type+" "+Object.values(PARTS[w.sil]||{}).map(x=>x[0]).join(" ")).toLowerCase())}"><div class="sil-box">${silSvg(w)}${w.gen?`<span class="gen">איור כללי</span>`:""}</div>
      ${(S.seen||[]).includes(w.id)?`<span class="arm-got">${ico("i-check")}</span>`:`<span class="arm-new">חדש</span>`}<div class="arm-meta"><b>${esc(w.n)}</b><small>${esc(w.type)} · ${esc(w.country)} · ${esc(w.year)}</small><span class="cal">${esc(w.cal)}</span></div></button>`).join("")}</div>`;
   $$(".chip").forEach(b=>b.onclick=()=>{armFilter=b.dataset.f;sfx.tap();renderArmory();});
   $$(".arm-card").forEach(b=>b.onclick=()=>weaponSheet(WMAP[b.dataset.w]));
