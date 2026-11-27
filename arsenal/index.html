@@ -1926,6 +1926,7 @@ const BADGES=[
   {n:"אספן",d:"פתח את הכרטיס של כל נשק בנשקייה",ic:"i-book",c:"#FFC800",v:()=>WEAPONS.filter(w=>(S.seen||[]).includes(w.id)).length,max:WEAPONS.length},
   {n:"זיכרון של פיל",d:"5 שאלות שסיימו את כל שלבי החזרה המרווחת",ic:"i-check",c:"#14B8A6",v:()=>S.srsDone||0,max:5},
   {n:"לוחם השבוע",d:"אסוף 3 פרסים של אתגר שבועי",ic:"i-trophy",c:"#8B5CF6",v:()=>S.wkClaims||0,max:3},
+  {n:"שולט בכרטיסיות",d:"10 מתוך 10 בכרטיסיות בנשקייה",ic:"i-book",c:"#0E9F8E",v:()=>S.fcBest||0,max:10},
   {n:"מומחה אמיתי",d:"8 מתוך 10 באתגר מומחה",ic:"i-trophy",c:"#CE82FF",v:()=>S.expertBest||0,max:8},
   {n:"מומחה חלקים",d:"10 מתוך 10 בתרגול זיהוי חלקים",ic:"i-star",c:"#14B8A6",v:()=>S.partsBest||0,max:10},
   ...COURSE.map(u=>({n:"בוגר: "+u.title,d:"סיים את כל היחידה",ic:"i-trophy",c:u.c[0],v:()=>+unitDone(u.id),max:1})),
@@ -2103,6 +2104,7 @@ function flashcards(list){
   const deck=shuffle(list.filter(w=>!w.gen)).slice(0,10), miss=[]; let i=0, known=0;
   const show=()=>{
     if(i>=deck.length){
+      if(deck.length>=10&&known>(S.fcBest||0)){ const before=BADGES.filter(earned).length; S.fcBest=known; save(); if(BADGES.filter(earned).length>before) setTimeout(()=>toast("עיטור חדש: שולט בכרטיסיות!"),600); }
       sheet(`<div class="center">${mascot(known===deck.length?"happy":"neutral","fc-kd")}<h2>${known===deck.length?"הכרת את כולם!":"סיימת את הכרטיסיות"}</h2>
         <p class="page-sub" style="margin:0">הכרת <b>${known}</b> מתוך <b>${deck.length}</b> נשקים.</p>
         ${miss.length?`<div class="st-ws" style="justify-content:center;margin-top:12px">${miss.map(w=>`<span class="fc-miss">${esc(w.n)}</span>`).join("")}</div>`:""}
