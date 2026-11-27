@@ -1588,7 +1588,8 @@ const COURSE = [
    {t:"part", w:"makarov", p:"hammer"},
    {t:"id", w:"usp"},
    {t:"tf", q:"אקדח ה-USP תוכנן מההתחלה גם לתחמושת ‎.45 החזקה.", c:true, e:"בתוך המגלשה יש מנגנון קפיצים שמקטין את הרתע."},
-   {t:"rank", k:"year", f:"אקדח"}
+   {t:"rank", k:"year", f:"אקדח"},
+   {t:"vs", k:"mag", f:"אקדח"}
   ]}
  ]},
  { id:"heavy", c:["#FF5A5A","#DB3E3E"], title:"צלפים ומקלעים", sub:"בארט, דרגונוב, נגב ומאג", lessons:[
@@ -1625,7 +1626,8 @@ const COURSE = [
    {t:"type", w:"negev"},
    {t:"tf", q:"במקלעים מחליפים לפעמים קנה כדי שלא יתחמם יותר מדי.", c:true, e:"קנה חם מדי נשחק מהר ומאבד דיוק."},
    {t:"mc", q:"מה פירוש 'מקלע קל'?", a:["מקלע שחייל אחד יכול לשאת ולהפעיל","מקלע שיורה תחמושת של אקדח","מקלע שמורכב רק על רכב","מקלע שקנה שלו עשוי פלסטיק"], c:0, e:"הנגב הוא מקלע קל. המאג כבד יותר ונקרא מקלע בינוני."},
-   {t:"match", q:"התאם נשק לתפקיד", p:[["בארט","צלף אנטי-חומר"],["דרגונוב","קלע מחלקתי"],["נגב","מקלע קל"],["מאג","מקלע בינוני"]]}
+   {t:"match", q:"התאם נשק לתפקיד", p:[["בארט","צלף אנטי-חומר"],["דרגונוב","קלע מחלקתי"],["נגב","מקלע קל"],["מאג","מקלע בינוני"]]},
+   {t:"vs", k:"kg", f:"מקלע"}
   ]},
   { name:"רובי צלפים", qs:[
    {t:"mc", q:"מה ההבדל בין הדרגונוב לרמינגטון 700?", a:["הדרגונוב חצי-אוטומטי, והרמינגטון 700 רובה בריח","הדרגונוב רובה בריח, והרמינגטון 700 חצי-אוטומטי","שניהם תת-מקלעים","הדרגונוב יורה כדור 9 מ\"מ"], c:0, e:"בדרגונוב כדור חדש נכנס לבד אחרי כל ירייה. ברמינגטון 700 מזיזים את הבריח ביד."},
@@ -2856,12 +2858,12 @@ const VS_KINDS={
 function vsNum(x){const m=String(x).replace(/,/g,"").match(/\d+(\.\d+)?/);return m?+m[0]:null;}
 function renderVs(q,kick,tm){
   const kind=q.k||shuffle(Object.keys(VS_KINDS))[0], K=VS_KINDS[kind];
-  const pool=WEAPONS.filter(w=>!w.gen&&K.get(w)!==null);
+  const pool=WEAPONS.filter(w=>!w.gen&&K.get(w)!==null&&(!q.f||w.type.startsWith(q.f)));
   let a,b,ok=false;
   for(let t=0;t<80&&!ok;t++){ [a,b]=shuffle(pool); const x=K.get(a),y=K.get(b); ok=K.gap?Math.abs(x-y)>=K.gap:Math.max(x,y)/Math.min(x,y)>=K.ratio; }
   const x=K.get(a), y=K.get(b), win=K.low?(x<y?0:1):(x>y?0:1);
   L.cur={t:"mc",a:[a.n,b.n],c:win,e:`${a.n}: ${K.show(a)}. ${b.n}: ${K.show(b)}.`};
-  frame(`${kick}<h1 class="l-title">${esc(q.q||K.q)}</h1>
+  frame(`${kick}<h1 class="l-title">${esc(q.q||K.q)}</h1>${q.f?`<p class="part-sub">שני ${esc(q.f==="מקלע"?"מקלעים":q.f==="אקדח"?"אקדחים":q.f==="רובה"?"רובים":q.f)}, אחד מול השני</p>`:""}
     <div class="opts vs-grid">${[a,b].map((w,k)=>`<button class="opt vs-card ${k?"from-l":"from-r"}" data-a="${k}">${silSvg(w)}<b>${esc(w.n)}</b><small>${esc(w.type)}</small><span class="vs-yr" hidden>${esc(K.show(w))}</span></button>`).join("")}<span class="vs-badge">VS</span></div>`,"בדיקה",true,"",tm);
   bindChoice();
 }
