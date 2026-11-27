@@ -1507,8 +1507,6 @@ const COURSE = [
    {t:"id", w:"m4"},
    {t:"label", w:"m4"},
    {t:"id", w:"hk416"},
-   {t:"id", w:"vz58"},
-   {t:"tf", q:"ה-Sa vz. 58 הצ'כי יורה את אותו כדור כמו ה-AK, אבל אף חלק לא מתחלף ביניהם.", c:true, e:"מבחוץ הם דומים, אבל המנגנון בפנים תוכנן אחרת לגמרי."},
    {t:"id", w:"fnc"},
    {t:"part", w:"fnc", p:"stock"},
    {t:"miss", w:"g3", p:"mag"},
@@ -1522,6 +1520,22 @@ const COURSE = [
    {t:"tf", q:"ה-AK-12 הוא היורש המודרני של ה-AK-74 בצבא רוסיה, והוא יורה את אותו כדור, 5.45×39 מ\"מ.", c:true, e:"הוא נכנס לשירות ב-2018, עם מסילות לאביזרים וקת מתקפלת."},
    {t:"mc", q:"מה ההבדל העיקרי בין HK416 ל-M4?", a:["ב-HK416 הגזים דוחפים בוכנה, וב-M4 הם נכנסים ישר לבית המכלול","ל-HK416 יש קליבר גדול יותר","ה-HK416 הוא רובה בריח","ל-M4 אין מחסנית נשלפת"], c:0, e:"כך פחות פיח נכנס לתוך המכלול, והנשק צריך פחות ניקוי."},
    {t:"part", w:"scar", p:"stock"}
+  ]},
+  { name:"נשק הגוש המזרחי", qs:[
+   {t:"id", w:"ak74"},
+   {t:"miss", w:"ak74", p:"brake"},
+   {t:"spec", w:"ak74", k:"cal"},
+   {t:"id", w:"svd"},
+   {t:"part", w:"svd", p:"scope"},
+   {t:"id", w:"pkm"},
+   {t:"tf", q:"רובה הצלפים דרגונוב ומקלע ה-PKM יורים את אותו כדור.", c:true, e:"שניהם יורים 7.62×54R, כדור ארוך וחזק יותר מזה של ה-AK."},
+   {t:"match", q:"התאם נשק סובייטי או רוסי לסוג שלו", p:[["AK-74","רובה סער"],["RPK","מקלע קל"],["PKM","מקלע כללי"],["דרגונוב SVD","רובה צלפים"]]},
+   {t:"miss", w:"ak12", p:"mag"},
+   {t:"mc", q:"מה ההבדל הבולט בין ה-RPK ל-AK-47?", a:["ל-RPK קנה ארוך ועבה יותר ודו-חצובה","ה-RPK יורה כדור אחר לגמרי","ל-RPK אין קת","ה-RPK הוא בולפאפ"], c:0, e:"ה-RPK הוא מקלע קל שנבנה על בסיס ה-AK, והוא מקבל גם מחסניות רגילות של AK."},
+   {t:"id", w:"vz58"},
+   {t:"tf", q:"ה-Sa vz. 58 הצ'כי יורה את אותו כדור כמו ה-AK, אבל אף חלק לא מתחלף ביניהם.", c:true, e:"מבחוץ הם דומים, אבל המנגנון בפנים תוכנן אחרת לגמרי."},
+   {t:"peek", w:"vz58"},
+   {t:"rank", k:"year", f:"רובה"}
   ]}
  ]},
  { id:"pistols", c:["#C27DF5","#9E5AD6"], title:"אקדחים ותת-מקלעים", sub:"גלוק, יריחו, עוזי, MP5 ואקדחים מודרניים", lessons:[
@@ -2870,7 +2884,7 @@ function renderVs(q,kick,tm){
   for(let t=0;t<80&&!ok;t++){ [a,b]=shuffle(pool); const x=K.get(a),y=K.get(b); ok=K.gap?Math.abs(x-y)>=K.gap:Math.max(x,y)/Math.min(x,y)>=K.ratio; }
   const x=K.get(a), y=K.get(b), win=K.low?(x<y?0:1):(x>y?0:1);
   L.cur={t:"mc",a:[a.n,b.n],c:win,e:`${a.n}: ${K.show(a)}. ${b.n}: ${K.show(b)}.`};
-  frame(`${kick}<h1 class="l-title">${esc(q.q||K.q)}</h1>${q.f?`<p class="part-sub">שני ${esc(q.f==="מקלע"?"מקלעים":q.f==="אקדח"?"אקדחים":q.f==="רובה"?"רובים":q.f)}, אחד מול השני</p>`:""}
+  frame(`${kick}<h1 class="l-title">${esc(q.q||K.q)}</h1>${q.f?`<p class="part-sub">שני ${esc(typePlural(q.f))}, אחד מול השני</p>`:""}
     <div class="opts vs-grid">${[a,b].map((w,k)=>`<button class="opt vs-card ${k?"from-l":"from-r"}" data-a="${k}">${silSvg(w)}<b>${esc(w.n)}</b><small>${esc(w.type)}</small><span class="vs-yr" hidden>${esc(K.show(w))}</span></button>`).join("")}<span class="vs-badge">VS</span></div>`,"בדיקה",true,"",tm);
   bindChoice();
 }
@@ -2964,13 +2978,14 @@ const RANK_KINDS={
   rng:{q:"סדר מהטווח הקצר לארוך",get:w=>vsNum(w.rng),show:v=>`${v} מ'`},
   year:{q:"סדר מהישן לחדש",get:w=>/^\d{4}$/.test(w.year)?+w.year:null,show:v=>v},
 };
+const typePlural=f=>({"מקלע":"מקלעים","אקדח":"אקדחים","רובה":"רובים","תת-מקלע":"תת-מקלעים"})[f]||f;
 function buildRank(q){
   const k=RANK_KINDS[q.k]?q.k:shuffle(Object.keys(RANK_KINDS))[0], K=RANK_KINDS[k], n=q.n||4;
   const far=(a,b)=>k==="year"?Math.abs(a-b)>=8:Math.max(a,b)/Math.min(a,b)>=1.25;
   const pick=[];
   for(const w of shuffle(WEAPONS.filter(w=>!w.gen&&K.get(w)&&(!q.f||w.type.startsWith(q.f))))){ const v=K.get(w); if(pick.every(x=>far(K.get(x),v))) pick.push(w); if(pick.length===n) break; }
   pick.sort((a,b)=>K.get(a)-K.get(b));
-  q.items=pick.map(w=>w.n); q.q=q.f?`${K.q} (רק ${q.f}ים)`:K.q; q.e=pick.map(w=>`${w.n}: ${K.show(K.get(w))}`).join(" · ")+".";
+  q.items=pick.map(w=>w.n); q.q=q.f?`${K.q} (רק ${typePlural(q.f)})`:K.q; q.e=pick.map(w=>`${w.n}: ${K.show(K.get(w))}`).join(" · ")+".";
 }
 
 /* ---- banner that slides in when a new unit opens on the path */
