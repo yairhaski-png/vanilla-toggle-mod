@@ -909,6 +909,9 @@ body{font-size:16px}
 .peek-svg .peek-ring{fill:none;stroke:var(--blue);stroke-width:2;stroke-dasharray:4 3;animation:peekSpin 6s linear infinite;transform-box:fill-box;transform-origin:center;transition:opacity .4s}
 @keyframes peekSpin{to{transform:rotate(360deg)}}
 .peek-svg.revealed .peek-cover,.peek-svg.revealed .peek-ring{opacity:0}
+.miss-svg .miss-ring{animation:none}
+.miss-svg .miss-q{font:900 15px var(--font,sans-serif);fill:var(--blue);transition:opacity .4s}
+.miss-svg.revealed .miss-q{opacity:0}
 .peek-svg.revealed{animation:peekPop .5s cubic-bezier(.3,1.6,.5,1)}
 @keyframes peekPop{50%{transform:scale(1.06)}}
 .met{margin-top:14px;width:100%;max-width:440px}
@@ -1274,6 +1277,7 @@ const COURSE = [
    {t:"part", w:"beretta92"},
    {t:"label", w:"negev"},
    {t:"part", w:"m249", p:"bipod"},
+   {t:"miss", w:"fal", p:"handle"},
    {t:"mc", q:"מה החלק שנע אחורה וקדימה בכל ירייה באקדח כמו הברטה?", a:["המגלשה","ידית האחיזה","מגן ההדק","הכוונת הקדמית"], c:0, e:"בברטה 92 המגלשה פתוחה בחלק העליון, וכך רואים את הקנה מבחוץ."},
    {t:"match", q:"התאם נשק לחלק שבולט בו", p:[["נגב","תיבת תחמושת"],["FAL","ידית נשיאה"],["MP5","מחסנית מעוקלת"],["ברטה 92","מגלשה פתוחה"]]}
   ]},
@@ -1480,6 +1484,7 @@ const COURSE = [
    {t:"id", w:"hk416"},
    {t:"id", w:"fnc"},
    {t:"part", w:"fnc", p:"stock"},
+   {t:"miss", w:"g3", p:"mag"},
    {t:"id", w:"mcx"},
    {t:"part", w:"mcx", p:"stock"},
    {t:"id", w:"arx160"},
@@ -1678,6 +1683,7 @@ const COURSE = [
    {t:"part", w:"ppsh", p:"drum"},
    {t:"id", w:"mg42"},
    {t:"part", w:"mg42", p:"barrel"},
+   {t:"miss", w:"mg42", p:"bipod"},
    {t:"id", w:"sten"},
    {t:"part", w:"sten", p:"mag"},
    {t:"match", q:"התאם תת-מקלע של מלחמת העולם השנייה למדינה שלו", p:[["MP40","גרמניה"],["PPSh-41","ברית המועצות"],["תומפסון","ארה\"ב"]]},
@@ -1728,6 +1734,7 @@ const COURSE = [
    {t:"part", w:"negev", p:"box"},
    {t:"tf", q:"מקלע הנגב יכול לירות גם מחגור וגם ממחסנית רגילה של רובה.", c:true, e:"זה נוח בשטח: אם נגמר החגור, אפשר להכניס מחסנית של M16 או של תבור."},
    {t:"part", w:"jericho", p:"hammer"},
+   {t:"miss", w:"negev", p:"box"},
    {t:"id", w:"masada"},
    {t:"tf", q:"על המגלשה של אקדח המצדה אפשר להרכיב כוונת השתקפותית קטנה.", c:true, e:"זה אקדח מודרני מ-2017, ורבים מהאקדחים החדשים בנויים כך."},
    {t:"mc", q:"מה משותף לתבור, ל-X95, לנגב ולערד?", a:["כולם יורים 5.56×45 מ\"מ וכולם של התעשייה הצבאית","כולם בולפאפ","כולם יורים 9 מ\"מ","כולם תוכננו בשנות ה-50"], c:0, e:"כולם פותחו ב-IWI, ויורים את אותה תחמושת נאט\"ו."},
@@ -2278,6 +2285,7 @@ function renderQ(){
   if(q.t==="flag") return renderFlag(q,kick,tm);
   if(q.t==="spec") return renderSpec(q,kick,tm);
   if(q.t==="peek") return renderPeek(q,kick,tm);
+  if(q.t==="miss") return renderMiss(q,kick,tm);
   if(q.t==="odd") return renderOdd(q,kick,tm);
   if(q.t==="story") return renderStory(q,kick);
   if(q.t==="id"){
@@ -2334,13 +2342,13 @@ function timeUp(){
 }
 function check(timeout){
   const q0=L.qs[L.i]; if(L.sel===null)return;
-  const q=(q0.t==="id"||q0.t==="pic"||q0.t==="vs"||q0.t==="flag"||q0.t==="odd"||q0.t==="spec"||q0.t==="peek"||q0.t==="hear")?L.cur:(q0.t==="gap"||q0.t==="story")?{...q0,t:"mc"}:q0;
+  const q=(q0.t==="id"||q0.t==="pic"||q0.t==="vs"||q0.t==="flag"||q0.t==="odd"||q0.t==="spec"||q0.t==="peek"||q0.t==="hear"||q0.t==="miss")?L.cur:(q0.t==="gap"||q0.t==="story")?{...q0,t:"mc"}:q0;
   const ok=!timeout&&(q.t==="mc"?L.sel===q.c:(L.sel===1)===q.c), right=q.t==="mc"?q.c:(q.c?1:0);
   if(q0.t==="id"&&ok) S.ids=(S.ids||0)+1;
   $$(".opts .opt").forEach(b=>{b.disabled=true;b.classList.remove("sel"); if(+b.dataset.a===right)b.classList.add("right"); else if(+b.dataset.a===L.sel)b.classList.add("wrong");});
   L.state="checked"; feedback(ok,(timeout?"נגמר הזמן. ":"")+(q.e||""),q);
   if(q0.t==="vs") $$(".vs-yr").forEach((e,k)=>setTimeout(()=>{e.hidden=false;},k*180));
-  if(q0.t==="peek"){ const pv=$(".peek-svg"); if(pv) pv.classList.add("revealed"); }
+  if(q0.t==="peek"||q0.t==="miss"){ const pv=$(".peek-svg"); if(pv) pv.classList.add("revealed"); }
   if(q0.t==="gap"){ const g=$("#gap"); g.classList.add(ok?"ok":"no"); if(!ok){ g.textContent=q.a[q.c]; g.classList.add("filled"); } }
   if(ok) burst(q0.t==="gap"?$("#gap"):$(".opt.right"),["#58C21B","#A8E66F","#FFC800"],16);
 }
@@ -2841,6 +2849,23 @@ function renderFlag(q,kick,tm){
   bindChoice();
 }
 
+/* ---- missing part: one part of the drawing is covered; name the hidden part */
+function renderMiss(q,kick,tm){
+  const pool=WEAPONS.filter(x=>!x.gen&&PARTS[x.sil]&&Object.keys(PARTS[x.sil]).length>=4);
+  const w=q.w&&WMAP[q.w]&&PARTS[WMAP[q.w].sil]&&Object.keys(PARTS[WMAP[q.w].sil]).length>=4?WMAP[q.w]:shuffle(pool)[0];
+  const P=PARTS[w.sil], keys=Object.keys(P), key=q.p&&P[q.p]?q.p:shuffle(keys)[0], [name,x,y,pw,ph]=P[key];
+  const wrong=shuffle(keys.filter(k=>k!==key)).slice(0,3).map(k=>P[k][0]);
+  L.cur={t:"mc",a:[name,...wrong],c:0,e:`חסר כאן: ${name}. `+(PART_INFO[w.sil+":"+key]||PART_INFO[key]||"")}; L.curW=w.id;
+  L.order=shuffle([0,1,2,3]);
+  const mid=`ms${Date.now()%1e6}`;
+  frame(`${kick}<h1 class="l-title">איזה חלק חסר?</h1><p class="part-sub"><bdi>${esc(w.n)}</bdi>: חלק אחד מכוסה. מה מסתתר מתחת לסימן השאלה?</p>
+    <div class="id-card"><svg class="sil gun peek-svg miss-svg" viewBox="0 0 240 96"><defs><mask id="${mid}"><rect width="240" height="96" fill="#000"/><rect x="${x}" y="${y}" width="${pw}" height="${ph}" rx="4" fill="#fff"/></mask></defs>
+      <ellipse class="gsh" cx="120" cy="90" rx="100" ry="4"/>${SIL[w.sil]}<rect class="peek-cover" width="240" height="96" mask="url(#${mid})"/>
+      <rect class="peek-ring miss-ring" x="${x}" y="${y}" width="${pw}" height="${ph}" rx="4"/><text class="miss-q" x="${x+pw/2}" y="${y+ph/2+5}" text-anchor="middle">?</text></svg></div>
+    <div class="opts id-opts">${L.order.map((ai,k)=>optBtn(ai,k,L.cur.a[ai])).join("")}</div>`,"בדיקה",true,"",tm);
+  bindChoice();
+}
+
 /* ---- peek: only a small window of the drawing is visible; name the weapon, then the whole drawing is revealed */
 function renderPeek(q,kick,tm){
   const pool=WEAPONS.filter(x=>!x.gen&&PARTS[x.sil]);
@@ -2885,7 +2910,7 @@ function unitBanner(u){
 
 /* ---- spec questions built from the armory data: calibre, magazine, designer, mechanism */
 /* profile statistics: accuracy by question type and by weapon */
-const TYPE_NAMES={mc:"בחירה",tf:"נכון / לא נכון",match:"התאמה",id:"זיהוי נשק",pic:"זיהוי לפי ציור",part:"גע בחלק",label:"שמות חלקים",spec:"מפרט",rank:"סידור",order:"סדר",peek:"מה מסתתר",gap:"השלמה",vs:"מי מנצח",flag:"דגלים",odd:"יוצא דופן",type:"הקלדה",story:"סיפור",hear:"האזנה"};
+const TYPE_NAMES={mc:"בחירה",tf:"נכון / לא נכון",match:"התאמה",id:"זיהוי נשק",pic:"זיהוי לפי ציור",part:"גע בחלק",label:"שמות חלקים",spec:"מפרט",rank:"סידור",order:"סדר",peek:"מה מסתתר",miss:"חלק חסר",gap:"השלמה",vs:"מי מנצח",flag:"דגלים",odd:"יוצא דופן",type:"הקלדה",story:"סיפור",hear:"האזנה"};
 function statsCard(){
   const ts=Object.entries(S.ts||{}).filter(([t,v])=>v[1]>=1&&TYPE_NAMES[t]).sort((a,b)=>b[1][1]-a[1][1]).slice(0,6);
   if(!ts.length) return `<div class="card stats-card"><h3>סטטיסטיקה</h3><p class="page-sub" style="margin:0">ענה על כמה שאלות, וכאן יופיע הדיוק שלך לפי סוג שאלה ולפי נשק.</p></div>`;
@@ -2963,7 +2988,7 @@ function partsCard(){
 }
 function startPartsDrill(){
   const ws=shuffle(WEAPONS.filter(w=>PARTS[w.sil])).slice(0,10);
-  const qs=ws.map((w,i)=>i%3===2?{t:"label",w:w.id,n:Object.keys(PARTS[w.sil]).length>4?4:3}:{t:"part",w:w.id});
+  const qs=ws.map((w,i)=>i%3===2?{t:"label",w:w.id,n:Object.keys(PARTS[w.sil]).length>4?4:3}:i%4===3?{t:"miss",w:w.id}:{t:"part",w:w.id});
   startLesson({u:COURSE[0],ui:0,n:{t:"practice",name:"זיהוי חלקים"},key:"practice",drill:1},qs);
 }
 /* ---- expert challenge: only the hard types (4-point labels, peek, spec, sound), opens after 6 lessons */
