@@ -1111,6 +1111,7 @@ const WEAPONS=[
  {id:"qbz95",n:"QBZ-95",sil:"qbz95",type:"רובה סער",country:"סין",year:"1997",by:"נורינקו",cal:"5.8×42 מ\"מ",act:"בוכנת גזים קצרה, בריח מסתובב",mag:"30",rng:"כ-400 מ'",kg:"כ-3.3 ק\"ג (ריק)",fact:"רובה הסער הבולפאפ של צבא סין. הוא יורה כדור סיני מיוחד בקוטר 5.8 מ\"מ, וידית הנשיאה שלו משמשת גם בסיס לכוונת."},
  {id:"g11",n:"HK G11",sil:"g11",type:"רובה סער",country:"גרמניה",year:"1990",by:"הקלר אנד קוך",cal:"4.73×33 מ\"מ (ללא תרמיל)",act:"גזים, בית בליעה מסתובב",mag:"45 או 50",rng:"כ-400 מ'",kg:"כ-3.6 ק\"ג (ריק)",fact:"רובה ניסיוני שיורה תחמושת בלי תרמיל: אבק השריפה דחוס סביב הקליע ונשרף כולו. נבנו ממנו רק אבות-טיפוס, והוא לא נכנס לשירות, אבל הוא מפורסם בגלל הצורה המלבנית שלו."},
  {id:"f2000",n:"FN F2000",sil:"f2000",type:"רובה סער",country:"בלגיה",year:"2001",by:"FN הרסטל",cal:"5.56×45 מ\"מ נאט\"ו",act:"גזים, בריח מסתובב",mag:"30",rng:"כ-500 מ'",kg:"כ-3.6 ק\"ג (ריק)",fact:"רובה בולפאפ בלגי עם צורה חלקה ועגולה. התרמילים הריקים לא נזרקים הצידה אלא קדימה, דרך צינור ליד הקנה, ולכן גם שמאליים יכולים לירות בו בנוחות."},
+ {id:"mk18",n:"Mk 18",sil:"mk18",type:"קרבין",country:"ארה\"ב",year:"2002",by:"מרכז הלחימה הימית קריין",cal:"5.56×45 מ\"מ נאט\"ו",act:"גזים ישירים, בריח מסתובב",mag:"30",rng:"כ-300 מ'",kg:"כ-2.9 ק\"ג (ריק)",fact:"גרסה קצרה מאוד של ה-M4, עם קנה של כ-26 ס\"מ בלבד. היא נבנתה ללחימה בתוך ספינות ומבנים, שבהם רובה ארוך מפריע להסתובב."},
  {id:"thompson",n:"תומפסון",sil:"thompson",type:"תת-מקלע",country:"ארה\"ב",year:"1921",by:"ג'ון ט. תומפסון",cal:".45 ACP",act:"הדף",mag:"20, 30 או תוף של 50",rng:"כ-50 עד 100 מ'",kg:"כ-4.9 ק\"ג",fact:"ה'טומי גאן' המפורסם מתקופת היובש בארה\"ב, ששימש גם במלחמת העולם השנייה."},
  {id:"enfield",n:"לי-אנפילד",sil:"enfield",type:"רובה בריח",country:"בריטניה",year:"1895",by:"ג'יימס פריס לי (מנגנון הבריח)",cal:".303 בריטי",act:"בריח ידני",mag:"10",rng:"כ-500 מ'",kg:"כ-4 ק\"ג",fact:"הבריח המהיר שלו אפשר את 'הדקה המטורפת': חיילים מאומנים ירו יותר מ-15 יריות מכוונות בדקה."},
 
@@ -1140,12 +1141,13 @@ const WEAPONS=[
  {id:"x95",n:"מיקרו תבור X95",sil:"x95",type:"רובה סער",country:"ישראל",year:"2003",by:"התעשייה הצבאית (IWI)",cal:"5.56×45 מ\"מ נאט\"ו",act:"גזים, בוכנה ארוכה",mag:"30",rng:"כ-400 מ'",kg:"כ-3.2 ק\"ג (ריק)",fact:"גרסה קצרה של התבור. ב-2009 בחר בו צה\"ל כרובה הרגלים הסטנדרטי."},
 ];
 /* look-alike groups: never offered together as answer options */
-const LOOKALIKE=[["f2000","p90","famas","aug","qbz95"],["g11","p90","famas","aug"],["qbz95","tavor","famas","l85","aug"],["type56","ak47","ak74","vz58","rpk"],["svt40","mosin","garand","m14","svd"],["ksg","rem870","moss500","benelli"],["vz58","ak47","ak74","rpk","galil"],["usp","glock17","p320","p99","masada"],["cz75","jericho","beretta92","m1911"],["makarov","ppk","p99","glock17"],["masada","glock17","jericho","p320","p99"],["fnc","fal","m16","galil","g3"],["mg42","mag","pkm","negev"],["sten","mp40","uzi","thompson"],["g3","fal","m14","mp5"],["mp40","ppsh","thompson","uzi"],["l85","famas","aug","tavor","x95"],["mcx","hk416","m4","m16","scar"],["arx160","scar","hk416"],["rpk","ak47","ak74","ak12"],["p99","ppk","glock17","p320","fiveseven"],["m2","dshk"],["arad","m4","hk416","m16"],["bren2","scar","g36"],["benelli","moss500","rem870"],["ak12","ak74","ak47","galil"],["mg4","negev","m249"],["scout","rem700","mauser"],["famas","tavor","x95","aug"],["g36","hk416","m4","scar"],["fiveseven","glock17","p320","jericho","beretta92"],["vector","scorpion","mp7","p90"],["ppk","glock17","p320","m1911"],["scorpion","mp5","mp7","uzi"],["m249","negev"],["m14","garand"],["rem700","mauser","enfield","mosin"],["m16","m4","hk416","scar"],["glock17","p320"],["mosin","enfield","mauser","garand"],["tavor","x95","aug"],["glock17","jericho","beretta92","m1911","deagle"],["m16","m4"],["ak47","ak74","galil"],["negev","mag","pkm"],["uzi","mp5","thompson"]];
+const LOOKALIKE=[["mk18","m4","hk416","mcx","m16"],["f2000","p90","famas","aug","qbz95"],["g11","p90","famas","aug"],["qbz95","tavor","famas","l85","aug"],["type56","ak47","ak74","vz58","rpk"],["svt40","mosin","garand","m14","svd"],["ksg","rem870","moss500","benelli"],["vz58","ak47","ak74","rpk","galil"],["usp","glock17","p320","p99","masada"],["cz75","jericho","beretta92","m1911"],["makarov","ppk","p99","glock17"],["masada","glock17","jericho","p320","p99"],["fnc","fal","m16","galil","g3"],["mg42","mag","pkm","negev"],["sten","mp40","uzi","thompson"],["g3","fal","m14","mp5"],["mp40","ppsh","thompson","uzi"],["l85","famas","aug","tavor","x95"],["mcx","hk416","m4","m16","scar"],["arx160","scar","hk416"],["rpk","ak47","ak74","ak12"],["p99","ppk","glock17","p320","fiveseven"],["m2","dshk"],["arad","m4","hk416","m16"],["bren2","scar","g36"],["benelli","moss500","rem870"],["ak12","ak74","ak47","galil"],["mg4","negev","m249"],["scout","rem700","mauser"],["famas","tavor","x95","aug"],["g36","hk416","m4","scar"],["fiveseven","glock17","p320","jericho","beretta92"],["vector","scorpion","mp7","p90"],["ppk","glock17","p320","m1911"],["scorpion","mp5","mp7","uzi"],["m249","negev"],["m14","garand"],["rem700","mauser","enfield","mosin"],["m16","m4","hk416","scar"],["glock17","p320"],["mosin","enfield","mauser","garand"],["tavor","x95","aug"],["glock17","jericho","beretta92","m1911","deagle"],["m16","m4"],["ak47","ak74","galil"],["negev","mag","pkm"],["uzi","mp5","thompson"]];
 const sameLook=(a,b)=>LOOKALIKE.some(g=>g.includes(a.id)&&g.includes(b.id));
 const WMAP=Object.fromEntries(WEAPONS.map(w=>[w.id,w]));
 
 /* Side-profile silhouettes, muzzle pointing left (reads naturally in RTL). viewBox 0 0 240 90 */
 const SIL={
+ mk18:`<path class="ms" d="M150 46q-2 10 6 12"/><rect class="m" x="182" y="34" width="30" height="6"/><path class="p" d="M206 27h30v28l-30-7z"/><path class="m" d="M136 46h-14l-2 28h14z"/><rect class="m" x="112" y="30" width="70" height="16" rx="2"/><rect class="m" x="66" y="25" width="118" height="5"/><path d="M68 25v-1.5M73 25v-1.5M78 25v-1.5M83 25v-1.5M88 25v-1.5M93 25v-1.5M98 25v-1.5M103 25v-1.5M108 25v-1.5" stroke="#000" stroke-width="1.2" opacity=".4"/><rect class="p" x="130" y="13" width="26" height="12" rx="3"/><rect class="o" x="131" y="15" width="5" height="7" rx="1"/><path class="p" d="M158 46h-10l4 20h10z"/><rect class="m" x="66" y="30" width="46" height="15" rx="2"/><path d="M72 34h8M86 34h8M100 34h8" stroke="#000" stroke-width="2.5" opacity=".35"/><rect class="m" x="44" y="34" width="22" height="4"/><rect class="m" x="36" y="32" width="10" height="8" rx="1"/><rect class="hl" x="114" y="31" width="66" height="2" rx="1"/>`,
  f2000:`<path class="m" d="M178 52h-14l-2 24h14z"/><path class="m" d="M80 30q0-6 8-6h132q12 0 14 10l2 14q0 8-8 8h-16l-24-4h-96q-12 0-12-10z"/><path d="M196 34v14M202 34v14M208 34v14" stroke="#000" stroke-width="2" opacity=".3"/><path class="ms" d="M104 52q-4 10 8 12h8"/><path class="m" d="M128 52h-12l2 24h12z"/><rect class="m" x="44" y="35" width="38" height="5"/><rect class="m" x="36" y="33" width="10" height="9" rx="1"/><rect class="p" x="120" y="14" width="48" height="10" rx="3"/><rect class="o" x="121" y="16" width="5" height="6" rx="1"/><rect class="hl" x="90" y="25" width="132" height="2" rx="1"/>`,
  g11:`<path class="ms" d="M138 54q-8 4-8 14h12"/><path class="m" d="M152 54h-12l-2 22h12z"/><rect class="m" x="60" y="26" width="170" height="28" rx="6"/><path d="M76 32v16M82 32v16M88 32v16" stroke="#000" stroke-width="2" opacity=".3"/><rect class="m" x="96" y="16" width="70" height="10" rx="3"/><rect class="o" x="98" y="18" width="6" height="6" rx="1"/><rect class="m" x="38" y="37" width="22" height="5" rx="1"/><path d="M200 30v20" stroke="#000" stroke-width="1.5" opacity=".25"/><rect class="hl" x="64" y="27" width="162" height="2" rx="1"/>`,
  qbz95:`<path class="ms" d="M132 48q-10 4-12 16h16"/><path class="m" d="M178 50h-14l-4 26h14z"/><path class="m" d="M234 28l-124-0-14 8v12l92 2 46 8 4-4z"/><path d="M200 34v12M206 34v12M212 34v12" stroke="#000" stroke-width="2" opacity=".3"/><path class="m" d="M126 48h-12l4 22h12z"/><path class="m" d="M118 28v-10h70v10h-6v-5h-58v5z"/><rect class="m" x="40" y="35" width="56" height="4"/><rect class="m" x="32" y="33" width="10" height="8" rx="1"/><rect class="m" x="60" y="29" width="4" height="6"/><rect class="hl" x="112" y="29" width="118" height="2" rx="1"/>`,
@@ -1260,6 +1262,7 @@ const PARTS={
  qbz95:{barrel:["הקנה",30,28,66,14],handle:["ידית הנשיאה",116,14,74,14],grip:["ידית האחיזה",112,48,22,24],mag:["המחסנית",158,50,22,28],stock:["הקת",190,28,48,32]},
  g11:{barrel:["הקנה",34,32,28,14],optic:["הכוונת",94,12,74,15],grip:["ידית האחיזה",136,54,18,24],stock:["הקת",186,26,46,28]},
  f2000:{barrel:["הקנה",34,30,46,14],optic:["הכוונת",118,10,52,15],grip:["ידית האחיזה",114,52,18,26],mag:["המחסנית",160,52,20,26],stock:["הקת",200,24,38,34]},
+ mk18:{barrel:["הקנה",32,28,34,14],hand:["מגן הידיים",66,24,46,22],optic:["הכוונת",128,10,30,15],mag:["המחסנית",118,47,22,28],grip:["ידית האחיזה",148,47,18,20],stock:["הקת",204,25,36,32]},
  thompson:{barrel:["הקנה",20,28,58,12],recv:["בית המכלול",82,27,90,15],fgrip:["הידית הקדמית",94,43,16,22],drum:["מחסנית התוף",120,43,38,36],grip:["ידית האחיזה",162,43,20,22],stock:["הקת",178,29,60,26]},
  garand:{barrel:["הקנה",8,30,56,12],hand:["מגן הידיים",64,29,76,18],recv:["בית המכלול",140,25,44,20],guard:["מגן ההדק",162,48,20,16],stock:["הקת",186,30,52,30]},
  bolt:{barrel:["הקנה",4,31,36,12],hand:["מגן הידיים",42,31,68,15],recv:["בית המכלול",110,26,38,18],bhandle:["ידית הבריח",148,16,16,16],guard:["מגן ההדק",144,44,16,14],stock:["הקת",168,28,70,30]},
@@ -1567,6 +1570,8 @@ const COURSE = [
    {t:"id", w:"fnc"},
    {t:"part", w:"fnc", p:"stock"},
    {t:"miss", w:"g3", p:"mag"},
+   {t:"id", w:"mk18"},
+   {t:"mc", q:"למה ל-Mk 18 יש קנה קצר כל כך?", a:["כדי להסתובב בקלות בתוך ספינות ומבנים","כדי לירות רחוק יותר","כי הוא יורה כדור של אקדח","כדי שיהיה כבד ויציב יותר"], c:0, e:"קנה קצר מקטין קצת את הטווח, אבל נשק קצר נוח יותר במקומות צפופים."},
    {t:"id", w:"mcx"},
    {t:"part", w:"mcx", p:"stock"},
    {t:"id", w:"arx160"},
@@ -2074,24 +2079,12 @@ function statRow(){
    <div class="stat gems" title="יהלומים">${ico("i-gem")}<span>${S.gems}</span></div>
    <button class="stat hearts" data-hearts title="לבבות">${ico("i-heart")}<span>${S.hearts}</span></button>`;
 }
-function goalCard(){
-  const p=Math.min(100,S.daily.xp/S.goal*100);
-  return `<div class="card"><h3>משימות יומיות</h3><div class="quest"><svg viewBox="0 0 24 24" style="color:var(--gold)"><use href="#i-bolt"/></svg>
-    <div class="q-txt"><b>צבור ${S.goal} XP</b><div class="pbar"><i style="width:${p}%"></i><span>${S.daily.xp} / ${S.goal}</span></div></div>
-    <svg viewBox="0 0 86 78" style="width:44px;height:40px"><use href="#${S.daily.xp>=S.goal?"chest-open":"chest"}"/></svg></div></div>`;
-}
 function rankCard(){
   const r=rankInfo();
   return `<div class="card"><h3>הדרגה שלך</h3><div class="rank-row"><div class="rank-badge"><svg viewBox="0 0 32 32"><use href="#n-trophy"/></svg></div>
    <div style="flex:1;min-width:0"><b style="font-size:19px;color:var(--ink-strong)">${esc(r.name)}</b>
    <p>${r.next?`עוד ${r.need} XP לדרגת ${esc(r.next)}`:"הגעת לדרגה הגבוהה ביותר"}</p>
    <div class="pbar" style="margin-top:8px;height:14px"><i style="width:${r.pct}%;background:var(--blue)"></i></div></div></div></div>`;
-}
-function nextBadgeCard(){
-  const b=BADGES.find(b=>!earned(b)); if(!b) return "";
-  return `<div class="card"><h3>העיטור הבא <button data-go="badges">הצג הכל</button></h3><div class="quest">
-   <div class="li" style="padding:0;border:0"><div class="ic" style="--c:${b.c};width:54px;height:54px"><svg viewBox="0 0 24 24" style="fill:#fff;width:30px;height:30px"><use href="#${b.ic}"/></svg></div></div>
-   <div class="q-txt"><b>${esc(b.n)}</b><div class="pbar" style="height:14px"><i style="width:${Math.min(100,b.v()/b.max*100)}%"></i></div><p style="font-size:14px;margin-top:4px">${esc(b.d)}</p></div></div></div>`;
 }
 function render(){
   regenHearts();
