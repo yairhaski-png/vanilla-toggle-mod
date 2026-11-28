@@ -968,6 +968,12 @@ body{font-size:16px}
 #wdGo{margin-bottom:10px}
 .arm-star{position:absolute;top:8px;inset-inline-end:8px;width:24px;height:24px;border-radius:50%;background:#FFC800;display:grid;place-items:center;box-shadow:0 2px 0 #E0A800;z-index:1}.arm-star svg{width:15px;height:15px;fill:#fff}
 .arm-mast{display:flex;align-items:center;gap:6px;margin-top:6px;font-weight:800;color:#C88A00}.arm-mast svg{width:16px;height:16px;fill:#FFC800}
+.cty-wrap{margin:12px 0 4px}.cty-wrap>b{display:block;margin-bottom:8px;font-size:15px}
+.cty-row{display:flex;gap:10px;overflow-x:auto;padding:8px 8px 6px;scrollbar-width:thin}
+.cty{flex:none;display:flex;flex-direction:column;align-items:center;gap:4px;padding:8px 10px;border:2px solid var(--line);border-bottom-width:4px;border-radius:14px;background:var(--surface);color:inherit;font:inherit;cursor:pointer;position:relative;min-width:72px}
+.cty .flag-svg{width:40px;height:27px;border-radius:4px;box-shadow:0 0 0 1px var(--line)}.cty small{font-weight:800;font-size:12px;white-space:nowrap}
+.cty span{position:absolute;top:-6px;inset-inline-start:-6px;background:var(--blue);color:#fff;font-size:11px;font-weight:900;border-radius:10px;padding:1px 6px}
+.cty:active{transform:translateY(2px);border-bottom-width:2px}
 @media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
 </style>
 
@@ -2202,17 +2208,30 @@ function renderArmory(){
    <div class="arm-search">${ico("i-search")}<input id="armQ" type="search" placeholder="חפש נשק, מדינה, קליבר או חלק" value="${esc(armQuery)}" autocomplete="off"></div>
    <div class="chips">${ARM_GROUPS.filter(([t,f])=>t==="הכל"||t===armFilter||WEAPONS.some(f)).map(([t,f])=>`<button class="chip" aria-pressed="${t===armFilter}" data-f="${esc(t)}">${esc(t)} <span class="chip-n">${WEAPONS.filter(f).length}</span></button>`).join("")}</div>
    <button class="btn wide teal fc-go" id="fcGo">${ico("i-book")}כרטיסיות: חזרה מהירה על ${heN(Math.min(10,list.length),"נשק אחד","נשקים")}</button>
+   ${countryRow()}
    <p class="arm-empty" id="armEmpty" hidden>לא נמצא נשק כזה. נסה מילה אחרת.</p>
    <div class="arm-grid">${list.map((w,i)=>`<button class="arm-card" style="--d:${Math.min(i,12)}" data-w="${w.id}" data-q="${esc((w.n+" "+w.id+" "+w.country+" "+w.cal+" "+w.type+" "+Object.values(PARTS[w.sil]||{}).map(x=>x[0]).join(" ")).toLowerCase())}"><div class="sil-box">${silSvg(w)}${w.gen?`<span class="gen">איור כללי</span>`:""}</div>
      ${(S.seen||[]).includes(w.id)?`<span class="arm-got">${ico("i-check")}</span>`:`<span class="arm-new">חדש</span>`}${(S.wdPerfect||[]).includes(w.id)?`<span class="arm-star" title="תרגלת את כל החלקים בלי טעויות" aria-label="תרגלת את כל החלקים בלי טעויות">${ico("i-star")}</span>`:""}<div class="arm-meta"><b>${esc(w.n)}</b><small>${esc(w.type)} · ${esc(w.country)} · ${esc(w.year)}</small><span class="cal">${esc(w.cal)}</span></div></button>`).join("")}</div>`;
   $$(".chip").forEach(b=>b.onclick=()=>{armFilter=b.dataset.f;sfx.tap();renderArmory();});
   $$(".arm-card").forEach(b=>b.onclick=()=>weaponSheet(WMAP[b.dataset.w]));
   $("#fcGo").onclick=()=>{ sfx.tap(); flashcards(list); };
+  $$(".cty").forEach(b=>b.onclick=()=>{ sfx.tap(); startCountryDrill(b.dataset.c); });
   const applyQ=()=>{ const q=armQuery.trim().toLowerCase(); let n=0;
     $$(".arm-card").forEach(c=>{ const hit=!q||c.dataset.q.includes(q); c.hidden=!hit; if(hit) n++; });
     $("#armEmpty").hidden=n>0; };
   $("#armQ").oninput=e=>{ armQuery=e.target.value; applyQ(); };
   applyQ();
+}
+/* ---- practice by country: identify the weapons of one country, plus a few of their parts */
+function countryList(){ return Object.keys(FLAGS).map(c=>[c,WEAPONS.filter(w=>!w.gen&&w.country===c)]).filter(([,ws])=>ws.length>=3).sort((a,b)=>b[1].length-a[1].length); }
+function countryRow(){
+  const cs=countryList(); if(!cs.length) return "";
+  return `<div class="cty-wrap"><b>תרגול לפי מדינה</b><div class="cty-row">${cs.map(([c,ws])=>`<button class="cty" data-c="${esc(c)}" aria-label="תרגול הנשקים של ${esc(c)}">${flagSvg(c)}<small>${esc(c)}</small><span>${ws.length}</span></button>`).join("")}</div></div>`;
+}
+function startCountryDrill(c){
+  const ws=shuffle(WEAPONS.filter(w=>!w.gen&&w.country===c)), qs=ws.slice(0,7).map(w=>({t:"id",w:w.id}));
+  ws.filter(w=>PARTS[w.sil]).slice(0,3).forEach(w=>qs.push({t:"part",w:w.id}));
+  startLesson({u:COURSE[0],ui:0,n:{t:"practice",name:`הנשקים של ${c}`},key:"practice"},shuffle(qs));
 }
 /* ---- flashcards: drawing on the front, the key facts on the back; "knew it" / "not yet" */
 function flashcards(list){
