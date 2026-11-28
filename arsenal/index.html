@@ -1578,6 +1578,19 @@ const COURSE = [
    {t:"id", w:"type56"},
    {t:"flag", w:"type56"},
    {t:"rank", k:"year", f:"רובה"}
+  ]},
+  { name:"נשקים יוצאי דופן", qs:[
+   {t:"peek", w:"g11"},
+   {t:"spec", w:"g11", k:"cal"},
+   {t:"id", w:"vector"},
+   {t:"miss", w:"vector", p:"fstock"},
+   {t:"part", w:"p90", p:"mag"},
+   {t:"mc", q:"מה מיוחד במחסנית של ה-FN P90?", a:["היא שקופה ושוכבת על גבי הנשק, והכדורים מסתובבים בה","היא עגולה כמו תוף","היא נכנסת לתוך ידית האחיזה","אין לו מחסנית בכלל"], c:0, e:"המחסנית מחזיקה 50 כדורים, שוכבת לאורך הנשק, ואפשר לראות דרכה כמה כדורים נשארו."},
+   {t:"id", w:"ksg"},
+   {t:"part", w:"ksg", p:"pump"},
+   {t:"miss", w:"aug", p:"fgrip"},
+   {t:"match", q:"התאם נשק לתכונה המיוחדת שלו", p:[["HK G11","תחמושת בלי תרמיל"],["FN P90","מחסנית שקופה מעל הנשק"],["קל-טק KSG","שני צינורות מחסנית"],["KRISS Vector","מנגנון שמפנה את הרתע כלפי מטה"]]},
+   {t:"rank", k:"year", f:"רובה"}
   ]}
  ]},
  { id:"pistols", c:["#C27DF5","#9E5AD6"], title:"אקדחים ותת-מקלעים", sub:"גלוק, יריחו, עוזי, MP5 ואקדחים מודרניים", lessons:[
@@ -3471,7 +3484,7 @@ Object.assign(DIAGRAMS,{
    <g transform="translate(250 63)"><circle class="pl0" cx="0" cy="-3.0" r="2.4" fill="#4A525B" style="--a:-8deg;--k:0"/><circle class="pl1" cx="0" cy="-1.5" r="2.4" fill="#4A525B" style="--a:-4deg;--k:1"/><circle class="pl2" cx="0" cy="0.0" r="2.4" fill="#4A525B" style="--a:0deg;--k:2"/><circle class="pl0" cx="0" cy="1.5" r="2.4" fill="#4A525B" style="--a:4deg;--k:3"/><circle class="pl1" cx="0" cy="3.0" r="2.4" fill="#4A525B" style="--a:8deg;--k:4"/><circle class="pl2" cx="0" cy="-3.0" r="2.4" fill="#4A525B" style="--a:-8deg;--k:5"/><circle class="pl0" cx="0" cy="-1.5" r="2.4" fill="#4A525B" style="--a:-4deg;--k:6"/><circle class="pl1" cx="0" cy="0.0" r="2.4" fill="#4A525B" style="--a:0deg;--k:7"/><circle class="pl2" cx="0" cy="1.5" r="2.4" fill="#4A525B" style="--a:4deg;--k:8"/><circle class="pl0" cx="0" cy="3.0" r="2.4" fill="#4A525B" style="--a:8deg;--k:9"/></g>
    <g class="dg-lbl"><text x="270" y="96" text-anchor="middle">תרמיל</text><text x="200" y="120" text-anchor="middle">קרוב: קבוצה צפופה</text><text x="70" y="120" text-anchor="middle">רחוק: פיזור רחב</text></g></svg>`},
 });
-const LESSON_DIAG={"rifles:2":["reddot"],"rifles:3":["gas"],"rifles:4":["caliber"],"pistols:3":["tl_pistols"],"history:3":["drum"],"heavy:3":["belt","caliber"],"works:3":["shot","magtypes"],"famous:2":["tl_pistols"],"heavy:2":["scope","caliber"],"pistols:2":["pdwcal"],"history:2":["tl_musket","cartridge"],"israel:2":["tl_idf"],"works:2":["revolver","blowback"],"parts2:3":["stocks","bullpup"],"parts2:2":["rifling","muzzle"],"parts2:1":["magtypes","magazine"],"parts2:0":["sights","reddot","scope"],"parts:2":["pt_tavor"],"parts:3":["pt_fal"],"parts:4":["pt_barrett"],"parts:5":["bolt"],"stories:3":["madmin"],"famous:0":["tl_classic"],"famous:1":["drum"],"terms:1":["indirect"],"shoot:1":["zero"],"israel:1":["belt"],"terms:0":["caliber"],"history:1":["tl_ww"],"rifles:0":["akvsm16"],"heavy:0":["scope"],"history:0":["tl_world"],"israel:0":["tl_israel"],"gear:0":["armor"],"technique:0":["positions"],"pistols:1":["blowback"],"heavy:1":["belt"],"pistols:0":["revolver"],"shoot:0":["sights"],"gear:1":["reddot"],"parts:0":["magazine"],"parts:1":["cartridge","firing"],"works:0":["bolt"],"works:1":["gas"],"rifles:1":["bullpup"],"technique:1":["trajectory","rifling"]};
+const LESSON_DIAG={"rifles:5":["bullpup"],"rifles:2":["reddot"],"rifles:3":["gas"],"rifles:4":["caliber"],"pistols:3":["tl_pistols"],"history:3":["drum"],"heavy:3":["belt","caliber"],"works:3":["shot","magtypes"],"famous:2":["tl_pistols"],"heavy:2":["scope","caliber"],"pistols:2":["pdwcal"],"history:2":["tl_musket","cartridge"],"israel:2":["tl_idf"],"works:2":["revolver","blowback"],"parts2:3":["stocks","bullpup"],"parts2:2":["rifling","muzzle"],"parts2:1":["magtypes","magazine"],"parts2:0":["sights","reddot","scope"],"parts:2":["pt_tavor"],"parts:3":["pt_fal"],"parts:4":["pt_barrett"],"parts:5":["bolt"],"stories:3":["madmin"],"famous:0":["tl_classic"],"famous:1":["drum"],"terms:1":["indirect"],"shoot:1":["zero"],"israel:1":["belt"],"terms:0":["caliber"],"history:1":["tl_ww"],"rifles:0":["akvsm16"],"heavy:0":["scope"],"history:0":["tl_world"],"israel:0":["tl_israel"],"gear:0":["armor"],"technique:0":["positions"],"pistols:1":["blowback"],"heavy:1":["belt"],"pistols:0":["revolver"],"shoot:0":["sights"],"gear:1":["reddot"],"parts:0":["magazine"],"parts:1":["cartridge","firing"],"works:0":["bolt"],"works:1":["gas"],"rifles:1":["bullpup"],"technique:1":["trajectory","rifling"]};
 
 /* ---- teach first: cards built from the lesson's own content, shown before the questions */
 function teachCards(qs,key){
