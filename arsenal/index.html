@@ -1890,7 +1890,8 @@ const COURSE = [
    {t:"match", q:"התאם רובה לתקופה בצה\"ל", p:[["מאוזר","מלחמת העצמאות"],["FN FAL","שנות ה-50 וה-60"],["גליל","שנות ה-70 וה-80"],["תבור","שנות ה-2000"]]},
    {t:"miss", w:"tavor", p:"optic"},
    {t:"id", w:"galilace"},
-   {t:"mc", q:"מה ההבדל העיקרי בין גליל ACE לגליל המקורי?", a:["גוף קל יותר, מסילות לאביזרים וקת שמתכווננת","הוא יורה רק בירי בודד","הוא בולפאפ","אין לו קת בכלל"], c:0, e:"המנגנון האמין נשאר, אבל הרובה עודכן לשדה הקרב המודרני."}
+   {t:"mc", q:"מה ההבדל העיקרי בין גליל ACE לגליל המקורי?", a:["גוף קל יותר, מסילות לאביזרים וקת שמתכווננת","הוא יורה רק בירי בודד","הוא בולפאפ","אין לו קת בכלל"], c:0, e:"המנגנון האמין נשאר, אבל הרובה עודכן לשדה הקרב המודרני."},
+   {t:"match", q:"התאם רובה של צה\"ל לשנה שבה הופיע", p:[["גליל","1972"],["תבור","2001"],["מיקרו תבור X95","2003"],["ערד","2019"]]}
   ]}
  ]},
  { id:"famous", c:["#8B5CF6","#6D3FD6"], title:"הקלאסיקות", sub:"כלי נשק שכל העולם מכיר", lessons:[
@@ -2367,7 +2368,7 @@ function renderMe(){
     <div class="tile"><svg viewBox="0 0 24 24" style="fill:var(--green)"><use href="#i-check"/></svg><div><b>${lessonsDone()}/${LESSON_COUNT}</b><small>שיעורים</small></div></div>
     <div class="tile"><svg viewBox="0 0 24 24" style="fill:var(--blue)"><use href="#i-star"/></svg><div><b>${acc}%</b><small>דיוק</small></div></div>
    </div>
-   <h2 class="page-title" style="font-size:21px">סטטיסטיקה</h2>${statsCard()}
+   ${statsCard()}
    <h2 class="page-title" style="font-size:21px">XP בשבוע האחרון</h2>
    <div class="card"><div class="week">${days.map(d=>`<div class="d"><small style="color:var(--ink)">${d.v||""}</small><div class="b ${d.v?"on":""}" style="height:${Math.max(4,d.v/mx*80)}px"></div><small>${d.l}</small></div>`).join("")}</div></div>
    <div class="me-cards" style="display:grid;gap:16px;margin-top:20px">${leagueCard()}${questsCard()}${rankCard()}</div>
