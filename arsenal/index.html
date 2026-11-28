@@ -981,6 +981,12 @@ body{font-size:16px}
 .arm-prac>summary svg{width:22px;height:22px;fill:#14B8A6;flex:none}.arm-prac>summary small{color:var(--muted);font-weight:700;margin-inline-start:auto;font-size:12px}
 .arm-prac>summary::after{content:"";width:9px;height:9px;border-right:3px solid var(--muted);border-bottom:3px solid var(--muted);transform:translateY(-3px) rotate(45deg);margin-inline-start:6px;transition:transform .2s}
 .arm-prac[open]>summary::after{transform:translateY(2px) rotate(-135deg)}
+.pt-row{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin:10px 0 14px}
+.pt-tile{display:flex;flex-direction:column;align-items:center;gap:3px;padding:12px 4px 10px;border:2px solid var(--line);border-bottom-width:4px;border-radius:18px;background:var(--surface);color:inherit;font:inherit;cursor:pointer;text-align:center}
+.pt-tile:active:not(:disabled){transform:translateY(2px);border-bottom-width:2px}
+.pt-tile .pt-ic{width:40px;height:40px;border-radius:12px;display:grid;place-items:center;background:color-mix(in srgb,var(--tc) 18%,transparent)}
+.pt-tile .pt-ic svg{width:24px;height:24px;fill:var(--tc)}.pt-tile b{font-size:13px}.pt-tile small{font-size:11px;color:var(--muted);font-weight:700}
+.pt-tile:disabled{opacity:.6;cursor:default}.pt-tile:disabled .pt-ic svg{fill:var(--muted)}
 @media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
 </style>
 
@@ -2138,7 +2144,7 @@ function renderLearn(){
     h+=`${mascot("happy","buddy")}</div></section>`.replace('class="kd happy buddy"',`class="kd happy buddy" style="${side>0?"left":"right"}:0"`);
   });
   h+=`<p class="path-end">${lessonsDone()===LESSON_COUNT?"סיימת את כל הקורס. אפשר לחזור לכל שלב ולצבור עוד XP.":"יחידות נוספות בדרך"}</p>`;
-  $("#main").innerHTML=wotdCard()+mistakesCard()+blitzCard()+partsCard()+expertCard()+h;
+  $("#main").innerHTML=wotdCard()+mistakesCard()+practiceTiles()+h;
   $("#wotdGo").onclick=openWotd;
   const mg=$("#missGo"); if(mg) mg.onclick=startMistakes;
   $("#partsGo").onclick=startPartsDrill;
@@ -3221,6 +3227,12 @@ function startPartsDrill(){
   const ws=shuffle(WEAPONS.filter(w=>PARTS[w.sil])).slice(0,10);
   const qs=ws.map((w,i)=>i%3===2?{t:"label",w:w.id,n:Object.keys(PARTS[w.sil]).length>4?4:3}:i%4===3?{t:"miss",w:w.id}:{t:"part",w:w.id});
   startLesson({u:COURSE[0],ui:0,n:{t:"practice",name:"זיהוי חלקים"},key:"practice",drill:1},qs);
+}
+/* ---- three compact practice tiles on the learning page (blitz, parts drill, expert) instead of three full cards */
+function practiceTiles(){
+  const xOpen=lessonsDone()>=EXPERT_AT;
+  const tile=(id,ic,col,title,sub,dis)=>`<button class="pt-tile" id="${id}" style="--tc:${col}" ${dis?"disabled":""}><span class="pt-ic">${ico(ic)}</span><b>${title}</b><small>${sub}</small></button>`;
+  return `<div class="pt-row">${tile("blitzGo","i-bolt","#FF9600","אתגר בזק",S.blitzBest?`שיא: ${S.blitzBest}`:`${BLITZ_SEC} שניות`)}${tile("partsGo","i-star","#14B8A6","זיהוי חלקים",S.partsBest?`שיא: <span dir="ltr">${S.partsBest}/10</span>`:"10 שאלות")}${tile("expertGo",xOpen?"i-trophy":"i-lock","#CE82FF","אתגר מומחה",xOpen?(S.expertBest?`שיא: <span dir="ltr">${S.expertBest}/10</span>`:"שאלות קשות"):`אחרי ${EXPERT_AT} שיעורים`,!xOpen)}</div>`;
 }
 /* ---- expert challenge: only the hard types (4-point labels, peek, spec, sound), opens after 6 lessons */
 const EXPERT_AT=6;
