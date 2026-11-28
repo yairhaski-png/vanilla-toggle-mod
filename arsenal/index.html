@@ -581,7 +581,6 @@ button.stat:hover{background:var(--soft)}
 .flag-opt.sel .flag-svg{transform:rotate(-4deg) scale(1.08)}
 .flag-opt.right .flag-svg{animation:flagWave .9s ease-in-out}
 @keyframes flagWave{25%{transform:skewY(-6deg) scale(1.1)}50%{transform:skewY(5deg) scale(1.1)}75%{transform:skewY(-3deg) scale(1.05)}}
-.blitz-card>svg{fill:var(--orange);background:color-mix(in srgb,var(--orange) 18%,transparent)}
 .timer.blitz{height:8px}
 .timer.blitz>i{background:linear-gradient(90deg,var(--red),var(--orange),#FFC800)}
 .blitz-score{font-size:96px;font-weight:900;line-height:1;color:var(--orange);font-variant-numeric:tabular-nums}
@@ -844,10 +843,6 @@ body{font-size:16px}
 #pins .pin.ok circle{fill:var(--green)}#pins .pin.no circle{fill:#FF4B4B}
 @keyframes pinPulse{50%{transform:scale(1.25)}}
 .big-sil .dg-pt{width:100%;max-width:440px;height:auto}
-.parts-card>svg{fill:#14B8A6;background:color-mix(in srgb,#14B8A6 18%,transparent)}
-.expert-card>svg{fill:#CE82FF;background:color-mix(in srgb,#CE82FF 18%,transparent)}
-.expert-card .btn{background:#CE82FF;box-shadow:0 4px 0 #A568CC}
-.expert-card.locked{opacity:.7}.expert-card.locked>svg{fill:var(--muted)}
 .btn.teal{background:#14B8A6;box-shadow:0 4px 0 #0E8F81}
 .arm-search{display:flex;align-items:center;gap:8px;border:2px solid var(--line);border-radius:14px;padding:0 12px;margin:4px 0 12px;background:var(--surface)}
 .arm-search svg{width:18px;height:18px;fill:var(--muted);flex:none}
@@ -1779,7 +1774,8 @@ const COURSE = [
    {t:"vs", k:"year"},
    {t:"order", q:"סדר מהמוקדם למאוחר", items:["אבק השריפה","המוסקט","מקלע גטלינג","M1 גאראנד"], e:"אבק השריפה בסין (המאה ה-9), מוסקטים (המאה ה-16), גטלינג (1862), M1 גאראנד (1936)."},
    {t:"mc", q:"מי המציא את מכונת הירייה הידנית בעלת הקנים המסתובבים ב-1862?", a:["ריצ'רד גטלינג","סמואל קולט","הירם מקסים","ג'ון בראונינג"], c:0, e:"מקלע גטלינג הופעל בסיבוב ידית ושימש במלחמת האזרחים האמריקנית."},
-   {t:"mc", q:"מה היה חדשני במקלע של הירם מקסים (1884)?", a:["הוא היה אוטומטי לגמרי והשתמש בכוח הרתע","הוא הופעל בסיבוב ידית","הוא היה הנשק הראשון עם מחסנית","הוא ירה רק ירייה בודדת"], c:0, e:"זה היה המקלע האוטומטי המעשי הראשון, והוא שינה את פני מלחמות סוף המאה ה-19."}
+   {t:"mc", q:"מה היה חדשני במקלע של הירם מקסים (1884)?", a:["הוא היה אוטומטי לגמרי והשתמש בכוח הרתע","הוא הופעל בסיבוב ידית","הוא היה הנשק הראשון עם מחסנית","הוא ירה רק ירייה בודדת"], c:0, e:"זה היה המקלע האוטומטי המעשי הראשון, והוא שינה את פני מלחמות סוף המאה ה-19."},
+   {t:"match", q:"התאם נשק לתקופה שלו", p:[["מאוזר 98","סוף המאה ה-19"],["M1 גאראנד","מלחמת העולם השנייה"],["AK-47","אחרי מלחמת העולם השנייה"],["תבור","שנות ה-2000"]]}
   ]},
   { name:"מלחמות העולם", qs:[
    {t:"mc", q:"מה היה מיוחד ב-M1 גאראנד לעומת רובי הבריח של אותה תקופה?", a:["הוא חצי-אוטומטי: יורה בכל לחיצה בלי לדרוך ביד","הוא יורה צרורות","יש לו מחסנית של 30 כדורים","הוא נטען מהלוע"], c:0, e:"ברובה בריח צריך למשוך את הבריח אחרי כל ירייה. בגאראנד הגזים עושים את זה לבד."},
@@ -3220,9 +3216,6 @@ function openWotd(){
 }
 
 /* ---- parts drill: 10 quick part / label questions from every weapon */
-function partsCard(){
-  return `<div class="miss-card parts-card"><svg viewBox="0 0 24 24"><use href="#i-star"/></svg><div class="t"><b>זיהוי חלקים</b><p>10 שאלות מהירות על חלקים של ${WEAPONS.length} נשקים${S.partsBest?` · השיא שלך: ${S.partsBest}/10`:""}</p></div><button class="btn teal" id="partsGo">תרגל</button></div>`;
-}
 function startPartsDrill(){
   const ws=shuffle(WEAPONS.filter(w=>PARTS[w.sil])).slice(0,10);
   const qs=ws.map((w,i)=>i%3===2?{t:"label",w:w.id,n:Object.keys(PARTS[w.sil]).length>4?4:3}:i%4===3?{t:"miss",w:w.id}:{t:"part",w:w.id});
@@ -3236,10 +3229,6 @@ function practiceTiles(){
 }
 /* ---- expert challenge: only the hard types (4-point labels, peek, spec, sound), opens after 6 lessons */
 const EXPERT_AT=6;
-function expertCard(){
-  const open=lessonsDone()>=EXPERT_AT;
-  return `<div class="miss-card expert-card ${open?"":"locked"}"><svg viewBox="0 0 24 24"><use href="#i-${open?"trophy":"lock"}"/></svg><div class="t"><b>אתגר מומחה</b><p>${open?`10 שאלות קשות בלבד: תוויות, חלק חסר, הצצה ונתונים${S.expertBest?` · השיא שלך: ${S.expertBest}/10`:""}`:`נפתח אחרי ${EXPERT_AT} שיעורים (<span dir="ltr">${lessonsDone()}/${EXPERT_AT}</span>)`}</p></div>${open?`<button class="btn" id="expertGo">אתגר</button>`:""}</div>`;
-}
 function startExpert(){
   const big=shuffle(WEAPONS.filter(w=>PARTS[w.sil]&&Object.keys(PARTS[w.sil]).length>=4));
   const lab=big.slice(0,2).map(w=>({t:"label",w:w.id,n:4})), miss=big.slice(2,4).map(w=>({t:"miss",w:w.id}));
@@ -3247,9 +3236,6 @@ function startExpert(){
   const peek=ws.slice(0,2).map(w=>({t:"peek",w:w.id}));
   const spec=ws.slice(3,6).map((w,i)=>({t:"spec",w:w.id,k:["cal","by","act"][i]}));
   startLesson({u:COURSE[0],ui:0,n:{t:"practice",name:"אתגר מומחה"},key:"practice",expert:1},shuffle([...lab,...miss,...peek,...spec,{t:"hear",w:ws[6].id}]));
-}
-function blitzCard(){
-  return `<div class="miss-card blitz-card"><svg viewBox="0 0 24 24"><use href="#i-bolt"/></svg><div class="t"><b>אתגר בזק</b><p>${BLITZ_SEC} שניות, כמה שיותר תשובות נכונות${S.blitzBest?` · השיא שלך: ${S.blitzBest}`:""}</p></div><button class="btn orange" id="blitzGo">שחק</button></div>`;
 }
 
 /* ---- odd one out */
