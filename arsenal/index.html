@@ -90,10 +90,6 @@ main{padding:0 max(16px,env(safe-area-inset-right,0px)) calc(110px + env(safe-ar
 .card h3{margin:0 0 12px;font-size:20px;font-weight:800;color:var(--ink-strong);display:flex;align-items:center;justify-content:space-between;gap:8px}
 .card h3 a,.card h3 button{font-size:14px;color:var(--blue);font-weight:800;letter-spacing:.03em}
 .card p{margin:0;color:var(--muted);font-weight:500}
-.quest{display:flex;align-items:center;gap:14px}
-.quest svg{width:46px;height:46px}
-.quest .q-txt{flex:1;min-width:0}
-.quest b{display:block;font-weight:700;margin-bottom:6px}
 .pbar{position:relative;height:18px;border-radius:99px;background:var(--line);overflow:hidden}
 .pbar>i{position:absolute;inset:0 0 0 auto;border-radius:99px;background:var(--gold);transition:width .5s cubic-bezier(.2,.9,.3,1.2)}
 .pbar>i::after{content:"";position:absolute;top:4px;inset-inline:8px;height:5px;border-radius:9px;background:rgb(255 255 255 / .35)}
@@ -269,7 +265,6 @@ main{padding:0 max(16px,env(safe-area-inset-right,0px)) calc(110px + env(safe-ar
 .res b svg{width:22px;height:22px;fill:currentColor}
 
 #confetti{position:fixed;inset:0;width:100%;height:100%;pointer-events:none;z-index:60}
-.shake{animation:shake .35s}
 @keyframes shake{25%{transform:translateX(-6px)}75%{transform:translateX(6px)}}
 /* ---------- motion & stages */
 .unit-head{position:sticky;top:calc(env(safe-area-inset-top,0px) + 62px);z-index:4}
@@ -718,7 +713,6 @@ body{font-size:16px}
 .dg-rif .lands{transform-box:view-box;transform-origin:70px 62px;animation:spin 1.6s linear infinite}
 .dg-rif .engr{animation:engr .6s linear infinite}
 @keyframes engr{to{transform:translateX(12px)}}
-.dg-rif .spinb{clip-path:inset(0 0 0 0)}
 .dg-mag .top{animation:magTop 2.6s ease-in-out infinite}
 .dg-mag .stack{animation:magStack 2.6s ease-in-out infinite}
 .dg-mag .fol{animation:magStack 2.6s ease-in-out infinite}
@@ -1518,7 +1512,8 @@ const COURSE = [
    {t:"part", w:"ak74"},
    {t:"type", w:"ak47"},
    {t:"tf", q:"ה-AK-47 ידוע באמינות שלו גם בבוץ, בחול ובקור.", c:true, e:"החלקים הנעים שלו מרווחים, ולכן לכלוך פחות תוקע אותו."},
-   {t:"mc", q:"מה ההבדל העיקרי בין M4 ל-M16?", a:["ה-M4 קצר יותר, עם קנה קצר וקת נשלפת","ה-M4 יורה תחמושת 7.62 מ\"מ","ה-M4 עובד במנגנון בוכנה ארוכה כמו ה-AK","ה-M4 הוא רובה בולפאפ"], c:0, e:"ה-M4 הוא 'קרבין': גרסה קצרה ונוחה יותר."}
+   {t:"mc", q:"מה ההבדל העיקרי בין M4 ל-M16?", a:["ה-M4 קצר יותר, עם קנה קצר וקת נשלפת","ה-M4 יורה תחמושת 7.62 מ\"מ","ה-M4 עובד במנגנון בוכנה ארוכה כמו ה-AK","ה-M4 הוא רובה בולפאפ"], c:0, e:"ה-M4 הוא 'קרבין': גרסה קצרה ונוחה יותר."},
+   {t:"mc", q:"מה ההבדל בין קרבין לרובה?", a:["קרבין הוא גרסה קצרה וקלה יותר של רובה","קרבין יורה רק צרורות","קרבין הוא סוג של רובה צלפים","לקרבין אין מחסנית"], c:0, e:"ה-M4 הוא קרבין: גרסה קצרה של ה-M16, נוחה יותר ברכבים ובמבנים."}
   ]},
   { name:"תבור, גליל ו-FAL", qs:[
    {t:"id", w:"tavor", q:"איזה נשק זה?"},
